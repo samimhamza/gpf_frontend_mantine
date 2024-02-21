@@ -1,0 +1,15 @@
+{
+	"title": "بنیاد خیریه حاجی گل آغا پروانی",
+	"welcome_back": "خوش آمدید",
+	"email_or_username": "ایمیل یا نام کاربری",
+	"password": "پسورد",
+	"login": "ورود به سیستم",
+	"enter_email_or_username": "ایمیل یا نام کاربری را وارد نمایید",
+	"email_or_username_required": "ایمیل یا نام کاربری ضروری میباشد",
+	"password_required": "پسورد ضروری میباشد",
+	"gpf": "بنیاد گل آغا پروانی",
+	"logout": "خروج از برنامه",
+	"change_password": "تغییر رمز کاربری",
+	"something_went_wrong": ".اشتباهی رخ داده است",
+	"invalid_credentials": "ایمیل و یا پسورد اشتباه هست و یا حساب شما غیر فعال گردیده است"
+}
