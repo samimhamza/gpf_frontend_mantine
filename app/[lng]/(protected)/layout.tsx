@@ -1,4 +1,4 @@
-// import Sidebar from "@/components/dashboard/sidebar";
+import { AdminLayout } from "@/components/dashboard/AdminLayout";
 
 const AdminPanelLayout = ({
 	children,
@@ -7,13 +7,7 @@ const AdminPanelLayout = ({
 	children: React.ReactNode;
 	params: { lng: string };
 }) => {
-	return (
-		<>
-			{/* <Sidebar lng={lng}> */}
-			{children}
-			{/* </Sidebar> */}
-		</>
-	);
+	return <AdminLayout lng={lng}>{children}</AdminLayout>;
 };
 
 export default AdminPanelLayout;

@@ -1,7 +1,14 @@
 "use client";
 
 import { useForm } from "@mantine/form";
-import { Button, Group, TextInput, Box } from "@mantine/core";
+import {
+	Button,
+	Group,
+	TextInput,
+	Box,
+	PasswordInput,
+	Notification,
+} from "@mantine/core";
 import { useState, useTransition } from "react";
 import { useTranslation } from "@/app/i18n/client";
 import { LoginSchema } from "@/schemas";
@@ -9,7 +16,10 @@ import { zodResolver } from "mantine-form-zod-resolver";
 import * as z from "zod";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { CardWrapper } from "./CardWrapper";
+import { CardWrapper } from "../CardWrapper/CardWrapper";
+import ReactLoading from "react-loading";
+import classes from "./LoginForm.module.css";
+import { FormError } from "@/components/FormError";
 
 export const LoginForm = ({ lng }: { lng: string }) => {
 	const [error, setError] = useState<string | undefined>("");
@@ -48,17 +58,31 @@ export const LoginForm = ({ lng }: { lng: string }) => {
 					withAsterisk
 					mt="md"
 					{...form.getInputProps("email_or_username")}
+					disabled={isPending}
 				/>
-				<TextInput
-					label={t("enter_email_or_username")}
-					placeholder="*******"
+				<PasswordInput
+					label={t("password")}
+					placeholder="********"
 					type="password"
 					withAsterisk
 					{...form.getInputProps("password")}
+					disabled={isPending}
+					mt="md"
 				/>
-				<Group justify="flex-end" mt="md">
-					<Button type="submit">{t("login")}</Button>
-				</Group>
+				<FormError message={error} />
+				<Button type="submit" fullWidth mt="md">
+					{isPending ? (
+						<ReactLoading
+							className={classes.loadingButton}
+							type={"bars"}
+							color="white"
+							width="32px"
+							height="32px"
+						/>
+					) : (
+						t("login")
+					)}
+				</Button>
 			</Box>
 		</CardWrapper>
 	);

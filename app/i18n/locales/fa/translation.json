@@ -11,5 +11,10 @@
 	"logout": "خروج از برنامه",
 	"change_password": "تغییر رمز کاربری",
 	"something_went_wrong": ".اشتباهی رخ داده است",
-	"invalid_credentials": "ایمیل و یا پسورد اشتباه هست و یا حساب شما غیر فعال گردیده است"
+	"invalid_credentials": "ایمیل و یا پسورد اشتباه هست و یا حساب شما غیر فعال گردیده است",
+	"dashboard": "داشبورد",
+	"covered_areas": "ساحات تحت پوشش",
+	"provinces": "ولایات",
+	"districts": "مناطق",
+	"mosques": "مساجد"
 }

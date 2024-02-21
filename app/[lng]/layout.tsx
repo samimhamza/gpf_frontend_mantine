@@ -1,9 +1,10 @@
-// Import styles of packages that you've installed.
-// All packages except `@mantine/hooks` require styles imports
+import { Inter } from "next/font/google";
 import "@mantine/core/styles.css";
 import "./globals.css";
+const inter = Inter({ subsets: ["latin"] });
 
 import { MantineProvider } from "@mantine/core";
+import { ColorSchemeScript } from "@mantine/core";
 
 import { dir } from "i18next";
 import { languages } from "../i18n/settings";
@@ -24,7 +25,10 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang={lng} dir={dir(lng)}>
-			<body>
+			<head>
+				<ColorSchemeScript defaultColorScheme="light" />
+			</head>
+			<body className={inter.className}>
 				<AuthProvider>
 					<MantineProvider>{children}</MantineProvider>
 				</AuthProvider>

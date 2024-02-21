@@ -1,6 +1,6 @@
 import { RxExclamationTriangle } from "react-icons/rx";
 
-import { CardWrapper } from "@/components/auth/CardWrapper";
+import { CardWrapper } from "@/components/auth/CardWrapper/CardWrapper";
 
 export const ErrorCard = () => {
 	return (

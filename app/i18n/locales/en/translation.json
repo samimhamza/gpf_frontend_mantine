@@ -11,5 +11,10 @@
 	"logout": "Logout",
 	"change_password": "Change Password",
 	"something_went_wrong": "Something went wrong",
-	"invalid_credentials": "Invalid Credentials or Account is not active"
+	"invalid_credentials": "Invalid Credentials or Account is not active",
+	"dashboard": "Dashboard",
+	"covered_areas": "Covered Areas",
+	"provinces": "Provinces",
+	"districts": "Districts",
+	"mosques": "Mosques"
 }

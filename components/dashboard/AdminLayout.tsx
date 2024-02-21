@@ -1,10 +1,33 @@
 "use client";
-import { AppShell, Burger, Group, ScrollArea, Skeleton } from "@mantine/core";
+import { useTranslation } from "@/app/i18n/client";
+import {
+	AppShell,
+	Avatar,
+	Burger,
+	Flex,
+	Group,
+	ScrollArea,
+	Box,
+	Title,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import Image from "next/image";
+import { LinksGroup } from "./NavbarLinksGroup/NavbarLinksGroup";
+import { navItems } from "./NavItems";
 
-export function AdminLayout() {
+export function AdminLayout({
+	children,
+	lng,
+}: {
+	children: React.ReactNode;
+	lng: string;
+}) {
 	const [opened, { toggle }] = useDisclosure();
-
+	const { t } = useTranslation(lng);
+	const navList = navItems(t);
+	const links = navList.map((item) => (
+		<LinksGroup {...item} key={item.label} />
+	));
 	return (
 		<AppShell
 			header={{ height: 60 }}
@@ -12,25 +35,31 @@ export function AdminLayout() {
 			padding="md"
 		>
 			<AppShell.Header>
-				<Group h="100%" px="md">
-					<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-				</Group>
+				<Flex h="100%" px="md" align="center" justify="space-between">
+					<Group>
+						<Burger
+							opened={opened}
+							onClick={toggle}
+							hiddenFrom="sm"
+							size="sm"
+						/>
+						<Image
+							src="/images/favicon.png"
+							width={50}
+							height={50}
+							alt="logo"
+						/>
+						<Title order={3}>{t("gpf")}</Title>
+					</Group>
+					<Avatar radius="xl" color="cyan" />
+				</Flex>
 			</AppShell.Header>
 			<AppShell.Navbar p="md">
 				<AppShell.Section grow mb="md" component={ScrollArea}>
-					{Array(30)
-						.fill(0)
-						.map((_, index) => (
-							<Skeleton key={index} h={28} mt="sm" animate={false} />
-						))}
-				</AppShell.Section>
-				<AppShell.Section>
-					Navbar footer – always at the bottom
+					<Box my="xl">{links}</Box>
 				</AppShell.Section>
 			</AppShell.Navbar>
-			<AppShell.Main>
-				Alt layout – Navbar and Aside are rendered on top on Header and Footer
-			</AppShell.Main>
+			<AppShell.Main>{children}</AppShell.Main>
 		</AppShell>
 	);
 }

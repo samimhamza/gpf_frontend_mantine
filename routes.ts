@@ -30,4 +30,4 @@ export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
  * These routes will redirect logged in users to /settings
  * @type {string[]}
  */
-export const protectedRoutes = ["/dashboard", "/coverage_areas"];
+export const protectedRoutes = ["/dashboard", "/covered_areas"];

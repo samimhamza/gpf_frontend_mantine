@@ -13,6 +13,7 @@
     "@mantine/form": "^7.5.3",
     "@mantine/hooks": "^7.5.3",
     "@mantine/modals": "^7.5.3",
+    "@tabler/icons-react": "^2.47.0",
     "accept-language": "^3.0.18",
     "axios": "^1.6.7",
     "i18next": "^23.9.0",
@@ -28,6 +29,7 @@
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^14.0.5",
     "react-icons": "^5.0.1",
+    "react-loading": "^2.0.3",
     "sharp": "^0.33.2",
     "swr": "^2.2.5",
     "zod": "^3.22.4"

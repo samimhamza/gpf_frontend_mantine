@@ -1,6 +1,5 @@
 import { languages, fallbackLng } from "../i18n/settings";
 import { useTranslation } from "../i18n";
-import { ColorSchemeScript } from "@mantine/core";
 
 export default async function Head({
 	params: { lng },
@@ -16,9 +15,6 @@ export default async function Head({
 		<>
 			<title>{t("title")}</title>
 			<meta name="description" content="Gull Agha Parwani Foundation" />
-			<head>
-				<ColorSchemeScript />
-			</head>
 		</>
 	);
 }
