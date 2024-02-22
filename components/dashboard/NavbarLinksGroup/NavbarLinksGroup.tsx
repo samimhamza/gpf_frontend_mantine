@@ -19,7 +19,8 @@ interface LinksGroupProps {
 	label: string;
 	link?: string;
 	initiallyOpened?: boolean;
-	links?: { label: string; link: string }[];
+	links?: { label: string; link: string; permission?: string }[];
+	user_permissions: Array<string>;
 }
 
 export function LinksGroup({
@@ -28,11 +29,19 @@ export function LinksGroup({
 	link,
 	initiallyOpened,
 	links,
+	user_permissions,
 }: LinksGroupProps) {
 	const hasLinks = Array.isArray(links);
 	const [opened, setOpened] = useState(initiallyOpened || false);
 	const router = useRouter();
-	const items = (hasLinks ? links : []).map((link) => (
+	const userNavList = (hasLinks ? links : []).filter((link) => {
+		if (
+			(link.permission && user_permissions.includes(link.permission)) ||
+			!link.permission
+		)
+			return link;
+	});
+	const items = userNavList.map((link) => (
 		<Text
 			className={classes.link}
 			key={link.label}
@@ -41,6 +50,7 @@ export function LinksGroup({
 			{link.label}
 		</Text>
 	));
+
 	return (
 		<>
 			<UnstyledButton
@@ -67,7 +77,7 @@ export function LinksGroup({
 					)}
 				</Group>
 			</UnstyledButton>
-			{hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
+			{hasLinks && <Collapse in={opened}>{items}</Collapse>}
 		</>
 	);
 }

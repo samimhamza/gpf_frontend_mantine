@@ -1,13 +1,24 @@
-import { AdminLayout } from "@/components/dashboard/AdminLayout";
+import { authOptions } from "@/auth";
+import { AdminLayout } from "@/components/Dashboard/AdminLayout";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-const AdminPanelLayout = ({
+const AdminPanelLayout = async ({
 	children,
 	params: { lng },
 }: {
 	children: React.ReactNode;
 	params: { lng: string };
 }) => {
-	return <AdminLayout lng={lng}>{children}</AdminLayout>;
+	const data = await getServerSession(authOptions);
+	if (!data?.user) {
+		redirect("auth/login");
+	}
+	return (
+		<AdminLayout lng={lng} user={data.user}>
+			{children}
+		</AdminLayout>
+	);
 };
 
 export default AdminPanelLayout;
