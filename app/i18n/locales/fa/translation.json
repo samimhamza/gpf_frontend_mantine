@@ -17,5 +17,22 @@
 	"provinces": "ولایات",
 	"districts": "مناطق",
 	"mosques": "مساجد",
-	"users": "کاربر ها"
+	"users": "کاربر ها",
+	"full_name": "اسم",
+	"email": "ایمیل",
+	"username": "نام کاربری",
+	"office": "دفتر",
+	"status": "وضعیت",
+	"active": "فعال",
+	"inactive": "غیر فعال",
+	"pending": "انتظار",
+	"created_at": "تاریخ ایجاد",
+	"updated_at": "تاریخ اپدیت",
+	"deleted_at": "تاریخ حذف",
+	"created_by": "ایجاد کننده",
+	"updated_by": "اپدیت کننده",
+	"deleted_by": "حذف کننده",
+	"loading_data": "در حال بارگذاری...",
+	"no_records": "هیچ معلوماتی موجود نیست",
+	"user": "کاربر"
 }

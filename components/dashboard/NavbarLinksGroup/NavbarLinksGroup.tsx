@@ -9,6 +9,7 @@ import {
 	Text,
 	UnstyledButton,
 	rem,
+	Button,
 } from "@mantine/core";
 import { GoChevronLeft } from "react-icons/go";
 import classes from "./NavbarLinksGroup.module.css";

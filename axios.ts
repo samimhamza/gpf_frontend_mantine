@@ -43,7 +43,7 @@ api.interceptors.response.use(
 );
 
 const getApi = (url: string, params = {}) =>
-	api.get(url, params).then((res) => res.data);
+	api.get(url, { params }).then((res) => res.data);
 
 const postApi = (url: string, data = {}) =>
 	api.post(url, data).then((res) => res.data);

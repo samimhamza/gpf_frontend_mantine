@@ -14,6 +14,7 @@ import { ColorSchemeScript } from "@mantine/core";
 import { dir } from "i18next";
 import { languages } from "../i18n/settings";
 import AuthProvider from "@/app/[lng]/AuthProvider";
+import { Notifications } from "@mantine/notifications";
 
 export async function generateStaticParams() {
 	return languages.map((lng) => ({ lng }));
@@ -35,7 +36,10 @@ export default function RootLayout({
 			</head>
 			<body className={inter.className}>
 				<AuthProvider>
-					<MantineProvider>{children}</MantineProvider>
+					<MantineProvider>
+						<Notifications />
+						{children}
+					</MantineProvider>
 				</AuthProvider>
 			</body>
 		</html>

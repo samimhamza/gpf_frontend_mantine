@@ -80,9 +80,9 @@ export function AdminLayout({
 					</Avatar>
 				</Flex>
 			</AppShell.Header>
-			<AppShell.Navbar p="md">
-				<AppShell.Section grow mb="md" component={ScrollArea}>
-					<Box my="xl">{links}</Box>
+			<AppShell.Navbar p="xs">
+				<AppShell.Section grow component={ScrollArea}>
+					<Box my="md">{links}</Box>
 				</AppShell.Section>
 			</AppShell.Navbar>
 			<AppShell.Main>{children}</AppShell.Main>
