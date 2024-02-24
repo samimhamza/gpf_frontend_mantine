@@ -4,7 +4,7 @@ import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
 import { logColumns } from "@/shared/columns";
 import { UserColumns } from "@/shared/columns/user.columns";
-import ActionMenu from "@/components/ActionMenu";
+import ActionMenu from "@/components/DataTable/ActionMenu";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 
 export const UserModule = ({ lng }: { lng: string }) => {
@@ -20,7 +20,6 @@ export const UserModule = ({ lng }: { lng: string }) => {
 					{ title: t("users") },
 				]}
 			/>
-			<ActionMenu lng={lng} />
 			<CustomDataTable url="/users" lng={lng} columns={columns} />
 		</>
 	);
