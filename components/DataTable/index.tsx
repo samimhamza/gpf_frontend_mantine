@@ -66,19 +66,19 @@ const CustomDataTable = ({
 		setSortStatus(status);
 	};
 
-	// let actionIndex = columns.findIndex((col) => col.accessor == "actions");
-	// if (actionIndex == -1) {
-	columns.push({
-		accessor: "actions",
-		title: (
-			<Center>
-				<TbClick size={16} />
-			</Center>
-		),
-		width: "0%", // 👈 use minimal width
-		render: renderActions,
-	});
-	// }
+	let actionIndex = columns.findIndex((col) => col.accessor == "actions");
+	if (actionIndex == -1) {
+		columns.push({
+			accessor: "actions",
+			title: (
+				<Center>
+					<TbClick size={16} />
+				</Center>
+			),
+			width: "0%", // 👈 use minimal width
+			render: renderActions,
+		});
+	}
 	return (
 		<DataTable
 			height={550}

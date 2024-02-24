@@ -1,9 +1,12 @@
 "use client";
+
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
+import { logColumns } from "@/shared/columns";
 
 export const UserModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
+	const logs = logColumns(t);
 	return (
 		<CustomDataTable
 			url="/users"
@@ -48,30 +51,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
 							? t("pending")
 							: "",
 				},
-				{
-					accessor: "created_at",
-					title: t("created_at"),
-					noWrap: true,
-					sortable: true,
-				},
-				{
-					accessor: "created_by",
-					title: t("created_by"),
-					noWrap: true,
-					sortable: true,
-				},
-				{
-					accessor: "updated_at",
-					title: t("updated_at"),
-					noWrap: true,
-					sortable: true,
-				},
-				{
-					accessor: "updated_by",
-					title: t("updated_by"),
-					noWrap: true,
-					sortable: true,
-				},
+				...logs,
 			]}
 		/>
 	);
