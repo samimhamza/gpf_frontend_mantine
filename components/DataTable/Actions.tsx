@@ -1,4 +1,3 @@
-import { MdDelete } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { ActionIcon, Group } from "@mantine/core";
 import { TbEye } from "react-icons/tb";
@@ -30,17 +29,6 @@ export const Actions = ({ record }: { record: any }) => {
 				}}
 			>
 				<TbEdit size={16} />
-			</ActionIcon>
-			<ActionIcon
-				size="sm"
-				variant="transparent"
-				color="red"
-				onClick={(e) => {
-					e.stopPropagation(); // 👈 prevent triggering the row click function
-					console.log("delete", record);
-				}}
-			>
-				<MdDelete size={16} />
 			</ActionIcon>
 		</Group>
 	);

@@ -32,5 +32,10 @@
 	"created_by": "Created By",
 	"updated_by": "Updated By",
 	"deleted_by": "Deleted By",
-	"loading_data": "Loading Data"
+	"loading_data": "Loading Data",
+	"no_records": "No Records Found",
+	"user": "User",
+	"add": "Add",
+	"delete": "Delete",
+	"search": "Search"
 }
