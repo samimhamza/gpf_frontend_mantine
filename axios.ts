@@ -1,6 +1,7 @@
 "use server";
 
 import { authOptions } from "@/auth";
+import { notifications } from "@mantine/notifications";
 import axios from "axios";
 import { getServerSession } from "next-auth";
 
@@ -69,6 +70,19 @@ const putApiWithFile = (url: string, data = {}) =>
 		})
 		.then((res) => res.data);
 
+const deleteApi = async (url: string, ids: number[]) => {
+	let status = null;
+	let error = null;
+	let data = null;
+	try {
+		const response = await api.delete(url, { params: { ids: ids } });
+		status = response.status;
+		data = response.data;
+	} catch (err) {
+		error = err;
+	}
+	return { data, status, error };
+};
 // // API methods for making GET and POST requests
 // const getApi = async (url: string, params: any = {}) => {
 // 	let response = null;
@@ -146,18 +160,4 @@ const putApiWithFile = (url: string, data = {}) =>
 // 	}
 // };
 
-// const deleteApi = async (url: string) => {
-// 	try {
-// 		const response = await api.delete(url, {
-// 			headers: {
-// 				// 'accept': "*/*",
-// 				"Content-Type": "application/json",
-// 			},
-// 		});
-// 		return response.data;
-// 	} catch (error) {
-// 		return Promise.reject(error);
-// 	}
-// };
-
-export { getApi, postApi, postApiWithFile, putApi, putApiWithFile };
+export { getApi, postApi, postApiWithFile, putApi, putApiWithFile, deleteApi };

@@ -10,7 +10,6 @@ import * as z from "zod";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
 import ReactLoading from "react-loading";
-import classes from "./LoginForm.module.css";
 import { FormError } from "@/components/FormError";
 import { CardWrapper } from "../CardWrapper/CardWrapper";
 
@@ -66,7 +65,7 @@ export const LoginForm = ({ lng }: { lng: string }) => {
 				<Button type="submit" fullWidth mt="md">
 					{isPending ? (
 						<ReactLoading
-							className={classes.loadingButton}
+							className="loadingButton"
 							type={"bars"}
 							color="white"
 							width="32px"
@@ -77,6 +76,15 @@ export const LoginForm = ({ lng }: { lng: string }) => {
 					)}
 				</Button>
 			</Box>
+			<style jsx>{`
+				.loadingButton {
+					margin-left: auto;
+					margin-right: auto;
+				}
+				.loadingButton:hover {
+					fill: white;
+				}
+			`}</style>
 		</CardWrapper>
 	);
 };

@@ -1,19 +1,30 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { getApi } from "@/axios";
 import { Center } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TbClick } from "react-icons/tb";
-import useSWR from "swr";
 import { Actions } from "./Actions";
+
+interface DataProps {
+	data: Array<any>;
+	page: number;
+	per_page: number;
+	total: number;
+}
 
 interface DataTableProps {
 	url: string;
 	columns: Array<any>;
 	search: string;
 	lng: string;
+	selectedRecords: Array<any>;
+	setSelectedRecords: Dispatch<SetStateAction<any>>;
+	tableDetails: any;
+	setTableDetails: Dispatch<SetStateAction<any>>;
+	data: DataProps;
+	isLoading: boolean;
 }
 const renderActions = (record: any) => <Actions record={record} />;
 
@@ -22,6 +33,12 @@ const MantineDataTable = ({
 	columns,
 	search,
 	lng,
+	selectedRecords,
+	setSelectedRecords,
+	tableDetails,
+	setTableDetails,
+	data,
+	isLoading,
 	...additionalProps
 }: DataTableProps) => {
 	const { t } = useTranslation(lng);
@@ -32,36 +49,21 @@ const MantineDataTable = ({
 		columnAccessor: "created_at",
 		direction: "desc",
 	});
-	const [selectedRecords, setSelectedRecords] = useState([]);
-	const [tableDetails, setTableDetails] = useState({
-		page: 1,
-		per_page: 20,
-		search: "",
-		order_by: {
-			column: "created_at",
-			order: "desc",
-		},
-		filter_data: {},
-	});
-	const { data, error, isLoading } = useSWR([url, tableDetails], async () => {
-		const response = await getApi(url, tableDetails);
-		return response;
-	});
 
 	useEffect(() => {
-		setTableDetails((d) => {
+		setTableDetails((d: any) => {
 			return { ...d, search: search };
 		});
 	}, [search]);
 
 	const handlePageChange = (p: number) => {
-		setTableDetails((d) => {
+		setTableDetails((d: any) => {
 			return { ...d, page: p };
 		});
 	};
 
 	const handleSortStatusChange = (status: any) => {
-		setTableDetails((d) => {
+		setTableDetails((d: any) => {
 			return {
 				...d,
 				page: 1,

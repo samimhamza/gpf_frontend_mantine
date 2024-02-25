@@ -4,7 +4,6 @@ import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
 import { logColumns } from "@/shared/columns";
 import { UserColumns } from "@/shared/columns/user.columns";
-import ActionMenu from "@/components/DataTable/ActionMenu";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 
 export const UserModule = ({ lng }: { lng: string }) => {

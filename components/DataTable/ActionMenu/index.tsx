@@ -3,16 +3,51 @@ import { ActionIcon, Button, Group, Input, Paper } from "@mantine/core";
 import { MdAdd } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { deleteApi } from "@/axios";
+import { notifications } from "@mantine/notifications";
 
-const ActionMenu = ({ onSearch, lng }: { onSearch: any; lng: string }) => {
+interface ActionMenuProps {
+	selectedRecords: Array<any>;
+	onSearch: Dispatch<SetStateAction<string>>;
+	lng: string;
+	mutate: any;
+}
+
+const ActionMenu = ({
+	selectedRecords,
+	onSearch,
+	lng,
+	mutate,
+}: ActionMenuProps) => {
 	const { t } = useTranslation(lng);
 	const [search, setSearch] = useState("");
+	const [deleteLoading, setDeleteLoading] = useState(false);
 
 	const handleSearch = (e: any) => {
 		if (e.keyCode == 13) {
 			onSearch(search);
 		}
+	};
+
+	const handleDelete = async (e: any) => {
+		setDeleteLoading(true);
+		const ids = selectedRecords.map((rec) => rec.id);
+		const { status, error } = await deleteApi(`/users/${ids[0]}`, ids);
+		if (status == 204) {
+			mutate();
+			notifications.show({
+				position: "bottom-left",
+				title: "Successfully Deleted",
+				message: `sdff`,
+			});
+		}
+		if (error)
+			notifications.show({
+				title: "SomeThing went wrong",
+				message: "Delete operation denied",
+			});
+		setDeleteLoading(false);
 	};
 
 	return (
@@ -35,10 +70,17 @@ const ActionMenu = ({ onSearch, lng }: { onSearch: any; lng: string }) => {
 					</ActionIcon>
 				</Group>
 				<Group>
+					{selectedRecords.length > 0 && (
+						<Button
+							loading={deleteLoading}
+							onClick={handleDelete}
+							color="red"
+							rightSection={<MdDelete size={14} />}
+						>
+							{t("delete")}
+						</Button>
+					)}
 					<Button rightSection={<MdAdd size={14} />}>{t("add")}</Button>
-					<Button color="red" rightSection={<MdDelete size={14} />}>
-						{t("delete")}
-					</Button>
 				</Group>
 			</Group>
 		</Paper>
