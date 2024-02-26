@@ -1,11 +1,11 @@
 import {
+	Box,
 	Button,
 	CloseButton,
+	Group,
 	Modal,
 	ScrollArea,
 	Stepper,
-	Title,
-	px,
 	useMantineTheme,
 } from "@mantine/core";
 import { useState } from "react";
@@ -14,7 +14,7 @@ import { TbChevronLeft } from "react-icons/tb";
 import { FaArrowRotateLeft } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
 import { MdSend } from "react-icons/md";
-import { useViewportSize } from "@mantine/hooks";
+import { useMediaQuery } from "@mantine/hooks";
 import Done from "./Done";
 
 interface CustomModalProps {
@@ -23,7 +23,6 @@ interface CustomModalProps {
 	steps: any;
 	form: any;
 	submit: any;
-	title: string;
 }
 
 const CustomModal = ({
@@ -32,13 +31,13 @@ const CustomModal = ({
 	steps,
 	form,
 	submit,
-	title,
 }: CustomModalProps) => {
 	const theme = useMantineTheme();
 	const [active, setActive] = useState(0);
-	const { height, width } = useViewportSize();
 	const [invalids, setInvalids] = useState([]);
 	const [loading, setLoading] = useState<number | null>(null);
+	const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
+	const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 
 	let stepInside = [
 		...steps,
@@ -114,7 +113,7 @@ const CustomModal = ({
 				opened={opened}
 				onClose={close}
 				centered
-				size="70%"
+				size={mdMatches ? "70%" : "100%"}
 				className="custom-modal"
 				withCloseButton={false}
 				overlayProps={{
@@ -125,181 +124,97 @@ const CustomModal = ({
 				lockScroll={true}
 				closeOnClickOutside={false}
 			>
-				<div
-					style={{ maxHeight: 700, minHeight: 700 }}
-					className="flex flex-col md:flex-row rounded-3xl overflow-hidden"
+				<Group
+					justify="space-between"
+					align="flex-start"
+					p="md"
+					className="modal-header"
 				>
-					<div
-						className={`stpper-sidebar w-full md:w-72  flex items-center px-5 py-5 justify-center md:justify-start`}
+					<Stepper
+						active={active}
+						onStepClick={changeStep}
+						style={{ flex: 1 }}
+						py="sm"
 					>
-						<Stepper
-							active={active}
-							onStepClick={changeStep}
-							orientation={
-								width > parseInt(px(theme.breakpoints.sm))
-									? "vertical"
-									: "horizontal"
-							}
+						{stepInside.map((step, i) => (
+							<Stepper.Step
+								icon={step.icon}
+								label={smMatches ? step.title : ""}
+								key={i}
+								color="blue"
+								loading={loading == i}
+							/>
+						))}
+					</Stepper>
+					<CloseButton
+						className="close-btn"
+						aria-label="Close modal"
+						onClick={close}
+					/>
+				</Group>
+				<ScrollArea h={450}>
+					{stepInside.map((step, i) => (
+						<div
+							key={i}
+							className={`stepper-item ${active == i ? "show" : "hide"} `}
 						>
-							{stepInside.map((step, i) => (
-								<Stepper.Step
-									icon={step.icon}
-									label={
-										width > parseInt(px(theme.breakpoints.sm))
-											? step.title
-											: null
-									}
-									key={i}
-									color={invalids.includes(i) ? "red" : theme.primaryColor}
-									loading={loading == i}
+							{active == i ? <step.step form={form} /> : <></>}
+						</div>
+					))}
+				</ScrollArea>
+				<Group justify="flex-end" p="sm" className="modal-footer">
+					{active !== 0 && active !== stepInside.length - 1 && (
+						<Button
+							leftSection={<TbChevronRight />}
+							variant="gradient"
+							onClick={prev}
+						>
+							Prev
+						</Button>
+					)}
+					{active == stepInside.length - 2 ? (
+						<Button
+							rightSection={
+								<MdSend
+									style={{
+										transform: "rotate(-180deg)",
+									}}
 								/>
-							))}
-						</Stepper>
-					</div>
-					<div className="w-full relative stepperBody">
-						<CloseButton
-							className="close-btn"
-							aria-label="Close modal"
-							onClick={close}
-						/>
-						<div className="content p-5 pb-20">
-							<Title order={3} className="mt-4">
-								{title ? title : ""}
-							</Title>
-							<div
-								className=" relative"
-								style={{
-									height:
-										width > parseInt(px(theme.breakpoints.sm)) ? 540 : 450,
-								}}
-							>
-								{stepInside.map((step, i) => (
-									<div
-										key={i}
-										className={`stepper-item ${active == i ? "show" : "hide"} `}
-									>
-										<ScrollArea
-											style={{
-												height:
-													width > parseInt(px(theme.breakpoints.sm))
-														? 540
-														: 450,
-											}}
-										>
-											{active == i ? <step.step form={form} /> : <></>}
-										</ScrollArea>
-									</div>
-								))}
-							</div>
-						</div>
-						<div className="stepper-body-footer flex items-center justify-between p-4  border-t border-gray-100 stepperBodyFooter">
-							<div>
-								{active !== 0 && active !== stepInside.length - 1 ? (
-									<Button
-										className="m-1"
-										leftSection={<TbChevronLeft />}
-										variant="gradient"
-										onClick={prev}
-									>
-										Prev
-									</Button>
-								) : (
-									<></>
-								)}
-							</div>
-							<div>
-								{active == stepInside.length - 2 ? (
-									<Button
-										className="m-1 "
-										rightSection={<MdSend />}
-										variant="gradient"
-										type={"submit"}
-										onClick={submitInside}
-									>
-										Submit
-									</Button>
-								) : active == stepInside.length - 1 ? (
-									<Button
-										className="m-1 "
-										rightSection={<FaArrowRotateLeft />}
-										variant="gradient"
-										onClick={restart}
-									>
-										Restart
-									</Button>
-								) : (
-									<Button
-										className="m-1 "
-										rightSection={<TbChevronRight />}
-										variant="gradient"
-										onClick={next}
-									>
-										Next
-									</Button>
-								)}
-							</div>
-						</div>
-					</div>
-				</div>
+							}
+							variant="gradient"
+							type={"submit"}
+							onClick={submitInside}
+						>
+							Submit
+						</Button>
+					) : active == stepInside.length - 1 ? (
+						<Button
+							rightSection={<FaArrowRotateLeft />}
+							variant="gradient"
+							onClick={restart}
+						>
+							Restart
+						</Button>
+					) : (
+						<Button
+							rightSection={<TbChevronLeft />}
+							variant="gradient"
+							onClick={next}
+						>
+							Next
+						</Button>
+					)}
+				</Group>
 			</Modal>
 			<style jsx global>{`
-				.custom-modal .mantine-Modal-inner {
-					z-index: 10000;
-					position: fixed;
-				}
-				.custom-modal .mantine-Modal-modal {
+				.custom-modal .mantine-Modal-body {
 					padding: 0;
-					background: transparent;
 				}
-				.custom-modal .mantine-Modal-close {
-					margin-right: 20px;
-					margin-top: 20px;
+				.custom-modal .modal-header {
+					border-bottom: 1px solid var(--mantine-color-gray-4);
 				}
-				.custom-modal .mantine-Stepper-stepBody {
-					margin-top: 14px;
-				}
-				.custom-modal .close-btn {
-					position: absolute;
-					top: 16px;
-					right: 16px;
-				}
-				.stpper-sidebar {
-					background: rgba(200, 200, 200, 0.7);
-					backdrop-filter: blur(10px);
-					transition: all 0.5s !important;
-				}
-				.stpper-sidebar.dark {
-					background: rgba(0, 0, 0, 0.3);
-				}
-				.stepper-body-footer {
-					position: absolute;
-					bottom: 0;
-					right: 0;
-					left: 0;
-				}
-				.stepper-item {
-					position: absolute;
-					top: 0;
-					right: 0;
-					left: 0;
-					bottom: 0;
-					transform: rotateX(0);
-					opacity: 1;
-					transition: all 0.7s;
-					z-index: 1;
-				}
-				.hide {
-					transform: rotateX(180deg);
-					opacity: 0;
-					z-index: 0;
-				}
-				
-				.stepperBodyFooter: {
-					background: var(--mantine-color-gray-0)
-					borderTop: 1px solid var(--mantine-color-gray-4);
-				}
-				.stepperBody: {
-					background: var(--mantine-color-gray-0);
+				.custom-modal .modal-footer {
+					border-top: 1px solid var(--mantine-color-gray-4);
 				}
 			`}</style>
 		</>

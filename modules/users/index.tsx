@@ -23,9 +23,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable url="/users" lng={lng} columns={columns} open={open} />
-			{opened && (
-				<UserModal opened={opened} close={close} title="User Modal" lng={lng} />
-			)}
+			{opened && <UserModal opened={opened} close={close} lng={lng} />}
 		</>
 	);
 };

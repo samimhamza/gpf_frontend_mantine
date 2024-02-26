@@ -3,21 +3,19 @@
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import { useForm, zodResolver } from "@mantine/form";
-import CustomModal from "@/components/CustomModal";
 import { UserSchema } from "@/schemas/pages/users";
 import { TbUserCircle } from "react-icons/tb";
 import { TbShieldCheck } from "react-icons/tb";
 import { useTranslation } from "@/app/i18n/client";
+import CustomModal from "@/components/CustomModal";
 
 const UserModal = ({
 	opened,
 	close,
-	title,
 	lng,
 }: {
 	opened: boolean;
 	close: () => void;
-	title: string;
 	lng: string;
 }) => {
 	const { t } = useTranslation(lng);
@@ -91,7 +89,6 @@ const UserModal = ({
 				steps={steps}
 				form={form}
 				submit={submit}
-				title={title}
 			/>
 		</form>
 	);
