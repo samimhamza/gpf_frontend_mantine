@@ -37,5 +37,8 @@
 	"user": "User",
 	"add": "Add",
 	"delete": "Delete",
-	"search": "Search"
+	"search": "Search",
+	"successfully_deleted": "Successfully Deleted",
+	"add_user": "Create User",
+	"update_user": "Update User"
 }

@@ -5,13 +5,14 @@ import { MdDelete } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { Dispatch, SetStateAction, useState } from "react";
 import { deleteApi } from "@/axios";
-import { notifications } from "@mantine/notifications";
+import toast from "react-hot-toast";
 
 interface ActionMenuProps {
 	selectedRecords: Array<any>;
 	onSearch: Dispatch<SetStateAction<string>>;
 	lng: string;
 	mutate: any;
+	open?: () => void;
 }
 
 const ActionMenu = ({
@@ -19,6 +20,7 @@ const ActionMenu = ({
 	onSearch,
 	lng,
 	mutate,
+	open,
 }: ActionMenuProps) => {
 	const { t } = useTranslation(lng);
 	const [search, setSearch] = useState("");
@@ -33,20 +35,14 @@ const ActionMenu = ({
 	const handleDelete = async (e: any) => {
 		setDeleteLoading(true);
 		const ids = selectedRecords.map((rec) => rec.id);
-		const { status, error } = await deleteApi(`/users/${ids[0]}`, ids);
+		const { status, error } = await deleteApi("/users/1", ids);
+
 		if (status == 204) {
-			mutate();
-			notifications.show({
-				position: "bottom-left",
-				title: "Successfully Deleted",
-				message: `sdff`,
-			});
+			await mutate();
+			toast.success(t("successfully_deleted"));
 		}
-		if (error)
-			notifications.show({
-				title: "SomeThing went wrong",
-				message: "Delete operation denied",
-			});
+		if (error) toast.error(t("something_went_wrong"));
+
 		setDeleteLoading(false);
 	};
 
@@ -80,7 +76,9 @@ const ActionMenu = ({
 							{t("delete")}
 						</Button>
 					)}
-					<Button rightSection={<MdAdd size={14} />}>{t("add")}</Button>
+					<Button onClick={open} rightSection={<MdAdd size={14} />}>
+						{t("add")}
+					</Button>
 				</Group>
 			</Group>
 		</Paper>

@@ -8,12 +8,14 @@ interface DataTableProps {
 	url: string;
 	columns: Array<any>;
 	lng: string;
+	open?: () => void;
 }
 
 const CustomDataTable = ({
 	url,
 	columns,
 	lng,
+	open,
 	...additionalProps
 }: DataTableProps) => {
 	const [search, setSearch] = useState("");
@@ -43,6 +45,7 @@ const CustomDataTable = ({
 				lng={lng}
 				selectedRecords={selectedRecords}
 				mutate={mutate}
+				open={open}
 			/>
 			<MantineDataTable
 				url={url}

@@ -9,17 +9,28 @@ import "@mantine/notifications/styles.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, createTheme } from "@mantine/core";
 import { ColorSchemeScript } from "@mantine/core";
 
 import { dir } from "i18next";
 import { languages } from "../i18n/settings";
 import AuthProvider from "@/app/[lng]/AuthProvider";
 import { Notifications } from "@mantine/notifications";
+import { Toaster } from "react-hot-toast";
 
 export async function generateStaticParams() {
 	return languages.map((lng) => ({ lng }));
 }
+
+const theme = createTheme({
+	breakpoints: {
+		xs: "30em",
+		sm: "48em",
+		md: "64em",
+		lg: "74em",
+		xl: "90em",
+	},
+});
 
 export default function RootLayout({
 	children,
@@ -37,9 +48,10 @@ export default function RootLayout({
 			</head>
 			<body className={inter.className}>
 				<AuthProvider>
-					<MantineProvider>
-						<Notifications />
+					<MantineProvider theme={theme}>
+						<Notifications position="bottom-left" />
 						{children}
+						<Toaster />
 					</MantineProvider>
 				</AuthProvider>
 			</body>

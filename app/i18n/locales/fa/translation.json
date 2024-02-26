@@ -10,7 +10,7 @@
 	"gpf": "بنیاد گل آغا پروانی",
 	"logout": "خروج از برنامه",
 	"change_password": "تغییر رمز کاربری",
-	"something_went_wrong": ".اشتباهی رخ داده است",
+	"something_went_wrong": "اشتباهی رخ داده است",
 	"invalid_credentials": "ایمیل و یا پسورد اشتباه هست و یا حساب شما غیر فعال گردیده است",
 	"dashboard": "داشبورد",
 	"covered_areas": "ساحات تحت پوشش",
@@ -37,5 +37,8 @@
 	"user": "کاربر",
 	"add": "ایجاد",
 	"delete": "حذف",
-	"search": "جستجو"
+	"search": "جستجو",
+	"successfully_deleted": "موفقانه حذف گردید",
+	"add_user": "ایجاد کاربر ",
+	"update_user": "ویرایش کاربر"
 }

@@ -1,7 +1,6 @@
 "use server";
 
 import { authOptions } from "@/auth";
-import { notifications } from "@mantine/notifications";
 import axios from "axios";
 import { getServerSession } from "next-auth";
 
