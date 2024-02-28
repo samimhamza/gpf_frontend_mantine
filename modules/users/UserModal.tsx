@@ -1,14 +1,13 @@
 "use client";
 
-import StepOne from "./StepOne";
-import StepTwo from "./StepTwo";
+import StepOne from "@/components/users/StepOne";
+import StepTwo from "@/components/users/StepTwo";
 import { useForm, zodResolver } from "@mantine/form";
 import { UserSchema } from "@/schemas/models/users";
 import { TbUserCircle } from "react-icons/tb";
 import { TbShieldCheck } from "react-icons/tb";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
-import { getApi } from "@/axios";
 import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -28,6 +27,8 @@ const UserModal = ({
 	const callApi = useAxios({ method: "GET" });
 	const callPostApi = useAxios({ method: "POST" });
 	const [offices, setOffices] = useState([]);
+	const [permissions, setPermissions] = useState([]);
+	const [totalPermissions, setTotalPermissions] = useState<number>(0);
 
 	useEffect(() => {
 		(async function () {
@@ -40,8 +41,18 @@ const UserModal = ({
 						return { value: item.id.toString(), label: item.name };
 					})
 				);
-			} else {
-				console.error(error.message);
+			}
+		})();
+	}, []);
+
+	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				url: "/grouped_permissions",
+			});
+			if (status == 200 && response.result == true) {
+				setPermissions(response.data);
+				setTotalPermissions(response.total);
 			}
 		})();
 	}, []);
@@ -54,12 +65,13 @@ const UserModal = ({
 			office_id: "",
 			password: "",
 			confirm_password: "",
-			roles: "",
-			permissions: "",
+			roles: [],
+			permissions: [],
 		},
 		validate: zodResolver(userSchema),
 		validateInputOnBlur: true,
 	});
+
 	const steps = [
 		{
 			title: t("user_info"),
@@ -110,7 +122,14 @@ const UserModal = ({
 		{
 			title: t("authorizations"),
 			icon: <TbShieldCheck size={22} />,
-			step: <StepTwo />,
+			step: (
+				<StepTwo
+					permissions={permissions}
+					form={form}
+					lng={lng}
+					totalPermissions={totalPermissions}
+				/>
+			),
 		},
 	];
 	return (

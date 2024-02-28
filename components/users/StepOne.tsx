@@ -1,8 +1,9 @@
+"use client";
+
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
 import { Flex, Loader, PasswordInput, Select, TextInput } from "@mantine/core";
 import { useState } from "react";
-import toast from "react-hot-toast";
 
 interface StepOneProps {
 	form: any;

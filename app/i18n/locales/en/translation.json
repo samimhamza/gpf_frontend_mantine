@@ -48,5 +48,7 @@
 	"noting_found": "Not Found",
 	"settings": "Settings",
 	"email_already_exists": "Email Already Exists",
-	"username_already_exists": "Username Already Exists"
+	"username_already_exists": "Username Already Exists",
+	"permissions": "Permissions",
+	"all": "All"
 }

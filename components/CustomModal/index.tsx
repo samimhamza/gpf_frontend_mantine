@@ -16,7 +16,6 @@ import { FaCheck } from "react-icons/fa6";
 import { MdSend } from "react-icons/md";
 import { useMediaQuery } from "@mantine/hooks";
 import Done from "./Done";
-import toast from "react-hot-toast";
 
 interface CustomModalProps {
 	opened: boolean;
@@ -37,7 +36,6 @@ const CustomModal = ({
 }: CustomModalProps) => {
 	const theme = useMantineTheme();
 	const [active, setActive] = useState(0);
-	const [invalids, setInvalids] = useState([]);
 	const [loading, setLoading] = useState<number | null>(null);
 	const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
 	const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
@@ -56,7 +54,6 @@ const CustomModal = ({
 		if (active < stepInside.length - 1) {
 			let res = await stepInside[active].validate();
 			if (res) {
-				setInvalids(invalids.filter((item) => item != active));
 				setActive(active + 1);
 				form.clearErrors();
 			} else {
@@ -81,13 +78,6 @@ const CustomModal = ({
 			let res = true;
 			for (let i = 0; i < index; i++) {
 				let stepRes = await stepInside[i].validate();
-				if (stepRes) {
-					setInvalids(invalids.filter((item) => item != i));
-				} else {
-					// if (!invalids.includes(i)) {
-					// 	setInvalids([...invalids, i]);
-					// }
-				}
 				res = res && stepRes;
 			}
 			if (res && index !== stepInside.length - 1) {
@@ -102,10 +92,7 @@ const CustomModal = ({
 		if (form.isValid()) {
 			let res = await submit();
 			if (res) {
-				setInvalids(invalids.filter((item) => item != active));
 				next();
-			} else {
-				// setInvalids([...invalids, active]);
 			}
 		}
 		setLoading(null);
@@ -116,7 +103,7 @@ const CustomModal = ({
 				opened={opened}
 				onClose={close}
 				centered
-				size={mdMatches ? "50%" : smMatches ? "80%" : "100%"}
+				size={mdMatches ? "70%" : smMatches ? "80%" : "100%"}
 				className="custom-modal"
 				withCloseButton={false}
 				overlayProps={{

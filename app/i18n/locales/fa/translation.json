@@ -48,5 +48,7 @@
 	"noting_found": "چیزی پیدا نشد",
 	"settings": "تنظیمات",
 	"email_already_exists": "ایمیل موجود است",
-	"username_already_exists": "نام کاربری موجود است"
+	"username_already_exists": "نام کاربری موجود است",
+	"permissions": "مجوز ها",
+	"all": "انتخاب همه"
 }
