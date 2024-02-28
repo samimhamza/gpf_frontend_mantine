@@ -4,8 +4,8 @@ import { MdAdd } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { Dispatch, SetStateAction, useState } from "react";
-import { deleteApi } from "@/axios";
 import toast from "react-hot-toast";
+import { useAxios } from "@/customHooks/useAxios";
 
 interface ActionMenuProps {
 	selectedRecords: Array<any>;
@@ -25,6 +25,7 @@ const ActionMenu = ({
 	const { t } = useTranslation(lng);
 	const [search, setSearch] = useState("");
 	const [deleteLoading, setDeleteLoading] = useState(false);
+	const callApi = useAxios({ method: "DELETE" });
 
 	const handleSearch = (e: any) => {
 		if (e.keyCode == 13) {
@@ -35,7 +36,10 @@ const ActionMenu = ({
 	const handleDelete = async (e: any) => {
 		setDeleteLoading(true);
 		const ids = selectedRecords.map((rec) => rec.id);
-		const { status, error } = await deleteApi("/users/1", ids);
+		const { status, error } = await callApi({
+			url: "/users/1",
+			data: { ids },
+		});
 
 		if (status == 204) {
 			await mutate();

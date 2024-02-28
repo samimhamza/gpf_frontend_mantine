@@ -19,6 +19,7 @@
 	"mosques": "Mosques",
 	"users": "Users",
 	"full_name": "Full Name",
+	"name": "Name",
 	"email": "Email",
 	"username": "Username",
 	"office": "Office",
@@ -40,5 +41,8 @@
 	"search": "Search",
 	"successfully_deleted": "Successfully Deleted",
 	"add_user": "Create User",
-	"update_user": "Update User"
+	"update_user": "Update User",
+	"user_info": "User Info",
+	"authorizations": "Authorizations",
+	"done": "Done"
 }

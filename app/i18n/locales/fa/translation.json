@@ -18,7 +18,8 @@
 	"districts": "مناطق",
 	"mosques": "مساجد",
 	"users": "کاربر ها",
-	"full_name": "اسم",
+	"full_name": "اسم و تخلص",
+	"name": "اسم",
 	"email": "ایمیل",
 	"username": "نام کاربری",
 	"office": "دفتر",
@@ -40,5 +41,8 @@
 	"search": "جستجو",
 	"successfully_deleted": "موفقانه حذف گردید",
 	"add_user": "ایجاد کاربر ",
-	"update_user": "ویرایش کاربر"
+	"update_user": "ویرایش کاربر",
+	"user_info": "اطلاعات کاربر",
+	"authorizations": "مجوز ها",
+	"done": "تکمیل"
 }

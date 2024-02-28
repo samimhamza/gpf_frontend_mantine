@@ -17,6 +17,8 @@ import { languages } from "../i18n/settings";
 import AuthProvider from "@/app/[lng]/AuthProvider";
 import { Notifications } from "@mantine/notifications";
 import { Toaster } from "react-hot-toast";
+import { authOptions } from "@/auth";
+import { getServerSession } from "next-auth";
 
 export async function generateStaticParams() {
 	return languages.map((lng) => ({ lng }));
@@ -32,7 +34,7 @@ const theme = createTheme({
 	},
 });
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 	params: { lng },
 }: {
@@ -41,13 +43,14 @@ export default function RootLayout({
 		lng: string;
 	};
 }) {
+	const session = await getServerSession(authOptions);
 	return (
 		<html lang={lng} dir={dir(lng)}>
 			<head>
 				<ColorSchemeScript defaultColorScheme="light" />
 			</head>
 			<body className={inter.className}>
-				<AuthProvider>
+				<AuthProvider session={session}>
 					<MantineProvider theme={theme}>
 						<Notifications position="bottom-left" />
 						{children}

@@ -3,6 +3,7 @@ import ActionMenu from "./ActionMenu";
 import { MantineDataTable } from "./MantineDataTable";
 import { getApi } from "@/axios";
 import useSWR from "swr";
+import { useAxios } from "@/customHooks/useAxios";
 
 interface DataTableProps {
 	url: string;
@@ -18,6 +19,7 @@ const CustomDataTable = ({
 	open,
 	...additionalProps
 }: DataTableProps) => {
+	const callApi = useAxios({ method: "GET" });
 	const [search, setSearch] = useState("");
 	const [selectedRecords, setSelectedRecords] = useState([]);
 	const [tableDetails, setTableDetails] = useState({
@@ -33,7 +35,10 @@ const CustomDataTable = ({
 	const { data, error, isLoading, mutate } = useSWR(
 		[url, tableDetails],
 		async () => {
-			const response = await getApi(url, tableDetails);
+			const { response } = await callApi({
+				url,
+				params: tableDetails,
+			});
 			return response;
 		}
 	);

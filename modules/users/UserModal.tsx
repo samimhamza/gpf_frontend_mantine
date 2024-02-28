@@ -3,11 +3,15 @@
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import { useForm, zodResolver } from "@mantine/form";
-import { UserSchema } from "@/schemas/pages/users";
+import { UserSchema } from "@/schemas/models/users";
 import { TbUserCircle } from "react-icons/tb";
 import { TbShieldCheck } from "react-icons/tb";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
+import { getApi } from "@/axios";
+import toast from "react-hot-toast";
+import { useAxios } from "@/customHooks/useAxios";
+import { useEffect } from "react";
 
 const UserModal = ({
 	opened,
@@ -21,6 +25,20 @@ const UserModal = ({
 	const { t } = useTranslation(lng);
 	const submit = async () => {};
 	const userSchema = UserSchema(t);
+	const callApi = useAxios({ method: "GET" });
+
+	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				url: "/office/auto_complete",
+			});
+			if (status == 200) {
+				toast.success(JSON.stringify(response));
+			} else {
+				toast.error(JSON.stringify(error.message));
+			}
+		})();
+	}, []);
 
 	const form = useForm({
 		initialValues: {
@@ -38,59 +56,49 @@ const UserModal = ({
 	});
 	const steps = [
 		{
-			title: "General Info",
+			title: t("user_info"),
 			icon: <TbUserCircle size={22} />,
-			step: StepOne,
+			step: <StepOne form={form} lng={lng} />,
 			async validate() {
-				// form.validate();
-				// let res =
-				// 	form.isValid("firstname") &&
-				// 	form.isValid("lastname") &&
-				// 	form.isValid("birth_date") &&
-				// 	form.isValid("job_title") &&
-				// 	form.isValid("phone") &&
-				// 	form.isValid("whatsapp") &&
-				// 	form.isValid("gender");
-				return true;
+				let response = await getApi("/user/valid_credential", {
+					email: form.values.email,
+					username: form.values.username,
+				});
+				if (response.status === 226) {
+					form.setErrors({
+						email: response.data == 1 ? `Email Already Exists` : "",
+						username: response.data == 2 ? `Username Already Exists` : "",
+					});
+					return false;
+				} else if (response.status !== 200) {
+					return false;
+				}
+				form.validate();
+				let res =
+					form.isValid("full_name") &&
+					form.isValid("office_id") &&
+					form.isValid("email") &&
+					form.isValid("username") &&
+					form.isValid("password") &&
+					form.isValid("confirm_password");
+				return res;
 			},
 		},
 		{
-			title: "Credentials",
+			title: t("authorizations"),
 			icon: <TbShieldCheck size={22} />,
-			step: StepTwo,
-			async validate() {
-				// let emailExist = await exists("email", form.values.email);
-				// let usernameExist = await exists("username", form.values.username);
-				// if (emailExist || usernameExist) {
-				// 	form.setErrors({
-				// 		email: emailExist ? `Email Already Exists` : "",
-				// 		username: usernameExist ? `Username Already Exists` : "",
-				// 	});
-				// 	return false;
-				// }
-				// form.validate();
-				// let res =
-				// 	!emailExist &&
-				// 	!usernameExist &&
-				// 	form.isValid("email") &&
-				// 	form.isValid("username") &&
-				// 	form.isValid("password") &&
-				// 	form.isValid("confirm_password") &&
-				// 	form.isValid("roles");
-				return true;
-			},
+			step: <StepTwo />,
 		},
 	];
 	return (
-		<form>
-			<CustomModal
-				opened={opened}
-				close={close}
-				steps={steps}
-				form={form}
-				submit={submit}
-			/>
-		</form>
+		<CustomModal
+			opened={opened}
+			close={close}
+			steps={steps}
+			form={form}
+			submit={submit}
+			doneTitle={t("done")}
+		/>
 	);
 };
 

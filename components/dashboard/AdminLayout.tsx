@@ -15,6 +15,8 @@ import Image from "next/image";
 import { LinksGroup } from "./NavbarLinksGroup/NavbarLinksGroup";
 import { navItems } from "./NavItems";
 import { userProps } from "@/types/next-auth";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const getNameAbbr = (name: string) => {
 	var words = name.split(" ");
@@ -36,6 +38,7 @@ export function AdminLayout({
 }) {
 	const [opened, { toggle }] = useDisclosure();
 	const { t } = useTranslation(lng);
+	const router = useRouter();
 	const navList = navItems(t);
 	const userNavList = navList.filter((item) => {
 		if (
@@ -44,6 +47,13 @@ export function AdminLayout({
 		)
 			return item;
 	});
+	const logout = async () => {
+		// const { status } = await getApi("/logout");
+		signOut({
+			redirect: false,
+		});
+		router.push("/auth/login");
+	};
 
 	const links = userNavList.map((item) => (
 		<LinksGroup

@@ -18,6 +18,7 @@ api.interceptors.request.use(async (config) => {
 		config.headers.Authorization = `Bearer ${data.user.token}`;
 	}
 	config.headers["Content-Type"] = "application/json";
+	config.headers.Accept = "application/json";
 	return config;
 });
 
@@ -44,119 +45,4 @@ api.interceptors.response.use(
 
 const getApi = (url: string, params = {}) =>
 	api.get(url, { params }).then((res) => res.data);
-
-const postApi = (url: string, data = {}) =>
-	api.post(url, data).then((res) => res.data);
-
-const postApiWithFile = (url: string, data = {}) =>
-	api
-		.post(url, data, {
-			headers: {
-				"Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
-			},
-		})
-		.then((res) => res.data);
-
-const putApi = (url: string, data = {}) =>
-	api.put(url, data).then((res) => res.data);
-
-const putApiWithFile = (url: string, data = {}) =>
-	api
-		.put(url, data, {
-			headers: {
-				"Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
-			},
-		})
-		.then((res) => res.data);
-
-const deleteApi = async (url: string, ids: number[]) => {
-	let status = null;
-	let error = null;
-	let data = null;
-	try {
-		const response = await api.delete(url, { params: { ids: ids } });
-		status = response.status;
-		data = response.data;
-	} catch (err) {
-		error = err;
-	}
-	return { data, status, error };
-};
-// // API methods for making GET and POST requests
-// const getApi = async (url: string, params: any = {}) => {
-// 	let response = null;
-// 	let loading = false;
-// 	let status = 404;
-// 	let error = null;
-// 	try {
-// 		loading = true;
-// 		const res = await api.get(url, params);
-// 		loading = false;
-// 		if (res.status == 200) {
-// 			response = res.data;
-// 		}
-// 		status = res.status;
-// 	} catch (err) {
-// 		loading = false;
-// 		error = err;
-// 	}
-// 	return { response, loading, status, error };
-// };
-
-// const postApi = async (url: string, data: Object = {}) => {
-// 	let response = null;
-// 	let loading = false;
-// 	let status = 404;
-// 	let error = null;
-// 	try {
-// 		loading = true;
-// 		const res = await api.post(url, data);
-// 		loading = false;
-// 		if (res.status == 201) {
-// 			response = res.data;
-// 		}
-// 		status = res.status;
-// 	} catch (err) {
-// 		loading = false;
-// 		error = err;
-// 	}
-// 	return { response, loading, status, error };
-// };
-
-// const postWithFileApi = async (url: string, data: any) => {
-// 	try {
-// 		const response = await api.post(url, data, {
-// 			headers: {
-// 				"Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
-// 			},
-// 		});
-// 		return response.data;
-// 	} catch (error) {
-// 		return Promise.reject(error);
-// 	}
-// };
-
-// const putApi = async (url: string, data: any) => {
-// 	try {
-// 		const response = await api.put(url, data);
-// 		return response.data;
-// 	} catch (error) {
-// 		return Promise.reject(error);
-// 	}
-// };
-
-// const putWithFileApi = async (url: string, data: any) => {
-// 	try {
-// 		const response = await api.put(url, JSON.stringify(data), {
-// 			headers: {
-// 				// 'accept': "*/*",
-// 				"Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
-// 			},
-// 		});
-// 		return response.data;
-// 	} catch (error) {
-// 		return Promise.reject(error);
-// 	}
-// };
-
-export { getApi, postApi, postApiWithFile, putApi, putApiWithFile, deleteApi };
+export { getApi };

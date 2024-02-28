@@ -23,6 +23,7 @@ interface CustomModalProps {
 	steps: any;
 	form: any;
 	submit: any;
+	doneTitle: string;
 }
 
 const CustomModal = ({
@@ -31,6 +32,7 @@ const CustomModal = ({
 	steps,
 	form,
 	submit,
+	doneTitle,
 }: CustomModalProps) => {
 	const theme = useMantineTheme();
 	const [active, setActive] = useState(0);
@@ -42,7 +44,7 @@ const CustomModal = ({
 	let stepInside = [
 		...steps,
 		{
-			title: "Done",
+			title: doneTitle,
 			icon: <FaCheck />,
 			step: () => <Done />,
 		},
@@ -113,7 +115,7 @@ const CustomModal = ({
 				opened={opened}
 				onClose={close}
 				centered
-				size={mdMatches ? "70%" : "100%"}
+				size={mdMatches ? "50%" : smMatches ? "80%" : "100%"}
 				className="custom-modal"
 				withCloseButton={false}
 				overlayProps={{
@@ -124,87 +126,89 @@ const CustomModal = ({
 				lockScroll={true}
 				closeOnClickOutside={false}
 			>
-				<Group
-					justify="space-between"
-					align="flex-start"
-					p="md"
-					className="modal-header"
-				>
-					<Stepper
-						active={active}
-						onStepClick={changeStep}
-						style={{ flex: 1 }}
-						py="sm"
+				<form>
+					<Group
+						justify="space-between"
+						align="flex-start"
+						p="md"
+						className="modal-header"
 					>
-						{stepInside.map((step, i) => (
-							<Stepper.Step
-								icon={step.icon}
-								label={smMatches ? step.title : ""}
-								key={i}
-								color="blue"
-								loading={loading == i}
-							/>
-						))}
-					</Stepper>
-					<CloseButton
-						className="close-btn"
-						aria-label="Close modal"
-						onClick={close}
-					/>
-				</Group>
-				<ScrollArea h={450}>
-					{stepInside.map((step, i) => (
-						<div
-							key={i}
-							className={`stepper-item ${active == i ? "show" : "hide"} `}
+						<Stepper
+							active={active}
+							onStepClick={changeStep}
+							style={{ flex: 1 }}
+							py="sm"
 						>
-							{active == i ? <step.step form={form} /> : <></>}
-						</div>
-					))}
-				</ScrollArea>
-				<Group justify="flex-end" p="sm" className="modal-footer">
-					{active !== 0 && active !== stepInside.length - 1 && (
-						<Button
-							leftSection={<TbChevronRight />}
-							variant="gradient"
-							onClick={prev}
-						>
-							Prev
-						</Button>
-					)}
-					{active == stepInside.length - 2 ? (
-						<Button
-							rightSection={
-								<MdSend
-									style={{
-										transform: "rotate(-180deg)",
-									}}
+							{stepInside.map((step, i) => (
+								<Stepper.Step
+									icon={step.icon}
+									label={smMatches ? step.title : ""}
+									key={i}
+									color="blue"
+									loading={loading == i}
 								/>
-							}
-							variant="gradient"
-							type={"submit"}
-							onClick={submitInside}
-						>
-							Submit
-						</Button>
-					) : active == stepInside.length - 1 ? (
-						<Button
-							rightSection={<FaArrowRotateLeft />}
-							variant="gradient"
-							onClick={restart}
-						>
-							Restart
-						</Button>
-					) : (
-						<Button
-							rightSection={<TbChevronLeft />}
-							variant="gradient"
-							onClick={next}
-						>
-							Next
-						</Button>
-					)}
-				</Group>
+							))}
+						</Stepper>
+						<CloseButton
+							className="close-btn"
+							aria-label="Close modal"
+							onClick={close}
+						/>
+					</Group>
+					<ScrollArea h={400}>
+						{stepInside.map((step, i) => (
+							<div
+								key={i}
+								className={`stepper-item ${active == i ? "show" : "hide"} `}
+							>
+								{active == i && step.step}
+							</div>
+						))}
+					</ScrollArea>
+					<Group justify="flex-end" p="sm" className="modal-footer">
+						{active !== 0 && active !== stepInside.length - 1 && (
+							<Button
+								leftSection={<TbChevronRight />}
+								variant="gradient"
+								onClick={prev}
+							>
+								Prev
+							</Button>
+						)}
+						{active == stepInside.length - 2 ? (
+							<Button
+								rightSection={
+									<MdSend
+										style={{
+											transform: "rotate(-180deg)",
+										}}
+									/>
+								}
+								variant="gradient"
+								type={"submit"}
+								onClick={submitInside}
+							>
+								Submit
+							</Button>
+						) : active == stepInside.length - 1 ? (
+							<Button
+								rightSection={<FaArrowRotateLeft />}
+								variant="gradient"
+								onClick={restart}
+							>
+								Restart
+							</Button>
+						) : (
+							<Button
+								rightSection={<TbChevronLeft />}
+								variant="gradient"
+								onClick={next}
+							>
+								Next
+							</Button>
+						)}
+					</Group>
+				</form>
 			</Modal>
 			<style jsx global>{`
 				.custom-modal .mantine-Modal-body {
