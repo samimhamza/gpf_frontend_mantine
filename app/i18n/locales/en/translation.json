@@ -44,5 +44,9 @@
 	"update_user": "Update User",
 	"user_info": "User Info",
 	"authorizations": "Authorizations",
-	"done": "Done"
+	"done": "Done",
+	"noting_found": "Not Found",
+	"settings": "Settings",
+	"email_already_exists": "Email Already Exists",
+	"username_already_exists": "Username Already Exists"
 }

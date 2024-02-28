@@ -1,7 +1,7 @@
 import * as z from "zod";
 
-export const UserSchema = (t: (arg: string) => string) =>
-	z
+export const UserSchema = (t: (arg: string) => string) => {
+	return z
 		.object({
 			full_name: z
 				.string()
@@ -19,6 +19,7 @@ export const UserSchema = (t: (arg: string) => string) =>
 				.string()
 				.min(3, { message: t("username_min") })
 				.max(64, { message: t("username_max") }),
+
 			password: z.string().min(8, { message: t("password_min") }),
 			password_confirmation: z.string().min(8, { message: t("password_min") }),
 		})
@@ -26,3 +27,4 @@ export const UserSchema = (t: (arg: string) => string) =>
 			message: t("password_not_match"),
 			path: ["password_confirmation"],
 		});
+};

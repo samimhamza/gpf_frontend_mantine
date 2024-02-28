@@ -16,6 +16,7 @@ import { FaCheck } from "react-icons/fa6";
 import { MdSend } from "react-icons/md";
 import { useMediaQuery } from "@mantine/hooks";
 import Done from "./Done";
+import toast from "react-hot-toast";
 
 interface CustomModalProps {
 	opened: boolean;

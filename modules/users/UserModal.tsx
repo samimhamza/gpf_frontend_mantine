@@ -9,9 +9,9 @@ import { TbShieldCheck } from "react-icons/tb";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { getApi } from "@/axios";
-import toast from "react-hot-toast";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const UserModal = ({
 	opened,
@@ -26,16 +26,22 @@ const UserModal = ({
 	const submit = async () => {};
 	const userSchema = UserSchema(t);
 	const callApi = useAxios({ method: "GET" });
+	const callPostApi = useAxios({ method: "POST" });
+	const [offices, setOffices] = useState([]);
 
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
 				url: "/office/auto_complete",
 			});
-			if (status == 200) {
-				toast.success(JSON.stringify(response));
+			if (status == 200 && response.result == true) {
+				setOffices(
+					response.data.map((item: any) => {
+						return { value: item.id.toString(), label: item.name };
+					})
+				);
 			} else {
-				toast.error(JSON.stringify(error.message));
+				console.error(error.message);
 			}
 		})();
 	}, []);
@@ -58,21 +64,15 @@ const UserModal = ({
 		{
 			title: t("user_info"),
 			icon: <TbUserCircle size={22} />,
-			step: <StepOne form={form} lng={lng} />,
+			step: (
+				<StepOne
+					form={form}
+					lng={lng}
+					offices={offices}
+					setOffices={setOffices}
+				/>
+			),
 			async validate() {
-				let response = await getApi("/user/valid_credential", {
-					email: form.values.email,
-					username: form.values.username,
-				});
-				if (response.status === 226) {
-					form.setErrors({
-						email: response.data == 1 ? `Email Already Exists` : "",
-						username: response.data == 2 ? `Username Already Exists` : "",
-					});
-					return false;
-				} else if (response.status !== 200) {
-					return false;
-				}
 				form.validate();
 				let res =
 					form.isValid("full_name") &&
@@ -81,7 +81,30 @@ const UserModal = ({
 					form.isValid("username") &&
 					form.isValid("password") &&
 					form.isValid("confirm_password");
-				return res;
+				if (res) {
+					let { response, status } = await callPostApi({
+						url: "/user/valid_credential",
+						data: {
+							email: form.values.email,
+							username: form.values.username,
+						},
+					});
+					if (status == 226) {
+						form.setErrors({
+							email:
+								(response.message == 1 || response.message == 0) &&
+								t("email_already_exists"),
+							username:
+								(response.message == 2 || response.message == 0) &&
+								t("username_already_exists"),
+						});
+						return false;
+					} else if (status !== 200) {
+						return false;
+					} else {
+						return true;
+					}
+				}
 			},
 		},
 		{

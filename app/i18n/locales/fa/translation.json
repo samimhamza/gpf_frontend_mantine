@@ -44,5 +44,9 @@
 	"update_user": "ویرایش کاربر",
 	"user_info": "اطلاعات کاربر",
 	"authorizations": "مجوز ها",
-	"done": "تکمیل"
+	"done": "تکمیل",
+	"noting_found": "چیزی پیدا نشد",
+	"settings": "تنظیمات",
+	"email_already_exists": "ایمیل موجود است",
+	"username_already_exists": "نام کاربری موجود است"
 }

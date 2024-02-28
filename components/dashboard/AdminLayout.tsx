@@ -9,6 +9,8 @@ import {
 	ScrollArea,
 	Box,
 	Title,
+	Menu,
+	rem,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
@@ -17,6 +19,9 @@ import { navItems } from "./NavItems";
 import { userProps } from "@/types/next-auth";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { TbLogout2 } from "react-icons/tb";
+import { IoIosSettings } from "react-icons/io";
+import { useAxios } from "@/customHooks/useAxios";
 
 const getNameAbbr = (name: string) => {
 	var words = name.split(" ");
@@ -38,7 +43,7 @@ export function AdminLayout({
 }) {
 	const [opened, { toggle }] = useDisclosure();
 	const { t } = useTranslation(lng);
-	const router = useRouter();
+	const callApi = useAxios({ method: "POST" });
 	const navList = navItems(t);
 	const userNavList = navList.filter((item) => {
 		if (
@@ -47,12 +52,12 @@ export function AdminLayout({
 		)
 			return item;
 	});
+
 	const logout = async () => {
-		// const { status } = await getApi("/logout");
+		const { status } = await callApi({ url: "/logout" });
 		signOut({
-			redirect: false,
+			callbackUrl: `${window.location.origin}/auth/login/`,
 		});
-		router.push("/auth/login");
 	};
 
 	const links = userNavList.map((item) => (
@@ -85,9 +90,32 @@ export function AdminLayout({
 						/>
 						<Title order={3}>{t("gpf")}</Title>
 					</Group>
-					<Avatar radius="xl" color="cyan">
-						{getNameAbbr(user.full_name)}
-					</Avatar>
+
+					<Menu shadow="md" width={200}>
+						<Menu.Target>
+							<Avatar radius="xl" color="cyan" style={{ cursor: "pointer" }}>
+								{getNameAbbr(user.full_name)}
+							</Avatar>
+						</Menu.Target>
+
+						<Menu.Dropdown>
+							<Menu.Item
+								rightSection={
+									<TbLogout2 style={{ width: rem(14), height: rem(14) }} />
+								}
+								onClick={logout}
+							>
+								{t("logout")}
+							</Menu.Item>
+							<Menu.Item
+								rightSection={
+									<IoIosSettings style={{ width: rem(14), height: rem(14) }} />
+								}
+							>
+								{t("settings")}
+							</Menu.Item>
+						</Menu.Dropdown>
+					</Menu>
 				</Flex>
 			</AppShell.Header>
 			<AppShell.Navbar p="xs">
