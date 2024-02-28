@@ -9,6 +9,7 @@ import { useAxios } from "@/customHooks/useAxios";
 
 interface ActionMenuProps {
 	selectedRecords: Array<any>;
+	setSelectedRecords: Dispatch<SetStateAction<any>>;
 	onSearch: Dispatch<SetStateAction<string>>;
 	lng: string;
 	mutate: any;
@@ -17,6 +18,7 @@ interface ActionMenuProps {
 
 const ActionMenu = ({
 	selectedRecords,
+	setSelectedRecords,
 	onSearch,
 	lng,
 	mutate,
@@ -43,6 +45,7 @@ const ActionMenu = ({
 
 		if (status == 204) {
 			await mutate();
+			setSelectedRecords([]);
 			toast.success(t("successfully_deleted"));
 		}
 		if (error) toast.error(t("something_went_wrong"));

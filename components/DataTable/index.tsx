@@ -49,6 +49,7 @@ const CustomDataTable = ({
 				onSearch={setSearch}
 				lng={lng}
 				selectedRecords={selectedRecords}
+				setSelectedRecords={setSelectedRecords}
 				mutate={mutate}
 				open={open}
 			/>
