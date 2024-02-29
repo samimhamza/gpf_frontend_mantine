@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ActionMenu from "./ActionMenu";
 import { MantineDataTable } from "./MantineDataTable";
-import { getApi } from "@/axios";
 import useSWR from "swr";
 import { useAxios } from "@/customHooks/useAxios";
 

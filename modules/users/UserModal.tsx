@@ -10,6 +10,7 @@ import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const UserModal = ({
 	opened,
@@ -21,13 +22,24 @@ const UserModal = ({
 	lng: string;
 }) => {
 	const { t } = useTranslation(lng);
-	const submit = async () => {};
 	const userSchema = UserSchema(t);
 	const callApi = useAxios({ method: "GET" });
 	const callPostApi = useAxios({ method: "POST" });
 	const [offices, setOffices] = useState([]);
 	const [permissions, setPermissions] = useState([]);
 	const [totalPermissions, setTotalPermissions] = useState<number>(0);
+
+	const submit = async () => {
+		const { response, error, status } = await callPostApi({
+			url: "/users",
+			data: form.values,
+		});
+		if (status == 201 && response.result) {
+			return true;
+		}
+		toast.error(t("something_went_wrong"));
+		return false;
+	};
 
 	useEffect(() => {
 		(async function () {
@@ -129,17 +141,22 @@ const UserModal = ({
 					totalPermissions={totalPermissions}
 				/>
 			),
+			async validate() {
+				return true;
+			},
 		},
 	];
 	return (
-		<CustomModal
-			opened={opened}
-			close={close}
-			steps={steps}
-			form={form}
-			submit={submit}
-			doneTitle={t("done")}
-		/>
+		<form>
+			<CustomModal
+				opened={opened}
+				close={close}
+				steps={steps}
+				form={form}
+				submit={submit}
+				doneTitle={t("done")}
+			/>
+		</form>
 	);
 };
 

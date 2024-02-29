@@ -1,18 +1,21 @@
 import Svgs from "@/utils/SVGs";
+import { Center } from "@mantine/core";
 
 const Done = () => {
 	return (
 		<>
-			<div
-				className="done-svg flex justify-center items-center h-full"
-				dangerouslySetInnerHTML={{ __html: Svgs.done }}
-			></div>
+			<Center>
+				<div
+					className="done-svg"
+					dangerouslySetInnerHTML={{ __html: Svgs.done }}
+				></div>
+			</Center>
 			<style jsx global>{`
 				.done-svg {
-					height: 540px;
+					height: 400px;
 				}
 				.done-svg svg {
-					height: 400px;
+					height: 300px;
 				}
 			`}</style>
 		</>

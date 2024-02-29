@@ -6,7 +6,7 @@ export const UserSchema = (t: (arg: string) => string) => {
 			full_name: z
 				.string()
 				.min(3, {
-					message: t("full_name_min"),
+					message: t("min_length_error"),
 				})
 				.max(64, {
 					message: t("full_name_max"),

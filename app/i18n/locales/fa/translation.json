@@ -51,5 +51,6 @@
 	"email_already_exists": "ایمیل موجود است",
 	"username_already_exists": "نام کاربری موجود است",
 	"permissions": "مجوز ها",
-	"all": "انتخاب همه"
+	"all": "انتخاب همه",
+	"min_length_error": "حد اقل {{length}} حرف ضروری است"
 }
