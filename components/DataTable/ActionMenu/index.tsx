@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useAxios } from "@/customHooks/useAxios";
 
 interface ActionMenuProps {
+	deleteUrl: string;
 	selectedRecords: Array<any>;
 	setSelectedRecords: Dispatch<SetStateAction<any>>;
 	onSearch: Dispatch<SetStateAction<string>>;
@@ -17,6 +18,7 @@ interface ActionMenuProps {
 }
 
 const ActionMenu = ({
+	deleteUrl,
 	selectedRecords,
 	setSelectedRecords,
 	onSearch,
@@ -39,7 +41,7 @@ const ActionMenu = ({
 		setDeleteLoading(true);
 		const ids = selectedRecords.map((rec) => rec.id);
 		const { status, error } = await callApi({
-			url: "/users/1",
+			url: deleteUrl,
 			data: { ids },
 		});
 

@@ -2,24 +2,33 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ActionMenu from "./ActionMenu";
 import { MantineDataTable } from "./MantineDataTable";
 import useSWR from "swr";
+import { Center } from "@mantine/core";
 import { useAxios } from "@/customHooks/useAxios";
+import { TbClick } from "react-icons/tb";
+import { Actions } from "./Actions";
 
 interface DataTableProps {
 	url: string;
+	deleteUrl: string;
 	columns: Array<any>;
 	lng: string;
 	open?: () => void;
 	mutated: boolean;
 	setMutated: Dispatch<SetStateAction<boolean>>;
+	setEdit: Dispatch<SetStateAction<number | undefined>>;
+	setView: Dispatch<SetStateAction<number | undefined>>;
 }
 
 const CustomDataTable = ({
 	url,
+	deleteUrl,
 	columns,
 	lng,
 	open,
 	mutated,
 	setMutated,
+	setEdit,
+	setView,
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios({ method: "GET" });
@@ -55,9 +64,28 @@ const CustomDataTable = ({
 		})();
 	}, [mutated]);
 
+	const renderActions = (record: any) => (
+		<Actions record={record} setEdit={setEdit} setView={setView} />
+	);
+
+	let actionIndex = columns.findIndex((col) => col.accessor == "actions");
+	if (actionIndex == -1) {
+		columns.push({
+			accessor: "actions",
+			title: (
+				<Center>
+					<TbClick size={16} />
+				</Center>
+			),
+			width: "0%", // 👈 use minimal width
+			render: renderActions,
+		});
+	}
+
 	return (
 		<>
 			<ActionMenu
+				deleteUrl={deleteUrl}
 				onSearch={setSearch}
 				lng={lng}
 				selectedRecords={selectedRecords}

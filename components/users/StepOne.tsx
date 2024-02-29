@@ -10,9 +10,10 @@ interface StepOneProps {
 	lng: string;
 	offices: any;
 	setOffices: any;
+	editId: number | undefined;
 }
 
-const StepOne = ({ form, lng, offices, setOffices }: StepOneProps) => {
+const StepOne = ({ form, lng, offices, setOffices, editId }: StepOneProps) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios({ method: "GET" });
 	const [loading, setLoading] = useState(false);
@@ -81,27 +82,29 @@ const StepOne = ({ form, lng, offices, setOffices }: StepOneProps) => {
 					{...form.getInputProps("username")}
 				/>
 			</Flex>
-			<Flex
-				direction={{ base: "column", sm: "row" }}
-				gap="sm"
-				p="sm"
-				justify={{ sm: "center" }}
-			>
-				<PasswordInput
-					style={{ flex: 1 }}
-					label={t("password")}
-					placeholder={t("password")}
-					withAsterisk
-					{...form.getInputProps("password")}
-				/>
-				<PasswordInput
-					style={{ flex: 1 }}
-					label={t("confirm_password")}
-					placeholder={t("confirm_password")}
-					withAsterisk
-					{...form.getInputProps("confirm_password")}
-				/>
-			</Flex>
+			{!editId && (
+				<Flex
+					direction={{ base: "column", sm: "row" }}
+					gap="sm"
+					p="sm"
+					justify={{ sm: "center" }}
+				>
+					<PasswordInput
+						style={{ flex: 1 }}
+						label={t("password")}
+						placeholder={t("password")}
+						withAsterisk
+						{...form.getInputProps("password")}
+					/>
+					<PasswordInput
+						style={{ flex: 1 }}
+						label={t("confirm_password")}
+						placeholder={t("confirm_password")}
+						withAsterisk
+						{...form.getInputProps("confirm_password")}
+					/>
+				</Flex>
+			)}
 		</>
 	);
 };

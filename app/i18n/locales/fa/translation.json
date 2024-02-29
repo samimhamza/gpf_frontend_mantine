@@ -52,5 +52,8 @@
 	"username_already_exists": "نام کاربری موجود است",
 	"permissions": "مجوز ها",
 	"all": "انتخاب همه",
-	"min_length_error": "حد اقل {{length}} حرف ضروری است"
+	"min_length_error": "حد اقل {{length}} حرف ضروری است",
+	"create_user": "ایجاد کاربر",
+	"roles": "صلاحیت ها",
+	"role": "صلاحیت"
 }

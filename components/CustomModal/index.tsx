@@ -4,8 +4,11 @@ import {
 	CloseButton,
 	Group,
 	Modal,
+	Paper,
 	ScrollArea,
 	Stepper,
+	Text,
+	Title,
 	useMantineTheme,
 } from "@mantine/core";
 import { useState } from "react";
@@ -24,6 +27,7 @@ interface CustomModalProps {
 	form: any;
 	submit: any;
 	doneTitle: string;
+	title: string;
 }
 
 const CustomModal = ({
@@ -33,6 +37,7 @@ const CustomModal = ({
 	form,
 	submit,
 	doneTitle,
+	title,
 }: CustomModalProps) => {
 	const theme = useMantineTheme();
 	const [active, setActive] = useState(0);
@@ -103,7 +108,7 @@ const CustomModal = ({
 				opened={opened}
 				onClose={close}
 				centered
-				size={mdMatches ? "70%" : smMatches ? "80%" : "100%"}
+				size={mdMatches ? "65%" : smMatches ? "80%" : "100%"}
 				className="custom-modal"
 				withCloseButton={false}
 				overlayProps={{
@@ -114,10 +119,18 @@ const CustomModal = ({
 				lockScroll={true}
 				closeOnClickOutside={false}
 			>
+				<Group justify="space-between" className="modal-header" p="xs">
+					<Title order={4}>{title}</Title>
+					<CloseButton
+						className="close-btn"
+						aria-label="Close modal"
+						onClick={close}
+					/>
+				</Group>
 				<Group
 					justify="space-between"
 					align="flex-start"
-					p="md"
+					p="xs"
 					className="modal-header"
 				>
 					<Stepper
@@ -136,13 +149,8 @@ const CustomModal = ({
 							/>
 						))}
 					</Stepper>
-					<CloseButton
-						className="close-btn"
-						aria-label="Close modal"
-						onClick={close}
-					/>
 				</Group>
-				<ScrollArea h={400}>
+				<ScrollArea h={370}>
 					{stepInside.map((step, i) => (
 						<div
 							key={i}

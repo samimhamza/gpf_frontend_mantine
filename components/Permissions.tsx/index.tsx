@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkbox, Flex, Paper, Stack } from "@mantine/core";
+import { Checkbox, Flex, Paper, Stack, Box } from "@mantine/core";
 import classes from "./Permissions.module.css";
 
 interface PermissionsProps {
@@ -54,7 +54,7 @@ const Permissions = ({ form, permissions }: PermissionsProps) => {
 	};
 
 	return (
-		<Paper shadow="xs" radius="xs" withBorder m="xs" p="xs">
+		<Box m="xs" p="xs">
 			<Flex direction="column" wrap="wrap">
 				{Object.entries(permissions)?.map(([name, pers], index) => (
 					<Stack style={{ flex: "50%" }} key={index}>
@@ -125,7 +125,7 @@ const Permissions = ({ form, permissions }: PermissionsProps) => {
 					</Stack>
 				))}
 			</Flex>
-		</Paper>
+		</Box>
 	);
 };
 

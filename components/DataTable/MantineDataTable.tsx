@@ -1,11 +1,8 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Center } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { TbClick } from "react-icons/tb";
-import { Actions } from "./Actions";
 
 interface DataProps {
 	data: Array<any>;
@@ -25,7 +22,6 @@ interface DataTableProps {
 	data: DataProps;
 	isLoading: boolean;
 }
-const renderActions = (record: any) => <Actions record={record} />;
 
 const MantineDataTable = ({
 	columns,
@@ -74,19 +70,6 @@ const MantineDataTable = ({
 		setSortStatus(status);
 	};
 
-	let actionIndex = columns.findIndex((col) => col.accessor == "actions");
-	if (actionIndex == -1) {
-		columns.push({
-			accessor: "actions",
-			title: (
-				<Center>
-					<TbClick size={16} />
-				</Center>
-			),
-			width: "0%", // 👈 use minimal width
-			render: renderActions,
-		});
-	}
 	return (
 		<DataTable
 			height={550}

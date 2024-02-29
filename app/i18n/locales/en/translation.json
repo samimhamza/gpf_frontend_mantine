@@ -51,5 +51,9 @@
 	"email_already_exists": "Email Already Exists",
 	"username_already_exists": "Username Already Exists",
 	"permissions": "Permissions",
-	"all": "All"
+	"all": "All",
+	"min_length_error": "Minimum {{length}} characters required",
+	"create_user": "Create User",
+	"roles": "Roles",
+	"role": "Role"
 }
