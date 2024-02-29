@@ -1,6 +1,6 @@
-import { LoginForm } from "../../../../components/auth/LoginForm";
+import { LoginForm } from "@/components/Auth/LoginForm/LoginForm";
 
-const LoginPage = async ({
+const LoginPage = ({
 	params: { lng },
 }: {
 	params: {
