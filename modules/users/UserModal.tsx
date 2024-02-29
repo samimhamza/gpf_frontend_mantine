@@ -192,10 +192,10 @@ const UserModal = ({
 					form.isValid("full_name") &&
 					form.isValid("office_id") &&
 					form.isValid("email") &&
-					form.isValid("username") &&
-					!editId
-						? form.isValid("password") && form.isValid("confirm_password")
-						: true;
+					form.isValid("username");
+				!editId
+					? form.isValid("password") && form.isValid("confirm_password")
+					: true;
 				if (res) {
 					let { response, status } = await callPostApi({
 						url: "/user/valid_credential",
@@ -215,12 +215,10 @@ const UserModal = ({
 								t("username_already_exists"),
 						});
 						return false;
-					} else if (status !== 200) {
-						return false;
-					} else {
-						return true;
-					}
+					} else if (status !== 200) return false;
+					return true;
 				}
+				return false;
 			},
 		},
 		{

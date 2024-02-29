@@ -48,7 +48,7 @@ const MantineDataTable = ({
 		setTableDetails((d: any) => {
 			return { ...d, search: search };
 		});
-	}, [search]);
+	}, [search, setTableDetails]);
 
 	const handlePageChange = (p: number) => {
 		setTableDetails((d: any) => {
