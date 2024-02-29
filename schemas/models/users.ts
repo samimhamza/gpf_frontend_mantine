@@ -21,10 +21,10 @@ export const UserSchema = (t: (arg: string) => string) => {
 				.max(64, { message: t("username_max") }),
 
 			password: z.string().min(8, { message: t("password_min") }),
-			password_confirmation: z.string().min(8, { message: t("password_min") }),
+			confirm_password: z.string().min(8, { message: t("password_min") }),
 		})
-		.refine((data) => data.password === data.password_confirmation, {
+		.refine((data) => data.password === data.confirm_password, {
 			message: t("password_not_match"),
-			path: ["password_confirmation"],
+			path: ["confirm_password"],
 		});
 };

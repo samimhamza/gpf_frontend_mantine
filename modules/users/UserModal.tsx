@@ -10,7 +10,6 @@ import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
 const UserModal = ({
 	opened,

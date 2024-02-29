@@ -3,6 +3,7 @@
 	"welcome_back": "Welcome Back",
 	"email_or_username": "Email Or Username",
 	"password": "Password",
+	"confirm_password": "Confirm Password",
 	"login": "Login",
 	"enter_email_or_username": "Enter Email or Username",
 	"email_or_username_required": "Email or Username is required",

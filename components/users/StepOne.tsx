@@ -96,10 +96,10 @@ const StepOne = ({ form, lng, offices, setOffices }: StepOneProps) => {
 				/>
 				<PasswordInput
 					style={{ flex: 1 }}
-					label={t("password_confirmation")}
-					placeholder={t("password_confirmation")}
+					label={t("confirm_password")}
+					placeholder={t("confirm_password")}
 					withAsterisk
-					{...form.getInputProps("password_confirmation")}
+					{...form.getInputProps("confirm_password")}
 				/>
 			</Flex>
 		</>
