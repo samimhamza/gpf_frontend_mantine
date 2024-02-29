@@ -15,7 +15,6 @@ interface DataProps {
 }
 
 interface DataTableProps {
-	url: string;
 	columns: Array<any>;
 	search: string;
 	lng: string;
@@ -29,7 +28,6 @@ interface DataTableProps {
 const renderActions = (record: any) => <Actions record={record} />;
 
 const MantineDataTable = ({
-	url,
 	columns,
 	search,
 	lng,

@@ -16,10 +16,12 @@ const UserModal = ({
 	opened,
 	close,
 	lng,
+	setMutated,
 }: {
 	opened: boolean;
 	close: () => void;
 	lng: string;
+	setMutated: any;
 }) => {
 	const { t } = useTranslation(lng);
 	const userSchema = UserSchema(t);
@@ -35,6 +37,7 @@ const UserModal = ({
 			data: form.values,
 		});
 		if (status == 201 && response.result) {
+			await setMutated(true);
 			return true;
 		}
 		toast.error(t("something_went_wrong"));

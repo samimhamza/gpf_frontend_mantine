@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ActionMenu from "./ActionMenu";
 import { MantineDataTable } from "./MantineDataTable";
 import useSWR from "swr";
@@ -9,6 +9,8 @@ interface DataTableProps {
 	columns: Array<any>;
 	lng: string;
 	open?: () => void;
+	mutated: boolean;
+	setMutated: Dispatch<SetStateAction<boolean>>;
 }
 
 const CustomDataTable = ({
@@ -16,6 +18,8 @@ const CustomDataTable = ({
 	columns,
 	lng,
 	open,
+	mutated,
+	setMutated,
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios({ method: "GET" });
@@ -42,6 +46,15 @@ const CustomDataTable = ({
 		}
 	);
 
+	useEffect(() => {
+		(async function () {
+			if (mutated) {
+				await mutate();
+				setMutated(false);
+			}
+		})();
+	}, [mutated]);
+
 	return (
 		<>
 			<ActionMenu
@@ -53,7 +66,6 @@ const CustomDataTable = ({
 				open={open}
 			/>
 			<MantineDataTable
-				url={url}
 				lng={lng}
 				columns={columns}
 				search={search}
