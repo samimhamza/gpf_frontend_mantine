@@ -1,43 +1,27 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { useAxios } from "@/customHooks/useAxios";
-import { Flex, Select, TextInput } from "@mantine/core";
-import { useState } from "react";
+import { Flex, NumberInput, Select, TextInput } from "@mantine/core";
 
 interface SchoolStepOneProps {
 	form: any;
 	lng: string;
 	offices: any;
-	provinces: any;
-	districts: any;
 }
 
-const SchoolStepOne = ({
-	form,
-	lng,
-	offices,
-	provinces,
-	districts,
-}: SchoolStepOneProps) => {
+const SchoolStepOne = ({ form, lng, offices }: SchoolStepOneProps) => {
 	const { t } = useTranslation(lng);
-	const callApi = useAxios({ method: "GET" });
-	const [loading, setLoading] = useState(false);
-
-	// const handleSearch = async (value: string) => {
-	// 	setLoading(true);
-	// 	const { response, status, error } = await callApi({
-	// 		url: `/office/auto_complete?name=${value}`,
-	// 	});
-	// 	if (status == 200 && response.result == true) {
-	// 		setOffices(
-	// 			response.data.map((item: any) => {
-	// 				return { value: item.id.toString(), label: item.name };
-	// 			})
-	// 		);
-	// 	}
-	// 	setLoading(false);
-	// };
+	const types = [
+		{ value: "elementary", label: t("elementary") },
+		{ value: "intermediate", label: t("intermediate") },
+		{ value: "high_school", label: t("high_school") },
+	];
+	// const statuses = [
+	// 	{ value: "active", label: t("active") },
+	// 	{ value: "rejected", label: t("rejected") },
+	// 	{ value: "inactive", label: t("inactive") },
+	// 	{ value: "pending", label: t("pending") },
+	// ];
 	return (
 		<>
 			<Flex
@@ -48,11 +32,46 @@ const SchoolStepOne = ({
 			>
 				<TextInput
 					style={{ flex: 1 }}
-					label={t("name")}
-					placeholder={t("name")}
+					label={t("school_name")}
+					placeholder={t("school_name")}
 					withAsterisk
 					{...form.getInputProps("name")}
 				/>
+				<NumberInput
+					style={{ flex: 1 }}
+					label={t("total_staff")}
+					placeholder={t("total_staff")}
+					min={0}
+					withAsterisk
+					{...form.getInputProps("total_staff")}
+				/>
+			</Flex>
+			<Flex
+				direction={{ base: "column", sm: "row" }}
+				gap="sm"
+				p="sm"
+				justify={{ sm: "center" }}
+			>
+				<TextInput
+					style={{ flex: 1 }}
+					label={t("head_name")}
+					placeholder={t("head_name")}
+					withAsterisk
+					{...form.getInputProps("head_name")}
+				/>
+				<TextInput
+					style={{ flex: 1 }}
+					label={t("head_phone")}
+					placeholder={t("head_phone")}
+					{...form.getInputProps("head_phone")}
+				/>
+			</Flex>
+			<Flex
+				direction={{ base: "column", sm: "row" }}
+				gap="sm"
+				p="sm"
+				justify={{ sm: "center" }}
+			>
 				<Select
 					style={{ flex: 1 }}
 					label={t("office")}
@@ -66,39 +85,32 @@ const SchoolStepOne = ({
 					// rightSection={loading && <Loader color="blue" size={15} />}
 					{...form.getInputProps("office_id")}
 				/>
-			</Flex>
-			<Flex
-				direction={{ base: "column", sm: "row" }}
-				gap="sm"
-				p="sm"
-				justify={{ sm: "center" }}
-			>
 				<Select
 					style={{ flex: 1 }}
-					label={t("province")}
-					placeholder={t("province")}
+					label={t("school_type")}
+					placeholder={t("school_type")}
 					withAsterisk
-					data={provinces}
+					data={types}
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}
 					// onSearchChange={handleSearch}
 					// rightSection={loading && <Loader color="blue" size={15} />}
-					{...form.getInputProps("province_id")}
+					{...form.getInputProps("type")}
 				/>
-				<Select
+				{/* <Select
 					style={{ flex: 1 }}
-					label={t("district")}
-					placeholder={t("district")}
+					label={t("status")}
+					placeholder={t("status")}
 					withAsterisk
-					data={districts}
+					data={statuses}
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}
 					// onSearchChange={handleSearch}
 					// rightSection={loading && <Loader color="blue" size={15} />}
-					{...form.getInputProps("district_id")}
-				/>
+					{...form.getInputProps("status_id")}
+				/> */}
 			</Flex>
 		</>
 	);

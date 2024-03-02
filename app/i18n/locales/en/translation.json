@@ -52,7 +52,8 @@
 	"username_already_exists": "Username Already Exists",
 	"permissions": "Permissions",
 	"all": "All",
-	"min_length_error": "Minimum {{length}} characters required",
+	"min_3_length_error": "Minimum 3 characters required",
+	"max_64_length_error": "Maximum 64 characters allowed",
 	"create_user": "Create User",
 	"roles": "Roles",
 	"role": "Role",
@@ -70,5 +71,9 @@
 	"high_school": "High School",
 	"intermediate": "Intermediate",
 	"elementary": "Elementary",
-	"total_applicants": "Total Applicants"
+	"total_applicants": "Total Applicants",
+	"school_name": "School Name",
+	"school_info": "School Info",
+	"school_location": "School Location",
+	"field_required": "Field Required"
 }

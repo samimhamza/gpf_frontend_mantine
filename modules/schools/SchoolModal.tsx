@@ -11,6 +11,8 @@ import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
+import SchoolStepTwo from "@/components/schools/SchoolStepTwo";
+import { FaLocationDot } from "react-icons/fa6";
 
 const SchoolModal = ({
 	opened,
@@ -28,7 +30,7 @@ const SchoolModal = ({
 	editId: number | undefined;
 }) => {
 	const { t } = useTranslation(lng);
-	const mosqueSchema = SchoolSchema(t);
+	const schoolSchema = SchoolSchema(t);
 	const callApi = useAxios({ method: "GET" });
 	const callPostApi = useAxios({ method: "POST" });
 	const callPutApi = useAxios({ method: "PUT" });
@@ -41,15 +43,20 @@ const SchoolModal = ({
 		name: "",
 		total_staff: "",
 		office_id: "",
+		type: "",
+		status: "",
+		head_name: "",
+		head_phone: "",
 		province_id: "",
 		district_id: "",
-		mosque_type: "",
-		mosque_formal: "",
+		address: "",
+		village: "",
+		street: "",
 	};
 
 	const form = useForm({
 		initialValues: initialValues,
-		validate: zodResolver(mosqueSchema),
+		validate: zodResolver(schoolSchema),
 		validateInputOnBlur: true,
 	});
 
@@ -80,27 +87,23 @@ const SchoolModal = ({
 				});
 				if (status == 200 && response.result == true) {
 					let values: any = {};
-					values.permissions = [];
-					values.roles = [];
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(initialValues).includes(key)) {
-							if (key != "permissions" && key != "roles" && key != "office_id")
+							if (
+								key != "province_id" &&
+								key != "district_id" &&
+								key != "office_id"
+							)
 								values[key] = value ? value : initialValues[key];
 						}
 						if (key == "office_id" && value) {
 							values[key] = value.toString();
 						}
-						if (Array.isArray(value) && value.length) {
-							if (key == "permissions") {
-								value.forEach((item: any) => {
-									values.permissions.push(item.id);
-								});
-							}
-							if (key == "roles") {
-								value.forEach((item: any) => {
-									values.roles.push(item.name);
-								});
-							}
+						if (key == "province_id" && value) {
+							values[key] = value.toString();
+						}
+						if (key == "district_id" && value) {
+							values[key] = value.toString();
 						}
 					});
 					form.setValues(values);
@@ -130,12 +133,26 @@ const SchoolModal = ({
 		(async function () {
 			const { response, status, error } = await callApi({
 				url: "/all_provinces",
-				// url: "/office/auto_complete",
 			});
 			if (status == 200 && response.result == true) {
 				setProvinces(
 					response.data.map((item: any) => {
-						return { value: item.name, label: item.name };
+						return { value: item.id.toString(), label: item.name_fa };
+					})
+				);
+			}
+		})();
+	}, []);
+
+	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				url: "/all_districts",
+			});
+			if (status == 200 && response.result == true) {
+				setDistricts(
+					response.data.map((item: any) => {
+						return { value: item.id.toString(), label: item.name_fa };
 					})
 				);
 			}
@@ -144,7 +161,7 @@ const SchoolModal = ({
 
 	const steps = [
 		{
-			title: t("mosque_info"),
+			title: t("school_info"),
 			icon: <FaSchool size={22} />,
 			step: (
 				<Box pos="relative">
@@ -153,13 +170,7 @@ const SchoolModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<SchoolStepOne
-						form={form}
-						lng={lng}
-						offices={offices}
-						provinces={provinces}
-						districts={districts}
-					/>
+					<SchoolStepOne form={form} lng={lng} offices={offices} />
 				</Box>
 			),
 			async validate() {
@@ -167,45 +178,29 @@ const SchoolModal = ({
 				let res =
 					form.isValid("name") &&
 					form.isValid("office_id") &&
-					form.isValid("province_id") &&
-					form.isValid("district_id");
-				if (res) {
-					let { response, status } = await callPostApi({
-						url: "/mosque/valid_credential",
-						data: {
-							name: form.values.name,
-							id: editId ? editId : null,
-						},
-					});
-					if (status == 226) {
-						form.setErrors({
-							name:
-								(response.message == 1 || response.message == 0) &&
-								t("mosque_name_already_exists"),
-						});
-						return false;
-					} else if (status !== 200) return false;
-					return true;
-				}
-				return false;
+					form.isValid("total_staff") &&
+					form.isValid("head_name") &&
+					form.isValid("type");
+				return res;
 			},
 		},
-		// {
-		// 	title: t("authorizations"),
-		// 	icon: <TbShieldCheck size={22} />,
-		// 	step: (
-		// 		<StepTwo
-		// 		// roles={roles}
-		// 		// permissions={permissions}
-		// 		// form={form}
-		// 		// lng={lng}
-		// 		// totalPermissions={totalPermissions}
-		// 		/>
-		// 	),
-		// 	async validate() {
-		// 		return true;
-		// 	},
-		// },
+		{
+			title: t("school_location"),
+			icon: <FaLocationDot size={22} />,
+			step: (
+				<SchoolStepTwo
+					provinces={provinces}
+					districts={districts}
+					form={form}
+					lng={lng}
+				/>
+			),
+			async validate() {
+				form.validate();
+				let res = form.isValid("province_id") && form.isValid("district_id");
+				return res;
+			},
+		},
 	];
 	return (
 		<form>

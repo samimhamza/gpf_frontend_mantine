@@ -5,25 +5,25 @@ export const MosqueSchema = (t: (arg: string) => string) => {
 		name: z
 			.string()
 			.min(3, {
-				message: t("min_length_error"),
+				message: t("min_3_length_error"),
 			})
 			.max(64, {
-				message: t("full_name_max"),
+				message: t("max_64_length_error"),
 			}),
 		office_id: z.string().min(1, {
-			message: t("office_required"),
+			message: t("field_required"),
 		}),
 		province_id: z.string().min(1, {
-			message: t("office_required"),
+			message: t("field_required"),
 		}),
 		district_id: z.string().min(1, {
-			message: t("office_required"),
+			message: t("field_required"),
 		}),
 		mosque_type: z.string().min(1, {
-			message: t("office_required"),
+			message: t("field_required"),
 		}),
 		mosque_formal: z.string().min(1, {
-			message: t("office_required"),
+			message: t("field_required"),
 		}),
 	});
 };
