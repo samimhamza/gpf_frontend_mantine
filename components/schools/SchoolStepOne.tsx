@@ -2,18 +2,24 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { Flex, Loader, PasswordInput, Select, TextInput } from "@mantine/core";
+import { Flex, Select, TextInput } from "@mantine/core";
 import { useState } from "react";
 
-interface StepOneProps {
+interface SchoolStepOneProps {
 	form: any;
 	lng: string;
 	offices: any;
-	setOffices: any;
-	editId: number | undefined;
+	provinces: any;
+	districts: any;
 }
 
-const StepOne = ({ form, lng, offices, setOffices, editId }: StepOneProps) => {
+const SchoolStepOne = ({
+	form,
+	lng,
+	offices,
+	provinces,
+	districts,
+}: SchoolStepOneProps) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios({ method: "GET" });
 	const [loading, setLoading] = useState(false);
@@ -42,10 +48,10 @@ const StepOne = ({ form, lng, offices, setOffices, editId }: StepOneProps) => {
 			>
 				<TextInput
 					style={{ flex: 1 }}
-					label={t("full_name")}
-					placeholder={t("full_name")}
+					label={t("name")}
+					placeholder={t("name")}
 					withAsterisk
-					{...form.getInputProps("full_name")}
+					{...form.getInputProps("name")}
 				/>
 				<Select
 					style={{ flex: 1 }}
@@ -67,46 +73,35 @@ const StepOne = ({ form, lng, offices, setOffices, editId }: StepOneProps) => {
 				p="sm"
 				justify={{ sm: "center" }}
 			>
-				<TextInput
+				<Select
 					style={{ flex: 1 }}
-					label={t("email")}
-					placeholder={t("email")}
+					label={t("province")}
+					placeholder={t("province")}
 					withAsterisk
-					{...form.getInputProps("email")}
+					data={provinces}
+					searchable
+					clearable
+					nothingFoundMessage={t("noting_found")}
+					// onSearchChange={handleSearch}
+					// rightSection={loading && <Loader color="blue" size={15} />}
+					{...form.getInputProps("province_id")}
 				/>
-				<TextInput
+				<Select
 					style={{ flex: 1 }}
-					label={t("username")}
-					placeholder={t("username")}
+					label={t("district")}
+					placeholder={t("district")}
 					withAsterisk
-					{...form.getInputProps("username")}
+					data={districts}
+					searchable
+					clearable
+					nothingFoundMessage={t("noting_found")}
+					// onSearchChange={handleSearch}
+					// rightSection={loading && <Loader color="blue" size={15} />}
+					{...form.getInputProps("district_id")}
 				/>
 			</Flex>
-			{!editId && (
-				<Flex
-					direction={{ base: "column", sm: "row" }}
-					gap="sm"
-					p="sm"
-					justify={{ sm: "center" }}
-				>
-					<PasswordInput
-						style={{ flex: 1 }}
-						label={t("password")}
-						placeholder={t("password")}
-						withAsterisk
-						{...form.getInputProps("password")}
-					/>
-					<PasswordInput
-						style={{ flex: 1 }}
-						label={t("confirm_password")}
-						placeholder={t("confirm_password")}
-						withAsterisk
-						{...form.getInputProps("confirm_password")}
-					/>
-				</Flex>
-			)}
 		</>
 	);
 };
 
-export default StepOne;
+export default SchoolStepOne;

@@ -11,10 +11,10 @@ import {
 	Text,
 } from "@mantine/core";
 import React from "react";
-import Permissions from "../Permissions.tsx";
-import classes from "./StepTwo.module.css";
+import classes from "./UserStepTwo.module.css";
+import Permissions from "../Permissions";
 
-interface StepTwoProps {
+interface UserStepTwoProps {
 	roles: Array<{ value: number; label: string }>;
 	permissions: any;
 	form: any;
@@ -28,13 +28,13 @@ interface permissionsProps {
 	group_name: string;
 }
 
-const StepTwo = ({
+const UserStepTwo = ({
 	roles,
 	permissions,
 	form,
 	lng,
 	totalPermissions,
-}: StepTwoProps) => {
+}: UserStepTwoProps) => {
 	const { t } = useTranslation(lng);
 	const setAllPermissions = () => {
 		const permissionIds: number[] = [];
@@ -102,4 +102,4 @@ const StepTwo = ({
 	);
 };
 
-export default StepTwo;
+export default UserStepTwo;

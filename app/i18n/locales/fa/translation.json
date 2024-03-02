@@ -55,5 +55,19 @@
 	"min_length_error": "حد اقل {{length}} حرف ضروری است",
 	"create_user": "ایجاد کاربر",
 	"roles": "صلاحیت ها",
-	"role": "صلاحیت"
+	"role": "صلاحیت",
+	"schools": "مکاتب",
+	"province": "ولایت",
+	"district": "ناحیه",
+	"total_staff": "تعداد کارمند",
+	"head_name": "نام مدیر مکتب",
+	"head_phone": "شماره تماس مدیر مکتب",
+	"school_type": "نوعیت مکتب",
+	"address": "آدرس",
+	"village": "قریه",
+	"street": "سرک",
+	"rejected": "رد شده",
+	"high_school": "لیسه",
+	"intermediate": "متوسطه",
+	"elementary": "ابتدایی"
 }

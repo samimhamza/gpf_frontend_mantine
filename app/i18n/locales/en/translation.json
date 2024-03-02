@@ -55,5 +55,19 @@
 	"min_length_error": "Minimum {{length}} characters required",
 	"create_user": "Create User",
 	"roles": "Roles",
-	"role": "Role"
+	"role": "Role",
+	"schools": "Schools",
+	"province": "Province",
+	"district": "District",
+	"total_staff": "Total Staff",
+	"head_name": "Head Name",
+	"head_phone": "Head Phone",
+	"school_type": "School Type",
+	"address": "Address",
+	"village": "Village",
+	"street": "Street",
+	"rejected": "Rejected",
+	"high_school": "High School",
+	"intermediate": "Intermediate",
+	"elementary": "Elementary"
 }
