@@ -39,6 +39,7 @@ const SchoolModal = ({
 
 	const initialValues: any = {
 		name: "",
+		total_staff: "",
 		office_id: "",
 		province_id: "",
 		district_id: "",

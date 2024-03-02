@@ -59,7 +59,7 @@
 	"schools": "مکاتب",
 	"province": "ولایت",
 	"district": "ناحیه",
-	"total_staff": "تعداد کارمند",
+	"total_staff": "تعداد کارمندان",
 	"head_name": "نام مدیر مکتب",
 	"head_phone": "شماره تماس مدیر مکتب",
 	"school_type": "نوعیت مکتب",
@@ -69,5 +69,6 @@
 	"rejected": "رد شده",
 	"high_school": "لیسه",
 	"intermediate": "متوسطه",
-	"elementary": "ابتدایی"
+	"elementary": "ابتدایی",
+	"total_applicants": "تعداد متقاضیان"
 }

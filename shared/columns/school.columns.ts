@@ -18,6 +18,13 @@ export const SchoolColumns = (t: (arg: string) => string, logs: Array<any>) => [
 	{
 		accessor: "total_staff",
 		title: t("total_staff"),
+		noWrap: true,
+		sortable: true,
+	},
+	{
+		accessor: "applicants_count",
+		title: t("total_applicants"),
+		noWrap: true,
 		sortable: true,
 	},
 	{
