@@ -1,7 +1,6 @@
 "use client";
 
 import SchoolStepOne from "@/components/schools/SchoolStepOne";
-// import StepTwo from "@/components/schools/StepTwo";
 import { useForm, zodResolver } from "@mantine/form";
 import { SchoolSchema } from "@/schemas/models/schools";
 import { FaSchool } from "react-icons/fa";
@@ -36,7 +35,6 @@ const SchoolModal = ({
 	const callPutApi = useAxios({ method: "PUT" });
 	const [offices, setOffices] = useState([]);
 	const [provinces, setProvinces] = useState([]);
-	const [districts, setDistricts] = useState([]);
 	const [loading, setLoading] = useState(false);
 
 	const initialValues: any = {
@@ -144,21 +142,6 @@ const SchoolModal = ({
 		})();
 	}, []);
 
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				url: "/all_districts",
-			});
-			if (status == 200 && response.result == true) {
-				setDistricts(
-					response.data.map((item: any) => {
-						return { value: item.id.toString(), label: item.name_fa };
-					})
-				);
-			}
-		})();
-	}, []);
-
 	const steps = [
 		{
 			title: t("school_info"),
@@ -187,14 +170,7 @@ const SchoolModal = ({
 		{
 			title: t("school_location"),
 			icon: <FaLocationDot size={22} />,
-			step: (
-				<SchoolStepTwo
-					provinces={provinces}
-					districts={districts}
-					form={form}
-					lng={lng}
-				/>
-			),
+			step: <SchoolStepTwo provinces={provinces} form={form} lng={lng} />,
 			async validate() {
 				form.validate();
 				let res = form.isValid("province_id") && form.isValid("district_id");
