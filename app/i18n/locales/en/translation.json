@@ -75,5 +75,6 @@
 	"school_name": "School Name",
 	"school_info": "School Info",
 	"school_location": "School Location",
-	"field_required": "Field Required"
+	"field_required": "Field Required",
+	"invalid_type": "Invalid Type"
 }

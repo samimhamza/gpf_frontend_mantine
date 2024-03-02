@@ -19,9 +19,10 @@ const SchoolStepTwo = ({ form, lng, provinces }: SchoolStepTwoProps) => {
 
 	useEffect(() => {
 		(async function () {
+			form.setFieldValue("district_id", null);
+			setDistricts([]);
 			if (form?.values?.province_id) {
 				setLoading(true);
-				// form.setFieldValue("district_id", "");
 				const { response, status, error } = await callApi({
 					url: `/all_districts?province_id=${form?.values?.province_id}`,
 				});
