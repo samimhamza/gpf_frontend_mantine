@@ -246,8 +246,9 @@ const UserModal = ({
 				steps={steps}
 				form={form}
 				submit={submit}
-				doneTitle={t("done")}
+				lng={lng}
 				title={title}
+				editId={editId}
 			/>
 		</form>
 	);

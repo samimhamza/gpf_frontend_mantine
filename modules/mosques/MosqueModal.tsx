@@ -214,8 +214,9 @@ const MosqueModal = ({
 				steps={steps}
 				form={form}
 				submit={submit}
-				doneTitle={t("done")}
 				title={title}
+				lng={lng}
+				editId={editId}
 			/>
 		</form>
 	);

@@ -1,13 +1,10 @@
 import {
-	Box,
 	Button,
 	CloseButton,
 	Group,
 	Modal,
-	Paper,
 	ScrollArea,
 	Stepper,
-	Text,
 	Title,
 	useMantineTheme,
 } from "@mantine/core";
@@ -19,6 +16,8 @@ import { FaCheck } from "react-icons/fa6";
 import { MdSend } from "react-icons/md";
 import { useMediaQuery } from "@mantine/hooks";
 import Done from "./Done";
+import { IoMdCloseCircle } from "react-icons/io";
+import { useTranslation } from "@/app/i18n/client";
 
 interface CustomModalProps {
 	opened: boolean;
@@ -26,8 +25,9 @@ interface CustomModalProps {
 	steps: any;
 	form: any;
 	submit: any;
-	doneTitle: string;
+	lng: string;
 	title: string;
+	editId: number | undefined;
 }
 
 const CustomModal = ({
@@ -36,9 +36,11 @@ const CustomModal = ({
 	steps,
 	form,
 	submit,
-	doneTitle,
+	lng,
 	title,
+	editId,
 }: CustomModalProps) => {
+	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
 	const [active, setActive] = useState(0);
 	const [loading, setLoading] = useState<number | null>(null);
@@ -48,7 +50,7 @@ const CustomModal = ({
 	let stepInside = [
 		...steps,
 		{
-			title: doneTitle,
+			title: t("done"),
 			icon: <FaCheck />,
 			step: <Done />,
 		},
@@ -161,13 +163,23 @@ const CustomModal = ({
 					))}
 				</ScrollArea>
 				<Group justify="flex-end" p="sm" className="modal-footer">
+					{active == stepInside.length - 1 && (
+						<Button
+							rightSection={<IoMdCloseCircle />}
+							variant="filled"
+							color="red"
+							onClick={close}
+						>
+							{t("close")}
+						</Button>
+					)}
 					{active !== 0 && active !== stepInside.length - 1 && (
 						<Button
 							leftSection={<TbChevronRight />}
 							variant="gradient"
 							onClick={prev}
 						>
-							Prev
+							{t("prev")}
 						</Button>
 					)}
 					{active == stepInside.length - 2 ? (
@@ -183,23 +195,22 @@ const CustomModal = ({
 							type="submit"
 							onClick={submitInside}
 						>
-							Submit
-						</Button>
-					) : active == stepInside.length - 1 ? (
-						<Button
-							rightSection={<FaArrowRotateLeft />}
-							variant="gradient"
-							onClick={restart}
-						>
-							Restart
+							{t("submit")}
 						</Button>
 					) : (
-						<Button
-							rightSection={<TbChevronLeft />}
-							variant="gradient"
-							onClick={next}
-						>
-							Next
+						active !== stepInside.length - 1 && (
+							<Button
+								rightSection={<TbChevronLeft />}
+								variant="gradient"
+								onClick={next}
+							>
+								{t("next")}
+							</Button>
+						)
+					)}
+					{active == stepInside.length - 1 && !editId && (
+						<Button rightSection={<FaArrowRotateLeft />} onClick={restart}>
+							{t("restart")}
 						</Button>
 					)}
 				</Group>

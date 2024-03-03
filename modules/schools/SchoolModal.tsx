@@ -36,6 +36,7 @@ const SchoolModal = ({
 	const [offices, setOffices] = useState([]);
 	const [provinces, setProvinces] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [editDistrict, setEditDistrict] = useState("");
 
 	const initialValues: any = {
 		name: "",
@@ -101,7 +102,7 @@ const SchoolModal = ({
 							values[key] = value.toString();
 						}
 						if (key == "district_id" && value) {
-							values[key] = value.toString();
+							setEditDistrict(value.toString());
 						}
 					});
 					form.setValues(values);
@@ -171,7 +172,15 @@ const SchoolModal = ({
 		{
 			title: t("school_location"),
 			icon: <FaLocationDot size={22} />,
-			step: <SchoolStepTwo provinces={provinces} form={form} lng={lng} />,
+			step: (
+				<SchoolStepTwo
+					provinces={provinces}
+					form={form}
+					lng={lng}
+					editDistrict={editDistrict}
+					setEditDistrict={setEditDistrict}
+				/>
+			),
 			async validate() {
 				form.validate();
 				let res = form.isValid("province_id") && form.isValid("district_id");
@@ -187,8 +196,9 @@ const SchoolModal = ({
 				steps={steps}
 				form={form}
 				submit={submit}
-				doneTitle={t("done")}
 				title={title}
+				editId={editId}
+				lng={lng}
 			/>
 		</form>
 	);

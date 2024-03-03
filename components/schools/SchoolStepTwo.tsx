@@ -9,9 +9,17 @@ interface SchoolStepTwoProps {
 	form: any;
 	lng: string;
 	provinces: any;
+	editDistrict: string | undefined;
+	setEditDistrict: any;
 }
 
-const SchoolStepTwo = ({ form, lng, provinces }: SchoolStepTwoProps) => {
+const SchoolStepTwo = ({
+	form,
+	lng,
+	provinces,
+	editDistrict,
+	setEditDistrict,
+}: SchoolStepTwoProps) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios({ method: "GET" });
 	const [loading, setLoading] = useState(false);
@@ -19,8 +27,13 @@ const SchoolStepTwo = ({ form, lng, provinces }: SchoolStepTwoProps) => {
 
 	useEffect(() => {
 		(async function () {
-			form.setFieldValue("district_id", null);
-			setDistricts([]);
+			if (editDistrict) {
+				form.setFieldValue("district_id", editDistrict);
+				setEditDistrict("");
+			} else {
+				form.setFieldValue("district_id", null);
+				setDistricts([]);
+			}
 			if (form?.values?.province_id) {
 				setLoading(true);
 				const { response, status, error } = await callApi({
