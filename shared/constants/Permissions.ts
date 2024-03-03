@@ -1,5 +1,5 @@
-// Verify Status
-export const VERIFY_STATUS = "verify_status";
+// Change Status
+export const CHANGE_STATUS = "change_status";
 
 // Users Permissions
 export const VIEW_USERS = "view_users";

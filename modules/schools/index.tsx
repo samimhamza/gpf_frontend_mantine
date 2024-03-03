@@ -12,7 +12,7 @@ import {
 	ADD_SCHOOLS,
 	DELETE_SCHOOLS,
 	EDIT_SCHOOLS,
-	VERIFY_STATUS,
+	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
 
 export const SchoolModule = ({ lng }: { lng: string }) => {
@@ -20,8 +20,8 @@ export const SchoolModule = ({ lng }: { lng: string }) => {
 	const [mutated, setMutated] = useState(false);
 	const columns = SchoolColumns(
 		t,
+		permissionChecker(CHANGE_STATUS),
 		"/schools/",
-		permissionChecker(VERIFY_STATUS),
 		setMutated
 	);
 	const [opened, { open, close }] = useDisclosure(false);

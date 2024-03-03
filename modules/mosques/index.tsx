@@ -2,7 +2,6 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { logColumns } from "@/shared/columns";
 import { MosqueColumns } from "@/shared/columns/mosque.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
@@ -13,13 +12,18 @@ import {
 	ADD_MOSQUES,
 	DELETE_MOSQUES,
 	EDIT_MOSQUES,
+	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
 
 export const MosqueModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
-	const logs = logColumns(t);
 	const [mutated, setMutated] = useState(false);
-	const columns = MosqueColumns(t, logs);
+	const columns = MosqueColumns(
+		t,
+		permissionChecker(CHANGE_STATUS),
+		"/mosques/",
+		setMutated
+	);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();

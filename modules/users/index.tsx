@@ -2,7 +2,6 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { logColumns } from "@/shared/columns";
 import { UserColumns } from "@/shared/columns/user.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
@@ -13,14 +12,19 @@ import {
 	ADD_USERS,
 	DELETE_USERS,
 	EDIT_USERS,
+	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
 
 export const UserModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
-	const logs = logColumns(t);
-	const columns = UserColumns(t, logs);
-	const [opened, { open, close }] = useDisclosure(false);
 	const [mutated, setMutated] = useState(false);
+	const columns = UserColumns(
+		t,
+		permissionChecker(CHANGE_STATUS),
+		"/users/",
+		setMutated
+	);
+	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
 
