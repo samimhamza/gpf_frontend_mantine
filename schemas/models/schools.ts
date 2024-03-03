@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { phoneRegex } from "..";
 
 export const SchoolSchema = (t: (arg: string) => string) => {
 	return z.object({
@@ -24,9 +25,13 @@ export const SchoolSchema = (t: (arg: string) => string) => {
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(1, {
-				message: t("field_required"),
+			.min(3, {
+				message: t("min_3_length_error"),
+			})
+			.max(64, {
+				message: t("max_64_length_error"),
 			}),
+		head_phone: z.string().regex(phoneRegex, t("invalid_phone")),
 		office_id: z
 			.string({
 				invalid_type_error: t("invalid_type"),

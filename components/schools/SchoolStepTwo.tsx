@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { Flex, Loader, Select, TextInput } from "@mantine/core";
+import { Flex, Loader, Select, TextInput, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 interface SchoolStepTwoProps {
@@ -69,6 +69,39 @@ const SchoolStepTwo = ({ form, lng, provinces }: SchoolStepTwoProps) => {
 					nothingFoundMessage={t("noting_found")}
 					rightSection={loading && <Loader color="blue" size={15} />}
 					{...form.getInputProps("district_id")}
+				/>
+			</Flex>
+			<Flex
+				direction={{ base: "column", sm: "row" }}
+				gap="sm"
+				p="sm"
+				justify={{ sm: "center" }}
+			>
+				<TextInput
+					style={{ flex: 1 }}
+					label={t("village")}
+					placeholder={t("village")}
+					{...form.getInputProps("village")}
+				/>
+				<TextInput
+					style={{ flex: 1 }}
+					label={t("street")}
+					placeholder={t("street")}
+					{...form.getInputProps("street")}
+				/>
+			</Flex>
+			<Flex
+				direction={{ base: "column", sm: "row" }}
+				gap="sm"
+				p="sm"
+				justify={{ sm: "center" }}
+			>
+				<Textarea
+					resize="vertical"
+					style={{ flex: 1 }}
+					label={t("address")}
+					placeholder={t("address")}
+					{...form.getInputProps("address")}
 				/>
 			</Flex>
 		</>

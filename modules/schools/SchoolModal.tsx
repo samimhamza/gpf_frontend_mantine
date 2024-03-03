@@ -163,6 +163,7 @@ const SchoolModal = ({
 					form.isValid("office_id") &&
 					form.isValid("total_staff") &&
 					form.isValid("head_name") &&
+					form.isValid("head_phone") &&
 					form.isValid("type");
 				return res;
 			},

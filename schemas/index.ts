@@ -17,3 +17,10 @@ export const LoginSchema = (t: (arg: string) => string) =>
 				message: t("password_required"),
 			}),
 	});
+
+// export const phoneRegex = new RegExp(
+// 	/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+// );
+export const phoneRegex = new RegExp(
+	"^(?:[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6})?$"
+);

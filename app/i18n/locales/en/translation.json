@@ -76,5 +76,7 @@
 	"school_info": "School Info",
 	"school_location": "School Location",
 	"field_required": "Field Required",
-	"invalid_type": "Invalid Type"
+	"invalid_type": "Invalid Type",
+	"must_be_number": "Value must be a number",
+	"invalid_phone": "Value is not a correct phone number"
 }
