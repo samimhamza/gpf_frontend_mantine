@@ -92,7 +92,7 @@ export function AdminLayout({
 						<Title order={3}>{t("gpf")}</Title>
 					</Group>
 
-					<Menu shadow="md" width={200}>
+					<Menu shadow="md">
 						<Menu.Target>
 							<Avatar radius="xl" color="cyan" style={{ cursor: "pointer" }}>
 								{getNameAbbr(user.full_name)}

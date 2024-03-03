@@ -21,6 +21,7 @@ interface DataTableProps {
 	setTableDetails: Dispatch<SetStateAction<any>>;
 	data: DataProps;
 	isLoading: boolean;
+	showDelete: boolean;
 }
 
 const MantineDataTable = ({
@@ -33,6 +34,8 @@ const MantineDataTable = ({
 	setTableDetails,
 	data,
 	isLoading,
+	showDelete,
+
 	...additionalProps
 }: DataTableProps) => {
 	const { t } = useTranslation(lng);
@@ -71,37 +74,39 @@ const MantineDataTable = ({
 	};
 
 	return (
-		<DataTable
-			height={550}
-			withTableBorder
-			highlightOnHover
-			withColumnBorders
-			striped
-			verticalAlign="top"
-			pinLastColumn
-			columns={columns}
-			fetching={isLoading}
-			records={data?.data}
-			page={data?.page ? data?.page : 1}
-			onPageChange={handlePageChange}
-			totalRecords={data?.total}
-			recordsPerPage={data?.per_page ? data?.per_page : 20}
-			sortStatus={sortStatus}
-			onSortStatusChange={handleSortStatusChange}
-			selectedRecords={selectedRecords}
-			onSelectedRecordsChange={setSelectedRecords}
-			shadow="sm"
-			borderRadius="sm"
-			loadingText={t("loading_data")}
-			noRecordsText={t("no_records")}
-			// paginationText={({ from, to, totalRecords }) =>
-			// 	`Records ${from} - ${to} of ${totalRecords}`
-			// }
-			// 👇 uncomment the next lines to use custom pagination colors
-			// paginationActiveBackgroundColor="green"
-			// paginationActiveTextColor="#e6e348"
-			{...additionalProps}
-		/>
+		<>
+			<DataTable
+				height={550}
+				withTableBorder
+				highlightOnHover
+				withColumnBorders
+				striped
+				verticalAlign="top"
+				pinLastColumn
+				columns={columns}
+				fetching={isLoading}
+				records={data?.data}
+				page={data?.page ? data?.page : 1}
+				onPageChange={handlePageChange}
+				totalRecords={data?.total}
+				recordsPerPage={data?.per_page ? data?.per_page : 20}
+				sortStatus={sortStatus}
+				onSortStatusChange={handleSortStatusChange}
+				selectedRecords={showDelete ? selectedRecords : undefined}
+				onSelectedRecordsChange={showDelete ? setSelectedRecords : undefined}
+				shadow="sm"
+				borderRadius="sm"
+				loadingText={t("loading_data")}
+				noRecordsText={t("no_records")}
+				// paginationText={({ from, to, totalRecords }) =>
+				// 	`Records ${from} - ${to} of ${totalRecords}`
+				// }
+				// 👇 uncomment the next lines to use custom pagination colors
+				// paginationActiveBackgroundColor="green"
+				// paginationActiveTextColor="#e6e348"
+				{...additionalProps}
+			/>
+		</>
 	);
 };
 

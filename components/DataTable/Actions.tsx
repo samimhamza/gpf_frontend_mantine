@@ -7,9 +7,15 @@ interface ActionsProps {
 	record: any;
 	setEdit: Dispatch<SetStateAction<number | undefined>>;
 	setView: Dispatch<SetStateAction<number | undefined>>;
+	showEdit: boolean;
 }
 
-export const Actions = ({ record, setEdit, setView }: ActionsProps) => {
+export const Actions = ({
+	record,
+	setEdit,
+	setView,
+	showEdit,
+}: ActionsProps) => {
 	return (
 		<Group gap={4} justify="right" wrap="nowrap">
 			<ActionIcon
@@ -23,16 +29,18 @@ export const Actions = ({ record, setEdit, setView }: ActionsProps) => {
 			>
 				<TbEye size={16} />
 			</ActionIcon>
-			<ActionIcon
-				size="sm"
-				variant="transparent"
-				onClick={(e) => {
-					e.stopPropagation(); // 👈 prevent triggering the row click function
-					setEdit(record.id);
-				}}
-			>
-				<TbEdit size={16} />
-			</ActionIcon>
+			{showEdit && (
+				<ActionIcon
+					size="sm"
+					variant="transparent"
+					onClick={(e) => {
+						e.stopPropagation(); // 👈 prevent triggering the row click function
+						setEdit(record.id);
+					}}
+				>
+					<TbEdit size={16} />
+				</ActionIcon>
+			)}
 		</Group>
 	);
 };

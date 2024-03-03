@@ -8,6 +8,12 @@ import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
 import UserModal from "./UserModal";
 import { useEffect, useState } from "react";
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import {
+	ADD_USERS,
+	DELETE_USERS,
+	EDIT_USERS,
+} from "@/shared/constants/Permissions";
 
 export const UserModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
@@ -48,6 +54,9 @@ export const UserModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
+				showAdd={permissionChecker(ADD_USERS)}
+				showDelete={permissionChecker(DELETE_USERS)}
+				showEdit={permissionChecker(EDIT_USERS)}
 			/>
 			{opened && (
 				<UserModal

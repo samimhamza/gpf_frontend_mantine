@@ -8,13 +8,19 @@ import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
 import MosqueModal from "./MosqueModal";
 import { useEffect, useState } from "react";
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import {
+	ADD_MOSQUES,
+	DELETE_MOSQUES,
+	EDIT_MOSQUES,
+} from "@/shared/constants/Permissions";
 
 export const MosqueModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const logs = logColumns(t);
+	const [mutated, setMutated] = useState(false);
 	const columns = MosqueColumns(t, logs);
 	const [opened, { open, close }] = useDisclosure(false);
-	const [mutated, setMutated] = useState(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
 
@@ -48,6 +54,9 @@ export const MosqueModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
+				showAdd={permissionChecker(ADD_MOSQUES)}
+				showDelete={permissionChecker(DELETE_MOSQUES)}
+				showEdit={permissionChecker(EDIT_MOSQUES)}
 			/>
 			{opened && (
 				<MosqueModal

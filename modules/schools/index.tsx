@@ -2,19 +2,29 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { logColumns } from "@/shared/columns";
 import { SchoolColumns } from "@/shared/columns/school.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
 import SchoolModal from "./SchoolModal";
 import { useEffect, useState } from "react";
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import {
+	ADD_SCHOOLS,
+	DELETE_SCHOOLS,
+	EDIT_SCHOOLS,
+	VERIFY_STATUS,
+} from "@/shared/constants/Permissions";
 
 export const SchoolModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
-	const logs = logColumns(t);
-	const columns = SchoolColumns(t, logs);
-	const [opened, { open, close }] = useDisclosure(false);
 	const [mutated, setMutated] = useState(false);
+	const columns = SchoolColumns(
+		t,
+		"/schools/",
+		permissionChecker(VERIFY_STATUS),
+		setMutated
+	);
+	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
 
@@ -48,6 +58,9 @@ export const SchoolModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
+				showAdd={permissionChecker(ADD_SCHOOLS)}
+				showDelete={permissionChecker(DELETE_SCHOOLS)}
+				showEdit={permissionChecker(EDIT_SCHOOLS)}
 			/>
 			{opened && (
 				<SchoolModal

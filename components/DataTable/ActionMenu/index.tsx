@@ -15,6 +15,8 @@ interface ActionMenuProps {
 	lng: string;
 	mutate: any;
 	open?: () => void;
+	showAdd: boolean;
+	showDelete: boolean;
 }
 
 const ActionMenu = ({
@@ -25,6 +27,8 @@ const ActionMenu = ({
 	lng,
 	mutate,
 	open,
+	showAdd,
+	showDelete,
 }: ActionMenuProps) => {
 	const { t } = useTranslation(lng);
 	const [search, setSearch] = useState("");
@@ -75,7 +79,7 @@ const ActionMenu = ({
 					</ActionIcon>
 				</Group>
 				<Group>
-					{selectedRecords.length > 0 && (
+					{showDelete && selectedRecords.length > 0 && (
 						<Button
 							loading={deleteLoading}
 							onClick={handleDelete}
@@ -85,9 +89,11 @@ const ActionMenu = ({
 							{t("delete")}
 						</Button>
 					)}
-					<Button onClick={open} rightSection={<MdAdd size={14} />}>
-						{t("add")}
-					</Button>
+					{showAdd && (
+						<Button onClick={open} rightSection={<MdAdd size={14} />}>
+							{t("add")}
+						</Button>
+					)}
 				</Group>
 			</Group>
 		</Paper>

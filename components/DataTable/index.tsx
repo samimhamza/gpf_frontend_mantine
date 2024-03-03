@@ -17,6 +17,9 @@ interface DataTableProps {
 	setMutated: Dispatch<SetStateAction<boolean>>;
 	setEdit: Dispatch<SetStateAction<number | undefined>>;
 	setView: Dispatch<SetStateAction<number | undefined>>;
+	showAdd: boolean;
+	showDelete: boolean;
+	showEdit: boolean;
 }
 
 const CustomDataTable = ({
@@ -29,6 +32,9 @@ const CustomDataTable = ({
 	setMutated,
 	setEdit,
 	setView,
+	showAdd,
+	showDelete,
+	showEdit,
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios({ method: "GET" });
@@ -65,7 +71,12 @@ const CustomDataTable = ({
 	}, [mutated, setMutated, mutate]);
 
 	const renderActions = (record: any) => (
-		<Actions record={record} setEdit={setEdit} setView={setView} />
+		<Actions
+			record={record}
+			setEdit={setEdit}
+			setView={setView}
+			showEdit={showEdit}
+		/>
 	);
 
 	let actionIndex = columns.findIndex((col) => col.accessor == "actions");
@@ -92,6 +103,8 @@ const CustomDataTable = ({
 				setSelectedRecords={setSelectedRecords}
 				mutate={mutate}
 				open={open}
+				showAdd={showAdd}
+				showDelete={showDelete}
 			/>
 			<MantineDataTable
 				lng={lng}
@@ -103,6 +116,7 @@ const CustomDataTable = ({
 				setTableDetails={setTableDetails}
 				data={data}
 				isLoading={isLoading}
+				showDelete={showDelete}
 				{...additionalProps}
 			/>
 		</>
