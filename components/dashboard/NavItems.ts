@@ -1,4 +1,8 @@
-import { VIEW_MOSQUES, VIEW_USERS } from "@/shared/constants/Permissions";
+import {
+	VIEW_MOSQUES,
+	VIEW_SCHOOLS,
+	VIEW_USERS,
+} from "@/shared/constants/Permissions";
 import { FaUsers } from "react-icons/fa6";
 import { TbGauge } from "react-icons/tb";
 import { MdMosque } from "react-icons/md";
@@ -12,14 +16,9 @@ export const navItems = (t: (arg: string) => string) => [
 		permission: VIEW_MOSQUES,
 		links: [
 			{
-				label: t("provinces"),
-				link: "/covered_areas/provinces",
-				permission: VIEW_MOSQUES,
-			},
-			{
-				label: t("districts"),
-				link: "/covered_areas/districts",
-				permission: VIEW_MOSQUES,
+				label: t("schools"),
+				link: "/covered_areas/schools",
+				permission: VIEW_SCHOOLS,
 			},
 			{
 				label: t("mosques"),

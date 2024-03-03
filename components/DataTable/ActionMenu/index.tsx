@@ -8,21 +8,27 @@ import toast from "react-hot-toast";
 import { useAxios } from "@/customHooks/useAxios";
 
 interface ActionMenuProps {
+	deleteUrl: string;
 	selectedRecords: Array<any>;
 	setSelectedRecords: Dispatch<SetStateAction<any>>;
 	onSearch: Dispatch<SetStateAction<string>>;
 	lng: string;
 	mutate: any;
 	open?: () => void;
+	showAdd: boolean;
+	showDelete: boolean;
 }
 
 const ActionMenu = ({
+	deleteUrl,
 	selectedRecords,
 	setSelectedRecords,
 	onSearch,
 	lng,
 	mutate,
 	open,
+	showAdd,
+	showDelete,
 }: ActionMenuProps) => {
 	const { t } = useTranslation(lng);
 	const [search, setSearch] = useState("");
@@ -39,7 +45,7 @@ const ActionMenu = ({
 		setDeleteLoading(true);
 		const ids = selectedRecords.map((rec) => rec.id);
 		const { status, error } = await callApi({
-			url: "/users/1",
+			url: deleteUrl,
 			data: { ids },
 		});
 
@@ -73,7 +79,7 @@ const ActionMenu = ({
 					</ActionIcon>
 				</Group>
 				<Group>
-					{selectedRecords.length > 0 && (
+					{showDelete && selectedRecords.length > 0 && (
 						<Button
 							loading={deleteLoading}
 							onClick={handleDelete}
@@ -83,9 +89,11 @@ const ActionMenu = ({
 							{t("delete")}
 						</Button>
 					)}
-					<Button onClick={open} rightSection={<MdAdd size={14} />}>
-						{t("add")}
-					</Button>
+					{showAdd && (
+						<Button onClick={open} rightSection={<MdAdd size={14} />}>
+							{t("add")}
+						</Button>
+					)}
 				</Group>
 			</Group>
 		</Paper>

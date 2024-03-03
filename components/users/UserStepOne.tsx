@@ -5,14 +5,21 @@ import { useAxios } from "@/customHooks/useAxios";
 import { Flex, Loader, PasswordInput, Select, TextInput } from "@mantine/core";
 import { useState } from "react";
 
-interface StepOneProps {
+interface UserStepOneProps {
 	form: any;
 	lng: string;
 	offices: any;
 	setOffices: any;
+	editId: number | undefined;
 }
 
-const StepOne = ({ form, lng, offices, setOffices }: StepOneProps) => {
+const UserStepOne = ({
+	form,
+	lng,
+	offices,
+	setOffices,
+	editId,
+}: UserStepOneProps) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios({ method: "GET" });
 	const [loading, setLoading] = useState(false);
@@ -81,29 +88,31 @@ const StepOne = ({ form, lng, offices, setOffices }: StepOneProps) => {
 					{...form.getInputProps("username")}
 				/>
 			</Flex>
-			<Flex
-				direction={{ base: "column", sm: "row" }}
-				gap="sm"
-				p="sm"
-				justify={{ sm: "center" }}
-			>
-				<PasswordInput
-					style={{ flex: 1 }}
-					label={t("password")}
-					placeholder={t("password")}
-					withAsterisk
-					{...form.getInputProps("password")}
-				/>
-				<PasswordInput
-					style={{ flex: 1 }}
-					label={t("confirm_password")}
-					placeholder={t("confirm_password")}
-					withAsterisk
-					{...form.getInputProps("confirm_password")}
-				/>
-			</Flex>
+			{!editId && (
+				<Flex
+					direction={{ base: "column", sm: "row" }}
+					gap="sm"
+					p="sm"
+					justify={{ sm: "center" }}
+				>
+					<PasswordInput
+						style={{ flex: 1 }}
+						label={t("password")}
+						placeholder={t("password")}
+						withAsterisk
+						{...form.getInputProps("password")}
+					/>
+					<PasswordInput
+						style={{ flex: 1 }}
+						label={t("confirm_password")}
+						placeholder={t("confirm_password")}
+						withAsterisk
+						{...form.getInputProps("confirm_password")}
+					/>
+				</Flex>
+			)}
 		</>
 	);
 };
 
-export default StepOne;
+export default UserStepOne;

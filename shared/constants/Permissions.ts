@@ -1,8 +1,17 @@
+// Change Status
+export const CHANGE_STATUS = "change_status";
+
 // Users Permissions
 export const VIEW_USERS = "view_users";
 export const ADD_USERS = "create_users";
 export const EDIT_USERS = "update_users";
 export const DELETE_USERS = "delete_users";
+
+// Schools Permissions
+export const VIEW_SCHOOLS = "view_schools";
+export const ADD_SCHOOLS = "create_schools";
+export const EDIT_SCHOOLS = "update_schools";
+export const DELETE_SCHOOLS = "delete_schools";
 
 // Employees Permissions
 export const VIEW_EMPLOYEES = "view_employees";

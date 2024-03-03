@@ -32,8 +32,7 @@ export const DEFAULT_LOGIN_REDIRECT = "/dashboard";
  */
 export const protectedRoutes = [
 	"/dashboard",
-	"/covered_areas/provinces",
-	"/covered_areas/districts",
+	"/covered_areas/schools",
 	"/covered_areas/mosques",
 	"users",
 ];

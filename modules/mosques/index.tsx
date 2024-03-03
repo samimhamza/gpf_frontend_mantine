@@ -2,26 +2,26 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { UserColumns } from "@/shared/columns/user.columns";
+import { MosqueColumns } from "@/shared/columns/mosque.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import UserModal from "./UserModal";
+import MosqueModal from "./MosqueModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-	ADD_USERS,
-	DELETE_USERS,
-	EDIT_USERS,
+	ADD_MOSQUES,
+	DELETE_MOSQUES,
+	EDIT_MOSQUES,
 	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
 
-export const UserModule = ({ lng }: { lng: string }) => {
+export const MosqueModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = UserColumns(
+	const columns = MosqueColumns(
 		t,
 		permissionChecker(CHANGE_STATUS),
-		"/users/",
+		"/mosques/",
 		setMutated
 	);
 	const [opened, { open, close }] = useDisclosure(false);
@@ -45,12 +45,12 @@ export const UserModule = ({ lng }: { lng: string }) => {
 			<CustomBreadCrumb
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
-					{ title: t("users") },
+					{ title: t("mosques") },
 				]}
 			/>
 			<CustomDataTable
-				url="/users"
-				deleteUrl="/users/1"
+				url="/mosques"
+				deleteUrl="/mosques/1"
 				lng={lng}
 				columns={columns}
 				open={open}
@@ -58,17 +58,17 @@ export const UserModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
-				showAdd={permissionChecker(ADD_USERS)}
-				showDelete={permissionChecker(DELETE_USERS)}
-				showEdit={permissionChecker(EDIT_USERS)}
+				showAdd={permissionChecker(ADD_MOSQUES)}
+				showDelete={permissionChecker(DELETE_MOSQUES)}
+				showEdit={permissionChecker(EDIT_MOSQUES)}
 			/>
 			{opened && (
-				<UserModal
+				<MosqueModal
 					opened={opened}
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("create_user") : t("update_user")}
+					title={!edit ? t("create_mosque") : t("update_mosque")}
 					editId={edit}
 				/>
 			)}

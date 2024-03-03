@@ -43,6 +43,7 @@ export function AdminLayout({
 }) {
 	const [opened, { toggle }] = useDisclosure();
 	const { t } = useTranslation(lng);
+	const router = useRouter();
 	const callApi = useAxios({ method: "POST" });
 	const navList = navItems(t);
 	const userNavList = navList.filter((item) => {
@@ -52,12 +53,12 @@ export function AdminLayout({
 		)
 			return item;
 	});
-
 	const logout = async () => {
 		const { status } = await callApi({ url: "/logout" });
 		signOut({
-			callbackUrl: `${window.location.origin}/auth/login/`,
+			redirect: false,
 		});
+		router.push("/auth/login");
 	};
 
 	const links = userNavList.map((item) => (
@@ -91,7 +92,7 @@ export function AdminLayout({
 						<Title order={3}>{t("gpf")}</Title>
 					</Group>
 
-					<Menu shadow="md" width={200}>
+					<Menu shadow="md">
 						<Menu.Target>
 							<Avatar radius="xl" color="cyan" style={{ cursor: "pointer" }}>
 								{getNameAbbr(user.full_name)}
