@@ -1,7 +1,7 @@
 "use client";
 
-import UserStepOne from "@/components/users/UserStepOne";
-import UserStepTwo from "@/components/users/UserStepTwo";
+import UserStepOne from "@/components/modules/users/UserStepOne";
+import UserStepTwo from "@/components/modules/users/UserStepTwo";
 import { useForm, zodResolver } from "@mantine/form";
 import { EditUserSchema, CreateUserSchema } from "@/schemas/models/users";
 import { TbUserCircle } from "react-icons/tb";

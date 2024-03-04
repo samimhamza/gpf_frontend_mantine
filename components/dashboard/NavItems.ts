@@ -37,7 +37,7 @@ export const navItems = (t: (arg: string) => string) => [
 		links: [
 			{
 				label: t("teachers"),
-				link: "/applicants/teachers",
+				link: "/teachers",
 				permission: VIEW_APPLICANTS,
 			},
 		],
