@@ -62,7 +62,7 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("create_teacher") : t("update_teacher")}
+					title={!edit ? t("add_teacher") : t("update_teacher")}
 					editId={edit}
 				/>
 			)}

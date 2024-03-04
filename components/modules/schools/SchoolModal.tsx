@@ -1,6 +1,6 @@
 "use client";
 
-import SchoolStepOne from "@/components/schools/SchoolStepOne";
+import SchoolStepOne from "@/components/modules/schools/SchoolStepOne";
 import { useForm, zodResolver } from "@mantine/form";
 import { SchoolSchema } from "@/schemas/models/schools";
 import { FaSchool } from "react-icons/fa";
@@ -10,7 +10,7 @@ import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
-import SchoolStepTwo from "@/components/schools/SchoolStepTwo";
+import SchoolStepTwo from "@/components/modules/schools/SchoolStepTwo";
 import { FaLocationDot } from "react-icons/fa6";
 
 const SchoolModal = ({

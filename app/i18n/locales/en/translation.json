@@ -42,7 +42,7 @@
 	"delete": "Delete",
 	"search": "Search",
 	"successfully_deleted": "Successfully Deleted",
-	"add_user": "Create User",
+	"add_user": "Add New User",
 	"update_user": "Update User",
 	"user_info": "User Info",
 	"authorizations": "Authorizations",
@@ -55,7 +55,6 @@
 	"all": "All",
 	"min_3_length_error": "Minimum 3 characters required",
 	"max_64_length_error": "Maximum 64 characters allowed",
-	"create_user": "Create User",
 	"roles": "Roles",
 	"role": "Role",
 	"schools": "Schools",
@@ -100,5 +99,8 @@
 	"formal_teacher": "Formal Teacher",
 	"school_employee": "School Employee",
 	"survey": "Survey",
-	"without_survey": "Without Survey"
+	"without_survey": "Without Survey",
+	"school": "School",
+	"add_teacher": "Add New Teacher",
+	"update_teacher": "Update Teacher"
 }

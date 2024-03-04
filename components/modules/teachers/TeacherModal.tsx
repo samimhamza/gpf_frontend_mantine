@@ -1,10 +1,10 @@
 "use client";
 
-import MosqueStepOne from "@/components/mosques/MosqueStepOne";
-// import StepTwo from "@/components/mosques/StepTwo";
+import TeacherStepOne from "@/components/modules/teachers/TeacherStepOne";
+import TeacherStepTwo from "@/components/modules/teachers/TeacherStepTwo";
 import { useForm, zodResolver } from "@mantine/form";
-import { MosqueSchema } from "@/schemas/models/mosques";
-import { FaMosque } from "react-icons/fa";
+import { TeacherSchema } from "@/schemas/models/teachers";
+import { FaChalkboardTeacher } from "react-icons/fa";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 
-const MosqueModal = ({
+const TeacherModal = ({
 	opened,
 	close,
 	lng,
@@ -28,38 +28,38 @@ const MosqueModal = ({
 	editId: number | undefined;
 }) => {
 	const { t } = useTranslation(lng);
-	const mosqueSchema = MosqueSchema(t);
+	const teacherSchema = TeacherSchema(t);
 	const callApi = useAxios({ method: "GET" });
 	const callPostApi = useAxios({ method: "POST" });
 	const callPutApi = useAxios({ method: "PUT" });
-	const [offices, setOffices] = useState([]);
-	const [provinces, setProvinces] = useState([]);
-	const [districts, setDistricts] = useState([]);
+	const [schools, setSchools] = useState([]);
 	const [loading, setLoading] = useState(false);
 
 	const initialValues: any = {
-		name: "",
-		office_id: "",
-		province_id: "",
-		district_id: "",
-		mosque_type: "",
-		mosque_formal: "",
+		first_name: "",
+		father_name: "",
+		last_name: "",
+		phone: "",
+		type: "",
+		staff_type: "",
+		national_id: "",
+		school_id: "",
 	};
 
 	const form = useForm({
 		initialValues: initialValues,
-		validate: zodResolver(mosqueSchema),
+		validate: zodResolver(teacherSchema),
 		validateInputOnBlur: true,
 	});
 
 	const submit = async () => {
 		const { response, status } = !editId
 			? await callPostApi({
-					url: "/mosques",
+					url: "/teachers",
 					data: form.values,
 			  })
 			: await callPutApi({
-					url: `/mosques/${editId}`,
+					url: `/teachers/${editId}`,
 					data: form.values,
 			  });
 		if ((!editId ? status == 201 : status == 202) && response.result) {
@@ -75,7 +75,7 @@ const MosqueModal = ({
 			(async function () {
 				setLoading(true);
 				const { response, status, error } = await callApi({
-					url: `/mosques/${editId}`,
+					url: `/teachers/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
 					let values: any = {};
@@ -112,39 +112,26 @@ const MosqueModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
-				url: "/all_offices",
-				// url: "/office/auto_complete",
+				url: "/all_schools",
 			});
 			if (status == 200 && response.result == true) {
-				setOffices(
-					response.data.map((item: any) => {
-						return { value: item.id.toString(), label: item.name };
-					})
+				const schools: any = Object.entries(response.data).map(
+					([name, items]: any) => {
+						const schools = items.map((item: any) => {
+							return { value: item.id.toString(), label: item.name };
+						});
+						return { group: name, items: schools };
+					}
 				);
-			}
-		})();
-	}, []);
-
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				url: "/all_provinces",
-				// url: "/office/auto_complete",
-			});
-			if (status == 200 && response.result == true) {
-				setProvinces(
-					response.data.map((item: any) => {
-						return { value: item.name, label: item.name };
-					})
-				);
+				setSchools(schools);
 			}
 		})();
 	}, []);
 
 	const steps = [
 		{
-			title: t("mosque_info"),
-			icon: <FaMosque size={22} />,
+			title: t("teacher_info"),
+			icon: <FaChalkboardTeacher size={22} />,
 			step: (
 				<Box pos="relative">
 					<LoadingOverlay
@@ -152,35 +139,31 @@ const MosqueModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<MosqueStepOne
-						form={form}
-						lng={lng}
-						offices={offices}
-						provinces={provinces}
-						districts={districts}
-					/>
+					<TeacherStepOne form={form} lng={lng} schools={schools} />
 				</Box>
 			),
 			async validate() {
 				form.validate();
 				let res =
-					form.isValid("name") &&
-					form.isValid("office_id") &&
-					form.isValid("province_id") &&
-					form.isValid("district_id");
+					form.isValid("first_name") &&
+					form.isValid("last_name") &&
+					form.isValid("father_name") &&
+					form.isValid("phone") &&
+					form.isValid("school_id") &&
+					form.isValid("type") &&
+					form.isValid("staff_type");
 				if (res) {
 					let { response, status } = await callPostApi({
-						url: "/mosque/valid_credential",
+						url: "/teacher/valid_credential",
 						data: {
-							name: form.values.name,
+							national_id: form.values.national_id,
 							id: editId ? editId : null,
 						},
 					});
 					if (status == 226) {
 						form.setErrors({
-							name:
-								(response.message == 1 || response.message == 0) &&
-								t("mosque_name_already_exists"),
+							national_id:
+								response.message == 0 && t("national_id_already_exists"),
 						});
 						return false;
 					} else if (status !== 200) return false;
@@ -192,15 +175,7 @@ const MosqueModal = ({
 		// {
 		// 	title: t("authorizations"),
 		// 	icon: <TbShieldCheck size={22} />,
-		// 	step: (
-		// 		<StepTwo
-		// 		// roles={roles}
-		// 		// permissions={permissions}
-		// 		// form={form}
-		// 		// lng={lng}
-		// 		// totalPermissions={totalPermissions}
-		// 		/>
-		// 	),
+		// 	step: <TeacherStepTwo form={form} lng={lng} />,
 		// 	async validate() {
 		// 		return true;
 		// 	},
@@ -214,12 +189,12 @@ const MosqueModal = ({
 				steps={steps}
 				form={form}
 				submit={submit}
-				title={title}
 				lng={lng}
+				title={title}
 				editId={editId}
 			/>
 		</form>
 	);
 };
 
-export default MosqueModal;
+export default TeacherModal;

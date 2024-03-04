@@ -3,7 +3,7 @@ import { phoneRegex } from "..";
 
 export const TeacherSchema = (t: (arg: string) => string) => {
 	return z.object({
-		name: z
+		first_name: z
 			.string({
 				invalid_type_error: t("field_required"),
 			})
@@ -34,5 +34,19 @@ export const TeacherSchema = (t: (arg: string) => string) => {
 				message: t("max_64_length_error"),
 			}),
 		phone: z.string().regex(phoneRegex, t("invalid_email")),
+		national_id: z.number(),
+		school_id: z
+			.string({
+				invalid_type_error: t("invalid_type"),
+			})
+			.min(1, {
+				message: t("field_required"),
+			}),
+		staff_type: z.string().min(1, {
+			message: t("field_required"),
+		}),
+		gender: z.string().min(1, {
+			message: t("field_required"),
+		}),
 	});
 };

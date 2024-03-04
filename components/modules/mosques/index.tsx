@@ -2,26 +2,26 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { SchoolColumns } from "@/shared/columns/school.columns";
+import { MosqueColumns } from "@/shared/columns/mosque.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import SchoolModal from "./SchoolModal";
+import MosqueModal from "./MosqueModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-	ADD_SCHOOLS,
-	DELETE_SCHOOLS,
-	EDIT_SCHOOLS,
+	ADD_MOSQUES,
+	DELETE_MOSQUES,
+	EDIT_MOSQUES,
 	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
 
-export const SchoolModule = ({ lng }: { lng: string }) => {
+export const MosqueModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = SchoolColumns(
+	const columns = MosqueColumns(
 		t,
 		permissionChecker(CHANGE_STATUS),
-		"/schools/",
+		"/mosques/",
 		setMutated
 	);
 	const [opened, { open, close }] = useDisclosure(false);
@@ -45,12 +45,12 @@ export const SchoolModule = ({ lng }: { lng: string }) => {
 			<CustomBreadCrumb
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
-					{ title: t("schools") },
+					{ title: t("mosques") },
 				]}
 			/>
 			<CustomDataTable
-				url="/schools"
-				deleteUrl="/schools/1"
+				url="/mosques"
+				deleteUrl="/mosques/1"
 				lng={lng}
 				columns={columns}
 				open={open}
@@ -58,17 +58,17 @@ export const SchoolModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
-				showAdd={permissionChecker(ADD_SCHOOLS)}
-				showDelete={permissionChecker(DELETE_SCHOOLS)}
-				showEdit={permissionChecker(EDIT_SCHOOLS)}
+				showAdd={permissionChecker(ADD_MOSQUES)}
+				showDelete={permissionChecker(DELETE_MOSQUES)}
+				showEdit={permissionChecker(EDIT_MOSQUES)}
 			/>
 			{opened && (
-				<SchoolModal
+				<MosqueModal
 					opened={opened}
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("create_school") : t("update_school")}
+					title={!edit ? t("add_mosque") : t("update_mosque")}
 					editId={edit}
 				/>
 			)}

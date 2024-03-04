@@ -2,26 +2,26 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { UserColumns } from "@/shared/columns/user.columns";
+import { SchoolColumns } from "@/shared/columns/school.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import UserModal from "./UserModal";
+import SchoolModal from "./SchoolModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-	ADD_USERS,
-	DELETE_USERS,
-	EDIT_USERS,
+	ADD_SCHOOLS,
+	DELETE_SCHOOLS,
+	EDIT_SCHOOLS,
 	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
 
-export const UserModule = ({ lng }: { lng: string }) => {
+export const SchoolModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = UserColumns(
+	const columns = SchoolColumns(
 		t,
 		permissionChecker(CHANGE_STATUS),
-		"/users/",
+		"/schools/",
 		setMutated
 	);
 	const [opened, { open, close }] = useDisclosure(false);
@@ -45,12 +45,12 @@ export const UserModule = ({ lng }: { lng: string }) => {
 			<CustomBreadCrumb
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
-					{ title: t("users") },
+					{ title: t("schools") },
 				]}
 			/>
 			<CustomDataTable
-				url="/users"
-				deleteUrl="/users/1"
+				url="/schools"
+				deleteUrl="/schools/1"
 				lng={lng}
 				columns={columns}
 				open={open}
@@ -58,17 +58,17 @@ export const UserModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
-				showAdd={permissionChecker(ADD_USERS)}
-				showDelete={permissionChecker(DELETE_USERS)}
-				showEdit={permissionChecker(EDIT_USERS)}
+				showAdd={permissionChecker(ADD_SCHOOLS)}
+				showDelete={permissionChecker(DELETE_SCHOOLS)}
+				showEdit={permissionChecker(EDIT_SCHOOLS)}
 			/>
 			{opened && (
-				<UserModal
+				<SchoolModal
 					opened={opened}
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("create_user") : t("update_user")}
+					title={!edit ? t("add_school") : t("update_school")}
 					editId={edit}
 				/>
 			)}
