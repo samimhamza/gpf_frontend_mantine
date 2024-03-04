@@ -5,7 +5,7 @@ import { useAxios } from "@/customHooks/useAxios";
 import { Flex, Loader, Select, TextInput, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 
-interface SchoolStepTwoProps {
+interface TeacherStepTwoProps {
 	form: any;
 	lng: string;
 	provinces: any;
@@ -13,13 +13,13 @@ interface SchoolStepTwoProps {
 	setEditDistrict: any;
 }
 
-const SchoolStepTwo = ({
+const TeacherStepTwo = ({
 	form,
 	lng,
 	provinces,
 	editDistrict,
 	setEditDistrict,
-}: SchoolStepTwoProps) => {
+}: TeacherStepTwoProps) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios({ method: "GET" });
 	const [loading, setLoading] = useState(false);
@@ -102,4 +102,4 @@ const SchoolStepTwo = ({
 	);
 };
 
-export default SchoolStepTwo;
+export default TeacherStepTwo;

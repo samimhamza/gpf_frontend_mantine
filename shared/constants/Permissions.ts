@@ -13,6 +13,12 @@ export const ADD_SCHOOLS = "create_schools";
 export const EDIT_SCHOOLS = "update_schools";
 export const DELETE_SCHOOLS = "delete_schools";
 
+// Applicants Permissions
+export const VIEW_APPLICANTS = "view_applicants";
+export const ADD_APPLICANTS = "create_applicants";
+export const EDIT_APPLICANTS = "update_applicants";
+export const DELETE_APPLICANTS = "delete_applicants";
+
 // Employees Permissions
 export const VIEW_EMPLOYEES = "view_employees";
 export const ADD_EMPLOYEES = "create_employees";

@@ -1,19 +1,19 @@
 "use client";
 
-import SchoolStepOne from "@/components/schools/SchoolStepOne";
+import TeacherStepOne from "@/components/teachers/TeacherStepOne";
+import TeacherStepTwo from "@/components/teachers/TeacherStepTwo";
 import { useForm, zodResolver } from "@mantine/form";
-import { SchoolSchema } from "@/schemas/models/schools";
-import { FaSchool } from "react-icons/fa";
+import { TeacherSchema } from "@/schemas/models/teachers";
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { TbShieldCheck } from "react-icons/tb";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
-import SchoolStepTwo from "@/components/schools/SchoolStepTwo";
-import { FaLocationDot } from "react-icons/fa6";
 
-const SchoolModal = ({
+const TeacherModal = ({
 	opened,
 	close,
 	lng,
@@ -29,42 +29,34 @@ const SchoolModal = ({
 	editId: number | undefined;
 }) => {
 	const { t } = useTranslation(lng);
-	const schoolSchema = SchoolSchema(t);
+	const teacherSchema = TeacherSchema(t);
 	const callApi = useAxios({ method: "GET" });
 	const callPostApi = useAxios({ method: "POST" });
 	const callPutApi = useAxios({ method: "PUT" });
 	const [offices, setOffices] = useState([]);
-	const [provinces, setProvinces] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [editDistrict, setEditDistrict] = useState("");
 
 	const initialValues: any = {
 		name: "",
-		total_staff: "",
-		office_id: "",
-		type: "",
-		status: "",
-		head_name: "",
-		head_phone: "",
-		province_id: "",
-		district_id: "",
-		address: "",
+		father_name: "",
+		last_name: "",
+		phone: "",
 	};
 
 	const form = useForm({
 		initialValues: initialValues,
-		validate: zodResolver(schoolSchema),
+		validate: zodResolver(teacherSchema),
 		validateInputOnBlur: true,
 	});
 
 	const submit = async () => {
 		const { response, status } = !editId
 			? await callPostApi({
-					url: "/schools",
+					url: "/teachers",
 					data: form.values,
 			  })
 			: await callPutApi({
-					url: `/schools/${editId}`,
+					url: `/teachers/${editId}`,
 					data: form.values,
 			  });
 		if ((!editId ? status == 201 : status == 202) && response.result) {
@@ -80,27 +72,31 @@ const SchoolModal = ({
 			(async function () {
 				setLoading(true);
 				const { response, status, error } = await callApi({
-					url: `/schools/${editId}`,
+					url: `/teachers/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
 					let values: any = {};
+					values.permissions = [];
+					values.roles = [];
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(initialValues).includes(key)) {
-							if (
-								key != "province_id" &&
-								key != "district_id" &&
-								key != "office_id"
-							)
+							if (key != "permissions" && key != "roles" && key != "office_id")
 								values[key] = value ? value : initialValues[key];
 						}
 						if (key == "office_id" && value) {
 							values[key] = value.toString();
 						}
-						if (key == "province_id" && value) {
-							values[key] = value.toString();
-						}
-						if (key == "district_id" && value) {
-							setEditDistrict(value.toString());
+						if (Array.isArray(value) && value.length) {
+							if (key == "permissions") {
+								value.forEach((item: any) => {
+									values.permissions.push(item.id);
+								});
+							}
+							if (key == "roles") {
+								value.forEach((item: any) => {
+									values.roles.push(item.name);
+								});
+							}
 						}
 					});
 					form.setValues(values);
@@ -126,25 +122,10 @@ const SchoolModal = ({
 		})();
 	}, []);
 
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				url: "/all_provinces",
-			});
-			if (status == 200 && response.result == true) {
-				setProvinces(
-					response.data.map((item: any) => {
-						return { value: item.id.toString(), label: item.name_fa };
-					})
-				);
-			}
-		})();
-	}, []);
-
 	const steps = [
 		{
-			title: t("school_info"),
-			icon: <FaSchool size={22} />,
+			title: t("teacher_info"),
+			icon: <FaChalkboardTeacher size={22} />,
 			step: (
 				<Box pos="relative">
 					<LoadingOverlay
@@ -152,39 +133,50 @@ const SchoolModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<SchoolStepOne form={form} lng={lng} offices={offices} />
+					<TeacherStepOne
+						form={form}
+						lng={lng}
+						offices={offices}
+						setOffices={setOffices}
+						editId={editId}
+					/>
 				</Box>
 			),
 			async validate() {
 				form.validate();
 				let res =
 					form.isValid("name") &&
-					form.isValid("office_id") &&
-					form.isValid("total_staff") &&
-					form.isValid("head_name") &&
-					form.isValid("head_phone") &&
-					form.isValid("type");
-				return res;
+					form.isValid("last_name") &&
+					form.isValid("father_name") &&
+					form.isValid("phone");
+				if (res) {
+					let { response, status } = await callPostApi({
+						url: "/teacher/valid_credential",
+						data: {
+							national_id: form.values.national_id,
+							id: editId ? editId : null,
+						},
+					});
+					if (status == 226) {
+						form.setErrors({
+							national_id:
+								response.message == 0 && t("national_id_already_exists"),
+						});
+						return false;
+					} else if (status !== 200) return false;
+					return true;
+				}
+				return false;
 			},
 		},
-		{
-			title: t("school_location"),
-			icon: <FaLocationDot size={22} />,
-			step: (
-				<SchoolStepTwo
-					provinces={provinces}
-					form={form}
-					lng={lng}
-					editDistrict={editDistrict}
-					setEditDistrict={setEditDistrict}
-				/>
-			),
-			async validate() {
-				form.validate();
-				let res = form.isValid("province_id") && form.isValid("district_id");
-				return res;
-			},
-		},
+		// {
+		// 	title: t("authorizations"),
+		// 	icon: <TbShieldCheck size={22} />,
+		// 	step: <TeacherStepTwo form={form} lng={lng} />,
+		// 	async validate() {
+		// 		return true;
+		// 	},
+		// },
 	];
 	return (
 		<form>
@@ -194,12 +186,12 @@ const SchoolModal = ({
 				steps={steps}
 				form={form}
 				submit={submit}
+				lng={lng}
 				title={title}
 				editId={editId}
-				lng={lng}
 			/>
 		</form>
 	);
 };
 
-export default SchoolModal;
+export default TeacherModal;

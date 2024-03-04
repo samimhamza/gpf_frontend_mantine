@@ -36,8 +36,6 @@ export const SchoolColumns = (
 	return [
 		{ accessor: "id", hidden: true },
 		{ accessor: "office_id", hidden: true },
-		{ accessor: "province_id", hidden: true },
-		{ accessor: "district_id", hidden: true },
 		{
 			accessor: "office_name",
 			title: t("office"),
@@ -100,24 +98,12 @@ export const SchoolColumns = (
 			noWrap: true,
 			sortable: true,
 		},
-		{
-			accessor: "address",
-			title: t("address"),
-			noWrap: true,
-			sortable: true,
-		},
-		{
-			accessor: "village",
-			title: t("village"),
-			noWrap: true,
-			sortable: true,
-		},
-		{
-			accessor: "street",
-			title: t("street"),
-			noWrap: true,
-			sortable: true,
-		},
+		// {
+		// 	accessor: "address",
+		// 	title: t("address"),
+		// 	noWrap: true,
+		// 	sortable: true,
+		// },
 		...logs,
 	];
 };

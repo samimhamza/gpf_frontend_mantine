@@ -36,8 +36,6 @@ export const MosqueColumns = (
 	return [
 		{ accessor: "id", hidden: true },
 		{ accessor: "office_id", hidden: true },
-		{ accessor: "province_id", hidden: true },
-		{ accessor: "district_id", hidden: true },
 		{
 			accessor: "office_name",
 			title: t("office"),
