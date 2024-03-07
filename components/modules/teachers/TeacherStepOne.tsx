@@ -65,7 +65,7 @@ const TeacherStepOne = ({
 				});
 			}
 		})();
-	}, [form.values.school_id]);
+	}, [form.values.school_id, schools]);
 
 	return (
 		<>

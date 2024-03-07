@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import axios from "axios";
 import { getSession, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export const useAxios = () => {
+export const useAxios: any = () => {
 	const router = useRouter();
 
 	const { data: session } = useSession();

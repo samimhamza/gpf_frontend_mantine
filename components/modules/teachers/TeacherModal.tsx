@@ -96,6 +96,26 @@ const TeacherModal = ({
 	}, []);
 
 	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				method: "GET",
+				url: "/all_schools",
+			});
+			if (status == 200 && response.result == true) {
+				const schools: any = Object.entries(response.data).map(
+					([name, items]: any) => {
+						const schools = items.map((item: any) => {
+							return { value: item.id.toString(), label: item.name };
+						});
+						return { group: name, items: schools };
+					}
+				);
+				setSchools(schools);
+			}
+		})();
+	}, []);
+
+	useEffect(() => {
 		if (editId) {
 			(async function () {
 				setLoading(true);
@@ -123,7 +143,7 @@ const TeacherModal = ({
 							values[key] = value.toString();
 						}
 						if (key == "relevantable_id" && value) {
-							values["school_id"] = value.toString();
+							values.school_id = value.toString();
 						}
 					});
 					form.setValues(values);
@@ -132,26 +152,6 @@ const TeacherModal = ({
 			})();
 		}
 	}, [editId]);
-
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				method: "GET",
-				url: "/all_schools",
-			});
-			if (status == 200 && response.result == true) {
-				const schools: any = Object.entries(response.data).map(
-					([name, items]: any) => {
-						const schools = items.map((item: any) => {
-							return { value: item.id.toString(), label: item.name };
-						});
-						return { group: name, items: schools };
-					}
-				);
-				setSchools(schools);
-			}
-		})();
-	}, []);
 
 	const steps = [
 		{
