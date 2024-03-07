@@ -55,6 +55,7 @@ export const ItemModule = ({ lng }: { lng: string }) => {
 				showAdd={permissionChecker(ADD_ITEMS)}
 				showDelete={permissionChecker(DELETE_ITEMS)}
 				showEdit={permissionChecker(EDIT_ITEMS)}
+				showView={false}
 			/>
 			{opened && (
 				<ItemModal
