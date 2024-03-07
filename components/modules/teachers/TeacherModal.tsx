@@ -11,6 +11,7 @@ import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
+import { FcSurvey } from "react-icons/fc";
 
 const TeacherModal = ({
 	opened,
@@ -29,21 +30,27 @@ const TeacherModal = ({
 }) => {
 	const { t } = useTranslation(lng);
 	const teacherSchema = TeacherSchema(t);
-	const callApi = useAxios({ method: "GET" });
-	const callPostApi = useAxios({ method: "POST" });
-	const callPutApi = useAxios({ method: "PUT" });
+	const callApi = useAxios();
 	const [schools, setSchools] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [provinces, setProvinces] = useState([]);
+	const [districts, setDistricts] = useState([]);
 
 	const initialValues: any = {
 		first_name: "",
 		father_name: "",
 		last_name: "",
 		phone: "",
-		type: "",
 		staff_type: "",
 		national_id: "",
 		school_id: "",
+		main_residence_id: "",
+		current_residence_id: "",
+		district_id: "",
+		address: "",
+		type: "",
+		description: "",
+		gender: "",
 	};
 
 	const form = useForm({
@@ -54,11 +61,13 @@ const TeacherModal = ({
 
 	const submit = async () => {
 		const { response, status } = !editId
-			? await callPostApi({
+			? await callApi({
+					method: "POST",
 					url: "/teachers",
 					data: form.values,
 			  })
-			: await callPutApi({
+			: await callApi({
+					method: "PUT",
 					url: `/teachers/${editId}`,
 					data: form.values,
 			  });
@@ -71,35 +80,50 @@ const TeacherModal = ({
 	};
 
 	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				method: "GET",
+				url: "/all_provinces",
+			});
+			if (status == 200 && response.result == true) {
+				setProvinces(
+					response.data.map((item: any) => {
+						return { value: item.id.toString(), label: item.name_fa };
+					})
+				);
+			}
+		})();
+	}, []);
+
+	useEffect(() => {
 		if (editId) {
 			(async function () {
 				setLoading(true);
 				const { response, status, error } = await callApi({
+					method: "GET",
 					url: `/teachers/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
 					let values: any = {};
-					values.permissions = [];
-					values.roles = [];
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(initialValues).includes(key)) {
-							if (key != "permissions" && key != "roles" && key != "office_id")
+							if (
+								key != "main_residence_id" &&
+								key != "current_residence_id" &&
+								key != "district_id"
+							)
 								values[key] = value ? value : initialValues[key];
 						}
-						if (key == "office_id" && value) {
+						if (
+							(key == "main_residence_id" ||
+								key == "current_residence_id" ||
+								key == "district_id") &&
+							value
+						) {
 							values[key] = value.toString();
 						}
-						if (Array.isArray(value) && value.length) {
-							if (key == "permissions") {
-								value.forEach((item: any) => {
-									values.permissions.push(item.id);
-								});
-							}
-							if (key == "roles") {
-								value.forEach((item: any) => {
-									values.roles.push(item.name);
-								});
-							}
+						if (key == "relevantable_id" && value) {
+							values["school_id"] = value.toString();
 						}
 					});
 					form.setValues(values);
@@ -112,6 +136,7 @@ const TeacherModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
+				method: "GET",
 				url: "/all_schools",
 			});
 			if (status == 200 && response.result == true) {
@@ -139,7 +164,13 @@ const TeacherModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<TeacherStepOne form={form} lng={lng} schools={schools} />
+					<TeacherStepOne
+						form={form}
+						lng={lng}
+						schools={schools}
+						provinces={provinces}
+						setDistricts={setDistricts}
+					/>
 				</Box>
 			),
 			async validate() {
@@ -150,11 +181,13 @@ const TeacherModal = ({
 					form.isValid("father_name") &&
 					form.isValid("phone") &&
 					form.isValid("school_id") &&
-					form.isValid("type") &&
+					form.isValid("national_id") &&
+					form.isValid("gender") &&
 					form.isValid("staff_type");
-				if (res) {
-					let { response, status } = await callPostApi({
-						url: "/teacher/valid_credential",
+				if (res && form.values.national_id) {
+					let { response, status } = await callApi({
+						method: "POST",
+						url: "/applicants/valid_credential",
 						data: {
 							national_id: form.values.national_id,
 							id: editId ? editId : null,
@@ -169,17 +202,25 @@ const TeacherModal = ({
 					} else if (status !== 200) return false;
 					return true;
 				}
-				return false;
+				return res;
 			},
 		},
-		// {
-		// 	title: t("authorizations"),
-		// 	icon: <TbShieldCheck size={22} />,
-		// 	step: <TeacherStepTwo form={form} lng={lng} />,
-		// 	async validate() {
-		// 		return true;
-		// 	},
-		// },
+		{
+			title: t("survey_info"),
+			icon: <FcSurvey size={22} />,
+			step: (
+				<TeacherStepTwo
+					form={form}
+					lng={lng}
+					provinces={provinces}
+					districts={districts}
+				/>
+			),
+			async validate() {
+				form.validate();
+				return form.isValid("type");
+			},
+		},
 	];
 	return (
 		<form>

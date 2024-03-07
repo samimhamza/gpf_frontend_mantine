@@ -44,7 +44,7 @@ export function AdminLayout({
 	const [opened, { toggle }] = useDisclosure();
 	const { t } = useTranslation(lng);
 	const router = useRouter();
-	const callApi = useAxios({ method: "POST" });
+	const callApi = useAxios();
 	const navList = navItems(t);
 	const userNavList = navList.filter((item) => {
 		if (
@@ -54,7 +54,7 @@ export function AdminLayout({
 			return item;
 	});
 	const logout = async () => {
-		const { status } = await callApi({ url: "/logout" });
+		const { status } = await callApi({ method: "POST", url: "/logout" });
 		signOut({
 			redirect: false,
 		});

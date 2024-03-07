@@ -29,9 +29,7 @@ const MosqueModal = ({
 }) => {
 	const { t } = useTranslation(lng);
 	const mosqueSchema = MosqueSchema(t);
-	const callApi = useAxios({ method: "GET" });
-	const callPostApi = useAxios({ method: "POST" });
-	const callPutApi = useAxios({ method: "PUT" });
+	const callApi = useAxios();
 	const [offices, setOffices] = useState([]);
 	const [provinces, setProvinces] = useState([]);
 	const [districts, setDistricts] = useState([]);
@@ -54,11 +52,13 @@ const MosqueModal = ({
 
 	const submit = async () => {
 		const { response, status } = !editId
-			? await callPostApi({
+			? await callApi({
+					method: "POST",
 					url: "/mosques",
 					data: form.values,
 			  })
-			: await callPutApi({
+			: await callApi({
+					method: "PUT",
 					url: `/mosques/${editId}`,
 					data: form.values,
 			  });
@@ -75,6 +75,7 @@ const MosqueModal = ({
 			(async function () {
 				setLoading(true);
 				const { response, status, error } = await callApi({
+					method: "GET",
 					url: `/mosques/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
@@ -112,6 +113,7 @@ const MosqueModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
+				method: "GET",
 				url: "/all_offices",
 				// url: "/office/auto_complete",
 			});
@@ -128,6 +130,7 @@ const MosqueModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
+				method: "GET",
 				url: "/all_provinces",
 				// url: "/office/auto_complete",
 			});
@@ -169,7 +172,8 @@ const MosqueModal = ({
 					form.isValid("province_id") &&
 					form.isValid("district_id");
 				if (res) {
-					let { response, status } = await callPostApi({
+					let { response, status } = await callApi({
+						method: "POST",
 						url: "/mosque/valid_credential",
 						data: {
 							name: form.values.name,

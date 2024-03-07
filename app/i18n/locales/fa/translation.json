@@ -105,5 +105,8 @@
 	"teacher_info": "معلومات معلم",
 	"school": "مکتب",
 	"add_teacher": "ایجاد معلم جدید",
-	"update_teacher": "ویرایش معلم"
+	"update_teacher": "ویرایش معلم",
+	"survey_info": "معلومات سروی",
+	"current_district": "ولسوالی/شهر فعلی",
+	"description": "توضیحات"
 }

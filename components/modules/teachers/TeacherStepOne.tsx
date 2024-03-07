@@ -1,16 +1,30 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Flex, NumberInput, Select, TextInput } from "@mantine/core";
+import { useAxios } from "@/customHooks/useAxios";
+import { Flex, Select, TextInput } from "@mantine/core";
+import { useEffect } from "react";
 
 interface TeacherStepOneProps {
 	form: any;
 	lng: string;
-	schools: Array<{ value: string; label: string }>;
+	schools: Array<{
+		group: string;
+		items: Array<{ value: string; label: string }>;
+	}>;
+	provinces: Array<{ value: string; label: string }>;
+	setDistricts: any;
 }
 
-const TeacherStepOne = ({ form, lng, schools }: TeacherStepOneProps) => {
+const TeacherStepOne = ({
+	form,
+	lng,
+	schools,
+	provinces,
+	setDistricts,
+}: TeacherStepOneProps) => {
 	const { t } = useTranslation(lng);
+	const callApi = useAxios();
 
 	const staffTypes = [
 		{ value: "formal_teacher", label: t("formal_teacher") },
@@ -22,6 +36,36 @@ const TeacherStepOne = ({ form, lng, schools }: TeacherStepOneProps) => {
 		{ value: "male", label: t("male") },
 		{ value: "female", label: t("female") },
 	];
+
+	useEffect(() => {
+		(async function () {
+			if (form.values.school_id) {
+				schools.forEach((item) => {
+					item.items.forEach(async (school) => {
+						if (school.value == form.values.school_id) {
+							const prov = provinces.find(
+								(province) => province.label == item.group
+							);
+							if (prov?.value) {
+								form.setFieldValue("current_residence_id", prov.value);
+								const { response, status, error } = await callApi({
+									method: "GET",
+									url: `/all_districts?province_id=${prov.value}`,
+								});
+								if (status == 200 && response.result == true) {
+									setDistricts(
+										response.data.map((item: any) => {
+											return { value: item.id.toString(), label: item.name_fa };
+										})
+									);
+								}
+							}
+						}
+					});
+				});
+			}
+		})();
+	}, [form.values.school_id]);
 
 	return (
 		<>

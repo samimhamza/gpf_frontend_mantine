@@ -30,9 +30,7 @@ const SchoolModal = ({
 }) => {
 	const { t } = useTranslation(lng);
 	const schoolSchema = SchoolSchema(t);
-	const callApi = useAxios({ method: "GET" });
-	const callPostApi = useAxios({ method: "POST" });
-	const callPutApi = useAxios({ method: "PUT" });
+	const callApi = useAxios();
 	const [offices, setOffices] = useState([]);
 	const [provinces, setProvinces] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -59,11 +57,13 @@ const SchoolModal = ({
 
 	const submit = async () => {
 		const { response, status } = !editId
-			? await callPostApi({
+			? await callApi({
+					method: "POST",
 					url: "/schools",
 					data: form.values,
 			  })
-			: await callPutApi({
+			: await callApi({
+					method: "PUT",
 					url: `/schools/${editId}`,
 					data: form.values,
 			  });
@@ -80,6 +80,7 @@ const SchoolModal = ({
 			(async function () {
 				setLoading(true);
 				const { response, status, error } = await callApi({
+					method: "GET",
 					url: `/schools/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
@@ -93,10 +94,7 @@ const SchoolModal = ({
 							)
 								values[key] = value ? value : initialValues[key];
 						}
-						if (key == "office_id" && value) {
-							values[key] = value.toString();
-						}
-						if (key == "province_id" && value) {
+						if ((key == "office_id" || key == "province_id") && value) {
 							values[key] = value.toString();
 						}
 						if (key == "district_id" && value) {
@@ -113,6 +111,7 @@ const SchoolModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
+				method: "GET",
 				url: "/all_offices",
 				// url: "/office/auto_complete",
 			});
@@ -129,6 +128,7 @@ const SchoolModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
+				method: "GET",
 				url: "/all_provinces",
 			});
 			if (status == 200 && response.result == true) {

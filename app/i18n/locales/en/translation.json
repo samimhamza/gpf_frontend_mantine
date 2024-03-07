@@ -102,5 +102,8 @@
 	"without_survey": "Without Survey",
 	"school": "School",
 	"add_teacher": "Add New Teacher",
-	"update_teacher": "Update Teacher"
+	"update_teacher": "Update Teacher",
+	"survey_info": "Survey Info",
+	"current_district": "Current District",
+	"description": "Description"
 }

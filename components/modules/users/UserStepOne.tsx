@@ -21,12 +21,13 @@ const UserStepOne = ({
 	editId,
 }: UserStepOneProps) => {
 	const { t } = useTranslation(lng);
-	const callApi = useAxios({ method: "GET" });
+	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 
 	// const handleSearch = async (value: string) => {
 	// 	setLoading(true);
 	// 	const { response, status, error } = await callApi({
+	//		method: "GET",
 	// 		url: `/office/auto_complete?name=${value}`,
 	// 	});
 	// 	if (status == 200 && response.result == true) {

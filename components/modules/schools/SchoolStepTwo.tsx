@@ -21,7 +21,7 @@ const SchoolStepTwo = ({
 	setEditDistrict,
 }: SchoolStepTwoProps) => {
 	const { t } = useTranslation(lng);
-	const callApi = useAxios({ method: "GET" });
+	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 	const [districts, setDistricts] = useState([]);
 
@@ -37,6 +37,7 @@ const SchoolStepTwo = ({
 			if (form?.values?.province_id) {
 				setLoading(true);
 				const { response, status, error } = await callApi({
+					method: "GET",
 					url: `/all_districts?province_id=${form?.values?.province_id}`,
 				});
 				if (status == 200 && response.result == true) {
