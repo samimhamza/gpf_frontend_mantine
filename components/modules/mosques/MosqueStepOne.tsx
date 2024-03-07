@@ -63,8 +63,6 @@ const MosqueStepOne = ({
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}
-					// onSearchChange={handleSearch}
-					// rightSection={loading && <Loader color="blue" size={15} />}
 					{...form.getInputProps("office_id")}
 				/>
 			</Flex>
@@ -83,8 +81,6 @@ const MosqueStepOne = ({
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}
-					// onSearchChange={handleSearch}
-					// rightSection={loading && <Loader color="blue" size={15} />}
 					{...form.getInputProps("province_id")}
 				/>
 				<Select
@@ -96,8 +92,6 @@ const MosqueStepOne = ({
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}
-					// onSearchChange={handleSearch}
-					// rightSection={loading && <Loader color="blue" size={15} />}
 					{...form.getInputProps("district_id")}
 				/>
 			</Flex>

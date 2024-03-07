@@ -1,5 +1,6 @@
 import {
 	VIEW_APPLICANTS,
+	VIEW_ITEMS,
 	VIEW_MOSQUES,
 	VIEW_SCHOOLS,
 	VIEW_USERS,
@@ -8,6 +9,7 @@ import { FaUsers } from "react-icons/fa6";
 import { TbGauge } from "react-icons/tb";
 import { MdMosque } from "react-icons/md";
 import { FaUserGroup } from "react-icons/fa6";
+import { BiSolidBox } from "react-icons/bi";
 
 export const navItems = (t: (arg: string) => string) => [
 	{ label: t("dashboard"), icon: TbGauge, link: "/dashboard" },
@@ -39,6 +41,19 @@ export const navItems = (t: (arg: string) => string) => [
 				label: t("teachers"),
 				link: "/teachers",
 				permission: VIEW_APPLICANTS,
+			},
+		],
+	},
+	{
+		label: t("inventory"),
+		icon: BiSolidBox,
+		initiallyOpened: true,
+		permission: VIEW_APPLICANTS,
+		links: [
+			{
+				label: t("items"),
+				link: "/items",
+				permission: VIEW_ITEMS,
 			},
 		],
 	},

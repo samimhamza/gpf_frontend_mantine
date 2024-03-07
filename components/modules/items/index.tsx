@@ -2,22 +2,22 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { TeacherColumns } from "@/shared/columns/teacher.columns";
+import { ItemColumns } from "@/shared/columns/item.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import TeacherModal from "./TeacherModal";
+import ItemModal from "./ItemModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-	EDIT_APPLICANTS,
-	ADD_APPLICANTS,
-	DELETE_APPLICANTS,
+	EDIT_ITEMS,
+	ADD_ITEMS,
+	DELETE_ITEMS,
 } from "@/shared/constants/Permissions";
 
-export const TeacherModule = ({ lng }: { lng: string }) => {
+export const ItemModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = TeacherColumns(t);
+	const columns = ItemColumns(t);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
@@ -39,12 +39,12 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 			<CustomBreadCrumb
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
-					{ title: t("teachers") },
+					{ title: t("items") },
 				]}
 			/>
 			<CustomDataTable
-				url="/teachers"
-				deleteUrl="/teachers/1"
+				url="/items"
+				deleteUrl="/items/1"
 				lng={lng}
 				columns={columns}
 				open={open}
@@ -52,12 +52,12 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
-				showAdd={permissionChecker(ADD_APPLICANTS)}
-				showDelete={permissionChecker(DELETE_APPLICANTS)}
-				showEdit={permissionChecker(EDIT_APPLICANTS)}
+				showAdd={permissionChecker(ADD_ITEMS)}
+				showDelete={permissionChecker(DELETE_ITEMS)}
+				showEdit={permissionChecker(EDIT_ITEMS)}
 			/>
 			{opened && (
-				<TeacherModal
+				<ItemModal
 					opened={opened}
 					close={close}
 					lng={lng}

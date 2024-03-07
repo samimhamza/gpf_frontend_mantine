@@ -39,3 +39,9 @@ export const VIEW_MOSQUES = "view_mosques";
 export const ADD_MOSQUES = "create_mosques";
 export const EDIT_MOSQUES = "update_mosques";
 export const DELETE_MOSQUES = "delete_mosques";
+
+// Items Permissions
+export const VIEW_ITEMS = "view_items";
+export const ADD_ITEMS = "create_items";
+export const EDIT_ITEMS = "update_items";
+export const DELETE_ITEMS = "delete_items";

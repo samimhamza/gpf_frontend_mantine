@@ -105,5 +105,9 @@
 	"update_teacher": "Update Teacher",
 	"survey_info": "Survey Info",
 	"current_district": "Current District",
-	"description": "Description"
+	"description": "Description",
+	"inventory": "Inventory",
+	"items": "Items",
+	"unit": "Unit",
+	"item_info": "Item Info"
 }

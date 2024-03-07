@@ -108,5 +108,9 @@
 	"update_teacher": "ویرایش معلم",
 	"survey_info": "معلومات سروی",
 	"current_district": "ولسوالی/شهر فعلی",
-	"description": "توضیحات"
+	"description": "توضیحات",
+	"inventory": "فهرست اموال",
+	"items": "اموال",
+	"unit": "واحد",
+	"item_info": "اطلاعات مال"
 }
