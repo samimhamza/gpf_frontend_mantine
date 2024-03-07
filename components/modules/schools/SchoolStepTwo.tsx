@@ -21,7 +21,7 @@ const SchoolStepTwo = ({
 	setEditDistrict,
 }: SchoolStepTwoProps) => {
 	const { t } = useTranslation(lng);
-	const callApi = useAxios({ method: "GET" });
+	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 	const [districts, setDistricts] = useState([]);
 
@@ -37,6 +37,7 @@ const SchoolStepTwo = ({
 			if (form?.values?.province_id) {
 				setLoading(true);
 				const { response, status, error } = await callApi({
+					method: "GET",
 					url: `/all_districts?province_id=${form?.values?.province_id}`,
 				});
 				if (status == 200 && response.result == true) {
@@ -82,25 +83,6 @@ const SchoolStepTwo = ({
 					nothingFoundMessage={t("noting_found")}
 					rightSection={loading && <Loader color="blue" size={15} />}
 					{...form.getInputProps("district_id")}
-				/>
-			</Flex>
-			<Flex
-				direction={{ base: "column", sm: "row" }}
-				gap="sm"
-				p="sm"
-				justify={{ sm: "center" }}
-			>
-				<TextInput
-					style={{ flex: 1 }}
-					label={t("village")}
-					placeholder={t("village")}
-					{...form.getInputProps("village")}
-				/>
-				<TextInput
-					style={{ flex: 1 }}
-					label={t("street")}
-					placeholder={t("street")}
-					{...form.getInputProps("street")}
 				/>
 			</Flex>
 			<Flex

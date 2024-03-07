@@ -18,6 +18,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import Done from "./Done";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useTranslation } from "@/app/i18n/client";
+import toast from "react-hot-toast";
 
 interface CustomModalProps {
 	opened: boolean;
@@ -97,9 +98,14 @@ const CustomModal = ({
 		setLoading(active);
 		form.validate();
 		if (form.isValid()) {
-			let res = await submit();
-			if (res) {
-				next();
+			let isValid = await stepInside[active].validate();
+			if (isValid) {
+				let res = await submit();
+				if (res) {
+					// next();
+					setActive(active + 1);
+					form.clearErrors();
+				}
 			}
 		}
 		setLoading(null);

@@ -1,5 +1,5 @@
+import { UserModule } from "@/components/modules/users";
 import usePermissionChecker from "@/customHooks/usePermissionChecker";
-import { UserModule } from "@/modules/users";
 import { VIEW_USERS } from "@/shared/constants/Permissions";
 
 const UsersPage = async ({

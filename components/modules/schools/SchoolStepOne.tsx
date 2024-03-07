@@ -81,8 +81,6 @@ const SchoolStepOne = ({ form, lng, offices }: SchoolStepOneProps) => {
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}
-					// onSearchChange={handleSearch}
-					// rightSection={loading && <Loader color="blue" size={15} />}
 					{...form.getInputProps("office_id")}
 				/>
 				<Select
@@ -94,23 +92,8 @@ const SchoolStepOne = ({ form, lng, offices }: SchoolStepOneProps) => {
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}
-					// onSearchChange={handleSearch}
-					// rightSection={loading && <Loader color="blue" size={15} />}
 					{...form.getInputProps("type")}
 				/>
-				{/* <Select
-					style={{ flex: 1 }}
-					label={t("status")}
-					placeholder={t("status")}
-					withAsterisk
-					data={statuses}
-					searchable
-					clearable
-					nothingFoundMessage={t("noting_found")}
-					// onSearchChange={handleSearch}
-					// rightSection={loading && <Loader color="blue" size={15} />}
-					{...form.getInputProps("status_id")}
-				/> */}
 			</Flex>
 		</>
 	);

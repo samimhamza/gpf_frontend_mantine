@@ -15,7 +15,7 @@ export const statusColum = (
 	showStatus: boolean,
 	setMutated: Dispatch<SetStateAction<boolean>>
 ) => {
-	const callApi = useAxios({ method: "PUT" });
+	const callApi = useAxios();
 	const [isLoading, setIsLoading] = useState<{
 		id: number | undefined;
 		isLoading: boolean;
@@ -43,6 +43,7 @@ export const statusColum = (
 		if (currentStatus != newStatus) {
 			setIsLoading({ id: id, isLoading: true });
 			const { status } = await callApi({
+				method: "PUT",
 				url: statusUrl + id + "/status",
 				data: {
 					status: newStatus,

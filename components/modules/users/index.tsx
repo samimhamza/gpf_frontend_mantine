@@ -68,7 +68,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("create_user") : t("update_user")}
+					title={!edit ? t("add_user") : t("update_user")}
 					editId={edit}
 				/>
 			)}

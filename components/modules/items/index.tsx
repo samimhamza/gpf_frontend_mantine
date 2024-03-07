@@ -2,28 +2,22 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { MosqueColumns } from "@/shared/columns/mosque.columns";
+import { ItemColumns } from "@/shared/columns/item.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import MosqueModal from "./MosqueModal";
+import ItemModal from "./ItemModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-	ADD_MOSQUES,
-	DELETE_MOSQUES,
-	EDIT_MOSQUES,
-	CHANGE_STATUS,
+	EDIT_ITEMS,
+	ADD_ITEMS,
+	DELETE_ITEMS,
 } from "@/shared/constants/Permissions";
 
-export const MosqueModule = ({ lng }: { lng: string }) => {
+export const ItemModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = MosqueColumns(
-		t,
-		permissionChecker(CHANGE_STATUS),
-		"/mosques/",
-		setMutated
-	);
+	const columns = ItemColumns(t);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
@@ -45,12 +39,12 @@ export const MosqueModule = ({ lng }: { lng: string }) => {
 			<CustomBreadCrumb
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
-					{ title: t("mosques") },
+					{ title: t("items") },
 				]}
 			/>
 			<CustomDataTable
-				url="/mosques"
-				deleteUrl="/mosques/1"
+				url="/items"
+				deleteUrl="/items/1"
 				lng={lng}
 				columns={columns}
 				open={open}
@@ -58,17 +52,17 @@ export const MosqueModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
-				showAdd={permissionChecker(ADD_MOSQUES)}
-				showDelete={permissionChecker(DELETE_MOSQUES)}
-				showEdit={permissionChecker(EDIT_MOSQUES)}
+				showAdd={permissionChecker(ADD_ITEMS)}
+				showDelete={permissionChecker(DELETE_ITEMS)}
+				showEdit={permissionChecker(EDIT_ITEMS)}
 			/>
 			{opened && (
-				<MosqueModal
+				<ItemModal
 					opened={opened}
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("create_mosque") : t("update_mosque")}
+					title={!edit ? t("add_teacher") : t("update_teacher")}
 					editId={edit}
 				/>
 			)}

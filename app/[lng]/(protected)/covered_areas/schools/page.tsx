@@ -1,5 +1,5 @@
+import { SchoolModule } from "@/components/modules/schools";
 import usePermissionChecker from "@/customHooks/usePermissionChecker";
-import { SchoolModule } from "@/modules/schools";
 import { VIEW_SCHOOLS } from "@/shared/constants/Permissions";
 
 const SchoolsPage = async ({

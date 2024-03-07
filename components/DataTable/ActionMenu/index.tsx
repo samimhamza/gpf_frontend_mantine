@@ -33,7 +33,7 @@ const ActionMenu = ({
 	const { t } = useTranslation(lng);
 	const [search, setSearch] = useState("");
 	const [deleteLoading, setDeleteLoading] = useState(false);
-	const callApi = useAxios({ method: "DELETE" });
+	const callApi = useAxios();
 
 	const handleSearch = (e: any) => {
 		if (e.keyCode == 13) {
@@ -45,6 +45,7 @@ const ActionMenu = ({
 		setDeleteLoading(true);
 		const ids = selectedRecords.map((rec) => rec.id);
 		const { status, error } = await callApi({
+			method: "DELETE",
 			url: deleteUrl,
 			data: { ids },
 		});

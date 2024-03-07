@@ -37,7 +37,7 @@ const CustomDataTable = ({
 	showEdit,
 	...additionalProps
 }: DataTableProps) => {
-	const callApi = useAxios({ method: "GET" });
+	const callApi = useAxios();
 	const [search, setSearch] = useState("");
 	const [selectedRecords, setSelectedRecords] = useState([]);
 	const [tableDetails, setTableDetails] = useState({
@@ -54,6 +54,7 @@ const CustomDataTable = ({
 		[url, tableDetails],
 		async () => {
 			const { response } = await callApi({
+				method: "GET",
 				url,
 				params: tableDetails,
 			});

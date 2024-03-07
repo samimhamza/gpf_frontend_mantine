@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import React from "react";
 import classes from "./UserStepTwo.module.css";
-import Permissions from "../Permissions";
+import Permissions from "@/components/Permissions";
 
 interface UserStepTwoProps {
 	roles: Array<{ value: number; label: string }>;

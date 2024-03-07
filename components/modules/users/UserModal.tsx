@@ -1,7 +1,7 @@
 "use client";
 
-import UserStepOne from "@/components/users/UserStepOne";
-import UserStepTwo from "@/components/users/UserStepTwo";
+import UserStepOne from "@/components/modules/users/UserStepOne";
+import UserStepTwo from "@/components/modules/users/UserStepTwo";
 import { useForm, zodResolver } from "@mantine/form";
 import { EditUserSchema, CreateUserSchema } from "@/schemas/models/users";
 import { TbUserCircle } from "react-icons/tb";
@@ -31,9 +31,7 @@ const UserModal = ({
 	const { t } = useTranslation(lng);
 	const createUserSchema = CreateUserSchema(t);
 	const editUserSchema = EditUserSchema(t);
-	const callApi = useAxios({ method: "GET" });
-	const callPostApi = useAxios({ method: "POST" });
-	const callPutApi = useAxios({ method: "PUT" });
+	const callApi = useAxios();
 	const [offices, setOffices] = useState([]);
 	const [roles, setRoles] = useState([]);
 	const [permissions, setPermissions] = useState([]);
@@ -67,11 +65,13 @@ const UserModal = ({
 
 	const submit = async () => {
 		const { response, status } = !editId
-			? await callPostApi({
+			? await callApi({
+					method: "POST",
 					url: "/users",
 					data: form.values,
 			  })
-			: await callPutApi({
+			: await callApi({
+					method: "PUT",
 					url: `/users/${editId}`,
 					data: form.values,
 			  });
@@ -88,6 +88,7 @@ const UserModal = ({
 			(async function () {
 				setLoading(true);
 				const { response, status, error } = await callApi({
+					method: "GET",
 					url: `/users/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
@@ -125,6 +126,7 @@ const UserModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
+				method: "GET",
 				url: "/all_offices",
 				// url: "/office/auto_complete",
 			});
@@ -141,6 +143,7 @@ const UserModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
+				method: "GET",
 				url: "/all_roles",
 				// url: "/office/auto_complete",
 			});
@@ -157,6 +160,7 @@ const UserModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
+				method: "GET",
 				url: "/grouped_permissions",
 			});
 			if (status == 200 && response.result == true) {
@@ -197,7 +201,8 @@ const UserModal = ({
 					? form.isValid("password") && form.isValid("confirm_password")
 					: true;
 				if (res) {
-					let { response, status } = await callPostApi({
+					let { response, status } = await callApi({
+						method: "POST",
 						url: "/user/valid_credential",
 						data: {
 							email: form.values.email,
