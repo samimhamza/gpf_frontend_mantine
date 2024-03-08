@@ -109,5 +109,11 @@
 	"inventory": "Inventory",
 	"items": "Items",
 	"unit": "Unit",
-	"item_info": "Item Info"
+	"item_info": "Item Info",
+	"charity_packages": "Charity Packages",
+	"period": "Period",
+	"cash_amount": "Cash Amount",
+	"currency": "Currency",
+	"start_date": "Start Date",
+	"end_date": "End Date"
 }

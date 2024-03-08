@@ -174,7 +174,7 @@ const MosqueModal = ({
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",
-						url: "/mosque/valid_credential",
+						url: "/mosques/check_uniqueness",
 						data: {
 							name: form.values.name,
 							id: editId ? editId : null,

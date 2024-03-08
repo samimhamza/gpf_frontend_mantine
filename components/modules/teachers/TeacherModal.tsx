@@ -187,7 +187,7 @@ const TeacherModal = ({
 				if (res && form.values.national_id) {
 					let { response, status } = await callApi({
 						method: "POST",
-						url: "/applicants/valid_credential",
+						url: "/applicants/check_uniqueness",
 						data: {
 							national_id: form.values.national_id,
 							id: editId ? editId : null,

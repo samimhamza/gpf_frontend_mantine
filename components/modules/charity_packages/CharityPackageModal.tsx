@@ -1,8 +1,8 @@
 "use client";
 
-import ItemStepOne from "@/components/modules/items/ItemStepOne";
+import CharityPackageStepOne from "@/components/modules/charity_packages/CharityPackageStepOne";
 import { useForm, zodResolver } from "@mantine/form";
-import { ItemSchema } from "@/schemas/models/items";
+import { CharityPackageSchema } from "@/schemas/models/charity_packages";
 import { BiSolidBox } from "react-icons/bi";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 
-const ItemModal = ({
+const CharityPackageModal = ({
 	opened,
 	close,
 	lng,
@@ -27,13 +27,19 @@ const ItemModal = ({
 	editId: number | undefined;
 }) => {
 	const { t } = useTranslation(lng);
-	const itemSchema = ItemSchema(t);
+	const itemSchema = CharityPackageSchema(t);
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
+	const [offices, setOffices] = useState([]);
 
 	const initialValues: any = {
 		name: "",
-		unit: "",
+		office_id: "",
+		period: "",
+		start_date: null,
+		end_date: "",
+		cash_amount: "",
+		currency: "",
 	};
 
 	const form = useForm({
@@ -46,12 +52,12 @@ const ItemModal = ({
 		const { response, status } = !editId
 			? await callApi({
 					method: "POST",
-					url: "/items",
+					url: "/charity_packages",
 					data: form.values,
 			  })
 			: await callApi({
 					method: "PUT",
-					url: `/items/${editId}`,
+					url: `/charity_packages/${editId}`,
 					data: form.values,
 			  });
 		if ((!editId ? status == 201 : status == 202) && response.result) {
@@ -63,12 +69,28 @@ const ItemModal = ({
 	};
 
 	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				method: "GET",
+				url: "/all_offices",
+			});
+			if (status == 200 && response.result == true) {
+				setOffices(
+					response.data.map((item: any) => {
+						return { value: item.id.toString(), label: item.name };
+					})
+				);
+			}
+		})();
+	}, []);
+
+	useEffect(() => {
 		if (editId) {
 			(async function () {
 				setLoading(true);
 				const { response, status, error } = await callApi({
 					method: "GET",
-					url: `/items/${editId}`,
+					url: `/charity_packages/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
 					let values: any = {};
@@ -95,7 +117,7 @@ const ItemModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<ItemStepOne form={form} lng={lng} />
+					<CharityPackageStepOne form={form} lng={lng} offices={offices} />
 				</Box>
 			),
 			async validate() {
@@ -105,7 +127,7 @@ const ItemModal = ({
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",
-						url: "/items/check_uniqueness",
+						url: "/charity_packages/check_uniqueness",
 						data: {
 							name: form.values.name,
 							id: editId ? editId : null,
@@ -139,4 +161,4 @@ const ItemModal = ({
 	);
 };
 
-export default ItemModal;
+export default CharityPackageModal;

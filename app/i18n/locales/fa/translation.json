@@ -112,5 +112,11 @@
 	"inventory": "فهرست اموال",
 	"items": "اموال",
 	"unit": "واحد",
-	"item_info": "اطلاعات مال"
+	"item_info": "اطلاعات مال",
+	"charity_packages": "بسته های کمکی",
+	"period": "میعاد",
+	"cash_amount": "پول نقد",
+	"currency": "واحد پولی",
+	"start_date": "تاریخ شروع",
+	"end_date": "تاریخ ختم"
 }

@@ -1,5 +1,6 @@
 import {
 	VIEW_APPLICANTS,
+	VIEW_CHARITY_PACKAGES,
 	VIEW_ITEMS,
 	VIEW_MOSQUES,
 	VIEW_SCHOOLS,
@@ -54,6 +55,11 @@ export const navItems = (t: (arg: string) => string) => [
 				label: t("items"),
 				link: "/items",
 				permission: VIEW_ITEMS,
+			},
+			{
+				label: t("charity_packages"),
+				link: "/charity_packages",
+				permission: VIEW_CHARITY_PACKAGES,
 			},
 		],
 	},
