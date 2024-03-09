@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import axios from "axios";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export const useAxios: any = () => {
@@ -16,7 +16,6 @@ export const useAxios: any = () => {
 			let loading = false;
 			let error = null;
 			let status = 404;
-			// const token = await getSession().then((session) => session?.user.token);
 
 			const api = axios.create({
 				baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -40,6 +39,7 @@ export const useAxios: any = () => {
 					},
 					data,
 				});
+
 				status = rawResponse.status;
 				response = rawResponse.data;
 				if (rawResponse.status == 401) {
@@ -54,6 +54,7 @@ export const useAxios: any = () => {
 			} finally {
 				loading = false;
 			}
+
 			return { response, status, error, loading };
 		},
 		[]

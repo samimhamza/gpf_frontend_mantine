@@ -36,6 +36,7 @@ const CharityPackageModal = ({
 	const [offices, setOffices] = useState([]);
 	const [items, setItems] = useState<any>([]);
 	const [dateError, setDateError] = useState(false);
+	const [startEndDates, setStartEndDates] = useState<any>([]);
 
 	const initialValues: any = {
 		name: "",
@@ -132,6 +133,13 @@ const CharityPackageModal = ({
 		}
 	}, [editId]);
 
+	useEffect(() => {
+		if (startEndDates?.length > 0) {
+			form.setFieldValue("start_end_date", startEndDates);
+			setDateError(false);
+		}
+	}, [startEndDates]);
+
 	const steps = [
 		{
 			title: t("item_info"),
@@ -148,13 +156,14 @@ const CharityPackageModal = ({
 						lng={lng}
 						offices={offices}
 						dateError={dateError}
-						setDateError={setDateError}
+						startEndDates={startEndDates}
+						setStartEndDates={setStartEndDates}
 					/>
 				</Box>
 			),
 			async validate() {
 				form.validate();
-				if (form.values.start_end_date.length == 0) {
+				if (form.values.start_end_date?.length == 0) {
 					setDateError(true);
 				}
 				let res =
@@ -162,7 +171,7 @@ const CharityPackageModal = ({
 					form.isValid("office_id") &&
 					form.isValid("period") &&
 					form.isValid("cash_amount") &&
-					form.values.start_end_date.length > 0;
+					form.values.start_end_date?.length > 0;
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",

@@ -5,14 +5,15 @@ import { Box, Flex, Input, Select, TextInput } from "@mantine/core";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import jalali_fa from "@/jalali_fa";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface CharityPackageStepOneProps {
 	form: any;
 	lng: string;
 	offices: Array<{ value: string; label: string }>;
 	dateError: boolean;
-	setDateError: Dispatch<SetStateAction<boolean>>;
+	startEndDates: Array<number>;
+	setStartEndDates: Dispatch<SetStateAction<any>>;
 }
 
 const CharityPackageStepOne = ({
@@ -20,7 +21,8 @@ const CharityPackageStepOne = ({
 	lng,
 	offices,
 	dateError,
-	setDateError,
+	startEndDates,
+	setStartEndDates,
 }: CharityPackageStepOneProps) => {
 	const { t } = useTranslation(lng);
 	const currencies = [
@@ -28,14 +30,8 @@ const CharityPackageStepOne = ({
 		{ value: "usd", label: t("usd") },
 	];
 
-	useEffect(() => {
-		if (form.values.start_end_date.length > 0) {
-			setDateError(false);
-		}
-	}, [form.values.start_end_date]);
-
 	return (
-		<>
+		<Box>
 			<Flex
 				px="sm"
 				direction={{ base: "column", sm: "row" }}
@@ -82,6 +78,8 @@ const CharityPackageStepOne = ({
 					</Box>
 					<Box style={{ display: "flex" }}>
 						<DatePicker
+							value={startEndDates}
+							onChange={setStartEndDates}
 							range
 							dateSeparator=" - "
 							zIndex={1000}
@@ -97,7 +95,6 @@ const CharityPackageStepOne = ({
 							calendar={persian}
 							locale={jalali_fa}
 							calendarPosition="bottom-right"
-							{...form.getInputProps("start_end_date")}
 						/>
 					</Box>
 					{dateError && (
@@ -128,7 +125,7 @@ const CharityPackageStepOne = ({
 					{...form.getInputProps("currency")}
 				/>
 			</Flex>
-		</>
+		</Box>
 	);
 };
 

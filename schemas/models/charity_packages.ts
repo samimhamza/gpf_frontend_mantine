@@ -22,24 +22,25 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 		period: z.string().regex(/^[0-9\-]+$/, t("only_number_allowed")),
 		cash_amount: z.string().regex(/^[0-9\-]*$/, t("only_number_allowed")),
 		items: z
-			.object({
-				item_id: z
-					.string({
-						invalid_type_error: t("invalid_type"),
-					})
-					.min(1, {
-						message: t("field_required"),
-					}),
-				quantity: z.string().regex(/^[0-9\-]+$/, t("only_number_allowed")),
-				unit: z
-					.string({
-						invalid_type_error: t("invalid_type"),
-					})
-					.min(1, {
-						message: t("field_required"),
-					}),
-			})
-			.array()
+			.array(
+				z.object({
+					item_id: z
+						.string({
+							invalid_type_error: t("invalid_type"),
+						})
+						.min(1, {
+							message: t("field_required"),
+						}),
+					quantity: z.string().regex(/^[0-9\-]+$/, t("only_number_allowed")),
+					unit: z
+						.string({
+							invalid_type_error: t("invalid_type"),
+						})
+						.min(1, {
+							message: t("field_required"),
+						}),
+				})
+			)
 			.superRefine((items, ctx) => {
 				const uniqueItemsCount = new Set(
 					items.map((value: any) => value.item_id)
