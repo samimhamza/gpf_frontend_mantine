@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Flex, NumberInput, Select, TextInput } from "@mantine/core";
+import { Flex, Select, TextInput } from "@mantine/core";
 
 interface SchoolStepOneProps {
 	form: any;
@@ -16,12 +16,6 @@ const SchoolStepOne = ({ form, lng, offices }: SchoolStepOneProps) => {
 		{ value: "intermediate", label: t("intermediate") },
 		{ value: "high_school", label: t("high_school") },
 	];
-	// const statuses = [
-	// 	{ value: "active", label: t("active") },
-	// 	{ value: "rejected", label: t("rejected") },
-	// 	{ value: "inactive", label: t("inactive") },
-	// 	{ value: "pending", label: t("pending") },
-	// ];
 	return (
 		<>
 			<Flex
@@ -37,7 +31,7 @@ const SchoolStepOne = ({ form, lng, offices }: SchoolStepOneProps) => {
 					withAsterisk
 					{...form.getInputProps("name")}
 				/>
-				<NumberInput
+				<TextInput
 					style={{ flex: 1 }}
 					label={t("total_staff")}
 					placeholder={t("total_staff")}

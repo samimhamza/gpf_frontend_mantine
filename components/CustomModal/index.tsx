@@ -18,7 +18,6 @@ import { useMediaQuery } from "@mantine/hooks";
 import Done from "./Done";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useTranslation } from "@/app/i18n/client";
-import toast from "react-hot-toast";
 
 interface CustomModalProps {
 	opened: boolean;

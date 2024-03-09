@@ -115,5 +115,12 @@
 	"cash_amount": "Cash Amount",
 	"currency": "Currency",
 	"start_date": "Start Date",
-	"end_date": "End Date"
+	"end_date": "End Date",
+	"start_end_date": "Start and End Range Date",
+	"usd": "USD",
+	"afn": "AFN",
+	"total_items": "Total Items",
+	"add_charity_package": "Add New Charity Package",
+	"add_item": "Add New Item",
+	"only_number_allowed": "Only numbers are allowed"
 }

@@ -1,4 +1,5 @@
 import { logColumns } from ".";
+import { getDate } from "../functions";
 
 export const CharityPackageColumns = (t: (arg: string) => string) => {
 	const logs = logColumns(t);
@@ -25,16 +26,24 @@ export const CharityPackageColumns = (t: (arg: string) => string) => {
 			sortable: true,
 		},
 		{
+			accessor: "items_count",
+			title: t("total_items"),
+			noWrap: true,
+			sortable: true,
+		},
+		{
 			accessor: "start_date",
 			title: t("start_date"),
 			noWrap: true,
 			sortable: true,
+			render: ({ start_date }: { start_date: string }) => getDate(start_date),
 		},
 		{
 			accessor: "end_date",
 			title: t("end_date"),
 			noWrap: true,
 			sortable: true,
+			render: ({ end_date }: { end_date: string }) => getDate(end_date),
 		},
 		{
 			accessor: "cash_amount",

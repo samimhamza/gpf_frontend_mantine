@@ -10,6 +10,9 @@ import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
+import { IoIosListBox } from "react-icons/io";
+import CharityPackageStepTwo from "./CharityPackageStepTwo";
+import { randomId } from "@mantine/hooks";
 
 const CharityPackageModal = ({
 	opened,
@@ -31,15 +34,17 @@ const CharityPackageModal = ({
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 	const [offices, setOffices] = useState([]);
+	const [items, setItems] = useState<any>([]);
+	const [dateError, setDateError] = useState(false);
 
 	const initialValues: any = {
 		name: "",
 		office_id: "",
 		period: "",
-		start_date: null,
-		end_date: "",
+		start_end_date: [],
 		cash_amount: "",
 		currency: "",
+		items: [{ item_id: "", quantity_id: "", unit: "", key: randomId() }],
 	};
 
 	const form = useForm({
@@ -85,6 +90,42 @@ const CharityPackageModal = ({
 	}, []);
 
 	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				method: "GET",
+				url: "/all_items",
+			});
+			if (status == 200 && response.result == true) {
+				setItems(
+					response.data.map((item: any) => {
+						return {
+							value: item.id.toString(),
+							label: item.name,
+							disabled: false,
+							unit: item.unit,
+						};
+					})
+				);
+			}
+		})();
+	}, []);
+
+	// useEffect(() => {
+	// 	form.values.items.map((item: any) => {
+	// 		const formItemIndex = items.findIndex(
+	// 			(it: any) => it.value == item.value
+	// 		);
+	// 		if (formItemIndex != -1) {
+	// 			let newItems = items.splice(formItemIndex, 1, {
+	// 				...items[formItemIndex],
+	// 				disabled: true,
+	// 			});
+	// 			setItems(newItems);
+	// 		}
+	// 	});
+	// }, [form.values.items]);
+
+	useEffect(() => {
 		if (editId) {
 			(async function () {
 				setLoading(true);
@@ -117,13 +158,26 @@ const CharityPackageModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<CharityPackageStepOne form={form} lng={lng} offices={offices} />
+					<CharityPackageStepOne
+						form={form}
+						lng={lng}
+						offices={offices}
+						dateError={dateError}
+						setDateError={setDateError}
+					/>
 				</Box>
 			),
 			async validate() {
 				form.validate();
-				let res = form.isValid("name") && form.isValid("unit");
-
+				if (form.values.start_end_date.length == 0) {
+					setDateError(true);
+				}
+				let res =
+					form.isValid("name") &&
+					form.isValid("office_id") &&
+					form.isValid("period") &&
+					form.isValid("cash_amount") &&
+					form.values.start_end_date.length > 0;
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",
@@ -141,6 +195,16 @@ const CharityPackageModal = ({
 					} else if (status !== 200) return false;
 					return true;
 				}
+				return res;
+			},
+		},
+		{
+			title: t("items"),
+			icon: <IoIosListBox size={22} />,
+			step: <CharityPackageStepTwo form={form} lng={lng} items={items} />,
+			async validate() {
+				form.validate();
+				let res = form.isValid("items");
 				return res;
 			},
 		},
