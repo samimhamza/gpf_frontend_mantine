@@ -128,5 +128,6 @@
 	"item": "جنس",
 	"quantity": "مقدار",
 	"package_items": "اجناس پکیج",
-	"only_number_allowed": "عدد وارد شده اشتباه است"
+	"only_number_allowed": "عدد وارد شده اشتباه است",
+	"value_already_exists": "معومات وارد شده موجود است!"
 }

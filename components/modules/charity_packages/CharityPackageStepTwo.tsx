@@ -10,7 +10,6 @@ import {
 	TextInput,
 } from "@mantine/core";
 import { randomId } from "@mantine/hooks";
-import { useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 
@@ -31,17 +30,6 @@ const CharityPackageStepTwo = ({
 	items,
 }: CharityPackageStepTwoProps) => {
 	const { t } = useTranslation(lng);
-
-	useEffect(() => {
-		const encounteredValues = new Set();
-		form.values.items.forEach((item: any, index: number) => {
-			if (encounteredValues.has(item.item_id)) {
-				form.setFieldError(`items.${index}.item_id`, t("already_exists"));
-			} else {
-				encounteredValues.add(item.item_id);
-			}
-		});
-	}, [form.values.items]);
 
 	const fields = form.values.items.map(
 		(
@@ -117,6 +105,7 @@ const CharityPackageStepTwo = ({
 						align="center"
 					>
 						<TextInput
+							disabled
 							style={{ flex: 1 }}
 							label={t("unit")}
 							placeholder={t("unit")}

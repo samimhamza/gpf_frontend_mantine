@@ -110,21 +110,6 @@ const CharityPackageModal = ({
 		})();
 	}, []);
 
-	// useEffect(() => {
-	// 	form.values.items.map((item: any) => {
-	// 		const formItemIndex = items.findIndex(
-	// 			(it: any) => it.value == item.value
-	// 		);
-	// 		if (formItemIndex != -1) {
-	// 			let newItems = items.splice(formItemIndex, 1, {
-	// 				...items[formItemIndex],
-	// 				disabled: true,
-	// 			});
-	// 			setItems(newItems);
-	// 		}
-	// 	});
-	// }, [form.values.items]);
-
 	useEffect(() => {
 		if (editId) {
 			(async function () {
@@ -189,7 +174,7 @@ const CharityPackageModal = ({
 					});
 					if (status == 226) {
 						form.setErrors({
-							name: response.message == 0 && t("name_already_exists"),
+							name: response.message == 0 && t("value_already_exists"),
 						});
 						return false;
 					} else if (status !== 200) return false;

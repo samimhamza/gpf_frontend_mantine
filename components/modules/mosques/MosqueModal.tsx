@@ -184,7 +184,7 @@ const MosqueModal = ({
 						form.setErrors({
 							name:
 								(response.message == 1 || response.message == 0) &&
-								t("mosque_name_already_exists"),
+								t("value_already_exists"),
 						});
 						return false;
 					} else if (status !== 200) return false;

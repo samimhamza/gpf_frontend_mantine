@@ -21,8 +21,8 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 			}),
 		period: z.string().regex(/^[0-9\-]+$/, t("only_number_allowed")),
 		cash_amount: z.string().regex(/^[0-9\-]*$/, t("only_number_allowed")),
-		items: z.array(
-			z.object({
+		items: z
+			.object({
 				item_id: z
 					.string({
 						invalid_type_error: t("invalid_type"),
@@ -39,6 +39,19 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 						message: t("field_required"),
 					}),
 			})
-		),
+			.array()
+			.superRefine((items, ctx) => {
+				const uniqueItemsCount = new Set(
+					items.map((value: any) => value.item_id)
+				).size;
+				const errorPosition = items.length - 1;
+				if (uniqueItemsCount !== items.length) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: t("value_already_exists"),
+						path: [errorPosition, "item_id"],
+					});
+				}
+			}),
 	});
 };

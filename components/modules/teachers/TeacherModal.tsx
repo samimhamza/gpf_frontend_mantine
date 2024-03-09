@@ -195,8 +195,7 @@ const TeacherModal = ({
 					});
 					if (status == 226) {
 						form.setErrors({
-							national_id:
-								response.message == 0 && t("national_id_already_exists"),
+							national_id: response.message == 0 && t("value_already_exists"),
 						});
 						return false;
 					} else if (status !== 200) return false;

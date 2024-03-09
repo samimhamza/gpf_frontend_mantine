@@ -122,5 +122,6 @@
 	"total_items": "Total Items",
 	"add_charity_package": "Add New Charity Package",
 	"add_item": "Add New Item",
-	"only_number_allowed": "Only numbers are allowed"
+	"only_number_allowed": "Only numbers are allowed",
+	"value_already_exists": "Value already exists"
 }
