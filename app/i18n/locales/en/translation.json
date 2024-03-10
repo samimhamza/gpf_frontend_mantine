@@ -116,7 +116,7 @@
 	"currency": "Currency",
 	"start_date": "Start Date",
 	"end_date": "End Date",
-	"start_end_date": "Start and End Range Date",
+	"date_range": "Start and End Range Date",
 	"usd": "USD",
 	"afn": "AFN",
 	"total_items": "Total Items",

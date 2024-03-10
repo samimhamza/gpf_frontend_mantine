@@ -5,15 +5,16 @@ import { Box, Flex, Input, Select, TextInput } from "@mantine/core";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import jalali_fa from "@/jalali_fa";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+import type { Value } from "react-multi-date-picker";
 
 interface CharityPackageStepOneProps {
 	form: any;
 	lng: string;
 	offices: Array<{ value: string; label: string }>;
 	dateError: boolean;
-	startEndDates: Array<number>;
-	setStartEndDates: Dispatch<SetStateAction<any>>;
+	startEndDates: Value;
+	setStartEndDates: Dispatch<SetStateAction<Value>>;
 }
 
 const CharityPackageStepOne = ({
@@ -74,7 +75,7 @@ const CharityPackageStepOne = ({
 				/>
 				<Box style={{ flex: 1 }}>
 					<Box>
-						<Input.Label required>{t("start_end_date")}</Input.Label>
+						<Input.Label required>{t("date_range")}</Input.Label>
 					</Box>
 					<Box style={{ display: "flex" }}>
 						<DatePicker
@@ -91,7 +92,7 @@ const CharityPackageStepOne = ({
 								borderRadius: "4px",
 							}}
 							containerStyle={{ flex: 1 }}
-							placeholder={t("start_end_date")}
+							placeholder={t("date_range")}
 							calendar={persian}
 							locale={jalali_fa}
 							calendarPosition="bottom-right"

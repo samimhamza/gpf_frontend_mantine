@@ -9,7 +9,6 @@ import {
 	Select,
 	TextInput,
 } from "@mantine/core";
-import { randomId } from "@mantine/hooks";
 import { FaTrashAlt } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 
@@ -19,7 +18,6 @@ interface CharityPackageStepTwoProps {
 	items: Array<{
 		value: string;
 		label: string;
-		disabled: boolean;
 		unit: string;
 	}>;
 }
@@ -39,11 +37,10 @@ const CharityPackageStepTwo = ({
 						item_id: string;
 						quantity: string;
 						unit: string;
-						key: string;
 					},
 					index: number
 				) => (
-					<Box p="sm" key={item.key}>
+					<Box p="sm" key={index}>
 						<Flex gap="sm" px="sm" justify={{ sm: "flex-end" }}>
 							{form.values.items.length - 1 == index && (
 								<ActionIcon
@@ -52,7 +49,6 @@ const CharityPackageStepTwo = ({
 											item_id: "",
 											quantity: "",
 											unit: "",
-											key: randomId(),
 										})
 									}
 								>
@@ -109,10 +105,8 @@ const CharityPackageStepTwo = ({
 								gap="sm"
 								pt="sm"
 								justify={{ sm: "center" }}
-								align="center"
 							>
 								<TextInput
-									disabled
 									style={{ flex: 1 }}
 									label={t("unit")}
 									placeholder={t("unit")}
