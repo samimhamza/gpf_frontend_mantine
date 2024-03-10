@@ -124,10 +124,16 @@
 	"usd": "دالر",
 	"total_items": "تعداد اجناس",
 	"add_charity_package": "ایجاد پکیج جدید",
+	"update_charity_package": "ویرایش پکیج",
 	"add_item": "ایجاد جنس جدید",
 	"item": "جنس",
 	"quantity": "مقدار",
 	"package_items": "اجناس پکیج",
 	"only_number_allowed": "عدد وارد شده اشتباه است",
-	"value_already_exists": "معومات وارد شده موجود است!"
+	"value_already_exists": "معومات وارد شده موجود است!",
+	"category": "کتگوری",
+	"categories": "کتگوری ها",
+	"add_category": "ایجاد کتگوری جدید",
+	"update_category": "ویرایش کتگوری",
+	"category_info": "اطلاعات کتگوری"
 }

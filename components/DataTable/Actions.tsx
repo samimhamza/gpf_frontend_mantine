@@ -9,6 +9,7 @@ interface ActionsProps {
 	setView: Dispatch<SetStateAction<number | undefined>>;
 	showEdit: boolean;
 	showView: boolean;
+	setAddPackage: Dispatch<SetStateAction<number | undefined>> | undefined;
 }
 
 export const Actions = ({
@@ -17,16 +18,30 @@ export const Actions = ({
 	setView,
 	showEdit,
 	showView,
+	setAddPackage,
 }: ActionsProps) => {
 	return (
 		<Group gap={4} justify="right" wrap="nowrap">
-			{showView && (
+			{setAddPackage && (
 				<ActionIcon
 					size="sm"
 					variant="transparent"
 					color="green"
 					onClick={(e) => {
 						e.stopPropagation(); // 👈 prevent triggering the row click function
+						setAddPackage(record.id);
+					}}
+				>
+					<TbEye size={16} />
+				</ActionIcon>
+			)}
+			{showView && (
+				<ActionIcon
+					size="sm"
+					variant="transparent"
+					color="green"
+					onClick={(e) => {
+						e.stopPropagation();
 						setView(record.id);
 					}}
 				>
@@ -38,7 +53,7 @@ export const Actions = ({
 					size="sm"
 					variant="transparent"
 					onClick={(e) => {
-						e.stopPropagation(); // 👈 prevent triggering the row click function
+						e.stopPropagation();
 						setEdit(record.id);
 					}}
 				>

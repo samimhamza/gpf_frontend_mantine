@@ -36,6 +36,7 @@ export const protectedRoutes = [
 	"/covered_areas/mosques",
 	"/teachers",
 	"/items",
+	"/categories",
 	"/charity_packages",
 	"/users",
 ];

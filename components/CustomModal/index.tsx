@@ -28,6 +28,7 @@ interface CustomModalProps {
 	lng: string;
 	title: string;
 	editId: number | undefined;
+	width?: string;
 }
 
 const CustomModal = ({
@@ -39,6 +40,7 @@ const CustomModal = ({
 	lng,
 	title,
 	editId,
+	width,
 }: CustomModalProps) => {
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
@@ -115,7 +117,7 @@ const CustomModal = ({
 				opened={opened}
 				onClose={close}
 				centered
-				size={mdMatches ? "65%" : smMatches ? "80%" : "100%"}
+				size={mdMatches ? (width ? width : "65%") : smMatches ? "80%" : "100%"}
 				className="custom-modal"
 				withCloseButton={false}
 				overlayProps={{

@@ -6,10 +6,15 @@ export const CharityPackageColumns = (t: (arg: string) => string) => {
 
 	return [
 		{ accessor: "id", hidden: true },
-		{ accessor: "office_id", hidden: true },
 		{
 			accessor: "office_name",
 			title: t("office"),
+			noWrap: true,
+			sortable: true,
+		},
+		{
+			accessor: "category_name",
+			title: t("category"),
 			noWrap: true,
 			sortable: true,
 		},

@@ -121,7 +121,19 @@
 	"afn": "AFN",
 	"total_items": "Total Items",
 	"add_charity_package": "Add New Charity Package",
+	"update_charity_package": "Update Charity Package",
 	"add_item": "Add New Item",
 	"only_number_allowed": "Only numbers are allowed",
-	"value_already_exists": "Value already exists"
+	"value_already_exists": "Value already exists",
+	"item": "Item",
+	"quantity": "Quantity",
+	"package_items": "Package Items",
+	"add_school": "Add New School",
+	"update_school": "Update School",
+	"teacher_info": "Teacher Info",
+	"category": "Category",
+	"categories": "Categories",
+	"add_category": "Add Category",
+	"update_category": "Update Category",
+	"category_info": "Category Info"
 }

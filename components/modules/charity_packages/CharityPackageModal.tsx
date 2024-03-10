@@ -34,6 +34,7 @@ const CharityPackageModal = ({
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 	const [offices, setOffices] = useState([]);
+	const [categories, setCategories] = useState([]);
 	const [items, setItems] = useState<any>([]);
 	const [dateError, setDateError] = useState(false);
 	const [startEndDates, setStartEndDates] = useState<Value>([]);
@@ -41,6 +42,7 @@ const CharityPackageModal = ({
 	const initialValues: any = {
 		name: "",
 		office_id: "",
+		category_id: "",
 		period: "",
 		date_range: [],
 		cash_amount: "",
@@ -73,6 +75,22 @@ const CharityPackageModal = ({
 		toast.error(t("something_went_wrong"));
 		return false;
 	};
+
+	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				method: "GET",
+				url: "/all_categories",
+			});
+			if (status == 200 && response.result == true) {
+				setCategories(
+					response.data.map((item: any) => {
+						return { value: item.id.toString(), label: item.name };
+					})
+				);
+			}
+		})();
+	}, []);
 
 	useEffect(() => {
 		(async function () {
@@ -122,9 +140,21 @@ const CharityPackageModal = ({
 					let values: any = {};
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(initialValues).includes(key)) {
-							if (key != "office_id" && key != "period" && key != "items") {
+							if (
+								key != "office_id" &&
+								key != "category_id" &&
+								key != "period" &&
+								key != "items" &&
+								key != "cash_amount"
+							) {
 								values[key] = value ? value : initialValues[key];
-							} else if ((key == "office_id" || key == "period") && value) {
+							} else if (
+								(key == "office_id" ||
+									key == "category_id" ||
+									key == "period" ||
+									key == "cash_amount") &&
+								value
+							) {
 								values[key] = value.toString();
 							} else if (key == "items" && Array.isArray(value)) {
 								values["items"] = [];
@@ -173,6 +203,7 @@ const CharityPackageModal = ({
 						form={form}
 						lng={lng}
 						offices={offices}
+						categories={categories}
 						dateError={dateError}
 						startEndDates={startEndDates}
 						setStartEndDates={setStartEndDates}
@@ -187,6 +218,7 @@ const CharityPackageModal = ({
 				let res =
 					form.isValid("name") &&
 					form.isValid("office_id") &&
+					form.isValid("category_id") &&
 					form.isValid("period") &&
 					form.isValid("cash_amount") &&
 					form.isValid("currency") &&

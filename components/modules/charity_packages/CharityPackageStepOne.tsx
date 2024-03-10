@@ -12,6 +12,7 @@ interface CharityPackageStepOneProps {
 	form: any;
 	lng: string;
 	offices: Array<{ value: string; label: string }>;
+	categories: Array<{ value: string; label: string }>;
 	dateError: boolean;
 	startEndDates: Value;
 	setStartEndDates: Dispatch<SetStateAction<Value>>;
@@ -21,14 +22,15 @@ const CharityPackageStepOne = ({
 	form,
 	lng,
 	offices,
+	categories,
 	dateError,
 	startEndDates,
 	setStartEndDates,
 }: CharityPackageStepOneProps) => {
 	const { t } = useTranslation(lng);
 	const currencies = [
-		{ value: "afn", label: t("afn") },
-		{ value: "usd", label: t("usd") },
+		{ value: "AFN", label: t("afn") },
+		{ value: "USD", label: t("usd") },
 	];
 
 	return (
@@ -73,14 +75,23 @@ const CharityPackageStepOne = ({
 					nothingFoundMessage={t("noting_found")}
 					{...form.getInputProps("office_id")}
 				/>
+				<Select
+					style={{ flex: 1 }}
+					label={t("category")}
+					placeholder={t("category")}
+					withAsterisk
+					data={categories}
+					searchable
+					clearable
+					nothingFoundMessage={t("noting_found")}
+					{...form.getInputProps("category_id")}
+				/>
 				<Box style={{ flex: 1 }}>
 					<Box>
 						<Input.Label required>{t("date_range")}</Input.Label>
 					</Box>
 					<Box style={{ display: "flex" }}>
 						<DatePicker
-							value={startEndDates}
-							onChange={setStartEndDates}
 							range
 							dateSeparator=" - "
 							zIndex={1000}
@@ -96,6 +107,8 @@ const CharityPackageStepOne = ({
 							calendar={persian}
 							locale={jalali_fa}
 							calendarPosition="bottom-right"
+							value={startEndDates}
+							onChange={setStartEndDates}
 						/>
 					</Box>
 					{dateError && (
