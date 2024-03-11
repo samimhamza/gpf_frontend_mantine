@@ -20,6 +20,8 @@ interface DataTableProps {
 	showAdd: boolean;
 	showDelete: boolean;
 	showEdit: boolean;
+	showView?: boolean;
+	setAddPackage?: Dispatch<SetStateAction<number | undefined>>;
 }
 
 const CustomDataTable = ({
@@ -35,6 +37,8 @@ const CustomDataTable = ({
 	showAdd,
 	showDelete,
 	showEdit,
+	showView = true,
+	setAddPackage = undefined,
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios();
@@ -77,6 +81,8 @@ const CustomDataTable = ({
 			setEdit={setEdit}
 			setView={setView}
 			showEdit={showEdit}
+			showView={showView}
+			setAddPackage={setAddPackage}
 		/>
 	);
 

@@ -203,7 +203,7 @@ const UserModal = ({
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",
-						url: "/user/valid_credential",
+						url: "/users/check_uniqueness",
 						data: {
 							email: form.values.email,
 							username: form.values.username,

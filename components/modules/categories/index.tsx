@@ -2,39 +2,37 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { TeacherColumns } from "@/shared/columns/teacher.columns";
+import { CategoryColumns } from "@/shared/columns/category.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import TeacherModal from "./TeacherModal";
+import CategoryModal from "./CategoryModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-	EDIT_APPLICANTS,
-	ADD_APPLICANTS,
-	DELETE_APPLICANTS,
+	EDIT_ITEMS,
+	ADD_ITEMS,
+	DELETE_ITEMS,
+	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
 
-export const TeacherModule = ({ lng }: { lng: string }) => {
+export const CategoryModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = TeacherColumns(t);
+	const columns = CategoryColumns(
+		t,
+		permissionChecker(CHANGE_STATUS),
+		"/categories/",
+		setMutated
+	);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
-	const [addPackage, setAddPackage] = useState<number>();
-	const [packageOpen, setPackageOpen] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (edit) {
 			open();
 		}
 	}, [edit]);
-
-	useEffect(() => {
-		if (addPackage) {
-			setPackageOpen(true);
-		}
-	}, [addPackage]);
 
 	useEffect(() => {
 		if (!opened) {
@@ -47,12 +45,12 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 			<CustomBreadCrumb
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
-					{ title: t("teachers") },
+					{ title: t("categories") },
 				]}
 			/>
 			<CustomDataTable
-				url="/teachers"
-				deleteUrl="/teachers/1"
+				url="/categories"
+				deleteUrl="/categories/1"
 				lng={lng}
 				columns={columns}
 				open={open}
@@ -60,31 +58,21 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
-				showAdd={permissionChecker(ADD_APPLICANTS)}
-				showDelete={permissionChecker(DELETE_APPLICANTS)}
-				showEdit={permissionChecker(EDIT_APPLICANTS)}
+				showAdd={permissionChecker(ADD_ITEMS)}
+				showDelete={permissionChecker(DELETE_ITEMS)}
+				showEdit={permissionChecker(EDIT_ITEMS)}
 				showView={false}
-				setAddPackage={setAddPackage}
 			/>
 			{opened && (
-				<TeacherModal
+				<CategoryModal
 					opened={opened}
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("add_teacher") : t("update_teacher")}
+					title={!edit ? t("add_category") : t("update_category")}
 					editId={edit}
 				/>
 			)}
-			{/* {packageOpen && (
-				<AddPackageModal
-					opened={packageOpen}
-					close={() => setPackageOpen(false)}
-					lng={lng}
-					setMutated={setMutated}
-					recordId={addPackage}
-				/>
-			)} */}
 		</>
 	);
 };

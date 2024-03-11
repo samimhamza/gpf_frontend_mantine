@@ -13,23 +13,20 @@ import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { FcSurvey } from "react-icons/fc";
 
-const TeacherModal = ({
+const AddPackageModal = ({
 	opened,
 	close,
 	lng,
 	setMutated,
-	title,
-	editId,
+	recordId,
 }: {
 	opened: boolean;
 	close: () => void;
 	lng: string;
 	setMutated: any;
-	title: string;
-	editId: number | undefined;
+	recordId: number;
 }) => {
 	const { t } = useTranslation(lng);
-	const teacherSchema = TeacherSchema(t);
 	const callApi = useAxios();
 	const [schools, setSchools] = useState([]);
 	const [loading, setLoading] = useState(false);
@@ -237,4 +234,4 @@ const TeacherModal = ({
 	);
 };
 
-export default TeacherModal;
+export default AddPackageModal;

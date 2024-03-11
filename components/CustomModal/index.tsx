@@ -18,7 +18,6 @@ import { useMediaQuery } from "@mantine/hooks";
 import Done from "./Done";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useTranslation } from "@/app/i18n/client";
-import toast from "react-hot-toast";
 
 interface CustomModalProps {
 	opened: boolean;
@@ -29,6 +28,7 @@ interface CustomModalProps {
 	lng: string;
 	title: string;
 	editId: number | undefined;
+	width?: string;
 }
 
 const CustomModal = ({
@@ -40,6 +40,7 @@ const CustomModal = ({
 	lng,
 	title,
 	editId,
+	width,
 }: CustomModalProps) => {
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
@@ -116,7 +117,7 @@ const CustomModal = ({
 				opened={opened}
 				onClose={close}
 				centered
-				size={mdMatches ? "65%" : smMatches ? "80%" : "100%"}
+				size={mdMatches ? (width ? width : "65%") : smMatches ? "80%" : "100%"}
 				className="custom-modal"
 				withCloseButton={false}
 				overlayProps={{

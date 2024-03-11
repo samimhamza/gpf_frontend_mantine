@@ -1,8 +1,8 @@
 "use client";
 
-import ItemStepOne from "@/components/modules/items/ItemStepOne";
+import CategoryStepOne from "@/components/modules/categories/CategoryStepOne";
 import { useForm, zodResolver } from "@mantine/form";
-import { ItemSchema } from "@/schemas/models/items";
+import { CategorySchema } from "@/schemas/models/categories";
 import { BiSolidBox } from "react-icons/bi";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 
-const ItemModal = ({
+const CategoryModal = ({
 	opened,
 	close,
 	lng,
@@ -27,18 +27,17 @@ const ItemModal = ({
 	editId: number | undefined;
 }) => {
 	const { t } = useTranslation(lng);
-	const itemSchema = ItemSchema(t);
+	const categorySchema = CategorySchema(t);
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 
 	const initialValues: any = {
 		name: "",
-		unit: "",
 	};
 
 	const form = useForm({
 		initialValues: initialValues,
-		validate: zodResolver(itemSchema),
+		validate: zodResolver(categorySchema),
 		validateInputOnBlur: true,
 	});
 
@@ -46,12 +45,12 @@ const ItemModal = ({
 		const { response, status } = !editId
 			? await callApi({
 					method: "POST",
-					url: "/items",
+					url: "/categories",
 					data: form.values,
 			  })
 			: await callApi({
 					method: "PUT",
-					url: `/items/${editId}`,
+					url: `/categories/${editId}`,
 					data: form.values,
 			  });
 		if ((!editId ? status == 201 : status == 202) && response.result) {
@@ -68,7 +67,7 @@ const ItemModal = ({
 				setLoading(true);
 				const { response, status, error } = await callApi({
 					method: "GET",
-					url: `/items/${editId}`,
+					url: `/categories/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
 					let values: any = {};
@@ -86,7 +85,7 @@ const ItemModal = ({
 
 	const steps = [
 		{
-			title: t("item_info"),
+			title: t("category_info"),
 			icon: <BiSolidBox size={22} />,
 			step: (
 				<Box pos="relative">
@@ -95,17 +94,17 @@ const ItemModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<ItemStepOne form={form} lng={lng} />
+					<CategoryStepOne form={form} lng={lng} />
 				</Box>
 			),
 			async validate() {
 				form.validate();
-				let res = form.isValid("name") && form.isValid("unit");
+				let res = form.isValid("name");
 
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",
-						url: "/items/check_uniqueness",
+						url: "/categories/check_uniqueness",
 						data: {
 							name: form.values.name,
 							id: editId ? editId : null,
@@ -134,9 +133,10 @@ const ItemModal = ({
 				lng={lng}
 				title={title}
 				editId={editId}
+				width="40%"
 			/>
 		</form>
 	);
 };
 
-export default ItemModal;
+export default CategoryModal;

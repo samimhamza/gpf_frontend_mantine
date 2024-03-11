@@ -45,3 +45,15 @@ export const VIEW_ITEMS = "view_items";
 export const ADD_ITEMS = "create_items";
 export const EDIT_ITEMS = "update_items";
 export const DELETE_ITEMS = "delete_items";
+
+// Categories Permissions
+export const VIEW_CATEGORIES = "view_categories";
+export const ADD_CATEGORIES = "create_categories";
+export const EDIT_CATEGORIES = "update_categories";
+export const DELETE_CATEGORIES = "delete_categories";
+
+// Charity Packages Permissions
+export const VIEW_CHARITY_PACKAGES = "view_charity_packages";
+export const ADD_CHARITY_PACKAGES = "create_charity_packages";
+export const EDIT_CHARITY_PACKAGES = "update_charity_packages";
+export const DELETE_CHARITY_PACKAGES = "delete_charity_packages";

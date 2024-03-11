@@ -55,6 +55,7 @@ export const ItemModule = ({ lng }: { lng: string }) => {
 				showAdd={permissionChecker(ADD_ITEMS)}
 				showDelete={permissionChecker(DELETE_ITEMS)}
 				showEdit={permissionChecker(EDIT_ITEMS)}
+				showView={false}
 			/>
 			{opened && (
 				<ItemModal
@@ -62,7 +63,7 @@ export const ItemModule = ({ lng }: { lng: string }) => {
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("add_teacher") : t("update_teacher")}
+					title={!edit ? t("add_item") : t("update_item")}
 					editId={edit}
 				/>
 			)}

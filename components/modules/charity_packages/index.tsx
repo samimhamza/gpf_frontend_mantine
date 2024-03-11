@@ -2,39 +2,31 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { TeacherColumns } from "@/shared/columns/teacher.columns";
+import { CharityPackageColumns } from "@/shared/columns/charity_package.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import TeacherModal from "./TeacherModal";
+import CharityPackageModal from "./CharityPackageModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-	EDIT_APPLICANTS,
-	ADD_APPLICANTS,
-	DELETE_APPLICANTS,
+	EDIT_CHARITY_PACKAGES,
+	ADD_CHARITY_PACKAGES,
+	DELETE_CHARITY_PACKAGES,
 } from "@/shared/constants/Permissions";
 
-export const TeacherModule = ({ lng }: { lng: string }) => {
+export const CharityPackageModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = TeacherColumns(t);
+	const columns = CharityPackageColumns(t);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
-	const [addPackage, setAddPackage] = useState<number>();
-	const [packageOpen, setPackageOpen] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (edit) {
 			open();
 		}
 	}, [edit]);
-
-	useEffect(() => {
-		if (addPackage) {
-			setPackageOpen(true);
-		}
-	}, [addPackage]);
 
 	useEffect(() => {
 		if (!opened) {
@@ -47,12 +39,12 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 			<CustomBreadCrumb
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
-					{ title: t("teachers") },
+					{ title: t("charity_packages") },
 				]}
 			/>
 			<CustomDataTable
-				url="/teachers"
-				deleteUrl="/teachers/1"
+				url="/charity_packages"
+				deleteUrl="/charity_packages/1"
 				lng={lng}
 				columns={columns}
 				open={open}
@@ -60,31 +52,21 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 				setMutated={setMutated}
 				setEdit={setEdit}
 				setView={setView}
-				showAdd={permissionChecker(ADD_APPLICANTS)}
-				showDelete={permissionChecker(DELETE_APPLICANTS)}
-				showEdit={permissionChecker(EDIT_APPLICANTS)}
+				showAdd={permissionChecker(ADD_CHARITY_PACKAGES)}
+				showDelete={permissionChecker(DELETE_CHARITY_PACKAGES)}
+				showEdit={permissionChecker(EDIT_CHARITY_PACKAGES)}
 				showView={false}
-				setAddPackage={setAddPackage}
 			/>
 			{opened && (
-				<TeacherModal
+				<CharityPackageModal
 					opened={opened}
 					close={close}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t("add_teacher") : t("update_teacher")}
+					title={!edit ? t("add_charity_package") : t("update_charity_package")}
 					editId={edit}
 				/>
 			)}
-			{/* {packageOpen && (
-				<AddPackageModal
-					opened={packageOpen}
-					close={() => setPackageOpen(false)}
-					lng={lng}
-					setMutated={setMutated}
-					recordId={addPackage}
-				/>
-			)} */}
 		</>
 	);
 };

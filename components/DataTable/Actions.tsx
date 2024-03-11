@@ -8,6 +8,8 @@ interface ActionsProps {
 	setEdit: Dispatch<SetStateAction<number | undefined>>;
 	setView: Dispatch<SetStateAction<number | undefined>>;
 	showEdit: boolean;
+	showView: boolean;
+	setAddPackage: Dispatch<SetStateAction<number | undefined>> | undefined;
 }
 
 export const Actions = ({
@@ -15,26 +17,43 @@ export const Actions = ({
 	setEdit,
 	setView,
 	showEdit,
+	showView,
+	setAddPackage,
 }: ActionsProps) => {
 	return (
 		<Group gap={4} justify="right" wrap="nowrap">
-			<ActionIcon
-				size="sm"
-				variant="transparent"
-				color="green"
-				onClick={(e) => {
-					e.stopPropagation(); // 👈 prevent triggering the row click function
-					setView(record.id);
-				}}
-			>
-				<TbEye size={16} />
-			</ActionIcon>
+			{setAddPackage && (
+				<ActionIcon
+					size="sm"
+					variant="transparent"
+					color="green"
+					onClick={(e) => {
+						e.stopPropagation(); // 👈 prevent triggering the row click function
+						setAddPackage(record.id);
+					}}
+				>
+					<TbEye size={16} />
+				</ActionIcon>
+			)}
+			{showView && (
+				<ActionIcon
+					size="sm"
+					variant="transparent"
+					color="green"
+					onClick={(e) => {
+						e.stopPropagation();
+						setView(record.id);
+					}}
+				>
+					<TbEye size={16} />
+				</ActionIcon>
+			)}
 			{showEdit && (
 				<ActionIcon
 					size="sm"
 					variant="transparent"
 					onClick={(e) => {
-						e.stopPropagation(); // 👈 prevent triggering the row click function
+						e.stopPropagation();
 						setEdit(record.id);
 					}}
 				>

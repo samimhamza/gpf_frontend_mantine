@@ -1,3 +1,4 @@
+import { Badge, Center, Text } from "@mantine/core";
 import { logColumns } from ".";
 
 export const TeacherColumns = (t: (arg: string) => string) => {
@@ -50,11 +51,19 @@ export const TeacherColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 			render: ({ type }: { type: string }) =>
-				type == "survey"
-					? t("survey")
-					: type == "without_survey"
-					? t("without_survey")
-					: "",
+				type == "survey" ? (
+					t("survey")
+				) : type == "without_survey" ? (
+					<Center>
+						<Badge style={{ cursor: "pointer" }} color="green">
+							<Text size="md" fw={500}>
+								{t("without_survey")}
+							</Text>
+						</Badge>
+					</Center>
+				) : (
+					""
+				),
 		},
 		{
 			accessor: "phone",

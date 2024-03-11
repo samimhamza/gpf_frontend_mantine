@@ -174,7 +174,7 @@ const MosqueModal = ({
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",
-						url: "/mosque/valid_credential",
+						url: "/mosques/check_uniqueness",
 						data: {
 							name: form.values.name,
 							id: editId ? editId : null,
@@ -184,7 +184,7 @@ const MosqueModal = ({
 						form.setErrors({
 							name:
 								(response.message == 1 || response.message == 0) &&
-								t("mosque_name_already_exists"),
+								t("value_already_exists"),
 						});
 						return false;
 					} else if (status !== 200) return false;
