@@ -4,6 +4,7 @@ import {
 	VIEW_CHARITY_PACKAGES,
 	VIEW_ITEMS,
 	VIEW_MOSQUES,
+	VIEW_OFFICES,
 	VIEW_SCHOOLS,
 	VIEW_USERS,
 } from "@/shared/constants/Permissions";
@@ -12,6 +13,7 @@ import { TbGauge } from "react-icons/tb";
 import { MdMosque } from "react-icons/md";
 import { FaUserGroup } from "react-icons/fa6";
 import { BiSolidBox } from "react-icons/bi";
+import { IoHome } from "react-icons/io5";
 
 export const navItems = (t: (arg: string) => string) => [
 	{ label: t("dashboard"), icon: TbGauge, link: "/dashboard" },
@@ -36,7 +38,7 @@ export const navItems = (t: (arg: string) => string) => [
 	{
 		label: t("applicants"),
 		icon: FaUserGroup,
-		initiallyOpened: true,
+		initiallyOpened: false,
 		permission: VIEW_APPLICANTS,
 		links: [
 			{
@@ -49,7 +51,7 @@ export const navItems = (t: (arg: string) => string) => [
 	{
 		label: t("inventory"),
 		icon: BiSolidBox,
-		initiallyOpened: true,
+		initiallyOpened: false,
 		permission: VIEW_APPLICANTS,
 		links: [
 			{
@@ -74,5 +76,11 @@ export const navItems = (t: (arg: string) => string) => [
 		icon: FaUsers,
 		link: "/users",
 		permission: VIEW_USERS,
+	},
+	{
+		label: t("offices"),
+		icon: IoHome,
+		link: "/offices",
+		permission: VIEW_OFFICES,
 	},
 ];

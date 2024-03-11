@@ -7,6 +7,12 @@ export const ADD_USERS = "create_users";
 export const EDIT_USERS = "update_users";
 export const DELETE_USERS = "delete_users";
 
+// Offices Permissions
+export const VIEW_OFFICES = "view_offices";
+export const ADD_OFFICES = "create_offices";
+export const EDIT_OFFICES = "update_offices";
+export const DELETE_OFFICES = "delete_offices";
+
 // Schools Permissions
 export const VIEW_SCHOOLS = "view_schools";
 export const ADD_SCHOOLS = "create_schools";

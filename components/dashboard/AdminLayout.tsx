@@ -1,4 +1,5 @@
 "use client";
+
 import { useTranslation } from "@/app/i18n/client";
 import {
 	AppShell,
@@ -11,6 +12,7 @@ import {
 	Title,
 	Menu,
 	rem,
+	LoadingOverlay,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
@@ -22,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { TbLogout2 } from "react-icons/tb";
 import { IoIosSettings } from "react-icons/io";
 import { useAxios } from "@/customHooks/useAxios";
+import { useState } from "react";
 
 const getNameAbbr = (name: string) => {
 	var words = name.split(" ");
@@ -43,9 +46,11 @@ export function AdminLayout({
 }) {
 	const [opened, { toggle }] = useDisclosure();
 	const { t } = useTranslation(lng);
+	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 	const callApi = useAxios();
 	const navList = navItems(t);
+
 	const userNavList = navList.filter((item) => {
 		if (
 			(item.permission && user.permissions.includes(item.permission)) ||
@@ -54,11 +59,13 @@ export function AdminLayout({
 			return item;
 	});
 	const logout = async () => {
+		setLoading(true);
 		const { status } = await callApi({ method: "POST", url: "/logout" });
-		signOut({
+		await signOut({
 			redirect: false,
 		});
 		router.push("/auth/login");
+		setLoading(false);
 	};
 
 	const links = userNavList.map((item) => (
@@ -119,12 +126,19 @@ export function AdminLayout({
 					</Menu>
 				</Flex>
 			</AppShell.Header>
-			<AppShell.Navbar p="xs">
-				<AppShell.Section grow component={ScrollArea}>
-					<Box my="md">{links}</Box>
-				</AppShell.Section>
-			</AppShell.Navbar>
-			<AppShell.Main>{children}</AppShell.Main>
+			<>
+				<LoadingOverlay
+					visible={loading}
+					zIndex={10000}
+					overlayProps={{ radius: "sm", blur: 2 }}
+				/>
+				<AppShell.Navbar p="xs">
+					<AppShell.Section grow component={ScrollArea}>
+						<Box my="md">{links}</Box>
+					</AppShell.Section>
+				</AppShell.Navbar>
+				<AppShell.Main>{children}</AppShell.Main>
+			</>
 		</AppShell>
 	);
 }

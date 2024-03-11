@@ -133,7 +133,12 @@
 	"teacher_info": "Teacher Info",
 	"category": "Category",
 	"categories": "Categories",
-	"add_category": "Add Category",
+	"add_category": "Add New Category",
 	"update_category": "Update Category",
-	"category_info": "Category Info"
+	"category_info": "Category Info",
+	"office_info": "Office Info",
+	"add_office": "Add New Office",
+	"update_office": "Update Office",
+	"offices": "Offices",
+	"end_date_must_be_greater": "End Date must be greater or equal to start date"
 }
