@@ -135,5 +135,10 @@
 	"categories": "کتگوری ها",
 	"add_category": "ایجاد کتگوری جدید",
 	"update_category": "ویرایش کتگوری",
-	"category_info": "اطلاعات کتگوری"
+	"category_info": "اطلاعات کتگوری",
+	"office_info": "اطلاعات دفتر",
+	"add_office": "ایجاد دفتر جدید",
+	"update_office": "ویرایش دفتر",
+	"offices": "دفاتر",
+	"end_date_must_be_greater": "تاریخ ختم باید بزرگتر ویا مساوی به تاریخ شروع باشد"
 }

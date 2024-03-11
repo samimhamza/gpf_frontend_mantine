@@ -112,7 +112,6 @@ const CharityPackageStepOne = ({
 					style={{ flex: 1 }}
 					label={t("category")}
 					placeholder={t("category")}
-					withAsterisk
 					data={categories}
 					searchable
 					clearable

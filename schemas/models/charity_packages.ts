@@ -10,13 +10,7 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 				.min(1, {
 					message: t("field_required"),
 				}),
-			category_id: z
-				.string({
-					invalid_type_error: t("invalid_type"),
-				})
-				.min(1, {
-					message: t("field_required"),
-				}),
+			category_id: z.string().nullable(),
 			name: z
 				.string({
 					invalid_type_error: t("invalid_type"),
@@ -28,8 +22,6 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 					message: t("max_64_length_error"),
 				}),
 			period: z.string().regex(/^[0-9\-]+$/, t("only_number_allowed")),
-			// start_date: z.string(),
-			// end_date: z.string(),
 			cash_amount: z.string().regex(/^[0-9\-]*$/, t("only_number_allowed")),
 			currency: z.string().nullable(),
 			items: z
@@ -67,13 +59,6 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 				}),
 		})
 		.superRefine((values, ctx) => {
-			// if (values.start_date > values.end_date) {
-			// 	ctx.addIssue({
-			// 		code: z.ZodIssueCode.custom,
-			// 		message: t("end_date_must_greater_than_start_date"),
-			// 		path: ["end_date"],
-			// 	});
-			// }
 			if (values.cash_amount && !values.currency) {
 				ctx.addIssue({
 					code: z.ZodIssueCode.custom,
