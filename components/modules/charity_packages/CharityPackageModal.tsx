@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { IoIosListBox } from "react-icons/io";
 import CharityPackageStepTwo from "./CharityPackageStepTwo";
-import type { Value } from "react-multi-date-picker";
+import { type Value } from "react-multi-date-picker";
 
 const CharityPackageModal = ({
 	opened,
@@ -36,15 +36,18 @@ const CharityPackageModal = ({
 	const [offices, setOffices] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [items, setItems] = useState<any>([]);
-	const [dateError, setDateError] = useState(false);
-	const [startEndDates, setStartEndDates] = useState<Value>([]);
+	const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
+	const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
+	const [startDate, setStartDate] = useState<Value>();
+	const [endDate, setEndDate] = useState<Value>();
 
 	const initialValues: any = {
 		name: "",
 		office_id: "",
 		category_id: "",
 		period: "",
-		date_range: [],
+		start_date: null,
+		end_date: null,
 		cash_amount: "",
 		currency: "",
 		items: [{ item_id: "", quantity: "", unit: "" }],
@@ -145,7 +148,9 @@ const CharityPackageModal = ({
 								key != "category_id" &&
 								key != "period" &&
 								key != "items" &&
-								key != "cash_amount"
+								key != "cash_amount" &&
+								key != "start_date" &&
+								key != "end_date"
 							) {
 								values[key] = value ? value : initialValues[key];
 							} else if (
@@ -165,28 +170,19 @@ const CharityPackageModal = ({
 										unit: item?.pivot?.unit,
 									});
 								});
+							} else if (key == "start_date" && value) {
+								setStartDate(new Date(value.toString()).getTime());
+							} else if (key == "end_date" && value) {
+								setEndDate(new Date(value.toString()).getTime());
 							}
 						}
-						if (key == "start_date" && value) {
-							values["date_range"] = [new Date(value.toString()).getTime()];
-						} else if (key == "end_date" && value) {
-							values["date_range"].push(new Date(value.toString()).getTime());
-						}
 					});
-					setStartEndDates(values?.date_range);
 					form.setValues(values);
 					setLoading(false);
 				}
 			})();
 		}
 	}, [editId]);
-
-	useEffect(() => {
-		if (Array.isArray(startEndDates) && startEndDates?.length > 0) {
-			form.setFieldValue("date_range", startEndDates);
-			setDateError(false);
-		}
-	}, [startEndDates]);
 
 	const steps = [
 		{
@@ -204,16 +200,24 @@ const CharityPackageModal = ({
 						lng={lng}
 						offices={offices}
 						categories={categories}
-						dateError={dateError}
-						startEndDates={startEndDates}
-						setStartEndDates={setStartEndDates}
+						startDateErrorMessage={startDateErrorMessage}
+						setStartDateErrorMessage={setStartDateErrorMessage}
+						endDateErrorMessage={endDateErrorMessage}
+						setEndDateErrorMessage={setEndDateErrorMessage}
+						startDate={startDate}
+						endDate={endDate}
+						setStartDate={setStartDate}
+						setEndDate={setEndDate}
 					/>
 				</Box>
 			),
 			async validate() {
 				form.validate();
-				if (form.values.date_range?.length == 0) {
-					setDateError(true);
+				if (!form.values.start_date) {
+					setStartDateErrorMessage(t("field_required"));
+				}
+				if (!form.values.end_date) {
+					setEndDateErrorMessage(t("field_required"));
 				}
 				let res =
 					form.isValid("name") &&
@@ -222,7 +226,8 @@ const CharityPackageModal = ({
 					form.isValid("period") &&
 					form.isValid("cash_amount") &&
 					form.isValid("currency") &&
-					form.values.date_range?.length > 0;
+					form.values.start_date &&
+					form.values.end_date;
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",

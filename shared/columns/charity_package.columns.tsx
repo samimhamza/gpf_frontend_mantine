@@ -61,6 +61,8 @@ export const CharityPackageColumns = (t: (arg: string) => string) => {
 			title: t("currency"),
 			noWrap: true,
 			sortable: true,
+			render: ({ currency }: { currency: string }) =>
+				currency == "USD" ? t("usd") : currency == "AFN" ? t("afn") : "",
 		},
 		...logs,
 	];

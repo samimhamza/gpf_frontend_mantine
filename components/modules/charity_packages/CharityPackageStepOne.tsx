@@ -1,21 +1,24 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Box, Flex, Input, Select, TextInput } from "@mantine/core";
-import DatePicker from "react-multi-date-picker";
-import persian from "react-date-object/calendars/persian";
-import jalali_fa from "@/jalali_fa";
-import { Dispatch, SetStateAction } from "react";
-import type { Value } from "react-multi-date-picker";
+import { Box, Flex, Select, TextInput } from "@mantine/core";
+import { DateObject, type Value } from "react-multi-date-picker";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import PersianDatePicker from "@/components/PersianDatePicker";
 
 interface CharityPackageStepOneProps {
 	form: any;
 	lng: string;
 	offices: Array<{ value: string; label: string }>;
 	categories: Array<{ value: string; label: string }>;
-	dateError: boolean;
-	startEndDates: Value;
-	setStartEndDates: Dispatch<SetStateAction<Value>>;
+	startDateErrorMessage: string;
+	setStartDateErrorMessage: Dispatch<SetStateAction<string>>;
+	endDateErrorMessage: string;
+	setEndDateErrorMessage: Dispatch<SetStateAction<string>>;
+	startDate: Value | undefined;
+	setStartDate: Dispatch<SetStateAction<Value | undefined>>;
+	endDate: Value | undefined;
+	setEndDate: Dispatch<SetStateAction<Value | undefined>>;
 }
 
 const CharityPackageStepOne = ({
@@ -23,15 +26,56 @@ const CharityPackageStepOne = ({
 	lng,
 	offices,
 	categories,
-	dateError,
-	startEndDates,
-	setStartEndDates,
+	startDateErrorMessage,
+	setStartDateErrorMessage,
+	endDateErrorMessage,
+	setEndDateErrorMessage,
+	startDate,
+	endDate,
+	setStartDate,
+	setEndDate,
 }: CharityPackageStepOneProps) => {
 	const { t } = useTranslation(lng);
 	const currencies = [
 		{ value: "AFN", label: t("afn") },
 		{ value: "USD", label: t("usd") },
 	];
+
+	const getTime = (date: any) => {
+		return date instanceof DateObject
+			? date?.toDate?.().getTime()
+			: date instanceof Date
+			? date.getTime()
+			: typeof date == "string"
+			? new Date(date).getTime()
+			: date;
+	};
+
+	useEffect(() => {
+		if (startDate) {
+			setStartDateErrorMessage("");
+			form.setFieldValue("start_date", getTime(startDate));
+		} else {
+			form.setFieldValue("start_date", null);
+		}
+	}, [startDate]);
+
+	useEffect(() => {
+		if (endDate) {
+			setEndDateErrorMessage("");
+			form.setFieldValue("end_date", getTime(endDate));
+		} else {
+			form.setFieldValue("end_date", null);
+		}
+	}, [endDate]);
+
+	useEffect(() => {
+		if (endDate && startDate) {
+			if (endDate < startDate) {
+				setEndDateErrorMessage(t("end_date_must_be_greater"));
+			}
+		}
+	}, [startDate, endDate]);
 
 	return (
 		<Box>
@@ -66,17 +110,6 @@ const CharityPackageStepOne = ({
 			>
 				<Select
 					style={{ flex: 1 }}
-					label={t("office")}
-					placeholder={t("office")}
-					withAsterisk
-					data={offices}
-					searchable
-					clearable
-					nothingFoundMessage={t("noting_found")}
-					{...form.getInputProps("office_id")}
-				/>
-				<Select
-					style={{ flex: 1 }}
 					label={t("category")}
 					placeholder={t("category")}
 					withAsterisk
@@ -86,37 +119,39 @@ const CharityPackageStepOne = ({
 					nothingFoundMessage={t("noting_found")}
 					{...form.getInputProps("category_id")}
 				/>
-				<Box style={{ flex: 1 }}>
-					<Box>
-						<Input.Label required>{t("date_range")}</Input.Label>
-					</Box>
-					<Box style={{ display: "flex" }}>
-						<DatePicker
-							range
-							dateSeparator=" - "
-							zIndex={1000}
-							portal
-							style={{
-								width: "100%",
-								boxSizing: "border-box",
-								height: "36px",
-								borderRadius: "4px",
-							}}
-							containerStyle={{ flex: 1 }}
-							placeholder={t("date_range")}
-							calendar={persian}
-							locale={jalali_fa}
-							calendarPosition="bottom-right"
-							value={startEndDates}
-							onChange={setStartEndDates}
-						/>
-					</Box>
-					{dateError && (
-						<Box pt={3}>
-							<Input.Error>{t("field_required")}</Input.Error>
-						</Box>
-					)}
-				</Box>
+				<Select
+					style={{ flex: 1 }}
+					label={t("office")}
+					placeholder={t("office")}
+					withAsterisk
+					data={offices}
+					searchable
+					clearable
+					nothingFoundMessage={t("noting_found")}
+					{...form.getInputProps("office_id")}
+				/>
+			</Flex>
+			<Flex
+				direction={{ base: "column", sm: "row" }}
+				gap="sm"
+				px="sm"
+				pt="sm"
+				justify={{ sm: "center" }}
+			>
+				<PersianDatePicker
+					label={t("start_date")}
+					placeholder={t("start_date")}
+					value={startDate}
+					onChange={setStartDate}
+					errorMessage={startDateErrorMessage}
+				/>
+				<PersianDatePicker
+					label={t("end_date")}
+					placeholder={t("end_date")}
+					value={endDate}
+					onChange={setEndDate}
+					errorMessage={endDateErrorMessage}
+				/>
 			</Flex>
 			<Flex
 				direction={{ base: "column", sm: "row" }}
