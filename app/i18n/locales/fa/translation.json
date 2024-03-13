@@ -113,7 +113,7 @@
 	"items": "اجناس",
 	"unit": "واحد",
 	"item_info": "اطلاعات جنس",
-	"charity_packages": "بسته های کمکی",
+	"charity_packages": "پکیج های خیریه",
 	"period": "میعاد",
 	"cash_amount": "پول نقد",
 	"currency": "واحد پولی",
@@ -140,5 +140,8 @@
 	"add_office": "ایجاد دفتر جدید",
 	"update_office": "ویرایش دفتر",
 	"offices": "دفاتر",
-	"end_date_must_be_greater": "تاریخ ختم باید بزرگتر ویا مساوی به تاریخ شروع باشد"
+	"end_date_must_be_greater": "تاریخ ختم باید بزرگتر ویا مساوی به تاریخ شروع باشد",
+	"charity_package": "پکیج خیریه",
+	"assign_package_for_non_survey": "تعیین پکیج خیریه برای متقاضیان بدون سروی",
+	"assign_package": "تعیین پکیج"
 }

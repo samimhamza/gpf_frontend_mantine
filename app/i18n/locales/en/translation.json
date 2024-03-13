@@ -140,5 +140,8 @@
 	"add_office": "Add New Office",
 	"update_office": "Update Office",
 	"offices": "Offices",
-	"end_date_must_be_greater": "End Date must be greater or equal to start date"
+	"end_date_must_be_greater": "End Date must be greater or equal to start date",
+	"charity_package": "Charity Package",
+	"assign_package_for_non_survey": "Assign Package for non Survey Applicants",
+	"assign_package": "Assign Package"
 }

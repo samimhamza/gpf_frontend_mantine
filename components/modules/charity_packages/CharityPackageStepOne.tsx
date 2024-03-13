@@ -113,6 +113,7 @@ const CharityPackageStepOne = ({
 					label={t("category")}
 					placeholder={t("category")}
 					data={categories}
+					withAsterisk
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}

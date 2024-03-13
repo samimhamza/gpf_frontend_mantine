@@ -1,8 +1,37 @@
-import { Badge, Center, Text } from "@mantine/core";
 import { logColumns } from ".";
+import { statusColum } from "./statusColum";
+import { Dispatch, SetStateAction } from "react";
 
-export const TeacherColumns = (t: (arg: string) => string) => {
+export const TeacherColumns = (
+	t: (arg: string) => string,
+	showStatus: boolean,
+	statusUrl: string,
+	setMutated: Dispatch<SetStateAction<boolean>>
+) => {
 	const logs = logColumns(t);
+
+	const statuses = [
+		{
+			status: "active",
+			color: "teal",
+			text: t("active"),
+		},
+		{
+			status: "inactive",
+			color: "gray",
+			text: t("inactive"),
+		},
+		{
+			status: "pending",
+			color: "yellow",
+			text: t("pending"),
+		},
+		{
+			status: "rejected",
+			color: "red",
+			text: t("rejected"),
+		},
+	];
 
 	return [
 		{ accessor: "id", hidden: true },
@@ -31,6 +60,7 @@ export const TeacherColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 		},
+		statusColum(t, statuses, statusUrl, showStatus, setMutated),
 		{
 			accessor: "staff_type",
 			title: t("staff_type"),
@@ -51,19 +81,11 @@ export const TeacherColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 			render: ({ type }: { type: string }) =>
-				type == "survey" ? (
-					t("survey")
-				) : type == "without_survey" ? (
-					<Center>
-						<Badge style={{ cursor: "pointer" }} color="green">
-							<Text size="md" fw={500}>
-								{t("without_survey")}
-							</Text>
-						</Badge>
-					</Center>
-				) : (
-					""
-				),
+				type == "survey"
+					? t("survey")
+					: type == "without_survey"
+					? t("without_survey")
+					: "",
 		},
 		{
 			accessor: "phone",

@@ -1,7 +1,9 @@
 import { TbEdit } from "react-icons/tb";
-import { ActionIcon, Group } from "@mantine/core";
+import { ActionIcon, Group, Tooltip } from "@mantine/core";
 import { TbEye } from "react-icons/tb";
 import { Dispatch, SetStateAction } from "react";
+import { BiSolidBox } from "react-icons/bi";
+import { FaAddressCard } from "react-icons/fa";
 
 interface ActionsProps {
 	record: any;
@@ -9,7 +11,9 @@ interface ActionsProps {
 	setView: Dispatch<SetStateAction<number | undefined>>;
 	showEdit: boolean;
 	showView: boolean;
-	setAddPackage: Dispatch<SetStateAction<number | undefined>> | undefined;
+	setAddPackage?: Dispatch<SetStateAction<number | undefined>> | undefined;
+	packageTitle?: string;
+	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>> | undefined;
 }
 
 export const Actions = ({
@@ -18,23 +22,12 @@ export const Actions = ({
 	setView,
 	showEdit,
 	showView,
+	packageTitle,
 	setAddPackage,
+	setPrintOrViewCard,
 }: ActionsProps) => {
 	return (
 		<Group gap={4} justify="right" wrap="nowrap">
-			{setAddPackage && (
-				<ActionIcon
-					size="sm"
-					variant="transparent"
-					color="green"
-					onClick={(e) => {
-						e.stopPropagation(); // 👈 prevent triggering the row click function
-						setAddPackage(record.id);
-					}}
-				>
-					<TbEye size={16} />
-				</ActionIcon>
-			)}
 			{showView && (
 				<ActionIcon
 					size="sm"
@@ -60,6 +53,38 @@ export const Actions = ({
 					<TbEdit size={16} />
 				</ActionIcon>
 			)}
+			{setAddPackage &&
+				record.type == "without_survey" &&
+				record.status == "active" && (
+					<Tooltip label={packageTitle}>
+						<ActionIcon
+							size="sm"
+							variant="transparent"
+							color="green"
+							onClick={(e) => {
+								e.stopPropagation(); // 👈 prevent triggering the row click function
+								setAddPackage(record.id);
+							}}
+						>
+							<BiSolidBox size={16} />
+						</ActionIcon>
+					</Tooltip>
+				)}
+			{setPrintOrViewCard &&
+				record.surveys_count > 0 &&
+				record.status == "active" && (
+					<ActionIcon
+						size="sm"
+						variant="transparent"
+						color="green"
+						onClick={(e) => {
+							e.stopPropagation(); // 👈 prevent triggering the row click function
+							setPrintOrViewCard(record.id);
+						}}
+					>
+						<FaAddressCard size={16} />
+					</ActionIcon>
+				)}
 		</Group>
 	);
 };

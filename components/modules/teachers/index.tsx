@@ -12,17 +12,27 @@ import {
 	EDIT_APPLICANTS,
 	ADD_APPLICANTS,
 	DELETE_APPLICANTS,
+	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
+import AddPackageModal from "./AddPackageModal";
+import ApplicantCard from "./ApplicantCard";
 
 export const TeacherModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = TeacherColumns(t);
+	const columns = TeacherColumns(
+		t,
+		permissionChecker(CHANGE_STATUS),
+		"/applicants/",
+		setMutated
+	);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
 	const [addPackage, setAddPackage] = useState<number>();
-	const [packageOpen, setPackageOpen] = useState<boolean>(false);
+	const [packageOpened, packageHandlers] = useDisclosure(false);
+	const [printOrViewCard, setPrintOrViewCard] = useState<number>();
+	const [cardOpened, cardHandlers] = useDisclosure(false);
 
 	useEffect(() => {
 		if (edit) {
@@ -32,15 +42,15 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 
 	useEffect(() => {
 		if (addPackage) {
-			setPackageOpen(true);
+			packageHandlers.open();
 		}
 	}, [addPackage]);
 
 	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
+		if (printOrViewCard) {
+			cardHandlers.open();
 		}
-	}, [opened]);
+	}, [printOrViewCard]);
 
 	return (
 		<>
@@ -65,26 +75,44 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 				showEdit={permissionChecker(EDIT_APPLICANTS)}
 				showView={false}
 				setAddPackage={setAddPackage}
+				packageTitle={t("assign_package")}
+				setPrintOrViewCard={setPrintOrViewCard}
 			/>
 			{opened && (
 				<TeacherModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_teacher") : t("update_teacher")}
 					editId={edit}
 				/>
 			)}
-			{/* {packageOpen && (
+			{packageOpened && (
 				<AddPackageModal
-					opened={packageOpen}
-					close={() => setPackageOpen(false)}
-					lng={lng}
+					applicantId={addPackage}
+					opened={packageOpened}
 					setMutated={setMutated}
-					recordId={addPackage}
+					close={() => {
+						packageHandlers.close();
+						setAddPackage(undefined);
+					}}
+					lng={lng}
 				/>
-			)} */}
+			)}
+			{cardOpened && (
+				<ApplicantCard
+					opened={cardOpened}
+					close={() => {
+						cardHandlers.close();
+						setPrintOrViewCard(undefined);
+					}}
+					lng={lng}
+				/>
+			)}
 		</>
 	);
 };

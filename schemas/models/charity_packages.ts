@@ -10,7 +10,13 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 				.min(1, {
 					message: t("field_required"),
 				}),
-			category_id: z.string().nullable(),
+			category_id: z
+				.string({
+					invalid_type_error: t("invalid_type"),
+				})
+				.min(1, {
+					message: t("field_required"),
+				}),
 			name: z
 				.string({
 					invalid_type_error: t("invalid_type"),
