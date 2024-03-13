@@ -34,12 +34,6 @@ export const OfficeModule = ({ lng }: { lng: string }) => {
 		}
 	}, [edit]);
 
-	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
-		}
-	}, [opened]);
-
 	return (
 		<>
 			<CustomBreadCrumb
@@ -66,7 +60,10 @@ export const OfficeModule = ({ lng }: { lng: string }) => {
 			{opened && (
 				<OfficeModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_office") : t("update_office")}

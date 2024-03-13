@@ -34,12 +34,6 @@ export const MosqueModule = ({ lng }: { lng: string }) => {
 		}
 	}, [edit]);
 
-	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
-		}
-	}, [opened]);
-
 	return (
 		<>
 			<CustomBreadCrumb
@@ -65,7 +59,10 @@ export const MosqueModule = ({ lng }: { lng: string }) => {
 			{opened && (
 				<MosqueModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_mosque") : t("update_mosque")}

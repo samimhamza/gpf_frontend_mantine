@@ -34,12 +34,6 @@ export const CategoryModule = ({ lng }: { lng: string }) => {
 		}
 	}, [edit]);
 
-	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
-		}
-	}, [opened]);
-
 	return (
 		<>
 			<CustomBreadCrumb
@@ -66,7 +60,10 @@ export const CategoryModule = ({ lng }: { lng: string }) => {
 			{opened && (
 				<CategoryModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_category") : t("update_category")}

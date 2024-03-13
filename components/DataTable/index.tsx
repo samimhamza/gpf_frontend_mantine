@@ -24,6 +24,8 @@ interface DataTableProps {
 	setAddPackage?: Dispatch<SetStateAction<number | undefined>>;
 	packageTitle?: string;
 	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>>;
+	setAddItem?: Dispatch<SetStateAction<number | undefined>>;
+	addItemTitle?: string;
 }
 
 const CustomDataTable = ({
@@ -43,6 +45,8 @@ const CustomDataTable = ({
 	setAddPackage = undefined,
 	packageTitle = undefined,
 	setPrintOrViewCard = undefined,
+	setAddItem = undefined,
+	addItemTitle = undefined,
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios();
@@ -89,6 +93,8 @@ const CustomDataTable = ({
 			setAddPackage={setAddPackage}
 			packageTitle={packageTitle}
 			setPrintOrViewCard={setPrintOrViewCard}
+			setAddItem={setAddItem}
+			addItemTitle={addItemTitle}
 		/>
 	);
 

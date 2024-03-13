@@ -148,5 +148,8 @@
 	"warehouse_info": "اطلاعات گدام",
 	"add_warehouse": "ایجاد گدام جدید",
 	"update_warehouse": "ویرایش گدام",
-	"warehouse": "گدام"
+	"warehouse": "گدام",
+	"add_item_to_inventory": "ایجاد اجناس برای این گدام",
+	"add_item_to_warehouse": "اضافه نمودن اجناس برای گدام",
+	"no_items_exists": "هیچ جنسی موجود نیست!"
 }

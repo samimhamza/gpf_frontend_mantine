@@ -148,5 +148,7 @@
 	"warehouse_info": "Warehouse Info",
 	"warehouse": "Warehouse",
 	"add_warehouse": "Add New Warehouse",
-	"update_warehouse": "Update Warehouse"
+	"update_warehouse": "Update Warehouse",
+	"add_item_to_inventory": "Add Item To Inventory",
+	"no_items_exists": "No Items Exists"
 }

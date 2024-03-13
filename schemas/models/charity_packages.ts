@@ -40,7 +40,9 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 							.min(1, {
 								message: t("field_required"),
 							}),
-						quantity: z.string().regex(/^[0-9\-]+$/, t("only_number_allowed")),
+						quantity: z
+							.string()
+							.regex(/^-?\d+(\.\d+)?$/, t("only_number_allowed")),
 						unit: z
 							.string({
 								invalid_type_error: t("invalid_type"),

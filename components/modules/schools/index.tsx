@@ -34,12 +34,6 @@ export const SchoolModule = ({ lng }: { lng: string }) => {
 		}
 	}, [edit]);
 
-	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
-		}
-	}, [opened]);
-
 	return (
 		<>
 			<CustomBreadCrumb
@@ -65,7 +59,10 @@ export const SchoolModule = ({ lng }: { lng: string }) => {
 			{opened && (
 				<SchoolModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_school") : t("update_school")}

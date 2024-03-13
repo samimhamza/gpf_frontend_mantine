@@ -4,6 +4,7 @@ import { TbEye } from "react-icons/tb";
 import { Dispatch, SetStateAction } from "react";
 import { BiSolidBox } from "react-icons/bi";
 import { FaAddressCard } from "react-icons/fa";
+import { FaBoxesPacking } from "react-icons/fa6";
 
 interface ActionsProps {
 	record: any;
@@ -14,6 +15,8 @@ interface ActionsProps {
 	setAddPackage?: Dispatch<SetStateAction<number | undefined>> | undefined;
 	packageTitle?: string;
 	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>> | undefined;
+	setAddItem?: Dispatch<SetStateAction<number | undefined>>;
+	addItemTitle?: string;
 }
 
 export const Actions = ({
@@ -25,6 +28,8 @@ export const Actions = ({
 	packageTitle,
 	setAddPackage,
 	setPrintOrViewCard,
+	setAddItem,
+	addItemTitle,
 }: ActionsProps) => {
 	return (
 		<Group gap={4} justify="right" wrap="nowrap">
@@ -56,7 +61,7 @@ export const Actions = ({
 			{setAddPackage &&
 				record.type == "without_survey" &&
 				record.status == "active" && (
-					<Tooltip label={packageTitle}>
+					<Tooltip label={packageTitle} color="gray">
 						<ActionIcon
 							size="sm"
 							variant="transparent"
@@ -85,6 +90,21 @@ export const Actions = ({
 						<FaAddressCard size={16} />
 					</ActionIcon>
 				)}
+			{setAddItem && (
+				<Tooltip label={addItemTitle} color="gray">
+					<ActionIcon
+						size="sm"
+						variant="transparent"
+						color="green"
+						onClick={(e) => {
+							e.stopPropagation(); // 👈 prevent triggering the row click function
+							setAddItem(record.id);
+						}}
+					>
+						<FaBoxesPacking size={16} />
+					</ActionIcon>
+				</Tooltip>
+			)}
 		</Group>
 	);
 };

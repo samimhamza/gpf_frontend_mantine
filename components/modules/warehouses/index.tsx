@@ -13,6 +13,7 @@ import {
 	ADD_WAREHOUSES,
 	DELETE_WAREHOUSES,
 } from "@/shared/constants/Permissions";
+import WarehouseItemsModal from "./WarehouseItemsModal";
 
 export const WarehouseModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
@@ -21,6 +22,8 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
+	const [itemModalOPened, itemModalHandlers] = useDisclosure(false);
+	const [addItem, setAddItem] = useState<number>();
 
 	useEffect(() => {
 		if (edit) {
@@ -29,10 +32,10 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 	}, [edit]);
 
 	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
+		if (addItem) {
+			itemModalHandlers.open();
 		}
-	}, [opened]);
+	}, [addItem]);
 
 	return (
 		<>
@@ -56,15 +59,33 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 				showDelete={permissionChecker(DELETE_WAREHOUSES)}
 				showEdit={permissionChecker(EDIT_WAREHOUSES)}
 				showView={false}
+				setAddItem={setAddItem}
+				addItemTitle={t("add_item_to_inventory")}
 			/>
 			{opened && (
 				<WarehouseModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_warehouse") : t("update_warehouse")}
 					editId={edit}
+				/>
+			)}
+			{itemModalOPened && (
+				<WarehouseItemsModal
+					opened={itemModalOPened}
+					close={() => {
+						itemModalHandlers.close();
+						setAddItem(undefined);
+					}}
+					lng={lng}
+					setMutated={setMutated}
+					title={t("add_item_to_warehouse")}
+					warehouseId={addItem}
 				/>
 			)}
 		</>
