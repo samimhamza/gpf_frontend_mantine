@@ -63,3 +63,9 @@ export const VIEW_CHARITY_PACKAGES = "view_charity_packages";
 export const ADD_CHARITY_PACKAGES = "create_charity_packages";
 export const EDIT_CHARITY_PACKAGES = "update_charity_packages";
 export const DELETE_CHARITY_PACKAGES = "delete_charity_packages";
+
+// Warehouses Permissions
+export const VIEW_WAREHOUSES = "view_warehouses";
+export const ADD_WAREHOUSES = "create_warehouses";
+export const EDIT_WAREHOUSES = "update_warehouses";
+export const DELETE_WAREHOUSES = "delete_warehouses";
