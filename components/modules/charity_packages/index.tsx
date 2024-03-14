@@ -37,6 +37,7 @@ export const CharityPackageModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("charity_packages")}
 				url="/charity_packages"
 				deleteUrl="/charity_packages/1"
 				lng={lng}

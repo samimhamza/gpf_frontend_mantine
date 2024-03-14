@@ -13,23 +13,31 @@ import {
 	ADD_WAREHOUSES,
 	DELETE_WAREHOUSES,
 } from "@/shared/constants/Permissions";
-import WarehouseItemsModal from "./WarehouseItemsModal";
+import WarehouseItemsModal from "./warehouse_items/WarehouseItemsModal";
+import { useRouter } from "next/navigation";
 
 export const WarehouseModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
+	const router = useRouter();
 	const [mutated, setMutated] = useState(false);
-	const columns = WarehouseColumns(t);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
 	const [itemModalOPened, itemModalHandlers] = useDisclosure(false);
 	const [addItem, setAddItem] = useState<number>();
+	const columns = WarehouseColumns(t);
 
 	useEffect(() => {
 		if (edit) {
 			open();
 		}
 	}, [edit]);
+
+	useEffect(() => {
+		if (view) {
+			router.push(`/warehouses/${view}`);
+		}
+	}, [view]);
 
 	useEffect(() => {
 		if (addItem) {
@@ -46,6 +54,7 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("warehouses")}
 				url="/warehouses"
 				deleteUrl="/warehouses/1"
 				lng={lng}
@@ -58,9 +67,8 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 				showAdd={permissionChecker(ADD_WAREHOUSES)}
 				showDelete={permissionChecker(DELETE_WAREHOUSES)}
 				showEdit={permissionChecker(EDIT_WAREHOUSES)}
-				showView={false}
 				setAddItem={setAddItem}
-				addItemTitle={t("add_item_to_inventory")}
+				addItemTitle={t("add_item_to_warehouse")}
 			/>
 			{opened && (
 				<WarehouseModal

@@ -43,6 +43,7 @@ export const OfficeModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("offices")}
 				url="/offices"
 				deleteUrl="/offices/1"
 				lng={lng}

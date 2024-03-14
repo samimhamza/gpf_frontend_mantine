@@ -43,6 +43,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("users")}
 				url="/users"
 				deleteUrl="/users/1"
 				lng={lng}

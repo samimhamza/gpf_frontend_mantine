@@ -12,6 +12,7 @@ interface DataProps {
 }
 
 interface DataTableProps {
+	title: string;
 	columns: Array<any>;
 	search: string;
 	lng: string;
@@ -22,9 +23,11 @@ interface DataTableProps {
 	data: DataProps;
 	isLoading: boolean;
 	showDelete: boolean;
+	height?: number;
 }
 
 const MantineDataTable = ({
+	title,
 	columns,
 	search,
 	lng,
@@ -35,7 +38,7 @@ const MantineDataTable = ({
 	data,
 	isLoading,
 	showDelete,
-
+	height,
 	...additionalProps
 }: DataTableProps) => {
 	const { t } = useTranslation(lng);
@@ -76,7 +79,7 @@ const MantineDataTable = ({
 	return (
 		<>
 			<DataTable
-				height={550}
+				height={height ? height : 550}
 				withTableBorder
 				highlightOnHover
 				withColumnBorders
@@ -84,6 +87,14 @@ const MantineDataTable = ({
 				verticalAlign="top"
 				pinLastColumn
 				columns={columns}
+				groups={[
+					{
+						id: "title",
+						title: title,
+						textAlign: "center",
+						columns: columns,
+					},
+				]}
 				fetching={isLoading}
 				records={data?.data}
 				page={data?.page ? data?.page : 1}

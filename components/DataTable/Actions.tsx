@@ -9,7 +9,7 @@ import { FaBoxesPacking } from "react-icons/fa6";
 interface ActionsProps {
 	record: any;
 	setEdit: Dispatch<SetStateAction<number | undefined>>;
-	setView: Dispatch<SetStateAction<number | undefined>>;
+	setView?: Dispatch<SetStateAction<number | undefined>>;
 	showEdit: boolean;
 	showView: boolean;
 	setAddPackage?: Dispatch<SetStateAction<number | undefined>> | undefined;
@@ -33,7 +33,7 @@ export const Actions = ({
 }: ActionsProps) => {
 	return (
 		<Group gap={4} justify="right" wrap="nowrap">
-			{showView && (
+			{showView && setView && (
 				<ActionIcon
 					size="sm"
 					variant="transparent"

@@ -8,6 +8,7 @@ import { TbClick } from "react-icons/tb";
 import { Actions } from "./Actions";
 
 interface DataTableProps {
+	title: string;
 	url: string;
 	deleteUrl: string;
 	columns: Array<any>;
@@ -16,7 +17,7 @@ interface DataTableProps {
 	mutated: boolean;
 	setMutated: Dispatch<SetStateAction<boolean>>;
 	setEdit: Dispatch<SetStateAction<number | undefined>>;
-	setView: Dispatch<SetStateAction<number | undefined>>;
+	setView?: Dispatch<SetStateAction<number | undefined>>;
 	showAdd: boolean;
 	showDelete: boolean;
 	showEdit: boolean;
@@ -26,9 +27,11 @@ interface DataTableProps {
 	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>>;
 	setAddItem?: Dispatch<SetStateAction<number | undefined>>;
 	addItemTitle?: string;
+	height?: number;
 }
 
 const CustomDataTable = ({
+	title,
 	url,
 	deleteUrl,
 	columns,
@@ -47,6 +50,7 @@ const CustomDataTable = ({
 	setPrintOrViewCard = undefined,
 	setAddItem = undefined,
 	addItemTitle = undefined,
+	height = undefined,
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios();
@@ -126,6 +130,7 @@ const CustomDataTable = ({
 				showDelete={showDelete}
 			/>
 			<MantineDataTable
+				title={title}
 				lng={lng}
 				columns={columns}
 				search={search}
@@ -136,6 +141,7 @@ const CustomDataTable = ({
 				data={data}
 				isLoading={isLoading}
 				showDelete={showDelete}
+				height={height}
 				{...additionalProps}
 			/>
 		</>

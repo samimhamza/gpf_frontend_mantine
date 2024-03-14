@@ -43,6 +43,7 @@ export const MosqueModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("mosques")}
 				url="/mosques"
 				deleteUrl="/mosques/1"
 				lng={lng}

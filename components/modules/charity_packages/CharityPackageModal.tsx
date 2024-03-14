@@ -37,8 +37,8 @@ const CharityPackageModal = ({
 	const [categories, setCategories] = useState([]);
 	const [items, setItems] = useState<any>([]);
 	const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
-	const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
 	const [startDate, setStartDate] = useState<Value>();
+	const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
 	const [endDate, setEndDate] = useState<Value>();
 
 	const initialValues: any = {

@@ -43,6 +43,7 @@ export const SchoolModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("schools")}
 				url="/schools"
 				deleteUrl="/schools/1"
 				lng={lng}
