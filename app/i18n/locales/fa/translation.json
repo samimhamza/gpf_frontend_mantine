@@ -152,5 +152,6 @@
 	"add_item_to_warehouse": "اضافه نمودن اجناس برای گدام",
 	"update_item_to_warehouse": "ویرایش جنس گدام",
 	"no_items_exists": "هیچ جنسی موجود نیست!",
-	"warehouse_items": "اجناس گدام"
+	"warehouse_items": "اجناس گدام",
+	"id": "آی دی"
 }

@@ -11,19 +11,19 @@ import {
 	EDIT_WAREHOUSES,
 } from "@/shared/constants/Permissions";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
-import { Group, LoadingOverlay, Paper } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import WarehouseItemsModal from "./WarehouseItemsModal";
+import WarehouseInfo from "./WarehouseInfo";
 
 export const SingleWarehouse = ({ lng, id }: { lng: string; id: number }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
-	const [warehouse, setWarehouse] = useState({});
+	const [warehouse, setWarehouse] = useState<any>();
 	const [mutated, setMutated] = useState(false);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
@@ -58,17 +58,10 @@ export const SingleWarehouse = ({ lng, id }: { lng: string; id: number }) => {
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
 					{ title: t("warehouses"), link: "/warehouses" },
-					{ title: id.toString() },
+					{ title: warehouse ? warehouse?.name : id.toString() },
 				]}
 			/>
-			<Paper p="md" withBorder shadow="sm" mb="md" pos="relative">
-				<LoadingOverlay
-					visible={loading}
-					zIndex={1000}
-					overlayProps={{ radius: "sm", blur: 2 }}
-				/>
-				<Group justify="space-between" align="center"></Group>
-			</Paper>
+			<WarehouseInfo lng={lng} warehouse={warehouse} loading={loading} />
 			<CustomDataTable
 				title={t("warehouse_items")}
 				url={`/warehouse_items?warehouse_id=${id}`}
