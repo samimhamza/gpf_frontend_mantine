@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
 import {
@@ -22,6 +24,7 @@ import { MdSend } from "react-icons/md";
 import { Value } from "react-multi-date-picker";
 import ItemsModal from "./ItemsModal";
 import ItemModal from "./ItemModal";
+import { getTime } from "@/shared/functions";
 
 interface WarehouseItemModalProps {
 	warehouseId: number | undefined;
@@ -31,6 +34,7 @@ interface WarehouseItemModalProps {
 	setMutated: Dispatch<SetStateAction<boolean>>;
 	title: string;
 	editId?: number;
+	mutate: any;
 }
 
 const WarehouseItemsModal = ({
@@ -41,6 +45,7 @@ const WarehouseItemsModal = ({
 	setMutated,
 	title,
 	editId = undefined,
+	mutate,
 }: WarehouseItemModalProps) => {
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
@@ -58,17 +63,28 @@ const WarehouseItemsModal = ({
 	>([]);
 	const [submitLoading, setSubmitLoading] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [storeDateErrorMessage, setStoreDateErrorMessage] = useState("");
-	const [storeDate, setStoreDate] = useState<Value>();
+	const [storeDatesErrorMessage, setStoreDatesErrorMessage] = useState<
+		Array<string>
+	>([""]);
+	const [storeDates, setStoreDates] = useState<Array<Value>>([]);
 
 	const createInitialValues: any = {
-		items: [{ warehouse_id: warehouseId, item_id: "", quantity: "", unit: "" }],
+		items: [
+			{
+				warehouse_id: warehouseId,
+				item_id: "",
+				quantity: "",
+				store_date: null,
+				unit: "",
+			},
+		],
 	};
 
 	const editInitialValues: any = {
 		warehouse_id: warehouseId,
 		item_id: "",
 		quantity: "",
+		store_date: null,
 		unit: "",
 	};
 
@@ -80,78 +96,91 @@ const WarehouseItemsModal = ({
 		validateInputOnBlur: true,
 	});
 
-	const checkUniqueness = async () => {
-		const data: any = {
-			warehouse_id: warehouseId,
-			id: editId ? editId : null,
-		};
-		if (editId) {
-			data.item_id = form.values.item_id;
-		} else {
-			data.item_ids = form.values.items.map((item: any) => item.item_id);
-		}
-		let { response, status } = await callApi({
-			method: "POST",
-			url: "/warehouse_items/check_uniqueness",
-			data: data,
-		});
-		if (status == 226) {
+	useEffect(() => {
+		if (storeDates?.length) {
 			if (editId) {
-				form.setErrors({
-					item_id: t("value_already_exists"),
-				});
+				if (storeDates[0]) {
+					setStoreDatesErrorMessage([""]);
+					form.setFieldValue("store_date", getTime(storeDates[0]));
+				} else {
+					form.setFieldValue("store_date", null);
+				}
 			} else {
-				let indexes = form.values.items.map(
-					(
-						item: {
-							item_id: string;
-							quantity: string;
-							unit: string;
-						},
-						index: number
-					) => {
-						const i = response.message.findIndex(
-							(item_id: string) => item_id == item.item_id
-						);
-						if (i != -1) {
-							return index;
-						}
+				storeDates.forEach((item, index) => {
+					if (item) {
+						setStoreDatesErrorMessage((d) => {
+							let errors = d.slice();
+							errors[index] = "";
+							return errors;
+						});
+						form.setFieldValue(`items.${index}.store_date`, item);
+					} else {
+						form.setFieldValue(`items.${index}.store_date`, null);
 					}
-				);
-				let errors: any = {};
-				indexes.forEach((index: number) => {
-					errors[`items.${index}.item_id`] = t("value_already_exists");
 				});
-				form.setErrors(errors);
 			}
-			return false;
-		} else if (status !== 200) return false;
-		return true;
+		} else {
+			editId
+				? form.setFieldValue("store_date", null)
+				: form.setFieldValue(`items.${0}.store_date`, null);
+		}
+	}, [storeDates]);
+
+	const validate = () => {
+		form.validate();
+		let isDatesValid = true;
+		if (editId && !form.values.store_date) {
+			setStoreDatesErrorMessage([t("field_required")]);
+			isDatesValid = false;
+		} else if (!editId) {
+			let indexes = form.values.items.map(
+				(
+					item: {
+						warehouse_id: number | undefined;
+						item_id: string;
+						quantity: string;
+						store_date: Value;
+						unit: string;
+					},
+					index: number
+				) => {
+					if (!item.store_date) {
+						return index;
+					}
+				}
+			);
+			let errors: Array<string> = [];
+			indexes.forEach((index: number) => {
+				errors[index] = t("field_required");
+			});
+			setStoreDatesErrorMessage(errors);
+			if (errors.length) {
+				isDatesValid = false;
+			}
+		}
+		return form.isValid() && isDatesValid;
 	};
 
 	const submit = async () => {
 		setSubmitLoading(true);
-		form.validate();
-		if (form.isValid()) {
-			const uniqueness = await checkUniqueness();
-			if (uniqueness) {
-				const { response, status } = !editId
-					? await callApi({
-							method: "POST",
-							url: `/warehouse_items`,
-							data: form.values,
-					  })
-					: await callApi({
-							method: "PUT",
-							url: `/warehouse_items/${editId}`,
-							data: form.values,
-					  });
-				if ((!editId ? status == 201 : status == 202) && response.result) {
-					setMutated(true);
-					close();
-				} else {
-					toast.error(t("something_went_wrong"));
-				}
+		if (validate()) {
+			const { response, status } = !editId
+				? await callApi({
+						method: "POST",
+						url: `/warehouse_items`,
+						data: form.values,
+				  })
+				: await callApi({
+						method: "PUT",
+						url: `/warehouse_items/${editId}`,
+						data: form.values,
+				  });
+			if ((!editId ? status == 201 : status == 202) && response.result) {
+				setMutated(true);
+				await mutate();
+				close();
+			} else {
+				toast.error(t("something_went_wrong"));
 			}
 		}
 		setSubmitLoading(false);
@@ -189,11 +218,17 @@ const WarehouseItemsModal = ({
 					let values: any = {};
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(editInitialValues).includes(key)) {
-							if (key != "item_id" && key != "quantity") {
+							if (
+								key != "item_id" &&
+								key != "quantity" &&
+								key != "store_date"
+							) {
 								values[key] = value ? value : editInitialValues[key];
 							}
 							if ((key == "item_id" || key == "quantity") && value) {
 								values[key] = value.toString();
+							} else if (key == "store_date" && value) {
+								setStoreDates([new Date(value.toString()).getTime()]);
 							}
 						}
 					});
@@ -241,18 +276,18 @@ const WarehouseItemsModal = ({
 								lng={lng}
 								form={form}
 								items={items}
-								storeDate={storeDate}
-								setStoreDate={setStoreDate}
-								storeDateErrorMessage={storeDateErrorMessage}
+								storeDates={storeDates}
+								setStoreDates={setStoreDates}
+								storeDatesErrorMessage={storeDatesErrorMessage}
 							/>
 						) : (
 							<ItemModal
 								lng={lng}
 								form={form}
 								items={items}
-								storeDate={storeDate}
-								setStoreDate={setStoreDate}
-								storeDateErrorMessage={storeDateErrorMessage}
+								storeDates={storeDates}
+								setStoreDates={setStoreDates}
+								storeDatesErrorMessage={storeDatesErrorMessage}
 							/>
 						)}
 					</ScrollArea>

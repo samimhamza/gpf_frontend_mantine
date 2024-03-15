@@ -25,9 +25,11 @@ interface DataTableProps {
 	setAddPackage?: Dispatch<SetStateAction<number | undefined>>;
 	packageTitle?: string;
 	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>>;
-	setAddItem?: Dispatch<SetStateAction<number | undefined>>;
-	addItemTitle?: string;
 	height?: number;
+	order_by?: {
+		column: string;
+		order: string;
+	};
 }
 
 const CustomDataTable = ({
@@ -48,9 +50,11 @@ const CustomDataTable = ({
 	setAddPackage = undefined,
 	packageTitle = undefined,
 	setPrintOrViewCard = undefined,
-	setAddItem = undefined,
-	addItemTitle = undefined,
 	height = undefined,
+	order_by = {
+		column: "created_at",
+		order: "desc",
+	},
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios();
@@ -60,10 +64,7 @@ const CustomDataTable = ({
 		page: 1,
 		per_page: 20,
 		search: "",
-		order_by: {
-			column: "created_at",
-			order: "desc",
-		},
+		order_by: order_by,
 		filter_data: {},
 	});
 	const { data, error, isLoading, mutate } = useSWR(
@@ -97,8 +98,6 @@ const CustomDataTable = ({
 			setAddPackage={setAddPackage}
 			packageTitle={packageTitle}
 			setPrintOrViewCard={setPrintOrViewCard}
-			setAddItem={setAddItem}
-			addItemTitle={addItemTitle}
 		/>
 	);
 

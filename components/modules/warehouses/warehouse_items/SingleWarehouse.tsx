@@ -12,39 +12,29 @@ import {
 } from "@/shared/constants/Permissions";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import { useDisclosure } from "@mantine/hooks";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import WarehouseItemsModal from "./WarehouseItemsModal";
 import WarehouseInfo from "./WarehouseInfo";
+import useSWR from "swr";
 
 export const SingleWarehouse = ({ lng, id }: { lng: string; id: number }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
-	const router = useRouter();
-	const [loading, setLoading] = useState(false);
-	const [warehouse, setWarehouse] = useState<any>();
 	const [mutated, setMutated] = useState(false);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const columns = WarehouseItemColumns(t);
 
-	useEffect(() => {
-		(async function () {
-			setLoading(true);
-			const { response, status, error } = await callApi({
+	const { data, error, isLoading, mutate } = useSWR(
+		`/warehouses/${id}`,
+		async () => {
+			const { response, error, status } = await callApi({
 				method: "GET",
 				url: `/warehouses/${id}`,
 			});
-			if (status == 200 && response.result == true) {
-				setWarehouse(response.data);
-			} else {
-				toast.error("something_went_wrong");
-				router.push("/warehouses");
-			}
-			setLoading(false);
-		})();
-	}, []);
+			return response?.data;
+		}
+	);
 
 	useEffect(() => {
 		if (edit) {
@@ -58,12 +48,12 @@ export const SingleWarehouse = ({ lng, id }: { lng: string; id: number }) => {
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
 					{ title: t("warehouses"), link: "/warehouses" },
-					{ title: warehouse ? warehouse?.name : id.toString() },
+					{ title: data ? data?.name : id.toString() },
 				]}
 			/>
-			<WarehouseInfo lng={lng} warehouse={warehouse} loading={loading} />
+			<WarehouseInfo lng={lng} warehouse={data} loading={isLoading} />
 			<CustomDataTable
-				title={t("warehouse_items")}
+				title={t("warehouse_items_imports")}
 				url={`/warehouse_items?warehouse_id=${id}`}
 				deleteUrl="/warehouse_items/1"
 				lng={lng}
@@ -76,6 +66,10 @@ export const SingleWarehouse = ({ lng, id }: { lng: string; id: number }) => {
 				showDelete={permissionChecker(DELETE_WAREHOUSES)}
 				showEdit={permissionChecker(EDIT_WAREHOUSES)}
 				height={350}
+				order_by={{
+					column: "store_date",
+					order: "desc",
+				}}
 			/>
 			{opened && (
 				<WarehouseItemsModal
@@ -91,6 +85,7 @@ export const SingleWarehouse = ({ lng, id }: { lng: string; id: number }) => {
 					}
 					warehouseId={id}
 					editId={edit}
+					mutate={mutate}
 				/>
 			)}
 		</>

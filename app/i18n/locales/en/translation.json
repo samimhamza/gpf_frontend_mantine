@@ -153,5 +153,8 @@
 	"add_item_to_warehouse": "Add Items to warehouse",
 	"update_item_to_warehouse": "Update Warehouse Item",
 	"warehouse_items": "Warehouse Items",
-	"id": "ID"
+	"id": "ID",
+	"store_date": "Store Date",
+	"warehouse_items_imports": "Warehouse Items Imports",
+	"total_quantity": "Total Quantity"
 }

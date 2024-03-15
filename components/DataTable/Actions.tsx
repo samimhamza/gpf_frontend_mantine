@@ -15,8 +15,6 @@ interface ActionsProps {
 	setAddPackage?: Dispatch<SetStateAction<number | undefined>> | undefined;
 	packageTitle?: string;
 	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>> | undefined;
-	setAddItem?: Dispatch<SetStateAction<number | undefined>>;
-	addItemTitle?: string;
 }
 
 export const Actions = ({
@@ -28,8 +26,6 @@ export const Actions = ({
 	packageTitle,
 	setAddPackage,
 	setPrintOrViewCard,
-	setAddItem,
-	addItemTitle,
 }: ActionsProps) => {
 	return (
 		<Group gap={4} justify="right" wrap="nowrap">
@@ -90,21 +86,6 @@ export const Actions = ({
 						<FaAddressCard size={16} />
 					</ActionIcon>
 				)}
-			{setAddItem && (
-				<Tooltip label={addItemTitle} color="gray">
-					<ActionIcon
-						size="sm"
-						variant="transparent"
-						color="green"
-						onClick={(e) => {
-							e.stopPropagation(); // 👈 prevent triggering the row click function
-							setAddItem(record.id);
-						}}
-					>
-						<FaBoxesPacking size={16} />
-					</ActionIcon>
-				</Tooltip>
-			)}
 		</Group>
 	);
 };

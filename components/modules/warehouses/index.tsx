@@ -23,8 +23,6 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
-	const [itemModalOPened, itemModalHandlers] = useDisclosure(false);
-	const [addItem, setAddItem] = useState<number>();
 	const columns = WarehouseColumns(t);
 
 	useEffect(() => {
@@ -38,12 +36,6 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 			router.push(`/warehouses/${view}`);
 		}
 	}, [view]);
-
-	useEffect(() => {
-		if (addItem) {
-			itemModalHandlers.open();
-		}
-	}, [addItem]);
 
 	return (
 		<>
@@ -67,8 +59,6 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 				showAdd={permissionChecker(ADD_WAREHOUSES)}
 				showDelete={permissionChecker(DELETE_WAREHOUSES)}
 				showEdit={permissionChecker(EDIT_WAREHOUSES)}
-				setAddItem={setAddItem}
-				addItemTitle={t("add_item_to_warehouse")}
 			/>
 			{opened && (
 				<WarehouseModal
@@ -81,19 +71,6 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
 					setMutated={setMutated}
 					title={!edit ? t("add_warehouse") : t("update_warehouse")}
 					editId={edit}
-				/>
-			)}
-			{itemModalOPened && (
-				<WarehouseItemsModal
-					opened={itemModalOPened}
-					close={() => {
-						itemModalHandlers.close();
-						setAddItem(undefined);
-					}}
-					lng={lng}
-					setMutated={setMutated}
-					title={t("add_item_to_warehouse")}
-					warehouseId={addItem}
 				/>
 			)}
 		</>

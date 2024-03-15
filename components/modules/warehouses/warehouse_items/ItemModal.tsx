@@ -10,16 +10,16 @@ const ItemModal = ({
 	lng,
 	form,
 	items,
-	storeDate,
-	setStoreDate,
-	storeDateErrorMessage,
+	storeDates,
+	setStoreDates,
+	storeDatesErrorMessage,
 }: {
 	lng: string;
 	form: any;
 	items: Array<{ value: string; label: string; unit: string }>;
-	storeDate: Value | undefined;
-	setStoreDate: Dispatch<SetStateAction<Value | undefined>>;
-	storeDateErrorMessage: string;
+	storeDates: Array<Value>;
+	setStoreDates: Dispatch<SetStateAction<Array<Value>>>;
+	storeDatesErrorMessage: Array<string>;
 }) => {
 	const { t } = useTranslation(lng);
 
@@ -74,9 +74,9 @@ const ItemModal = ({
 				<PersianDatePicker
 					label={t("store_date")}
 					placeholder={t("store_date")}
-					value={storeDate}
-					onChange={setStoreDate}
-					errorMessage={storeDateErrorMessage}
+					value={storeDates[0]}
+					onChange={(value: Value) => setStoreDates([value])}
+					errorMessage={storeDatesErrorMessage[0]}
 				/>
 			</Flex>
 		</>

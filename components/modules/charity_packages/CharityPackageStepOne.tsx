@@ -2,9 +2,10 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { Box, Flex, Select, TextInput } from "@mantine/core";
-import { DateObject, type Value } from "react-multi-date-picker";
+import { type Value } from "react-multi-date-picker";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import PersianDatePicker from "@/components/PersianDatePicker";
+import { getTime } from "@/shared/functions";
 
 interface CharityPackageStepOneProps {
 	form: any;
@@ -40,16 +41,6 @@ const CharityPackageStepOne = ({
 		{ value: "AFN", label: t("afn") },
 		{ value: "USD", label: t("usd") },
 	];
-
-	const getTime = (date: any) => {
-		return date instanceof DateObject
-			? date?.toDate?.().getTime()
-			: date instanceof Date
-			? date.getTime()
-			: typeof date == "string"
-			? new Date(date).getTime()
-			: date;
-	};
 
 	useEffect(() => {
 		if (startDate) {
