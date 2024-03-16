@@ -2,6 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
+import { Genders, StaffTypes } from "@/shared/constants";
 import { Flex, Select, TextInput } from "@mantine/core";
 import { useEffect } from "react";
 
@@ -25,17 +26,8 @@ const TeacherStepOne = ({
 }: TeacherStepOneProps) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
-
-	const staffTypes = [
-		{ value: "formal_teacher", label: t("formal_teacher") },
-		{ value: "informal_teacher", label: t("informal_teacher") },
-		{ value: "school_employee", label: t("school_employee") },
-	];
-
-	const genders = [
-		{ value: "male", label: t("male") },
-		{ value: "female", label: t("female") },
-	];
+	const staffTypes = StaffTypes(t);
+	const genders = Genders(t);
 
 	useEffect(() => {
 		(async function () {
@@ -86,7 +78,6 @@ const TeacherStepOne = ({
 					style={{ flex: 1 }}
 					label={t("last_name")}
 					placeholder={t("last_name")}
-					withAsterisk
 					{...form.getInputProps("last_name")}
 				/>
 			</Flex>
@@ -100,7 +91,6 @@ const TeacherStepOne = ({
 					style={{ flex: 1 }}
 					label={t("father_name")}
 					placeholder={t("father_name")}
-					withAsterisk
 					{...form.getInputProps("father_name")}
 				/>
 				<TextInput

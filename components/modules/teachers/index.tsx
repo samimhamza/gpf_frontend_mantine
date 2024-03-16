@@ -14,11 +14,12 @@ import {
 	DELETE_APPLICANTS,
 	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
-import AddPackageModal from "./AddPackageModal";
 import ApplicantCard from "./ApplicantCard";
+import { useRouter } from "next/navigation";
 
 export const TeacherModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
+	const router = useRouter();
 	const [mutated, setMutated] = useState(false);
 	const columns = TeacherColumns(
 		t,
@@ -29,8 +30,6 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
-	const [addPackage, setAddPackage] = useState<number>();
-	const [packageOpened, packageHandlers] = useDisclosure(false);
 	const [printOrViewCard, setPrintOrViewCard] = useState<number>();
 	const [cardOpened, cardHandlers] = useDisclosure(false);
 
@@ -41,10 +40,10 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 	}, [edit]);
 
 	useEffect(() => {
-		if (addPackage) {
-			packageHandlers.open();
+		if (view) {
+			router.push(`/applicants/${view}`);
 		}
-	}, [addPackage]);
+	}, [view]);
 
 	useEffect(() => {
 		if (printOrViewCard) {
@@ -74,9 +73,6 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 				showAdd={permissionChecker(ADD_APPLICANTS)}
 				showDelete={permissionChecker(DELETE_APPLICANTS)}
 				showEdit={permissionChecker(EDIT_APPLICANTS)}
-				showView={false}
-				setAddPackage={setAddPackage}
-				packageTitle={t("assign_package")}
 				setPrintOrViewCard={setPrintOrViewCard}
 			/>
 			{opened && (
@@ -92,18 +88,7 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 					editId={edit}
 				/>
 			)}
-			{packageOpened && (
-				<AddPackageModal
-					applicantId={addPackage}
-					opened={packageOpened}
-					setMutated={setMutated}
-					close={() => {
-						packageHandlers.close();
-						setAddPackage(undefined);
-					}}
-					lng={lng}
-				/>
-			)}
+
 			{cardOpened && (
 				<ApplicantCard
 					opened={cardOpened}

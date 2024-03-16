@@ -17,7 +17,7 @@ import WarehouseItemsModal from "./WarehouseItemsModal";
 import WarehouseInfo from "./WarehouseInfo";
 import useSWR from "swr";
 
-export const SingleWarehouse = ({ lng, id }: { lng: string; id: number }) => {
+export const WarehouseModule = ({ lng, id }: { lng: string; id: number }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
 	const [mutated, setMutated] = useState(false);

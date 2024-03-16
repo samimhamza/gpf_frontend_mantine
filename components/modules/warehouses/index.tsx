@@ -13,7 +13,6 @@ import {
 	ADD_WAREHOUSES,
 	DELETE_WAREHOUSES,
 } from "@/shared/constants/Permissions";
-import WarehouseItemsModal from "./warehouse_items/WarehouseItemsModal";
 import { useRouter } from "next/navigation";
 
 export const WarehouseModule = ({ lng }: { lng: string }) => {

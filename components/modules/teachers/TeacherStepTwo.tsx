@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import { SurveyTypes } from "@/shared/constants";
 import { Flex, Select, Textarea } from "@mantine/core";
 
 interface TeacherStepTwoProps {
@@ -17,10 +18,7 @@ const TeacherStepTwo = ({
 	districts,
 }: TeacherStepTwoProps) => {
 	const { t } = useTranslation(lng);
-	const surveyTypes = [
-		{ value: "survey", label: t("survey") },
-		{ value: "without_survey", label: t("without_survey") },
-	];
+	const types = SurveyTypes(t);
 
 	return (
 		<>
@@ -74,7 +72,7 @@ const TeacherStepTwo = ({
 					label={t("survey_type")}
 					placeholder={t("survey_type")}
 					withAsterisk
-					data={surveyTypes}
+					data={types}
 					clearable
 					{...form.getInputProps("type")}
 				/>

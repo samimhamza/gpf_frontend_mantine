@@ -1,4 +1,4 @@
-import { SingleWarehouse } from "@/components/modules/warehouses/warehouse_items/SingleWarehouse";
+import { WarehouseModule } from "@/components/modules/warehouses/warehouse/WarehouseModule";
 import usePermissionChecker from "@/customHooks/usePermissionChecker";
 import { VIEW_WAREHOUSES } from "@/shared/constants/Permissions";
 
@@ -12,7 +12,7 @@ const WarehousePage = async ({
 }) => {
 	await usePermissionChecker(VIEW_WAREHOUSES);
 
-	return <SingleWarehouse lng={lng} id={id} />;
+	return <WarehouseModule lng={lng} id={id} />;
 };
 
 export default WarehousePage;
