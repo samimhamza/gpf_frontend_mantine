@@ -19,6 +19,7 @@ const ItemsModal = ({
 	lng,
 	form,
 	items,
+	warehouseId,
 	storeDates,
 	setStoreDates,
 	storeDatesErrorMessage,
@@ -26,6 +27,7 @@ const ItemsModal = ({
 	lng: string;
 	form: any;
 	items: Array<{ value: string; label: string; unit: string }>;
+	warehouseId: number | undefined;
 	storeDates: Array<Value>;
 	setStoreDates: Dispatch<SetStateAction<Array<Value>>>;
 	storeDatesErrorMessage: Array<string>;
@@ -48,6 +50,7 @@ const ItemsModal = ({
 						<ActionIcon
 							onClick={() =>
 								form.insertListItem("items", {
+									warehouse_id: warehouseId,
 									item_id: "",
 									quantity: "",
 									unit: "",
@@ -60,10 +63,16 @@ const ItemsModal = ({
 					{form.values.items.length !== 1 && (
 						<ActionIcon
 							color="red"
-							onClick={() =>
-								form.values.items.length !== 1 &&
-								form.removeListItem("items", index)
-							}
+							onClick={() => {
+								if (form.values.items.length !== 1) {
+									form.removeListItem("items", index);
+									setStoreDates((d) => {
+										let newDates = d.slice();
+										newDates.splice(index, 1);
+										return newDates;
+									});
+								}
+							}}
 						>
 							<FaTrashAlt size="1rem" />
 						</ActionIcon>
@@ -94,7 +103,6 @@ const ItemsModal = ({
 							}}
 						/>
 						<TextInput
-							disabled
 							style={{ flex: 1 }}
 							label={t("unit")}
 							placeholder={t("unit")}

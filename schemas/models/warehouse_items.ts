@@ -19,8 +19,8 @@ export const WarehouseItemSchema = (t: (arg: string) => string) => {
 						.string({
 							invalid_type_error: t("invalid_type"),
 						})
-						.min(3, {
-							message: t("min_3_length_error"),
+						.min(2, {
+							message: t("min_2_length_error"),
 						})
 						.max(64, {
 							message: t("max_64_length_error"),
@@ -57,8 +57,8 @@ export const EditWarehouseItemSchema = (t: (arg: string) => string) => {
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(3, {
-				message: t("min_3_length_error"),
+			.min(2, {
+				message: t("min_2_length_error"),
 			})
 			.max(64, {
 				message: t("max_64_length_error"),

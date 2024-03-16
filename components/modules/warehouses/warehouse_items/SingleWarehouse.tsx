@@ -65,11 +65,10 @@ export const SingleWarehouse = ({ lng, id }: { lng: string; id: number }) => {
 				showAdd={permissionChecker(ADD_WAREHOUSES)}
 				showDelete={permissionChecker(DELETE_WAREHOUSES)}
 				showEdit={permissionChecker(EDIT_WAREHOUSES)}
-				height={350}
-				order_by={{
-					column: "store_date",
-					order: "desc",
-				}}
+				// orderBy={{
+				// 	column: "store_date",
+				// 	order: "desc",
+				// }}
 			/>
 			{opened && (
 				<WarehouseItemsModal

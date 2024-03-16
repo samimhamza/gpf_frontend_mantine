@@ -123,6 +123,7 @@
 	"add_charity_package": "Add New Charity Package",
 	"update_charity_package": "Update Charity Package",
 	"add_item": "Add New Item",
+	"update_item": "Add Item",
 	"only_number_allowed": "Only numbers are allowed",
 	"value_already_exists": "Value already exists",
 	"item": "Item",
@@ -156,5 +157,6 @@
 	"id": "ID",
 	"store_date": "Store Date",
 	"warehouse_items_imports": "Warehouse Items Imports",
-	"total_quantity": "Total Quantity"
+	"total_quantity": "Total Quantity",
+	"min_2_length_error": "Minimum 3 characters required"
 }

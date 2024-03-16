@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import { WarehouseItemTotalColumns } from "@/shared/columns/warehouse_item.columns";
 import { getDateTime } from "@/shared/functions";
 import {
 	Box,
@@ -24,37 +25,7 @@ const WarehouseInfo = ({
 	loading: boolean;
 }) => {
 	const { t } = useTranslation(lng);
-	const columns = [
-		{
-			accessor: "item_id",
-			hidden: true,
-		},
-		{
-			accessor: "name",
-			title: t("item"),
-			noWrap: true,
-			width: "50%",
-			textAlign: "center",
-		},
-		{
-			accessor: "unit",
-			hidden: true,
-		},
-		{
-			accessor: "total_quantity",
-			title: t("total_quantity"),
-			noWrap: true,
-			width: "50%",
-			textAlign: "center",
-			render: ({
-				unit,
-				total_quantity,
-			}: {
-				unit: string;
-				total_quantity: string;
-			}) => total_quantity + " " + unit,
-		},
-	];
+	const columns = WarehouseItemTotalColumns(t);
 
 	return (
 		<>
@@ -158,9 +129,9 @@ const WarehouseInfo = ({
 					fetching={loading}
 					totalRecords={warehouse?.items?.length}
 					shadow="sm"
-					borderRadius="sm"
 					loadingText={t("loading_data")}
 					noRecordsText={t("no_records")}
+					borderRadius="sm"
 				/>
 			</Box>
 			<style jsx global>{`

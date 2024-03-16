@@ -26,9 +26,9 @@ interface DataTableProps {
 	packageTitle?: string;
 	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>>;
 	height?: number;
-	order_by?: {
+	orderBy?: {
 		column: string;
-		order: string;
+		order: "desc" | "asc";
 	};
 }
 
@@ -51,7 +51,7 @@ const CustomDataTable = ({
 	packageTitle = undefined,
 	setPrintOrViewCard = undefined,
 	height = undefined,
-	order_by = {
+	orderBy = {
 		column: "created_at",
 		order: "desc",
 	},
@@ -64,7 +64,7 @@ const CustomDataTable = ({
 		page: 1,
 		per_page: 20,
 		search: "",
-		order_by: order_by,
+		order_by: orderBy,
 		filter_data: {},
 	});
 	const { data, error, isLoading, mutate } = useSWR(
@@ -141,6 +141,7 @@ const CustomDataTable = ({
 				isLoading={isLoading}
 				showDelete={showDelete}
 				height={height}
+				orderBy={orderBy}
 				{...additionalProps}
 			/>
 		</>

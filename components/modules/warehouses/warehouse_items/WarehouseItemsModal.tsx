@@ -113,7 +113,7 @@ const WarehouseItemsModal = ({
 							errors[index] = "";
 							return errors;
 						});
-						form.setFieldValue(`items.${index}.store_date`, item);
+						form.setFieldValue(`items.${index}.store_date`, getTime(item));
 					} else {
 						form.setFieldValue(`items.${index}.store_date`, null);
 					}
@@ -276,6 +276,7 @@ const WarehouseItemsModal = ({
 								lng={lng}
 								form={form}
 								items={items}
+								warehouseId={warehouseId}
 								storeDates={storeDates}
 								setStoreDates={setStoreDates}
 								storeDatesErrorMessage={storeDatesErrorMessage}

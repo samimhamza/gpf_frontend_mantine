@@ -23,6 +23,10 @@ interface DataTableProps {
 	data: DataProps;
 	isLoading: boolean;
 	showDelete: boolean;
+	orderBy: {
+		column: string;
+		order: "desc" | "asc";
+	};
 	height?: number;
 }
 
@@ -38,6 +42,7 @@ const MantineDataTable = ({
 	data,
 	isLoading,
 	showDelete,
+	orderBy,
 	height,
 	...additionalProps
 }: DataTableProps) => {
@@ -46,8 +51,8 @@ const MantineDataTable = ({
 		columnAccessor: string;
 		direction: "desc" | "asc";
 	}>({
-		columnAccessor: "created_at",
-		direction: "desc",
+		columnAccessor: orderBy.column,
+		direction: orderBy.order,
 	});
 
 	useEffect(() => {

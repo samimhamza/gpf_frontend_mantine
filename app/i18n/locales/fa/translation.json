@@ -156,5 +156,6 @@
 	"id": "آی دی",
 	"store_date": "تاریخ ذخیره در انبار",
 	"warehouse_items_imports": "واردات اجناس به گدام",
-	"total_quantity": "موجودی"
+	"total_quantity": "موجودی",
+	"min_2_length_error": "حد اقل ۲ حرف ضروری است"
 }
