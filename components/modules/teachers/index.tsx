@@ -14,7 +14,6 @@ import {
 	DELETE_APPLICANTS,
 	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
-import ApplicantCard from "./ApplicantCard";
 import { useRouter } from "next/navigation";
 
 export const TeacherModule = ({ lng }: { lng: string }) => {
@@ -30,8 +29,6 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
-	const [printOrViewCard, setPrintOrViewCard] = useState<number>();
-	const [cardOpened, cardHandlers] = useDisclosure(false);
 
 	useEffect(() => {
 		if (edit) {
@@ -44,12 +41,6 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 			router.push(`/applicants/${view}`);
 		}
 	}, [view]);
-
-	useEffect(() => {
-		if (printOrViewCard) {
-			cardHandlers.open();
-		}
-	}, [printOrViewCard]);
 
 	return (
 		<>
@@ -73,7 +64,6 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 				showAdd={permissionChecker(ADD_APPLICANTS)}
 				showDelete={permissionChecker(DELETE_APPLICANTS)}
 				showEdit={permissionChecker(EDIT_APPLICANTS)}
-				setPrintOrViewCard={setPrintOrViewCard}
 			/>
 			{opened && (
 				<TeacherModal
@@ -86,17 +76,6 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 					setMutated={setMutated}
 					title={!edit ? t("add_teacher") : t("update_teacher")}
 					editId={edit}
-				/>
-			)}
-
-			{cardOpened && (
-				<ApplicantCard
-					opened={cardOpened}
-					close={() => {
-						cardHandlers.close();
-						setPrintOrViewCard(undefined);
-					}}
-					lng={lng}
 				/>
 			)}
 		</>

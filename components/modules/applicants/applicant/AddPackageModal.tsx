@@ -1,6 +1,8 @@
 import { useTranslation } from "@/app/i18n/client";
+import PersianDatePicker from "@/components/PersianDatePicker";
 import { useAxios } from "@/customHooks/useAxios";
 import { SurveyResultSchema } from "@/schemas/models/survey_results";
+import { getTime } from "@/shared/functions";
 import {
 	Button,
 	CloseButton,
@@ -19,6 +21,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MdSend } from "react-icons/md";
+import { Value } from "react-multi-date-picker";
 
 interface AddPackageModalProps {
 	applicantId: number | undefined;
@@ -41,16 +44,18 @@ const AddPackageModal = ({
 	const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 	const callApi = useAxios();
 	const surveyResultSchema = SurveyResultSchema(t);
-	const [applicantPackages, setApplicantPackages] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [packages, setPackages] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [submitLoading, setSubmitLoading] = useState(false);
+	const [surveyDateErrorMessage, setSurveyDateErrorMessage] = useState("");
+	const [surveyDate, setSurveyDate] = useState<Value>();
 
 	const initialValues: any = {
 		applicant_id: applicantId,
 		category_id: "",
 		charity_package_id: "",
+		survey_date: null,
 		description: "",
 	};
 
@@ -66,30 +71,30 @@ const AddPackageModal = ({
 		}
 	}, [applicantId]);
 
-	useEffect(() => {
-		(async function () {
-			const { response, status } = await callApi({
-				method: "GET",
-				url: `/applicants/${applicantId}/packages`,
-			});
-			if (status === 200 && response.result) {
-				setApplicantPackages(response.data);
-			}
-		})();
-	}, []);
+	const validate = () => {
+		form.validate();
+		let isDateValid = true;
+		if (!form.values.survey_date) {
+			setSurveyDateErrorMessage(t("field_required"));
+			isDateValid = false;
+		}
+		return form.isValid() && isDateValid;
+	};
 
 	const submit = async () => {
 		setSubmitLoading(true);
-		const { response, status } = await callApi({
-			method: "POST",
-			url: "/direct_package",
-			data: form.values,
-		});
-		if (status == 201 && response.result) {
-			setMutated(true);
-			close();
-		} else {
-			toast.error(t("something_went_wrong"));
+		if (validate()) {
+			const { response, status } = await callApi({
+				method: "POST",
+				url: "/applicant_direct_packages",
+				data: form.values,
+			});
+			if (status == 201 && response.result) {
+				setMutated(true);
+				close();
+			} else {
+				toast.error(t("something_went_wrong"));
+			}
 		}
 		setSubmitLoading(false);
 	};
@@ -136,6 +141,15 @@ const AddPackageModal = ({
 			}
 		})();
 	}, [form?.values?.category_id]);
+
+	useEffect(() => {
+		if (surveyDate) {
+			setSurveyDateErrorMessage("");
+			form.setFieldValue("survey_date", getTime(surveyDate));
+		} else {
+			form.setFieldValue("survey_date", null);
+		}
+	}, [surveyDate]);
 
 	return (
 		<>
@@ -201,6 +215,13 @@ const AddPackageModal = ({
 							p="sm"
 							justify={{ sm: "center" }}
 						>
+							<PersianDatePicker
+								label={t("survey_date")}
+								placeholder={t("survey_date")}
+								value={surveyDate}
+								onChange={setSurveyDate}
+								errorMessage={surveyDateErrorMessage}
+							/>
 							<Textarea
 								resize="vertical"
 								style={{ flex: 1 }}

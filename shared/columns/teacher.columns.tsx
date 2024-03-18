@@ -1,4 +1,4 @@
-import { logColumns } from ".";
+import { applicantStatuses, logColumns } from ".";
 import { statusColum } from "./statusColum";
 import { Dispatch, SetStateAction } from "react";
 
@@ -9,29 +9,7 @@ export const TeacherColumns = (
 	setMutated: Dispatch<SetStateAction<boolean>>
 ) => {
 	const logs = logColumns(t);
-
-	const statuses = [
-		{
-			status: "active",
-			color: "teal",
-			text: t("active"),
-		},
-		{
-			status: "inactive",
-			color: "gray",
-			text: t("inactive"),
-		},
-		{
-			status: "pending",
-			color: "yellow",
-			text: t("pending"),
-		},
-		{
-			status: "rejected",
-			color: "red",
-			text: t("rejected"),
-		},
-	];
+	const statuses = applicantStatuses(t);
 
 	return [
 		{ accessor: "id", hidden: true },

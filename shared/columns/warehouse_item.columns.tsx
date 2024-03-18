@@ -30,7 +30,8 @@ export const WarehouseItemColumns = (t: (arg: string) => string) => {
 			title: t("store_date"),
 			noWrap: true,
 			sortable: true,
-			render: ({ store_date }: { store_date: string }) => getDate(store_date),
+			render: ({ store_date }: { store_date: string }) =>
+				store_date ? getDate(store_date) : "",
 		},
 		...logs,
 	];

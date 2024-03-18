@@ -15,6 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import ApplicantInfo from "./ApplicantInfo";
 import useSWR from "swr";
+import ApplicantSurveys from "./ApplicantSurveys";
 
 export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 	const { t } = useTranslation(lng);
@@ -46,7 +47,14 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 			<CustomBreadCrumb
 				items={[
 					{ title: t("dashboard"), link: "/dashboard" },
-					{ title: t("teachers"), link: "/teachers" },
+					{
+						title:
+							data?.relevantable_type == "School"
+								? t("teachers")
+								: t("applicants"),
+						link:
+							data?.relevantable_type == "School" ? "/teachers" : "/applicants",
+					},
 					{
 						title: data
 							? data?.first_name + " " + data?.last_name
@@ -54,7 +62,13 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 					},
 				]}
 			/>
-			<ApplicantInfo lng={lng} applicant={data} loading={isLoading} />
+			<ApplicantInfo
+				lng={lng}
+				applicant={data}
+				loading={isLoading}
+				mutate={mutate}
+			/>
+			<ApplicantSurveys lng={lng} applicantId={id} />
 			{/* <CustomDataTable
 				title={t("applicant_items_imports")}
 				url={`/applicant_items?applicant_id=${id}`}

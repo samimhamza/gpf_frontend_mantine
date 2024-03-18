@@ -143,7 +143,7 @@ const TeacherModal = ({
 							values[key] = value.toString();
 						}
 						if (key == "relevantable_id" && value) {
-							values.school_id = value.toString();
+							values["school_id"] = value.toString();
 						}
 					});
 					form.setValues(values);

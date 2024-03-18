@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import { Center, Group, Paper, Title } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -83,45 +84,46 @@ const MantineDataTable = ({
 
 	return (
 		<>
-			<DataTable
-				height={height ? height : 550}
-				withTableBorder
-				highlightOnHover
-				withColumnBorders
-				striped
-				verticalAlign="top"
-				pinLastColumn
-				columns={columns}
-				groups={[
-					{
-						id: "title",
-						title: title,
-						textAlign: "center",
-						columns: columns,
-					},
-				]}
-				fetching={isLoading}
-				records={data?.data}
-				page={data?.page ? data?.page : 1}
-				onPageChange={handlePageChange}
-				totalRecords={data?.total}
-				recordsPerPage={data?.per_page ? data?.per_page : 20}
-				sortStatus={sortStatus}
-				onSortStatusChange={handleSortStatusChange}
-				selectedRecords={showDelete ? selectedRecords : undefined}
-				onSelectedRecordsChange={showDelete ? setSelectedRecords : undefined}
-				shadow="sm"
-				borderRadius="sm"
-				loadingText={t("loading_data")}
-				noRecordsText={t("no_records")}
-				// paginationText={({ from, to, totalRecords }) =>
-				// 	`Records ${from} - ${to} of ${totalRecords}`
-				// }
-				// 👇 uncomment the next lines to use custom pagination colors
-				// paginationActiveBackgroundColor="green"
-				// paginationActiveTextColor="#e6e348"
-				{...additionalProps}
-			/>
+			<Paper withBorder shadow="sm" my="md">
+				<Center className="datatable_title">
+					<Group justify="space-between" align="center" p="sm">
+						<Title order={4}>{title}</Title>
+					</Group>
+				</Center>
+				<DataTable
+					height={height ? height : 550}
+					highlightOnHover
+					withColumnBorders
+					striped
+					verticalAlign="top"
+					pinLastColumn
+					columns={columns}
+					fetching={isLoading}
+					records={data?.data}
+					page={data?.page ? data?.page : 1}
+					onPageChange={handlePageChange}
+					totalRecords={data?.total}
+					recordsPerPage={data?.per_page ? data?.per_page : 20}
+					sortStatus={sortStatus}
+					onSortStatusChange={handleSortStatusChange}
+					selectedRecords={showDelete ? selectedRecords : undefined}
+					onSelectedRecordsChange={showDelete ? setSelectedRecords : undefined}
+					loadingText={t("loading_data")}
+					noRecordsText={t("no_records")}
+					// paginationText={({ from, to, totalRecords }) =>
+					// 	`Records ${from} - ${to} of ${totalRecords}`
+					// }
+					// 👇 uncomment the next lines to use custom pagination colors
+					// paginationActiveBackgroundColor="green"
+					// paginationActiveTextColor="#e6e348"
+					{...additionalProps}
+				/>
+			</Paper>
+			<style jsx global>{`
+				.datatable_title {
+					border-bottom: 1px solid var(--mantine-color-gray-4);
+				}
+			`}</style>
 		</>
 	);
 };

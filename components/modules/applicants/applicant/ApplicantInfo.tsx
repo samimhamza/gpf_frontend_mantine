@@ -1,30 +1,39 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import { useAxios } from "@/customHooks/useAxios";
+import { applicantStatuses } from "@/shared/columns";
 import { Genders, getType, StaffTypes, SurveyTypes } from "@/shared/constants";
 import { getDateTime } from "@/shared/functions";
 import {
+	Badge,
 	Box,
 	Center,
 	Flex,
 	Group,
+	Loader,
 	LoadingOverlay,
+	Menu,
 	Paper,
 	Text,
 	Title,
 	useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { DataTable } from "mantine-datatable";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { GoChevronDown } from "react-icons/go";
 
 const ApplicantInfo = ({
 	lng,
 	applicant,
 	loading,
+	mutate,
 }: {
 	lng: string;
 	applicant: any;
 	loading: boolean;
+	mutate: any;
 }) => {
 	const { t } = useTranslation(lng);
 	const types = SurveyTypes(t);
@@ -32,33 +41,105 @@ const ApplicantInfo = ({
 	const staffTypes = StaffTypes(t);
 	const theme = useMantineTheme();
 	const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
+	const statuses = applicantStatuses(t);
+	const callApi = useAxios();
+	const [statusLoading, setStatusLoading] = useState(false);
+
+	const getStatus = (status: string) => {
+		return statuses.find((item) => item.status == status);
+	};
+
+	const getMenu = (id: number, currentStatus: string) =>
+		statuses.map((item) => (
+			<Menu.Item onClick={() => changeStatus(id, currentStatus, item.status)}>
+				{item.text}
+			</Menu.Item>
+		));
+
+	const changeStatus = async (
+		id: number,
+		currentStatus: string,
+		newStatus: string
+	) => {
+		if (currentStatus != newStatus) {
+			setStatusLoading(true);
+			const { status } = await callApi({
+				method: "PUT",
+				url: "applicants/" + id + "/status",
+				data: {
+					status: newStatus,
+				},
+			});
+			if (status == 202) {
+				mutate();
+			} else {
+				toast.error(t("something_went_wrong"));
+			}
+			setStatusLoading(false);
+		}
+	};
 
 	return (
 		<>
 			<Paper withBorder shadow="sm" mb="md">
-				<Center className="applicant-title" p="sm">
-					<Title order={3}>{t("applicant_info")}</Title>
-				</Center>
-				<Box pos="relative" px="xl" p="md">
+				<Group
+					justify="space-between"
+					align="center"
+					className="applicant-title"
+					p="md"
+				>
+					<Title order={3}>
+						{applicant?.relevantable_type == "School"
+							? t("teacher_info")
+							: t("applicant_info")}
+					</Title>
+					{applicant?.status && (
+						<Menu shadow="md" width={100}>
+							<Menu.Target>
+								<Badge
+									style={{ cursor: "pointer" }}
+									color={getStatus(applicant?.status)?.color}
+									rightSection={<GoChevronDown size={16} />}
+									p="sm"
+								>
+									{statusLoading ? (
+										<Center>
+											<Loader size={20} color="white" />
+										</Center>
+									) : (
+										<Text size="md" fw={500}>
+											{getStatus(applicant?.status)?.text}
+										</Text>
+									)}
+								</Badge>
+							</Menu.Target>
+							<Menu.Dropdown>
+								{getMenu(applicant?.id, applicant?.status)}
+							</Menu.Dropdown>
+						</Menu>
+					)}
+				</Group>
+				<Box pos="relative" p="md">
 					<LoadingOverlay
 						visible={loading}
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<Flex gap="sm" p="sm" justify="space-between" wrap="wrap">
-						<Group style={{ flex: "1 1 100%", maxWidth: "100%" }}>
+					<Flex
+						px="sm"
+						direction={{ base: "column", sm: "row" }}
+						gap="sm"
+						pt="sm"
+						justify="center"
+						wrap="wrap"
+					>
+						<Group flex={1} wrap="nowrap" className="flex-item">
 							<Text>{t("id")} :</Text>
 							<Text>{applicant?.id}</Text>
 						</Group>
-						<Group style={{ flex: "1 1 100%", maxWidth: "100%" }}>
+						<Group flex={1} wrap="nowrap">
 							<Text>{t("office")} :</Text>
 							<Text>{applicant?.office?.name}</Text>
-						</Group>
-						<Group style={{ flex: "1 1 100%", maxWidth: "100%" }}>
-							<Text>{t("full_name")} :</Text>
-							<Text>
-								{applicant?.first_name} {applicant?.last_name}
-							</Text>
 						</Group>
 					</Flex>
 					<Flex
@@ -66,8 +147,14 @@ const ApplicantInfo = ({
 						direction={{ base: "column", sm: "row" }}
 						gap="sm"
 						pt="sm"
-						justify={"center"}
+						justify="center"
 					>
+						<Group flex={1} wrap="nowrap">
+							<Text>{t("full_name")} :</Text>
+							<Text>
+								{applicant?.first_name} {applicant?.last_name}
+							</Text>
+						</Group>
 						<Group flex={1}>
 							<Text>{t("father_name")} :</Text>
 							<Text>{applicant?.father_name}</Text>
@@ -78,7 +165,23 @@ const ApplicantInfo = ({
 						direction={{ base: "column", sm: "row" }}
 						gap="sm"
 						pt="sm"
-						justify={"center"}
+						justify="center"
+					>
+						<Group flex={1} wrap="nowrap">
+							<Text>{t("national_id")} :</Text>
+							<Text>{applicant?.national_id}</Text>
+						</Group>
+						<Group flex={1}>
+							<Text>{t("phone")} :</Text>
+							<Text>{applicant?.phone}</Text>
+						</Group>
+					</Flex>
+					<Flex
+						px="sm"
+						direction={{ base: "column", sm: "row" }}
+						gap="sm"
+						pt="sm"
+						justify="center"
 					>
 						<Group flex={1}>
 							<Text>{t("main_residence")} :</Text>
@@ -94,7 +197,7 @@ const ApplicantInfo = ({
 						direction={{ base: "column", sm: "row" }}
 						gap="sm"
 						pt="sm"
-						justify={"center"}
+						justify="center"
 					>
 						<Group flex={1}>
 							<Text>{t("current_district")} :</Text>
@@ -110,11 +213,15 @@ const ApplicantInfo = ({
 						direction={{ base: "column", sm: "row" }}
 						gap="sm"
 						pt="sm"
-						justify={"center"}
+						justify="center"
 					>
 						<Group flex={1}>
 							<Text>{t("staff_type")} :</Text>
 							<Text>{getType(staffTypes, applicant?.staff_type)}</Text>
+						</Group>
+						<Group flex={1}>
+							<Text>{t("gender")} :</Text>
+							<Text>{getType(genders, applicant?.gender)}</Text>
 						</Group>
 					</Flex>
 					<Flex
@@ -122,7 +229,28 @@ const ApplicantInfo = ({
 						direction={{ base: "column", sm: "row" }}
 						gap="sm"
 						pt="sm"
-						justify={"center"}
+						justify="center"
+					>
+						<Group flex={1}>
+							<Text>
+								{applicant?.relevantable_type == "School"
+									? t("school")
+									: t("mosque")}
+								:
+							</Text>
+							<Text>{applicant?.relevantable?.name}</Text>
+						</Group>
+						<Group flex={1}>
+							<Text>{t("address")} :</Text>
+							<Text>{applicant?.address}</Text>
+						</Group>
+					</Flex>
+					<Flex
+						px="sm"
+						direction={{ base: "column", sm: "row" }}
+						gap="sm"
+						pt="sm"
+						justify="center"
 					>
 						<Group flex={1}>
 							<Text>{t("created_by")} :</Text>
@@ -138,7 +266,7 @@ const ApplicantInfo = ({
 						direction={{ base: "column", sm: "row" }}
 						gap="sm"
 						pt="sm"
-						justify={"center"}
+						justify="center"
 					>
 						<Group flex={1}>
 							<Text>{t("created_at")} :</Text>
@@ -155,31 +283,6 @@ const ApplicantInfo = ({
 					</Flex>
 				</Box>
 			</Paper>
-
-			{/* <Box my="sm">
-				<DataTable
-					height={250}
-					withTableBorder
-					withColumnBorders
-					striped
-					columns={columns}
-					records={applicant?.items}
-					groups={[
-						{
-							id: "title",
-							title: t("surveys"),
-							textAlign: "center",
-							columns: columns,
-						},
-					]}
-					fetching={loading}
-					totalRecords={applicant?.items?.length}
-					shadow="sm"
-					loadingText={t("loading_data")}
-					noRecordsText={t("no_records")}
-					borderRadius="sm"
-				/>
-			</Box> */}
 			<style jsx global>{`
 				.applicant-title {
 					border-bottom: 1px solid var(--mantine-color-gray-4);

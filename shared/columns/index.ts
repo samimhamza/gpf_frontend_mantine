@@ -8,7 +8,7 @@ export const logColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 			render: ({ created_at }: { created_at: string }) =>
-				getDateTime(created_at),
+				created_at ? getDateTime(created_at) : "",
 		},
 		{
 			accessor: "created_by",
@@ -22,7 +22,7 @@ export const logColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 			render: ({ updated_at }: { updated_at: string }) =>
-				getDateTime(updated_at),
+				updated_at ? getDateTime(updated_at) : "",
 		},
 		{
 			accessor: "updated_by",
@@ -32,3 +32,26 @@ export const logColumns = (t: (arg: string) => string) => {
 		},
 	];
 };
+
+export const applicantStatuses = (t: (arg: string) => string) => [
+	{
+		status: "active",
+		color: "teal",
+		text: t("active"),
+	},
+	{
+		status: "inactive",
+		color: "gray",
+		text: t("inactive"),
+	},
+	{
+		status: "pending",
+		color: "yellow",
+		text: t("pending"),
+	},
+	{
+		status: "rejected",
+		color: "red",
+		text: t("rejected"),
+	},
+];

@@ -41,14 +41,16 @@ export const CharityPackageColumns = (t: (arg: string) => string) => {
 			title: t("start_date"),
 			noWrap: true,
 			sortable: true,
-			render: ({ start_date }: { start_date: string }) => getDate(start_date),
+			render: ({ start_date }: { start_date: string }) =>
+				start_date ? getDate(start_date) : "",
 		},
 		{
 			accessor: "end_date",
 			title: t("end_date"),
 			noWrap: true,
 			sortable: true,
-			render: ({ end_date }: { end_date: string }) => getDate(end_date),
+			render: ({ end_date }: { end_date: string }) =>
+				end_date ? getDate(end_date) : "",
 		},
 		{
 			accessor: "cash_amount",
