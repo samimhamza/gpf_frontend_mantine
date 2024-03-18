@@ -12,7 +12,12 @@ export const TeacherColumns = (
 	const statuses = applicantStatuses(t);
 
 	return [
-		{ accessor: "id", hidden: true },
+		{
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
 		{ accessor: "school_id", hidden: true },
 		{
 			accessor: "school_name",

@@ -4,7 +4,12 @@ export const WarehouseColumns = (t: (arg: string) => string) => {
 	const logs = logColumns(t);
 
 	return [
-		{ accessor: "id", hidden: true },
+		{
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
 		{
 			accessor: "name",
 			title: t("name"),
@@ -12,7 +17,7 @@ export const WarehouseColumns = (t: (arg: string) => string) => {
 			sortable: true,
 		},
 		{
-			accessor: "office_name",
+			accessor: "office_code",
 			title: t("office"),
 			noWrap: true,
 			sortable: true,

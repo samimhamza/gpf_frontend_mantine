@@ -29,8 +29,12 @@ export const UserColumns = (
 	];
 
 	return [
-		{ accessor: "id", hidden: true },
-		{ accessor: "office_id", hidden: true },
+		{
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
 		{
 			accessor: "full_name",
 			title: t("full_name"),
@@ -38,7 +42,7 @@ export const UserColumns = (
 			sortable: true,
 		},
 		{
-			accessor: "office_name",
+			accessor: "office_code",
 			title: t("office"),
 			noWrap: true,
 			sortable: true,

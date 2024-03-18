@@ -7,7 +7,9 @@ export const ApplicantSurveyColumns = (t: (arg: string) => string) => {
 	return [
 		{
 			accessor: "id",
-			hidden: true,
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
 		},
 		{
 			accessor: "survey_date",

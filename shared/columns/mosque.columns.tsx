@@ -34,10 +34,14 @@ export const MosqueColumns = (
 	];
 
 	return [
-		{ accessor: "id", hidden: true },
-		{ accessor: "office_id", hidden: true },
 		{
-			accessor: "office_name",
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
+		{
+			accessor: "office_code",
 			title: t("office"),
 			noWrap: true,
 			sortable: true,

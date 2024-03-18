@@ -26,6 +26,13 @@ const OfficeStepOne = ({ form, lng }: OfficeStepOneProps) => {
 					withAsterisk
 					{...form.getInputProps("name")}
 				/>
+				<TextInput
+					style={{ flex: 1 }}
+					label={t("code")}
+					placeholder={t("code")}
+					withAsterisk
+					{...form.getInputProps("code")}
+				/>
 			</Flex>
 		</>
 	);

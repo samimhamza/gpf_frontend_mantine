@@ -29,7 +29,12 @@ export const CategoryColumns = (
 	];
 
 	return [
-		{ accessor: "id", hidden: true },
+		{
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
 		{
 			accessor: "name",
 			title: t("name"),

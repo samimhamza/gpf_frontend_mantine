@@ -12,5 +12,15 @@ export const OfficeSchema = (t: (arg: string) => string) => {
 			.max(64, {
 				message: t("max_64_length_error"),
 			}),
+		code: z
+			.string({
+				invalid_type_error: t("invalid_type"),
+			})
+			.min(2, {
+				message: t("min_3_length_error"),
+			})
+			.max(16, {
+				message: t("max_64_length_error"),
+			}),
 	});
 };
