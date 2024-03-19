@@ -9,9 +9,10 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"@mantine/core": "^7.5.3",
+		"@mantine/core": "^7.6.2",
+		"@mantine/dropzone": "^7.6.2",
 		"@mantine/form": "^7.5.3",
-		"@mantine/hooks": "^7.5.3",
+		"@mantine/hooks": "^7.6.2",
 		"@mantine/modals": "^7.5.3",
 		"@mantine/notifications": "^7.5.3",
 		"accept-language": "^3.0.18",
@@ -29,6 +30,7 @@
 		"next-auth": "^4.24.6",
 		"qrcode": "^1.5.3",
 		"react": "^18",
+		"react-avatar-editor": "^13.0.2",
 		"react-cookie": "^7.0.2",
 		"react-dom": "^18",
 		"react-hot-toast": "^2.4.1",
@@ -44,6 +46,7 @@
 	"devDependencies": {
 		"@types/node": "^20",
 		"@types/react": "^18",
+		"@types/react-avatar-editor": "^13.0.2",
 		"@types/react-dom": "^18",
 		"eslint": "^8",
 		"eslint-config-next": "14.1.0",

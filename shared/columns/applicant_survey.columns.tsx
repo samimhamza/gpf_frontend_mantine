@@ -27,7 +27,7 @@ export const ApplicantSurveyColumns = (t: (arg: string) => string) => {
 		},
 		{
 			accessor: "charity_package.name",
-			title: t("package"),
+			title: t("charity_package"),
 			noWrap: true,
 			sortable: true,
 		},
@@ -44,11 +44,10 @@ export const ApplicantSurveyColumns = (t: (arg: string) => string) => {
 			sortable: true,
 		},
 		{
-			accessor: "items",
-			title: t("items_count"),
+			accessor: "charity_package.items_count",
+			title: t("total_items"),
 			noWrap: true,
 			sortable: true,
-			render: (record: any) => record.charity_package.items.length,
 		},
 		{
 			accessor: "charity_package.start_date",

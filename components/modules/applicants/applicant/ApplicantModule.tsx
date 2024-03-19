@@ -63,12 +63,13 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 				]}
 			/>
 			<ApplicantInfo
+				applicantId={id}
 				lng={lng}
 				applicant={data}
 				loading={isLoading}
 				mutate={mutate}
 			/>
-			<ApplicantSurveys lng={lng} applicantId={id} />
+			<ApplicantSurveys lng={lng} applicantId={id} applicant={data} />
 			{/* <CustomDataTable
 				title={t("applicant_items_imports")}
 				url={`/applicant_items?applicant_id=${id}`}

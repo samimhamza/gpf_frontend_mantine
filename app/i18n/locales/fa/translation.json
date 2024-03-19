@@ -143,7 +143,7 @@
 	"end_date_must_be_greater": "تاریخ ختم باید بزرگتر ویا مساوی به تاریخ شروع باشد",
 	"charity_package": "پکیج خیریه",
 	"assign_package_for_non_survey": "تعیین پکیج خیریه برای متقاضیان بدون سروی",
-	"assign_package": "تعیین پکیج",
+	"assign_package": "تعیین پکیج جدید",
 	"warehouses": "انبار ها",
 	"warehouse_info": "اطلاعات انبار",
 	"add_warehouse": "ایجاد انبار جدید",
@@ -159,5 +159,12 @@
 	"total_quantity": "موجودی",
 	"min_2_length_error": "حد اقل ۲ حرف ضروری است",
 	"applicant_info": "اطلاعات متقاضی",
-	"packages_history": "تاریخچه پکیج های تعیین شده"
+	"packages_history": "تاریخچه پکیج های تعیین شده",
+	"implements_count": "تعداد کمک های دریافت شده",
+	"survey_date": "تاریخ سروی/تعیین پکیج",
+	"zoom": "زوم",
+	"rotate": "چرخش",
+	"save": "ثبت",
+	"profile": "پروفایل",
+	"edit": "ویرایش"
 }

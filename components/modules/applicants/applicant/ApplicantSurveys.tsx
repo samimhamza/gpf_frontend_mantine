@@ -3,22 +3,29 @@
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
 import { ApplicantSurveyColumns } from "@/shared/columns/applicant_survey.columns";
-import { Box, Center, Group, Paper, Title } from "@mantine/core";
+import { Button, Flex, Group, Paper, Title } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import useSWR from "swr";
-import PackageItems from "./PackageItems";
 import { getDate } from "@/shared/functions";
+import { useState } from "react";
+import { MdAdd, MdDelete } from "react-icons/md";
+import { useDisclosure } from "@mantine/hooks";
 
 const ApplicantSurveys = ({
 	lng,
 	applicantId,
+	applicant,
 }: {
 	lng: string;
 	applicantId: number;
+	applicant: any;
 }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
 	const columns = ApplicantSurveyColumns(t);
+	const [selectedRecords, setSelectedRecords] = useState([]);
+	const [deleteLoading, setDeleteLoading] = useState(false);
+	const [opened, { open, close }] = useDisclosure();
 
 	const { data, error, isLoading, mutate } = useSWR(
 		`/applicant_surveys/${applicantId}`,
@@ -31,14 +38,41 @@ const ApplicantSurveys = ({
 		}
 	);
 
+	const handleDelete = () => {};
+
 	return (
 		<>
 			<Paper withBorder shadow="sm" my="md">
-				<Center className="applicant-title">
-					<Group justify="space-between" align="center" p="sm">
-						<Title order={4}>{t("packages_history")}</Title>
-					</Group>
-				</Center>
+				<Flex
+					justify={{ base: "center", sm: "space-between" }}
+					align="center"
+					className="applicant-title"
+					p="md"
+					gap="sm"
+					wrap="wrap"
+				>
+					<Title order={4}>{t("packages_history")}</Title>
+
+					{applicant?.status == "active" && (
+						<Group>
+							{selectedRecords.length > 0 && (
+								<Button
+									loading={deleteLoading}
+									onClick={handleDelete}
+									color="red"
+									rightSection={<MdDelete size={14} />}
+								>
+									{t("delete")}
+								</Button>
+							)}
+							{
+								<Button onClick={open} rightSection={<MdAdd size={14} />}>
+									{t("assign_package")}
+								</Button>
+							}
+						</Group>
+					)}
+				</Flex>
 				<DataTable
 					height={250}
 					withColumnBorders
@@ -46,6 +80,12 @@ const ApplicantSurveys = ({
 					records={data?.data}
 					fetching={isLoading}
 					totalRecords={data?.data?.length}
+					selectedRecords={
+						applicant?.status == "active" ? selectedRecords : undefined
+					}
+					onSelectedRecordsChange={
+						applicant?.status == "active" ? setSelectedRecords : undefined
+					}
 					loadingText={t("loading_data")}
 					noRecordsText={t("no_records")}
 					rowBackgroundColor={(record: any) => {

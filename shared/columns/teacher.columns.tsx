@@ -1,3 +1,4 @@
+import { Avatar, Center } from "@mantine/core";
 import { applicantStatuses, logColumns } from ".";
 import { statusColum } from "./statusColum";
 import { Dispatch, SetStateAction } from "react";
@@ -18,12 +19,22 @@ export const TeacherColumns = (
 			noWrap: true,
 			sortable: true,
 		},
-		{ accessor: "school_id", hidden: true },
 		{
 			accessor: "school_name",
 			title: t("school_name"),
 			noWrap: true,
 			sortable: true,
+		},
+		{
+			accessor: "profile",
+			title: t("profile"),
+			noWrap: true,
+			sortable: true,
+			render: ({ profile }: { profile: string }) => (
+				<Center>
+					<Avatar src={profile} alt="profile" size={35} />
+				</Center>
+			),
 		},
 		{
 			accessor: "first_name",

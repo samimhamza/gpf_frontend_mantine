@@ -19,6 +19,44 @@ export const getTime = (date: any) => {
 		: date;
 };
 
+export const isObject = (variable: any) => {
+	return (
+		typeof variable === "object" &&
+		!Array.isArray(variable) &&
+		variable !== null
+	);
+};
+
+export const getFormData = (data: any) => {
+	const formData = new FormData();
+	Object.keys(data).forEach((key) => {
+		let keyName = key;
+		if (Array.isArray(data[key])) {
+			keyName = key.toString() + "[]";
+			data[key].forEach((value: any) => {
+				if (value instanceof File) {
+					formData.append(keyName, value);
+				} else if (isObject(value)) {
+					formData.append(keyName, JSON.stringify(value));
+				} else {
+					formData.append(keyName, value);
+				}
+			});
+		} else if (isObject(data[keyName])) {
+			if (data[keyName] instanceof File) {
+				formData.append(keyName, data[keyName]);
+			} else {
+				formData.append(keyName, JSON.stringify(data[keyName]));
+			}
+		} else {
+			if (data[key] !== null && data[key] !== undefined) {
+				formData.append(keyName, data[key]);
+			}
+		}
+	});
+	return formData;
+};
+
 // Sample of checking uniqueness of multiple insert
 // const checkUniqueness = async () => {
 // 	const data: any = {

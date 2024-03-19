@@ -6,8 +6,10 @@ import { applicantStatuses } from "@/shared/columns";
 import { Genders, getType, StaffTypes, SurveyTypes } from "@/shared/constants";
 import { getDateTime } from "@/shared/functions";
 import {
+	Avatar,
 	Badge,
 	Box,
+	Button,
 	Center,
 	Flex,
 	Group,
@@ -19,17 +21,21 @@ import {
 	Title,
 	useMantineTheme,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { GoChevronDown } from "react-icons/go";
+import { TbEdit } from "react-icons/tb";
+import TeacherModal from "../../teachers/TeacherModal";
 
 const ApplicantInfo = ({
+	applicantId,
 	lng,
 	applicant,
 	loading,
 	mutate,
 }: {
+	applicantId: number;
 	lng: string;
 	applicant: any;
 	loading: boolean;
@@ -44,6 +50,7 @@ const ApplicantInfo = ({
 	const statuses = applicantStatuses(t);
 	const callApi = useAxios();
 	const [statusLoading, setStatusLoading] = useState(false);
+	const [opened, { open, close }] = useDisclosure(false);
 
 	const getStatus = (status: string) => {
 		return statuses.find((item) => item.status == status);
@@ -82,49 +89,66 @@ const ApplicantInfo = ({
 	return (
 		<>
 			<Paper withBorder shadow="sm" mb="md">
-				<Group
-					justify="space-between"
+				<Flex
+					justify={{ base: "center", xs: "space-between" }}
 					align="center"
 					className="applicant-title"
 					p="md"
+					gap="sm"
+					wrap="wrap"
 				>
 					<Title order={3}>
 						{applicant?.relevantable_type == "School"
 							? t("teacher_info")
 							: t("applicant_info")}
 					</Title>
-					{applicant?.status && (
-						<Menu shadow="md" width={100}>
-							<Menu.Target>
-								<Badge
-									style={{ cursor: "pointer" }}
-									color={getStatus(applicant?.status)?.color}
-									rightSection={<GoChevronDown size={16} />}
-									p="sm"
-								>
-									{statusLoading ? (
-										<Center>
-											<Loader size={20} color="white" />
-										</Center>
-									) : (
-										<Text size="md" fw={500}>
-											{getStatus(applicant?.status)?.text}
-										</Text>
-									)}
-								</Badge>
-							</Menu.Target>
-							<Menu.Dropdown>
-								{getMenu(applicant?.id, applicant?.status)}
-							</Menu.Dropdown>
-						</Menu>
+					{applicant?.profile && (
+						<Center>
+							<Avatar
+								size={80}
+								src={applicant?.profile}
+								style={{ cursor: "pointer" }}
+							/>
+						</Center>
 					)}
-				</Group>
+					<Group>
+						<Button onClick={() => open()} rightSection={<TbEdit size={16} />}>
+							{t("edit")}
+						</Button>
+						{applicant?.status && (
+							<Menu shadow="md" width={100}>
+								<Menu.Target>
+									<Badge
+										style={{ cursor: "pointer" }}
+										color={getStatus(applicant?.status)?.color}
+										rightSection={<GoChevronDown size={16} />}
+										p="sm"
+									>
+										{statusLoading ? (
+											<Center>
+												<Loader size={20} color="white" />
+											</Center>
+										) : (
+											<Text size="md" fw={500}>
+												{getStatus(applicant?.status)?.text}
+											</Text>
+										)}
+									</Badge>
+								</Menu.Target>
+								<Menu.Dropdown>
+									{getMenu(applicant?.id, applicant?.status)}
+								</Menu.Dropdown>
+							</Menu>
+						)}
+					</Group>
+				</Flex>
 				<Box pos="relative" p="md">
 					<LoadingOverlay
 						visible={loading}
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
+
 					<Flex
 						px="sm"
 						direction={{ base: "column", sm: "row" }}
@@ -283,6 +307,16 @@ const ApplicantInfo = ({
 					</Flex>
 				</Box>
 			</Paper>
+			{opened && (
+				<TeacherModal
+					opened={opened}
+					close={close}
+					lng={lng}
+					mutate={mutate}
+					title={t("update_teacher")}
+					editId={applicantId}
+				/>
+			)}
 			<style jsx global>{`
 				.applicant-title {
 					border-bottom: 1px solid var(--mantine-color-gray-4);

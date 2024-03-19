@@ -144,7 +144,7 @@
 	"end_date_must_be_greater": "End Date must be greater or equal to start date",
 	"charity_package": "Charity Package",
 	"assign_package_for_non_survey": "Assign Package for non Survey Applicants",
-	"assign_package": "Assign Package",
+	"assign_package": "Assign New Package",
 	"warehouses": "Warehouses",
 	"warehouse_info": "Warehouse Info",
 	"warehouse": "Warehouse",
@@ -160,5 +160,12 @@
 	"total_quantity": "Total Quantity",
 	"min_2_length_error": "Minimum 3 characters required",
 	"applicant_info": "Application Info",
-	"packages_history": "Packages Received History"
+	"packages_history": "Packages Received History",
+	"implements_count": "Total Charity Received",
+	"survey_date": "Survey/Package Assign Date",
+	"zoom": "Zoom",
+	"rotate": "Rotate",
+	"save": "Save",
+	"profile": "Profile",
+	"edit": "Edit"
 }
