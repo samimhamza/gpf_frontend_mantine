@@ -4,7 +4,6 @@ import {
 	Avatar,
 	Box,
 	Center,
-	CloseButton,
 	Group,
 	Text,
 	Title,
@@ -86,6 +85,7 @@ const Profile = ({ lng, profileUrl, name, form, title }: ProfileProps) => {
 								onClick={(e) => {
 									e.stopPropagation();
 									profileUrl.current = "";
+									form.setFieldValue("deleted", true);
 								}}
 							>
 								<IoClose size={16} />
