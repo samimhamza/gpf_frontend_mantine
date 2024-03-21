@@ -133,7 +133,10 @@ const UserModal = ({
 			if (status == 200 && response.result == true) {
 				setOffices(
 					response.data.map((item: any) => {
-						return { value: item.id.toString(), label: item.name };
+						return {
+							value: item.id.toString(),
+							label: item.name + " (" + item.code + ")",
+						};
 					})
 				);
 			}

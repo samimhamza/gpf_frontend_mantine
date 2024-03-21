@@ -7,9 +7,9 @@ import {
 	Burger,
 	Flex,
 	Group,
+	Title,
 	ScrollArea,
 	Box,
-	Title,
 	Menu,
 	rem,
 	LoadingOverlay,
@@ -58,6 +58,7 @@ export function AdminLayout({
 		)
 			return item;
 	});
+
 	const logout = async () => {
 		setLoading(true);
 		const { status } = await callApi({ method: "POST", url: "/logout" });

@@ -1,8 +1,15 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import { Box, Center, Group, Paper, Title } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 
 interface DataProps {
 	data: Array<any>;
@@ -12,6 +19,7 @@ interface DataProps {
 }
 
 interface DataTableProps {
+	title: string | ReactNode;
 	columns: Array<any>;
 	search: string;
 	lng: string;
@@ -22,9 +30,15 @@ interface DataTableProps {
 	data: DataProps;
 	isLoading: boolean;
 	showDelete: boolean;
+	orderBy: {
+		column: string;
+		order: "desc" | "asc";
+	};
+	height?: number;
 }
 
 const MantineDataTable = ({
+	title,
 	columns,
 	search,
 	lng,
@@ -35,7 +49,8 @@ const MantineDataTable = ({
 	data,
 	isLoading,
 	showDelete,
-
+	orderBy,
+	height,
 	...additionalProps
 }: DataTableProps) => {
 	const { t } = useTranslation(lng);
@@ -43,8 +58,8 @@ const MantineDataTable = ({
 		columnAccessor: string;
 		direction: "desc" | "asc";
 	}>({
-		columnAccessor: "created_at",
-		direction: "desc",
+		columnAccessor: orderBy.column,
+		direction: orderBy.order,
 	});
 
 	useEffect(() => {
@@ -73,39 +88,56 @@ const MantineDataTable = ({
 		setSortStatus(status);
 	};
 
+	const dataTable = (
+		<DataTable
+			height={height ? height : 550}
+			highlightOnHover
+			withColumnBorders
+			striped
+			verticalAlign="top"
+			pinLastColumn
+			columns={columns}
+			fetching={isLoading}
+			records={data?.data}
+			page={data?.page ? data?.page : 1}
+			onPageChange={handlePageChange}
+			totalRecords={data?.total}
+			recordsPerPage={data?.per_page ? data?.per_page : 20}
+			sortStatus={sortStatus}
+			onSortStatusChange={handleSortStatusChange}
+			selectedRecords={showDelete ? selectedRecords : undefined}
+			onSelectedRecordsChange={showDelete ? setSelectedRecords : undefined}
+			loadingText={t("loading_data")}
+			noRecordsText={t("no_records")}
+			// paginationText={({ from, to, totalRecords }) =>
+			// 	`Records ${from} - ${to} of ${totalRecords}`
+			// }
+			// 👇 uncomment the next lines to use custom pagination colors
+			// paginationActiveBackgroundColor="green"
+			// paginationActiveTextColor="#e6e348"
+			{...additionalProps}
+		/>
+	);
+
 	return (
 		<>
-			<DataTable
-				height={550}
-				withTableBorder
-				highlightOnHover
-				withColumnBorders
-				striped
-				verticalAlign="top"
-				pinLastColumn
-				columns={columns}
-				fetching={isLoading}
-				records={data?.data}
-				page={data?.page ? data?.page : 1}
-				onPageChange={handlePageChange}
-				totalRecords={data?.total}
-				recordsPerPage={data?.per_page ? data?.per_page : 20}
-				sortStatus={sortStatus}
-				onSortStatusChange={handleSortStatusChange}
-				selectedRecords={showDelete ? selectedRecords : undefined}
-				onSelectedRecordsChange={showDelete ? setSelectedRecords : undefined}
-				shadow="sm"
-				borderRadius="sm"
-				loadingText={t("loading_data")}
-				noRecordsText={t("no_records")}
-				// paginationText={({ from, to, totalRecords }) =>
-				// 	`Records ${from} - ${to} of ${totalRecords}`
-				// }
-				// 👇 uncomment the next lines to use custom pagination colors
-				// paginationActiveBackgroundColor="green"
-				// paginationActiveTextColor="#e6e348"
-				{...additionalProps}
-			/>
+			<Paper withBorder shadow="sm" my="md">
+				{typeof title == "string" ? (
+					<Center className="datatable_title">
+						<Group justify="space-between" align="center" p="sm">
+							<Title order={4}>{title}</Title>
+						</Group>
+					</Center>
+				) : (
+					<Box className="datatable_title">{title}</Box>
+				)}
+				{dataTable}
+			</Paper>
+			<style jsx global>{`
+				.datatable_title {
+					border-bottom: 1px solid var(--mantine-color-gray-4);
+				}
+			`}</style>
 		</>
 	);
 };

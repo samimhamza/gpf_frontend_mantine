@@ -1,4 +1,4 @@
-import { Breadcrumbs, Paper, Text } from "@mantine/core";
+import { Box, Breadcrumbs, Paper, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
 interface ItemProps {
@@ -8,14 +8,17 @@ interface ItemProps {
 const CustomBreadCrumb = ({ items }: { items: Array<ItemProps> }) => {
 	const router = useRouter();
 	const breadCrumbsItems = items.map((item, index) => (
-		<Text
-			key={index}
-			c={item?.link ? "blue" : ""}
-			style={item?.link ? { cursor: "pointer" } : {}}
-			onClick={() => item?.link && router.push(item.link)}
-		>
-			{item.title}
-		</Text>
+		<>
+			<Box style={item?.link ? { cursor: "pointer" } : {}}>
+				<Text
+					key={index}
+					c={item?.link ? "blue" : ""}
+					onClick={() => item?.link && router.push(item.link)}
+				>
+					{item.title}
+				</Text>
+			</Box>
+		</>
 	));
 
 	return (

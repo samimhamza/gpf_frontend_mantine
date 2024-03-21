@@ -28,12 +28,6 @@ export const CharityPackageModule = ({ lng }: { lng: string }) => {
 		}
 	}, [edit]);
 
-	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
-		}
-	}, [opened]);
-
 	return (
 		<>
 			<CustomBreadCrumb
@@ -43,6 +37,7 @@ export const CharityPackageModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("charity_packages")}
 				url="/charity_packages"
 				deleteUrl="/charity_packages/1"
 				lng={lng}
@@ -60,7 +55,10 @@ export const CharityPackageModule = ({ lng }: { lng: string }) => {
 			{opened && (
 				<CharityPackageModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_charity_package") : t("update_charity_package")}

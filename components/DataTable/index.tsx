@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 import ActionMenu from "./ActionMenu";
 import { MantineDataTable } from "./MantineDataTable";
 import useSWR from "swr";
@@ -8,6 +14,7 @@ import { TbClick } from "react-icons/tb";
 import { Actions } from "./Actions";
 
 interface DataTableProps {
+	title: string | ReactNode;
 	url: string;
 	deleteUrl: string;
 	columns: Array<any>;
@@ -16,15 +23,25 @@ interface DataTableProps {
 	mutated: boolean;
 	setMutated: Dispatch<SetStateAction<boolean>>;
 	setEdit: Dispatch<SetStateAction<number | undefined>>;
-	setView: Dispatch<SetStateAction<number | undefined>>;
+	setView?: Dispatch<SetStateAction<number | undefined>>;
 	showAdd: boolean;
 	showDelete: boolean;
 	showEdit: boolean;
 	showView?: boolean;
 	setAddPackage?: Dispatch<SetStateAction<number | undefined>>;
+	packageTitle?: string;
+	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>>;
+	height?: number;
+	orderBy?: {
+		column: string;
+		order: "desc" | "asc";
+	};
+	showActionMenu?: boolean;
+	setRecords?: any;
 }
 
 const CustomDataTable = ({
+	title,
 	url,
 	deleteUrl,
 	columns,
@@ -39,6 +56,15 @@ const CustomDataTable = ({
 	showEdit,
 	showView = true,
 	setAddPackage = undefined,
+	packageTitle = undefined,
+	setPrintOrViewCard = undefined,
+	height = undefined,
+	orderBy = {
+		column: "created_at",
+		order: "desc",
+	},
+	showActionMenu = true,
+	setRecords,
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios();
@@ -48,10 +74,7 @@ const CustomDataTable = ({
 		page: 1,
 		per_page: 20,
 		search: "",
-		order_by: {
-			column: "created_at",
-			order: "desc",
-		},
+		order_by: orderBy,
 		filter_data: {},
 	});
 	const { data, error, isLoading, mutate } = useSWR(
@@ -83,6 +106,8 @@ const CustomDataTable = ({
 			showEdit={showEdit}
 			showView={showView}
 			setAddPackage={setAddPackage}
+			packageTitle={packageTitle}
+			setPrintOrViewCard={setPrintOrViewCard}
 		/>
 	);
 
@@ -100,20 +125,29 @@ const CustomDataTable = ({
 		});
 	}
 
+	useEffect(() => {
+		if (setRecords) {
+			setRecords(selectedRecords);
+		}
+	}, [selectedRecords]);
+
 	return (
 		<>
-			<ActionMenu
-				deleteUrl={deleteUrl}
-				onSearch={setSearch}
-				lng={lng}
-				selectedRecords={selectedRecords}
-				setSelectedRecords={setSelectedRecords}
-				mutate={mutate}
-				open={open}
-				showAdd={showAdd}
-				showDelete={showDelete}
-			/>
+			{showActionMenu && (
+				<ActionMenu
+					deleteUrl={deleteUrl}
+					onSearch={setSearch}
+					lng={lng}
+					selectedRecords={selectedRecords}
+					setSelectedRecords={setSelectedRecords}
+					mutate={mutate}
+					open={open}
+					showAdd={showAdd}
+					showDelete={showDelete}
+				/>
+			)}
 			<MantineDataTable
+				title={title}
 				lng={lng}
 				columns={columns}
 				search={search}
@@ -124,6 +158,8 @@ const CustomDataTable = ({
 				data={data}
 				isLoading={isLoading}
 				showDelete={showDelete}
+				height={height}
+				orderBy={orderBy}
 				{...additionalProps}
 			/>
 		</>

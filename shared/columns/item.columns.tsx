@@ -4,7 +4,12 @@ export const ItemColumns = (t: (arg: string) => string) => {
 	const logs = logColumns(t);
 
 	return [
-		{ accessor: "id", hidden: true },
+		{
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
 		{
 			accessor: "name",
 			title: t("name"),

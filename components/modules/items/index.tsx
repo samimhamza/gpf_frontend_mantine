@@ -28,12 +28,6 @@ export const ItemModule = ({ lng }: { lng: string }) => {
 		}
 	}, [edit]);
 
-	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
-		}
-	}, [opened]);
-
 	return (
 		<>
 			<CustomBreadCrumb
@@ -43,6 +37,7 @@ export const ItemModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("items")}
 				url="/items"
 				deleteUrl="/items/1"
 				lng={lng}
@@ -60,7 +55,10 @@ export const ItemModule = ({ lng }: { lng: string }) => {
 			{opened && (
 				<ItemModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_item") : t("update_item")}

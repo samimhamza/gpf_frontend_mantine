@@ -7,6 +7,7 @@ import {
 	Fieldset,
 	Flex,
 	Select,
+	Text,
 	TextInput,
 } from "@mantine/core";
 import { FaTrashAlt } from "react-icons/fa";
@@ -31,6 +32,26 @@ const CharityPackageStepTwo = ({
 
 	return (
 		<Box>
+			{form.values.items.length == 0 && (
+				<>
+					<Flex gap="sm" p="sm" justify={{ sm: "center" }}>
+						<ActionIcon
+							onClick={() =>
+								form.insertListItem("items", {
+									item_id: "",
+									quantity: "",
+									unit: "",
+								})
+							}
+						>
+							<IoAddCircle size="1.5rem" />
+						</ActionIcon>
+					</Flex>
+					<Text c="dimmed" ta="center">
+						{t("no_items_exists")}
+					</Text>
+				</>
+			)}
 			{form.values.items.map(
 				(
 					item: {
@@ -55,17 +76,12 @@ const CharityPackageStepTwo = ({
 									<IoAddCircle size="1.5rem" />
 								</ActionIcon>
 							)}
-							{form.values.items.length !== 1 && (
-								<ActionIcon
-									color="red"
-									onClick={() =>
-										form.values.items.length !== 1 &&
-										form.removeListItem("items", index)
-									}
-								>
-									<FaTrashAlt size="1rem" />
-								</ActionIcon>
-							)}
+							<ActionIcon
+								color="red"
+								onClick={() => form.removeListItem("items", index)}
+							>
+								<FaTrashAlt size="1rem" />
+							</ActionIcon>
 						</Flex>
 						<Fieldset legend={t("package_items")}>
 							<Flex

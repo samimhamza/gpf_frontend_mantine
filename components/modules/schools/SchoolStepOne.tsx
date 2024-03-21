@@ -6,7 +6,7 @@ import { Flex, Select, TextInput } from "@mantine/core";
 interface SchoolStepOneProps {
 	form: any;
 	lng: string;
-	offices: any;
+	offices: Array<{ value: string; label: string }>;
 }
 
 const SchoolStepOne = ({ form, lng, offices }: SchoolStepOneProps) => {

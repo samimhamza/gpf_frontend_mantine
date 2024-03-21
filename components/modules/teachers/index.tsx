@@ -12,17 +12,23 @@ import {
 	EDIT_APPLICANTS,
 	ADD_APPLICANTS,
 	DELETE_APPLICANTS,
+	CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
+import { useRouter } from "next/navigation";
 
 export const TeacherModule = ({ lng }: { lng: string }) => {
 	const { t } = useTranslation(lng);
+	const router = useRouter();
 	const [mutated, setMutated] = useState(false);
-	const columns = TeacherColumns(t);
+	const columns = TeacherColumns(
+		t,
+		permissionChecker(CHANGE_STATUS),
+		"/applicants/",
+		setMutated
+	);
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
-	const [addPackage, setAddPackage] = useState<number>();
-	const [packageOpen, setPackageOpen] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (edit) {
@@ -31,16 +37,10 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 	}, [edit]);
 
 	useEffect(() => {
-		if (addPackage) {
-			setPackageOpen(true);
+		if (view) {
+			router.push(`/applicants/${view}`);
 		}
-	}, [addPackage]);
-
-	useEffect(() => {
-		if (!opened) {
-			setEdit(undefined);
-		}
-	}, [opened]);
+	}, [view]);
 
 	return (
 		<>
@@ -51,6 +51,7 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 				]}
 			/>
 			<CustomDataTable
+				title={t("teachers")}
 				url="/teachers"
 				deleteUrl="/teachers/1"
 				lng={lng}
@@ -63,28 +64,20 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
 				showAdd={permissionChecker(ADD_APPLICANTS)}
 				showDelete={permissionChecker(DELETE_APPLICANTS)}
 				showEdit={permissionChecker(EDIT_APPLICANTS)}
-				showView={false}
-				setAddPackage={setAddPackage}
 			/>
 			{opened && (
 				<TeacherModal
 					opened={opened}
-					close={close}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
 					lng={lng}
 					setMutated={setMutated}
 					title={!edit ? t("add_teacher") : t("update_teacher")}
 					editId={edit}
 				/>
 			)}
-			{/* {packageOpen && (
-				<AddPackageModal
-					opened={packageOpen}
-					close={() => setPackageOpen(false)}
-					lng={lng}
-					setMutated={setMutated}
-					recordId={addPackage}
-				/>
-			)} */}
 		</>
 	);
 };

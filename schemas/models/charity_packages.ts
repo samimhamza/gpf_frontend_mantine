@@ -10,7 +10,13 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 				.min(1, {
 					message: t("field_required"),
 				}),
-			category_id: z.string().nullable(),
+			category_id: z
+				.string({
+					invalid_type_error: t("invalid_type"),
+				})
+				.min(1, {
+					message: t("field_required"),
+				}),
 			name: z
 				.string({
 					invalid_type_error: t("invalid_type"),
@@ -34,13 +40,18 @@ export const CharityPackageSchema = (t: (arg: string) => string) => {
 							.min(1, {
 								message: t("field_required"),
 							}),
-						quantity: z.string().regex(/^[0-9\-]+$/, t("only_number_allowed")),
+						quantity: z
+							.string()
+							.regex(/^-?\d+(\.\d+)?$/, t("only_number_allowed")),
 						unit: z
 							.string({
 								invalid_type_error: t("invalid_type"),
 							})
-							.min(1, {
-								message: t("field_required"),
+							.min(2, {
+								message: t("min_2_length_error"),
+							})
+							.max(64, {
+								message: t("max_64_length_error"),
 							}),
 					})
 				)

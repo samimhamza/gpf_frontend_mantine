@@ -7,6 +7,7 @@ import {
 	VIEW_OFFICES,
 	VIEW_SCHOOLS,
 	VIEW_USERS,
+	VIEW_WAREHOUSES,
 } from "@/shared/constants/Permissions";
 import { FaUsers } from "react-icons/fa6";
 import { TbGauge } from "react-icons/tb";
@@ -58,6 +59,11 @@ export const navItems = (t: (arg: string) => string) => [
 				label: t("items"),
 				link: "/items",
 				permission: VIEW_ITEMS,
+			},
+			{
+				label: t("warehouses"),
+				link: "/warehouses",
+				permission: VIEW_WAREHOUSES,
 			},
 			{
 				label: t("categories"),

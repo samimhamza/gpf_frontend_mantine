@@ -5,9 +5,14 @@ export const CharityPackageColumns = (t: (arg: string) => string) => {
 	const logs = logColumns(t);
 
 	return [
-		{ accessor: "id", hidden: true },
 		{
-			accessor: "office_name",
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
+		{
+			accessor: "office_code",
 			title: t("office"),
 			noWrap: true,
 			sortable: true,
@@ -41,28 +46,30 @@ export const CharityPackageColumns = (t: (arg: string) => string) => {
 			title: t("start_date"),
 			noWrap: true,
 			sortable: true,
-			render: ({ start_date }: { start_date: string }) => getDate(start_date),
+			render: ({ start_date }: { start_date: string }) =>
+				start_date ? getDate(start_date) : "",
 		},
 		{
 			accessor: "end_date",
 			title: t("end_date"),
 			noWrap: true,
 			sortable: true,
-			render: ({ end_date }: { end_date: string }) => getDate(end_date),
+			render: ({ end_date }: { end_date: string }) =>
+				end_date ? getDate(end_date) : "",
 		},
 		{
 			accessor: "cash_amount",
 			title: t("cash_amount"),
 			noWrap: true,
 			sortable: true,
-		},
-		{
-			accessor: "currency",
-			title: t("currency"),
-			noWrap: true,
-			sortable: true,
-			render: ({ currency }: { currency: string }) =>
-				currency == "USD" ? t("usd") : currency == "AFN" ? t("afn") : "",
+			render: (record: any) =>
+				record.cash_amount +
+				" " +
+				(record.currency == "USD"
+					? t("usd")
+					: record.currency == "AFN"
+					? t("afn")
+					: ""),
 		},
 		...logs,
 	];

@@ -50,6 +50,7 @@ export const useAxios: any = () => {
 					return;
 				}
 			} catch (err: any) {
+				if (err.response.status) status = err.response.status;
 				error = err;
 			} finally {
 				loading = false;

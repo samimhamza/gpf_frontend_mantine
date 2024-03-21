@@ -29,7 +29,18 @@ export const OfficeColumns = (
 	];
 
 	return [
-		{ accessor: "id", hidden: true },
+		{
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
+		{
+			accessor: "code",
+			title: t("code"),
+			noWrap: true,
+			sortable: true,
+		},
 		{
 			accessor: "name",
 			title: t("name"),

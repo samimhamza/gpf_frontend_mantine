@@ -33,6 +33,7 @@ const OfficeModal = ({
 
 	const initialValues: any = {
 		name: "",
+		code: "",
 	};
 
 	const form = useForm({
@@ -99,20 +100,25 @@ const OfficeModal = ({
 			),
 			async validate() {
 				form.validate();
-				let res = form.isValid("name");
-
+				let res = form.isValid();
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",
 						url: "/offices/check_uniqueness",
 						data: {
 							name: form.values.name,
+							code: form.values.code,
 							id: editId ? editId : null,
 						},
 					});
 					if (status == 226) {
 						form.setErrors({
-							name: response.message == 0 && t("value_already_exists"),
+							name:
+								(response.message == 1 || response.message == 0) &&
+								t("value_already_exists"),
+							code:
+								(response.message == 2 || response.message == 0) &&
+								t("value_already_exists"),
 						});
 						return false;
 					} else if (status !== 200) return false;

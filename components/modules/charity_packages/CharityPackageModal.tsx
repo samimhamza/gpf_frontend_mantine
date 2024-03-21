@@ -37,8 +37,8 @@ const CharityPackageModal = ({
 	const [categories, setCategories] = useState([]);
 	const [items, setItems] = useState<any>([]);
 	const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
-	const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
 	const [startDate, setStartDate] = useState<Value>();
+	const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
 	const [endDate, setEndDate] = useState<Value>();
 
 	const initialValues: any = {
@@ -75,6 +75,11 @@ const CharityPackageModal = ({
 			await setMutated(true);
 			return true;
 		}
+		if (status == 423) {
+			toast.error(t("editing_not_allowed"));
+			close();
+			return false;
+		}
 		toast.error(t("something_went_wrong"));
 		return false;
 	};
@@ -104,7 +109,10 @@ const CharityPackageModal = ({
 			if (status == 200 && response.result == true) {
 				setOffices(
 					response.data.map((item: any) => {
-						return { value: item.id.toString(), label: item.name };
+						return {
+							value: item.id.toString(),
+							label: item.name + " (" + item.code + ")",
+						};
 					})
 				);
 			}

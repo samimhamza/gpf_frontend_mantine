@@ -1,17 +1,40 @@
-import { Badge, Center, Text } from "@mantine/core";
-import { logColumns } from ".";
+import { Avatar, Center } from "@mantine/core";
+import { applicantStatuses, logColumns } from ".";
+import { statusColum } from "./statusColum";
+import { Dispatch, SetStateAction } from "react";
 
-export const TeacherColumns = (t: (arg: string) => string) => {
+export const TeacherColumns = (
+	t: (arg: string) => string,
+	showStatus: boolean,
+	statusUrl: string,
+	setMutated: Dispatch<SetStateAction<boolean>>
+) => {
 	const logs = logColumns(t);
+	const statuses = applicantStatuses(t);
 
 	return [
-		{ accessor: "id", hidden: true },
-		{ accessor: "school_id", hidden: true },
+		{
+			accessor: "id",
+			title: t("id"),
+			noWrap: true,
+			sortable: true,
+		},
 		{
 			accessor: "school_name",
 			title: t("school_name"),
 			noWrap: true,
 			sortable: true,
+		},
+		{
+			accessor: "profile",
+			title: t("profile"),
+			noWrap: true,
+			sortable: true,
+			render: ({ profile }: { profile: string }) => (
+				<Center>
+					<Avatar src={profile} alt="profile" size={35} />
+				</Center>
+			),
 		},
 		{
 			accessor: "first_name",
@@ -31,6 +54,7 @@ export const TeacherColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 		},
+		statusColum(t, statuses, statusUrl, showStatus, setMutated),
 		{
 			accessor: "staff_type",
 			title: t("staff_type"),
@@ -51,19 +75,11 @@ export const TeacherColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 			render: ({ type }: { type: string }) =>
-				type == "survey" ? (
-					t("survey")
-				) : type == "without_survey" ? (
-					<Center>
-						<Badge style={{ cursor: "pointer" }} color="green">
-							<Text size="md" fw={500}>
-								{t("without_survey")}
-							</Text>
-						</Badge>
-					</Center>
-				) : (
-					""
-				),
+				type == "survey"
+					? t("survey")
+					: type == "without_survey"
+					? t("without_survey")
+					: "",
 		},
 		{
 			accessor: "phone",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import {
 	Group,
 	Box,
@@ -9,11 +9,10 @@ import {
 	Text,
 	UnstyledButton,
 	rem,
-	Button,
 } from "@mantine/core";
 import { GoChevronLeft } from "react-icons/go";
 import classes from "./NavbarLinksGroup.module.css";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface LinksGroupProps {
 	icon: React.FC<any>;
@@ -34,7 +33,22 @@ export function LinksGroup({
 }: LinksGroupProps) {
 	const hasLinks = Array.isArray(links);
 	const [opened, setOpened] = useState(initiallyOpened || false);
+	const [active, setActive] = useState("");
 	const router = useRouter();
+	const pathname = usePathname();
+
+	// useLayoutEffect(() => {
+	// 	if (hasLinks) {
+	// 		links.forEach((link) => {
+	// 			if (pathname?.includes(link.link)) {
+	// 				setActive(link.link);
+	// 			}
+	// 		});
+	// 	} else if (link && pathname?.includes(link)) {
+	// 		setActive(link);
+	// 	}
+	// }, [pathname]);
+
 	const userNavList = (hasLinks ? links : []).filter((link) => {
 		if (
 			(link.permission && user_permissions.includes(link.permission)) ||
@@ -44,7 +58,7 @@ export function LinksGroup({
 	});
 	const items = userNavList.map((link) => (
 		<Text
-			className={classes.link}
+			className={`${classes.link} ${link.link == active ? classes.active : ""}`}
 			key={link.label}
 			onClick={() => router.push(link.link)}
 		>
@@ -56,7 +70,7 @@ export function LinksGroup({
 		<>
 			<UnstyledButton
 				onClick={() => (!link ? setOpened((o) => !o) : router.push(link))}
-				className={classes.control}
+				className={`${classes.control} ${link == active ? classes.active : ""}`}
 			>
 				<Group justify="space-between" gap={0}>
 					<Box style={{ display: "flex", alignItems: "center" }}>

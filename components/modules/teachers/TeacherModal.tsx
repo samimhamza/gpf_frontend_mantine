@@ -8,23 +8,26 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { FcSurvey } from "react-icons/fc";
+import { getFormData } from "@/shared/functions";
 
 const TeacherModal = ({
 	opened,
 	close,
 	lng,
 	setMutated,
+	mutate,
 	title,
 	editId,
 }: {
 	opened: boolean;
 	close: () => void;
 	lng: string;
-	setMutated: any;
+	setMutated?: any;
+	mutate?: any;
 	title: string;
 	editId: number | undefined;
 }) => {
@@ -35,11 +38,13 @@ const TeacherModal = ({
 	const [loading, setLoading] = useState(false);
 	const [provinces, setProvinces] = useState([]);
 	const [districts, setDistricts] = useState([]);
+	const profileUrl = useRef(null);
 
 	const initialValues: any = {
 		first_name: "",
 		father_name: "",
 		last_name: "",
+		profile: "",
 		phone: "",
 		staff_type: "",
 		national_id: "",
@@ -60,19 +65,26 @@ const TeacherModal = ({
 	});
 
 	const submit = async () => {
+		const values = getFormData(form.values);
 		const { response, status } = !editId
 			? await callApi({
 					method: "POST",
 					url: "/teachers",
-					data: form.values,
+					data: values,
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
 			  })
 			: await callApi({
-					method: "PUT",
-					url: `/teachers/${editId}`,
-					data: form.values,
+					method: "POST",
+					url: `/teachers/${editId}?_method=PUT`,
+					data: values,
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
 			  });
 		if ((!editId ? status == 201 : status == 202) && response.result) {
-			await setMutated(true);
+			mutate ? await mutate() : await setMutated(true);
 			return true;
 		}
 		toast.error(t("something_went_wrong"));
@@ -128,6 +140,7 @@ const TeacherModal = ({
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(initialValues).includes(key)) {
 							if (
+								key != "profile" &&
 								key != "main_residence_id" &&
 								key != "current_residence_id" &&
 								key != "district_id"
@@ -143,7 +156,10 @@ const TeacherModal = ({
 							values[key] = value.toString();
 						}
 						if (key == "relevantable_id" && value) {
-							values.school_id = value.toString();
+							values["school_id"] = value.toString();
+						}
+						if (key == "profile" && value) {
+							profileUrl.current = value;
 						}
 					});
 					form.setValues(values);
@@ -164,13 +180,7 @@ const TeacherModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<TeacherStepOne
-						form={form}
-						lng={lng}
-						schools={schools}
-						provinces={provinces}
-						setDistricts={setDistricts}
-					/>
+					<TeacherStepOne form={form} lng={lng} profileUrl={profileUrl} />
 				</Box>
 			),
 			async validate() {
@@ -179,11 +189,8 @@ const TeacherModal = ({
 					form.isValid("first_name") &&
 					form.isValid("last_name") &&
 					form.isValid("father_name") &&
-					form.isValid("phone") &&
-					form.isValid("school_id") &&
-					form.isValid("national_id") &&
-					form.isValid("gender") &&
-					form.isValid("staff_type");
+					form.isValid("phone");
+
 				if (res && form.values.national_id) {
 					let { response, status } = await callApi({
 						method: "POST",
@@ -213,11 +220,19 @@ const TeacherModal = ({
 					lng={lng}
 					provinces={provinces}
 					districts={districts}
+					schools={schools}
+					setDistricts={setDistricts}
 				/>
 			),
 			async validate() {
 				form.validate();
-				return form.isValid("type");
+				return (
+					form.isValid("type") &&
+					form.isValid("national_id") &&
+					form.isValid("gender") &&
+					form.isValid("school_id") &&
+					form.isValid("staff_type")
+				);
 			},
 		},
 	];
