@@ -4,6 +4,7 @@ import { Box, Input, TextInput } from "@mantine/core";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import jalali_fa from "@/jalali_fa";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
 
 interface PersianDatePicker {
 	label: string;
@@ -11,6 +12,7 @@ interface PersianDatePicker {
 	value: any;
 	onChange: any;
 	errorMessage?: string;
+	dateTime?: boolean;
 }
 
 const PersianDatePicker = ({
@@ -19,6 +21,7 @@ const PersianDatePicker = ({
 	value,
 	onChange,
 	errorMessage,
+	dateTime = false,
 }: PersianDatePicker) => {
 	return (
 		<Box style={{ flex: 1 }}>
@@ -45,6 +48,10 @@ const PersianDatePicker = ({
 							withAsterisk
 							error={errorMessage ? true : false}
 						/>
+					}
+					format={`${dateTime ? "YYYY/MM/DD hh:mm A" : "YYYY/MM/DD"}`}
+					plugins={
+						dateTime ? [<TimePicker position="bottom" hideSeconds />] : []
 					}
 				/>
 			</Box>

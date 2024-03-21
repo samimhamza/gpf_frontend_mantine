@@ -160,12 +160,15 @@
 	"total_quantity": "Total Quantity",
 	"min_2_length_error": "Minimum 3 characters required",
 	"applicant_info": "Application Info",
-	"packages_history": "Packages Received History",
+	"packages_history": "Received Packages History",
 	"implements_count": "Total Charity Received",
 	"survey_date": "Survey/Package Assign Date",
 	"zoom": "Zoom",
 	"rotate": "Rotate",
 	"save": "Save",
 	"profile": "Profile",
-	"edit": "Edit"
+	"edit": "Edit",
+	"editing_not_allowed": "Editing Not Allowed!",
+	"implement_date": "Implement Date",
+	"implements_history": "Received Donations History"
 }

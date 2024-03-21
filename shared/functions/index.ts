@@ -2,7 +2,11 @@ import * as moment from "jalali-moment";
 import { DateObject } from "react-multi-date-picker";
 
 export const getDateTime = (utcTime: string) => {
-	return moment.utc(utcTime).local().locale("fa").format("YYYY-MM-DD HH:mm:ss");
+	return moment
+		.utc(utcTime)
+		.local()
+		.locale("fa")
+		.format("YYYY-MM-DD hh:mm:ss A");
 };
 
 export const getDate = (utcDate: string) => {

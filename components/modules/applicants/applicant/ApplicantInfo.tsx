@@ -27,6 +27,11 @@ import toast from "react-hot-toast";
 import { GoChevronDown } from "react-icons/go";
 import { TbEdit } from "react-icons/tb";
 import TeacherModal from "../../teachers/TeacherModal";
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import {
+	CHANGE_STATUS,
+	EDIT_APPLICANT_PACKAGE_IMPLEMENTS,
+} from "@/shared/constants/Permissions";
 
 const ApplicantInfo = ({
 	applicantId,
@@ -51,6 +56,10 @@ const ApplicantInfo = ({
 	const callApi = useAxios();
 	const [statusLoading, setStatusLoading] = useState(false);
 	const [opened, { open, close }] = useDisclosure(false);
+	const checkPermission = (permission: string) => {
+		const hasPermission = permissionChecker(permission);
+		return hasPermission && applicant?.status == "active";
+	};
 
 	const getStatus = (status: string) => {
 		return statuses.find((item) => item.status == status);
@@ -86,6 +95,25 @@ const ApplicantInfo = ({
 		}
 	};
 
+	const badge = (
+		<Badge
+			style={{ cursor: "pointer" }}
+			color={getStatus(applicant?.status)?.color}
+			rightSection={<GoChevronDown size={16} />}
+			p="sm"
+		>
+			{statusLoading ? (
+				<Center>
+					<Loader size={20} color="white" />
+				</Center>
+			) : (
+				<Text size="md" fw={500}>
+					{getStatus(applicant?.status)?.text}
+				</Text>
+			)}
+		</Badge>
+	);
+
 	return (
 		<>
 			<Paper withBorder shadow="sm" mb="md">
@@ -112,33 +140,23 @@ const ApplicantInfo = ({
 						</Center>
 					)}
 					<Group>
-						<Button onClick={() => open()} rightSection={<TbEdit size={16} />}>
-							{t("edit")}
-						</Button>
-						{applicant?.status && (
+						{checkPermission(EDIT_APPLICANT_PACKAGE_IMPLEMENTS) && (
+							<Button
+								onClick={() => open()}
+								rightSection={<TbEdit size={16} />}
+							>
+								{t("edit")}
+							</Button>
+						)}
+						{permissionChecker(CHANGE_STATUS) ? (
 							<Menu shadow="md" width={100}>
-								<Menu.Target>
-									<Badge
-										style={{ cursor: "pointer" }}
-										color={getStatus(applicant?.status)?.color}
-										rightSection={<GoChevronDown size={16} />}
-										p="sm"
-									>
-										{statusLoading ? (
-											<Center>
-												<Loader size={20} color="white" />
-											</Center>
-										) : (
-											<Text size="md" fw={500}>
-												{getStatus(applicant?.status)?.text}
-											</Text>
-										)}
-									</Badge>
-								</Menu.Target>
+								<Menu.Target>{badge}</Menu.Target>
 								<Menu.Dropdown>
 									{getMenu(applicant?.id, applicant?.status)}
 								</Menu.Dropdown>
 							</Menu>
+						) : (
+							badge
 						)}
 					</Group>
 				</Flex>

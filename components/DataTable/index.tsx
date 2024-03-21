@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 import ActionMenu from "./ActionMenu";
 import { MantineDataTable } from "./MantineDataTable";
 import useSWR from "swr";
@@ -8,7 +14,7 @@ import { TbClick } from "react-icons/tb";
 import { Actions } from "./Actions";
 
 interface DataTableProps {
-	title: string;
+	title: string | ReactNode;
 	url: string;
 	deleteUrl: string;
 	columns: Array<any>;
@@ -30,6 +36,8 @@ interface DataTableProps {
 		column: string;
 		order: "desc" | "asc";
 	};
+	showActionMenu?: boolean;
+	setRecords?: any;
 }
 
 const CustomDataTable = ({
@@ -55,6 +63,8 @@ const CustomDataTable = ({
 		column: "created_at",
 		order: "desc",
 	},
+	showActionMenu = true,
+	setRecords,
 	...additionalProps
 }: DataTableProps) => {
 	const callApi = useAxios();
@@ -115,19 +125,27 @@ const CustomDataTable = ({
 		});
 	}
 
+	useEffect(() => {
+		if (setRecords) {
+			setRecords(selectedRecords);
+		}
+	}, [selectedRecords]);
+
 	return (
 		<>
-			<ActionMenu
-				deleteUrl={deleteUrl}
-				onSearch={setSearch}
-				lng={lng}
-				selectedRecords={selectedRecords}
-				setSelectedRecords={setSelectedRecords}
-				mutate={mutate}
-				open={open}
-				showAdd={showAdd}
-				showDelete={showDelete}
-			/>
+			{showActionMenu && (
+				<ActionMenu
+					deleteUrl={deleteUrl}
+					onSearch={setSearch}
+					lng={lng}
+					selectedRecords={selectedRecords}
+					setSelectedRecords={setSelectedRecords}
+					mutate={mutate}
+					open={open}
+					showAdd={showAdd}
+					showDelete={showDelete}
+				/>
+			)}
 			<MantineDataTable
 				title={title}
 				lng={lng}

@@ -2,28 +2,20 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
-import { CustomDataTable } from "@/components/DataTable";
 import { useAxios } from "@/customHooks/useAxios";
-// import { ApplicantItemColumns } from "@/shared/columns/applicant_item.columns";
 import {
-	ADD_APPLICANTS,
-	DELETE_APPLICANTS,
-	EDIT_APPLICANTS,
+	VIEW_APPLICANT_PACKAGE_IMPLEMENTS,
+	VIEW_APPLICANT_SURVEYS,
 } from "@/shared/constants/Permissions";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
-import { useDisclosure } from "@mantine/hooks";
-import { useEffect, useState } from "react";
 import ApplicantInfo from "./ApplicantInfo";
 import useSWR from "swr";
 import ApplicantSurveys from "./ApplicantSurveys";
+import ApplicantPackageImplements from "./ApplicantPackageImplements";
 
 export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
-	const [mutated, setMutated] = useState(false);
-	const [opened, { open, close }] = useDisclosure(false);
-	const [edit, setEdit] = useState<number>();
-	// const columns = ApplicantItemColumns(t);
 
 	const { data, error, isLoading, mutate } = useSWR(
 		`/applicants/${id}`,
@@ -35,12 +27,6 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 			return response?.data;
 		}
 	);
-
-	useEffect(() => {
-		if (edit) {
-			open();
-		}
-	}, [edit]);
 
 	return (
 		<>
@@ -69,21 +55,18 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 				loading={isLoading}
 				mutate={mutate}
 			/>
-			<ApplicantSurveys lng={lng} applicantId={id} applicant={data} />
-			{/* <CustomDataTable
-				title={t("applicant_items_imports")}
-				url={`/applicant_items?applicant_id=${id}`}
-				deleteUrl="/applicant_items/1"
-				lng={lng}
-				columns={columns}
-				open={open}
-				mutated={mutated}
-				setMutated={setMutated}
-				setEdit={setEdit}
-				showAdd={permissionChecker(ADD_APPLICANTS)}
-				showDelete={permissionChecker(DELETE_APPLICANTS)}
-				showEdit={permissionChecker(EDIT_APPLICANTS)}
-			/> */}
+
+			{permissionChecker(VIEW_APPLICANT_PACKAGE_IMPLEMENTS) && (
+				<ApplicantPackageImplements
+					lng={lng}
+					applicantId={id}
+					applicant={data}
+				/>
+			)}
+
+			{permissionChecker(VIEW_APPLICANT_SURVEYS) && (
+				<ApplicantSurveys lng={lng} applicantId={id} applicant={data} />
+			)}
 			{/* {opened && (
 				<ApplicantItemsModal
 					opened={opened}

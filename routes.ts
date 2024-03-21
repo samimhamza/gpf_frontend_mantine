@@ -40,6 +40,7 @@ export const protectedRoutes = [
 	"/warehouses",
 	"/warehouses",
 	"/applicants",
+	"/applicants/[id]",
 	"/categories",
 	"/charity_packages",
 	"/users",

@@ -23,21 +23,25 @@ import toast from "react-hot-toast";
 import { MdSend } from "react-icons/md";
 import { Value } from "react-multi-date-picker";
 
-interface AddPackageModalProps {
+interface ApplicantPackageModalProps {
 	applicantId: number | undefined;
 	opened: boolean;
 	close: () => void;
 	lng: string;
 	setMutated: Dispatch<SetStateAction<boolean>>;
+	title: string;
+	editId: number | undefined;
 }
 
-const AddPackageModal = ({
+const ApplicantPackageModal = ({
 	applicantId,
 	opened,
 	close,
 	lng,
 	setMutated,
-}: AddPackageModalProps) => {
+	title,
+	editId,
+}: ApplicantPackageModalProps) => {
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
 	const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
@@ -170,7 +174,7 @@ const AddPackageModal = ({
 					closeOnClickOutside={false}
 				>
 					<Group justify="space-between" className="modal-header" p="xs">
-						<Title order={4}>{t("assign_package_for_non_survey")}</Title>
+						<Title order={4}>{title}</Title>
 						<CloseButton
 							className="close-btn"
 							aria-label="Close modal"
@@ -265,4 +269,4 @@ const AddPackageModal = ({
 	);
 };
 
-export default AddPackageModal;
+export default ApplicantPackageModal;

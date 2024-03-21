@@ -7,10 +7,8 @@ import {
 	Center,
 	Chip,
 	CloseButton,
-	Flex,
 	Modal,
 	Slider,
-	Stack,
 	Text,
 	Title,
 	useMantineTheme,
@@ -123,36 +121,26 @@ const AvatarCropper = ({
 					/>
 				</Center>
 				<Box>
-					<Flex
-						gap="sm"
-						direction="column"
-						justify="center"
-						align="center"
-						mx="sm"
-					>
-						<Stack my="sm">
-							<Text>{t("zoom")}</Text>
-							<Slider
-								value={zoom}
-								min={1}
-								max={3}
-								step={0.1}
-								onChange={setZoom}
-								w={250}
-							/>
-						</Stack>
-						<Stack mb="sm">
-							<Text>{t("rotate")}</Text>
-							<Slider
-								value={rotation}
-								min={0}
-								max={360}
-								step={1}
-								onChange={setRotation}
-								w={250}
-							/>
-						</Stack>
-					</Flex>
+					<Box m="md">
+						<Text>{t("zoom")}</Text>
+						<Slider
+							value={zoom}
+							min={1}
+							max={3}
+							step={0.1}
+							onChange={setZoom}
+						/>
+					</Box>
+					<Box mb="md" mx="md">
+						<Text>{t("rotate")}</Text>
+						<Slider
+							value={rotation}
+							min={0}
+							max={360}
+							step={1}
+							onChange={setRotation}
+						/>
+					</Box>
 					<Box m="sm">
 						<Button onClick={showCroppedImage} w="100%" loading={isLoading}>
 							{images.length == imageIndex + 1 ? t("save") : t("next")}

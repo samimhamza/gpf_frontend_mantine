@@ -126,6 +126,7 @@
 	"add_charity_package": "ایجاد پکیج جدید",
 	"update_charity_package": "ویرایش پکیج",
 	"add_item": "ایجاد جنس جدید",
+	"update_item": "ویرایش جنس",
 	"item": "جنس",
 	"quantity": "مقدار",
 	"package_items": "اجناس پکیج",
@@ -166,5 +167,8 @@
 	"rotate": "چرخش",
 	"save": "ثبت",
 	"profile": "پروفایل",
-	"edit": "ویرایش"
+	"edit": "ویرایش",
+	"editing_not_allowed": "ویرایش ممنوع است!",
+	"implement_date": "تاریخ اجرا",
+	"implements_history": "تاریخچه کمک های دریافت شده"
 }

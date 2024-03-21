@@ -2,21 +2,20 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { ApplicantSurveyColumns } from "@/shared/columns/applicant_survey.columns";
+import { ApplicantPackageImplementColumns } from "@/shared/columns/applicant_package_implement.columns";
 import { Button, Flex, Group, Title } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MdAdd, MdDelete } from "react-icons/md";
 import { useDisclosure } from "@mantine/hooks";
 import { CustomDataTable } from "@/components/DataTable";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-	ADD_APPLICANT_SURVEYS,
-	DELETE_APPLICANT_SURVEYS,
-	EDIT_APPLICANT_SURVEYS,
+	ADD_APPLICANT_PACKAGE_IMPLEMENTS,
+	DELETE_APPLICANT_PACKAGE_IMPLEMENTS,
+	EDIT_APPLICANT_PACKAGE_IMPLEMENTS,
 } from "@/shared/constants/Permissions";
-import ApplicantPackageModal from "./ApplicantPackageModal";
 
-const ApplicantSurveys = ({
+const ApplicantPackageImplements = ({
 	lng,
 	applicantId,
 	applicant,
@@ -27,20 +26,18 @@ const ApplicantSurveys = ({
 }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
-	const columns = ApplicantSurveyColumns(t);
+	const columns = ApplicantPackageImplementColumns(t);
 	const [selectedRecords, setSelectedRecords] = useState([]);
 	const [deleteLoading, setDeleteLoading] = useState(false);
 	const [opened, { open, close }] = useDisclosure();
 	const [mutated, setMutated] = useState(false);
 	const [edit, setEdit] = useState<number>();
+	const checkPermission = (permission: string) => {
+		const hasPermission = permissionChecker(permission);
+		return hasPermission && applicant?.status == "active";
+	};
 
 	const handleDelete = () => {};
-
-	useEffect(() => {
-		if (edit) {
-			open();
-		}
-	}, [edit]);
 
 	const title = (
 		<Flex
@@ -50,11 +47,11 @@ const ApplicantSurveys = ({
 			gap="sm"
 			wrap="wrap"
 		>
-			<Title order={4}>{t("packages_history")}</Title>
+			<Title order={4}>{t("implements_history")}</Title>
 
-			{applicant?.status == "active" && (
-				<Group>
-					{selectedRecords.length > 0 && (
+			<Group>
+				{checkPermission(DELETE_APPLICANT_PACKAGE_IMPLEMENTS) &&
+					selectedRecords.length > 0 && (
 						<Button
 							loading={deleteLoading}
 							onClick={handleDelete}
@@ -64,13 +61,12 @@ const ApplicantSurveys = ({
 							{t("delete")}
 						</Button>
 					)}
-					{
-						<Button onClick={open} rightSection={<MdAdd size={14} />}>
-							{t("assign_package")}
-						</Button>
-					}
-				</Group>
-			)}
+				{checkPermission(ADD_APPLICANT_PACKAGE_IMPLEMENTS) && (
+					<Button onClick={open} rightSection={<MdAdd size={14} />}>
+						{t("implement")}
+					</Button>
+				)}
+			</Group>
 		</Flex>
 	);
 
@@ -78,42 +74,24 @@ const ApplicantSurveys = ({
 		<>
 			<CustomDataTable
 				title={title}
-				url={`/applicant_surveys?applicant_id=${applicantId}`}
-				deleteUrl="/applicant_surveys/1"
+				url={`/applicant_package_implements?applicant_id=${applicantId}`}
+				deleteUrl="/applicant_package_implements/1"
 				lng={lng}
 				columns={columns}
 				open={open}
 				mutated={mutated}
 				setMutated={setMutated}
 				setEdit={setEdit}
-				showAdd={permissionChecker(ADD_APPLICANT_SURVEYS)}
-				showDelete={permissionChecker(DELETE_APPLICANT_SURVEYS)}
-				showEdit={permissionChecker(EDIT_APPLICANT_SURVEYS)}
+				showAdd={checkPermission(ADD_APPLICANT_PACKAGE_IMPLEMENTS)}
+				showDelete={checkPermission(DELETE_APPLICANT_PACKAGE_IMPLEMENTS)}
+				showEdit={checkPermission(EDIT_APPLICANT_PACKAGE_IMPLEMENTS)}
 				showView={false}
 				height={300}
 				showActionMenu={false}
 				setRecords={setSelectedRecords}
 			/>
-			{opened && (
-				<ApplicantPackageModal
-					applicantId={applicantId}
-					opened={opened}
-					close={() => {
-						close();
-						setEdit(undefined);
-					}}
-					lng={lng}
-					setMutated={setMutated}
-					title={
-						!edit
-							? t("assign_package_for_non_survey")
-							: t("assign_package_for_non_survey")
-					}
-					editId={edit}
-				/>
-			)}
 		</>
 	);
 };
 
-export default ApplicantSurveys;
+export default ApplicantPackageImplements;
