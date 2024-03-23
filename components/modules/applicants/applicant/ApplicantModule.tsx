@@ -12,6 +12,7 @@ import ApplicantInfo from "./ApplicantInfo";
 import useSWR from "swr";
 import ApplicantSurveys from "./ApplicantSurveys";
 import ApplicantPackageImplements from "./ApplicantPackageImplements";
+import { getID } from "@/shared/functions";
 
 export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 	const { t } = useTranslation(lng);
@@ -28,6 +29,10 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 		}
 	);
 
+	const checkPermission = (permission: string) => {
+		const hasPermission = permissionChecker(permission);
+		return hasPermission && data?.status == "active";
+	};
 	return (
 		<>
 			<CustomBreadCrumb
@@ -43,13 +48,18 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 					},
 					{
 						title: data
-							? data?.first_name + " " + data?.last_name
+							? getID(data?.office?.code, data?.created_at, data?.id)
 							: id.toString(),
 					},
 				]}
 			/>
 			<ApplicantInfo
-				applicantId={id}
+				applicantId={
+					data
+						? getID(data?.office?.code, data?.created_at, data?.id)
+						: undefined
+				}
+				databaseID={id}
 				lng={lng}
 				applicant={data}
 				loading={isLoading}
@@ -59,13 +69,19 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 			{permissionChecker(VIEW_APPLICANT_PACKAGE_IMPLEMENTS) && (
 				<ApplicantPackageImplements
 					lng={lng}
-					applicantId={id}
+					databaseID={id}
 					applicant={data}
+					checkPermission={checkPermission}
 				/>
 			)}
 
 			{permissionChecker(VIEW_APPLICANT_SURVEYS) && (
-				<ApplicantSurveys lng={lng} applicantId={id} applicant={data} />
+				<ApplicantSurveys
+					lng={lng}
+					databaseID={id}
+					applicant={data}
+					checkPermission={checkPermission}
+				/>
 			)}
 			{/* {opened && (
 				<ApplicantItemsModal

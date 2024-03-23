@@ -13,6 +13,10 @@ export const getDate = (utcDate: string) => {
 	return moment.utc(utcDate).local().locale("fa").format("YYYY-MM-DD");
 };
 
+export const getYear = (utcDate: string) => {
+	return moment.utc(utcDate).local().locale("fa").format("YYYY");
+};
+
 export const getTime = (date: any) => {
 	return date instanceof DateObject
 		? date?.toDate?.().getTime()
@@ -59,6 +63,29 @@ export const getFormData = (data: any) => {
 		}
 	});
 	return formData;
+};
+
+export const addLeadingZeros = (number: number | string) => {
+	let numberStr = number?.toString();
+	if (numberStr.length < 4) {
+		let zerosNeeded = 4 - numberStr.length;
+		numberStr = "0".repeat(zerosNeeded) + numberStr;
+	}
+	return numberStr;
+};
+
+export const getID = (
+	office_code: string,
+	created_at: string,
+	id: number | string
+) => {
+	return `GPF-${office_code}-${getYear(created_at)}-
+								${addLeadingZeros(id)}`;
+};
+
+export const getDatabaseID = (id: string): number => {
+	let parts = id.split("-");
+	return parseInt(parts[parts.length - 1]);
 };
 
 // Sample of checking uniqueness of multiple insert

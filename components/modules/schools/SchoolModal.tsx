@@ -90,11 +90,17 @@ const SchoolModal = ({
 							if (
 								key != "province_id" &&
 								key != "district_id" &&
+								key != "total_staff" &&
 								key != "office_id"
 							)
 								values[key] = value ? value : initialValues[key];
 						}
-						if ((key == "office_id" || key == "province_id") && value) {
+						if (
+							(key == "office_id" ||
+								key == "province_id" ||
+								key == "total_staff") &&
+							value
+						) {
 							values[key] = value.toString();
 						}
 						if (key == "district_id" && value) {

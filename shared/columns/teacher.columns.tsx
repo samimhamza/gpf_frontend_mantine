@@ -2,6 +2,7 @@ import { Avatar, Center } from "@mantine/core";
 import { applicantStatuses, logColumns } from ".";
 import { statusColum } from "./statusColum";
 import { Dispatch, SetStateAction } from "react";
+import { getID } from "../functions";
 
 export const TeacherColumns = (
 	t: (arg: string) => string,
@@ -18,6 +19,8 @@ export const TeacherColumns = (
 			title: t("id"),
 			noWrap: true,
 			sortable: true,
+			render: (record: any) =>
+				getID(record.office_code, record.created_at, record.id),
 		},
 		{
 			accessor: "school_name",

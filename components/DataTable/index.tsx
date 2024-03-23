@@ -28,9 +28,6 @@ interface DataTableProps {
 	showDelete: boolean;
 	showEdit: boolean;
 	showView?: boolean;
-	setAddPackage?: Dispatch<SetStateAction<number | undefined>>;
-	packageTitle?: string;
-	setPrintOrViewCard?: Dispatch<SetStateAction<number | undefined>>;
 	height?: number;
 	orderBy?: {
 		column: string;
@@ -55,9 +52,6 @@ const CustomDataTable = ({
 	showDelete,
 	showEdit,
 	showView = true,
-	setAddPackage = undefined,
-	packageTitle = undefined,
-	setPrintOrViewCard = undefined,
 	height = undefined,
 	orderBy = {
 		column: "created_at",
@@ -105,9 +99,6 @@ const CustomDataTable = ({
 			setView={setView}
 			showEdit={showEdit}
 			showView={showView}
-			setAddPackage={setAddPackage}
-			packageTitle={packageTitle}
-			setPrintOrViewCard={setPrintOrViewCard}
 		/>
 	);
 

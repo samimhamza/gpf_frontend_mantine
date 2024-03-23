@@ -169,6 +169,8 @@
 	"profile": "پروفایل",
 	"edit": "ویرایش",
 	"editing_not_allowed": "ویرایش ممنوع است!",
-	"implement_date": "تاریخ اجرا",
-	"implements_history": "تاریخچه کمک های دریافت شده"
+	"implement_date": "تاریخ اجرای مساعدت",
+	"implements_history": "تاریخچه کمک های دریافت شده",
+	"aid_implement": "اجرای مساعدت",
+	"edit_aid_implement": "ویرایش اجرای مساعدت"
 }

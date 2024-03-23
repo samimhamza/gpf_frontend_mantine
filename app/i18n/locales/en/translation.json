@@ -169,6 +169,8 @@
 	"profile": "Profile",
 	"edit": "Edit",
 	"editing_not_allowed": "Editing Not Allowed!",
-	"implement_date": "Implement Date",
-	"implements_history": "Received Donations History"
+	"implement_date": "Donation Implement Date",
+	"implements_history": "Received Donations History",
+	"aid_implement": "Donation Implement",
+	"edit_aid_implement": "Edit Donations Implement"
 }

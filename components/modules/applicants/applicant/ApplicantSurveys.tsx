@@ -3,27 +3,27 @@
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
 import { ApplicantSurveyColumns } from "@/shared/columns/applicant_survey.columns";
-import { Button, Flex, Group, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { MdAdd, MdDelete } from "react-icons/md";
 import { useDisclosure } from "@mantine/hooks";
 import { CustomDataTable } from "@/components/DataTable";
-import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
 	ADD_APPLICANT_SURVEYS,
 	DELETE_APPLICANT_SURVEYS,
 	EDIT_APPLICANT_SURVEYS,
 } from "@/shared/constants/Permissions";
 import ApplicantPackageModal from "./ApplicantPackageModal";
+import CustomTableTitle from "@/components/CustomTableTitle";
 
 const ApplicantSurveys = ({
 	lng,
-	applicantId,
+	databaseID,
 	applicant,
+	checkPermission,
 }: {
 	lng: string;
-	applicantId: number;
+	databaseID: number;
 	applicant: any;
+	checkPermission: (permission: string) => boolean;
 }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
@@ -42,43 +42,28 @@ const ApplicantSurveys = ({
 		}
 	}, [edit]);
 
-	const title = (
-		<Flex
-			justify={{ base: "center", sm: "space-between" }}
-			align="center"
-			p="sm"
-			gap="sm"
-			wrap="wrap"
-		>
-			<Title order={4}>{t("packages_history")}</Title>
-
-			{applicant?.status == "active" && (
-				<Group>
-					{selectedRecords.length > 0 && (
-						<Button
-							loading={deleteLoading}
-							onClick={handleDelete}
-							color="red"
-							rightSection={<MdDelete size={14} />}
-						>
-							{t("delete")}
-						</Button>
-					)}
-					{
-						<Button onClick={open} rightSection={<MdAdd size={14} />}>
-							{t("assign_package")}
-						</Button>
-					}
-				</Group>
-			)}
-		</Flex>
-	);
-
 	return (
 		<>
 			<CustomDataTable
-				title={title}
-				url={`/applicant_surveys?applicant_id=${applicantId}`}
+				title={
+					<CustomTableTitle
+						title={t("packages_history")}
+						showAdd={
+							checkPermission(ADD_APPLICANT_SURVEYS) &&
+							!applicant?.surveys?.length
+						}
+						showDelete={
+							checkPermission(DELETE_APPLICANT_SURVEYS) &&
+							selectedRecords.length > 0
+						}
+						addLabel={t("assign_package")}
+						deleteLabel={t("delete")}
+						deleteLoading={deleteLoading}
+						handleDelete={handleDelete}
+						openModal={open}
+					/>
+				}
+				url={`/applicant_surveys?applicant_id=${databaseID}`}
 				deleteUrl="/applicant_surveys/1"
 				lng={lng}
 				columns={columns}
@@ -86,9 +71,9 @@ const ApplicantSurveys = ({
 				mutated={mutated}
 				setMutated={setMutated}
 				setEdit={setEdit}
-				showAdd={permissionChecker(ADD_APPLICANT_SURVEYS)}
-				showDelete={permissionChecker(DELETE_APPLICANT_SURVEYS)}
-				showEdit={permissionChecker(EDIT_APPLICANT_SURVEYS)}
+				showAdd={checkPermission(ADD_APPLICANT_SURVEYS)}
+				showDelete={checkPermission(DELETE_APPLICANT_SURVEYS)}
+				showEdit={checkPermission(EDIT_APPLICANT_SURVEYS)}
 				showView={false}
 				height={300}
 				showActionMenu={false}
@@ -96,7 +81,7 @@ const ApplicantSurveys = ({
 			/>
 			{opened && (
 				<ApplicantPackageModal
-					applicantId={applicantId}
+					applicantId={databaseID}
 					opened={opened}
 					close={() => {
 						close();
@@ -107,7 +92,7 @@ const ApplicantSurveys = ({
 					title={
 						!edit
 							? t("assign_package_for_non_survey")
-							: t("assign_package_for_non_survey")
+							: t("edit_package_for_non_survey")
 					}
 					editId={edit}
 				/>
