@@ -7,10 +7,16 @@ import {
 	Box,
 	Button,
 	CloseButton,
+	Divider,
+	Fieldset,
 	Flex,
 	Group,
+	LoadingOverlay,
 	Modal,
+	Paper,
 	ScrollArea,
+	Select,
+	Text,
 	Textarea,
 	Title,
 	useMantineTheme,
@@ -24,6 +30,7 @@ import { Value } from "react-multi-date-picker";
 
 interface ImplementModalProps {
 	applicantId: number | undefined;
+	officeId: number;
 	opened: boolean;
 	close: () => void;
 	lng: string;
@@ -34,6 +41,7 @@ interface ImplementModalProps {
 
 const ImplementModal = ({
 	applicantId,
+	officeId,
 	opened,
 	close,
 	lng,
@@ -47,8 +55,9 @@ const ImplementModal = ({
 	const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 	const callApi = useAxios();
 	const implementsSchema = ApplicantImplementsSchema(t);
+	const [warehouses, setWarehouses] = useState([]);
+	const [applicantPackage, setApplicantPackage] = useState<any>();
 	const [loading, setLoading] = useState(false);
-	const [submitLoading, setSubmitLoading] = useState(false);
 	const [implementDateErrorMessage, setImplementDateErrorMessage] =
 		useState("");
 	const [implementDate, setImplementDate] = useState<Value>();
@@ -77,11 +86,11 @@ const ImplementModal = ({
 	};
 
 	const submit = async () => {
-		setSubmitLoading(true);
+		setLoading(true);
 		if (validate()) {
 			const { response, status } = await callApi({
 				method: "POST",
-				url: "/applicant_direct_packages",
+				url: "/applicant_package_implements",
 				data: form.values,
 			});
 			if (status == 201 && response.result) {
@@ -91,8 +100,39 @@ const ImplementModal = ({
 				toast.error(t("something_went_wrong"));
 			}
 		}
-		setSubmitLoading(false);
+		setLoading(false);
 	};
+
+	useEffect(() => {
+		(async function () {
+			setLoading(true);
+			const { response, status, error } = await callApi({
+				method: "GET",
+				url: `/all_warehouses?office_id=${officeId}`,
+			});
+			if (status == 200 && response.result == true) {
+				setWarehouses(
+					response.data.map((item: any) => {
+						return { value: item.id.toString(), label: item.name };
+					})
+				);
+			}
+			setLoading(false);
+		})();
+	}, []);
+
+	useEffect(() => {
+		(async function () {
+			const { response, status, error } = await callApi({
+				method: "GET",
+				url: `/applicant_current_package/${applicantId}`,
+			});
+			if (status == 200 && response.result == true) {
+				setApplicantPackage(response.data);
+				form.setFieldValue("applicant_survey_id", response.data.id);
+			}
+		})();
+	}, []);
 
 	useEffect(() => {
 		if (implementDate) {
@@ -129,21 +169,29 @@ const ImplementModal = ({
 							onClick={close}
 						/>
 					</Group>
-					<ScrollArea h={350}>
+					<ScrollArea h={380} p="sm">
+						<LoadingOverlay
+							visible={loading}
+							zIndex={1000}
+							overlayProps={{ radius: "sm", blur: 2 }}
+						/>
 						<Flex
 							direction={{ base: "column", sm: "row" }}
 							gap="sm"
 							p="sm"
 							justify={{ sm: "center" }}
 						>
-							<Box></Box>
-						</Flex>
-						<Flex
-							direction={{ base: "column", sm: "row" }}
-							gap="sm"
-							p="sm"
-							justify={{ sm: "center" }}
-						>
+							<Select
+								style={{ flex: 1 }}
+								label={t("warehouse")}
+								placeholder={t("warehouse")}
+								data={warehouses}
+								withAsterisk
+								searchable
+								clearable
+								nothingFoundMessage={t("noting_found")}
+								{...form.getInputProps("warehouse_id")}
+							/>
 							<PersianDatePicker
 								label={t("implement_date")}
 								placeholder={t("implement_date")}
@@ -152,7 +200,6 @@ const ImplementModal = ({
 								errorMessage={implementDateErrorMessage}
 								dateTime
 							/>
-							<Box style={{ flex: 1 }}></Box>
 						</Flex>
 						<Flex
 							direction={{ base: "column", sm: "row" }}
@@ -168,6 +215,65 @@ const ImplementModal = ({
 								{...form.getInputProps("description")}
 							/>
 						</Flex>
+						<Divider my="md" px="sm" />
+						<Flex
+							direction={{ base: "column", sm: "row" }}
+							gap="sm"
+							p="sm"
+							justify={{ sm: "center" }}
+						>
+							<Box style={{ flex: 1, cursor: "not-allowed" }}>
+								<Text px="xs">{t("category")}</Text>
+								<Paper withBorder py={5} px="sm">
+									<Text fw="lighter">{applicantPackage?.category?.name}</Text>
+								</Paper>
+							</Box>
+							<Box style={{ flex: 1, cursor: "not-allowed" }}>
+								<Text px="xs">{t("charity_package")}</Text>
+								<Paper withBorder py={5} px="sm">
+									<Text fw="lighter">
+										{applicantPackage?.charity_package?.name}
+									</Text>
+								</Paper>
+							</Box>
+						</Flex>
+						<Fieldset legend={t("package_items")} m="sm">
+							<Flex gap="sm" pt="sm" wrap="wrap">
+								<Box
+									style={{ cursor: "not-allowed" }}
+									w={{ base: "100%", sm: "48%" }}
+								>
+									<Text px="xs">{t("cash_amount")}</Text>
+									<Paper withBorder py={5} px="sm">
+										<Text>
+											{applicantPackage?.charity_package?.cash_amount}{" "}
+											{applicantPackage?.charity_package?.currency == "USD"
+												? t("usd")
+												: applicantPackage?.charity_package?.currency == "AFN"
+												? t("afn")
+												: ""}
+										</Text>
+									</Paper>
+								</Box>
+								{applicantPackage?.charity_package?.items?.map(
+									(item: any, index: number) => (
+										<Box
+											key={index}
+											style={{ cursor: "not-allowed" }}
+											w={{ base: "100%", sm: "48%" }}
+										>
+											<Text px="xs">{t("item")}</Text>
+											<Paper withBorder py={5} px="sm">
+												<Text>
+													{item.name} - {item.pivot.quantity.toString()}{" "}
+													{item.pivot.unit}
+												</Text>
+											</Paper>
+										</Box>
+									)
+								)}
+							</Flex>
+						</Fieldset>
 					</ScrollArea>
 					<Group justify="flex-end" p="sm" className="modal-footer">
 						<Button
@@ -181,7 +287,7 @@ const ImplementModal = ({
 							variant="gradient"
 							type="submit"
 							onClick={submit}
-							loading={submitLoading}
+							loading={loading}
 						>
 							{t("submit")}
 						</Button>
@@ -197,6 +303,9 @@ const ImplementModal = ({
 				}
 				.custom-modal .modal-footer {
 					border-top: 1px solid var(--mantine-color-gray-4);
+				}
+				.border {
+					border: 1px solid var(--mantine-color-gray-4);
 				}
 			`}</style>
 		</>

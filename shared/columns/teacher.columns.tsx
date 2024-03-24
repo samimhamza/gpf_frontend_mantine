@@ -23,6 +23,12 @@ export const TeacherColumns = (
 				getID(record.office_code, record.created_at, record.id),
 		},
 		{
+			accessor: "office_code",
+			title: t("office"),
+			noWrap: true,
+			sortable: true,
+		},
+		{
 			accessor: "school_name",
 			title: t("school_name"),
 			noWrap: true,

@@ -158,6 +158,8 @@
 	"store_date": "Store Date",
 	"warehouse_items_imports": "Warehouse Items Imports",
 	"total_quantity": "Total Quantity",
+	"total_implements": "Total Implements",
+	"remaining_quantity": "Remaining Quantity",
 	"min_2_length_error": "Minimum 3 characters required",
 	"applicant_info": "Application Info",
 	"packages_history": "Received Packages History",

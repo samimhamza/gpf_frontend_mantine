@@ -13,6 +13,7 @@ import {
 } from "@/shared/constants/Permissions";
 import ImplementModal from "./ImplementModal";
 import CustomTableTitle from "@/components/CustomTableTitle";
+import toast from "react-hot-toast";
 
 const ApplicantPackageImplements = ({
 	lng,
@@ -40,7 +41,24 @@ const ApplicantPackageImplements = ({
 		}
 	}, [edit]);
 
-	const handleDelete = () => {};
+	const handleDelete = async (e: any) => {
+		setDeleteLoading(true);
+		const ids = selectedRecords.map((rec) => rec.id);
+		const { status, error } = await callApi({
+			method: "DELETE",
+			url: "applicant_package_implements/1",
+			data: { ids },
+		});
+
+		if (status == 204) {
+			// await mutate();
+			setSelectedRecords([]);
+			toast.success(t("successfully_deleted"));
+		}
+		if (error) toast.error(t("something_went_wrong"));
+
+		setDeleteLoading(false);
+	};
 
 	return (
 		<>
@@ -82,6 +100,7 @@ const ApplicantPackageImplements = ({
 			{opened && (
 				<ImplementModal
 					applicantId={databaseID}
+					officeId={applicant?.office_id}
 					opened={opened}
 					close={() => {
 						close();
