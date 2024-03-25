@@ -72,6 +72,7 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 					databaseID={id}
 					applicant={data}
 					checkPermission={checkPermission}
+					mutate={mutate}
 				/>
 			)}
 
@@ -81,6 +82,7 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 					databaseID={id}
 					applicant={data}
 					checkPermission={checkPermission}
+					mutate={mutate}
 				/>
 			)}
 			{/* {opened && (

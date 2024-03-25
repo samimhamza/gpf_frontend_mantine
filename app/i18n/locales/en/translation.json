@@ -57,6 +57,9 @@
 	"max_64_length_error": "Maximum 64 characters allowed",
 	"roles": "Roles",
 	"role": "Role",
+	"role_info": "Role Info",
+	"add_role": "Add New Role",
+	"update_role": "Update Role",
 	"schools": "Schools",
 	"province": "Province",
 	"district": "District",
@@ -175,5 +178,9 @@
 	"implements_history": "Received Donations History",
 	"aid_implement": "Donation Implement",
 	"edit_aid_implement": "Edit Donations Implement",
-	"not_found_in_warehouse": "There are not enough items in the warehouse"
+	"not_found_in_warehouse": "There are not enough items in the warehouse",
+	"user_management": "User Management",
+	"delete_not_allowed": "Delete not allowed for selected data!",
+	"permissions_count": "Permissions Count",
+	"users_count": "Users Count"
 }

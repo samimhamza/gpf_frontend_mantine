@@ -5,6 +5,7 @@ import {
 	VIEW_ITEMS,
 	VIEW_MOSQUES,
 	VIEW_OFFICES,
+	VIEW_ROLES,
 	VIEW_SCHOOLS,
 	VIEW_USERS,
 	VIEW_WAREHOUSES,
@@ -22,7 +23,7 @@ export const navItems = (t: (arg: string) => string) => [
 		label: t("covered_areas"),
 		icon: MdMosque,
 		initiallyOpened: true,
-		permission: VIEW_MOSQUES,
+		permission: VIEW_MOSQUES || VIEW_SCHOOLS,
 		links: [
 			{
 				label: t("schools"),
@@ -53,7 +54,8 @@ export const navItems = (t: (arg: string) => string) => [
 		label: t("inventory"),
 		icon: BiSolidBox,
 		initiallyOpened: false,
-		permission: VIEW_APPLICANTS,
+		permission:
+			VIEW_ITEMS || VIEW_WAREHOUSES || VIEW_CATEGORIES || VIEW_CHARITY_PACKAGES,
 		links: [
 			{
 				label: t("items"),
@@ -78,10 +80,22 @@ export const navItems = (t: (arg: string) => string) => [
 		],
 	},
 	{
-		label: t("users"),
+		label: t("user_management"),
 		icon: FaUsers,
-		link: "/users",
-		permission: VIEW_USERS,
+		initiallyOpened: true,
+		permission: VIEW_USERS || VIEW_ROLES,
+		links: [
+			{
+				label: t("users"),
+				link: "/users",
+				permission: VIEW_USERS,
+			},
+			{
+				label: t("roles"),
+				link: "/roles",
+				permission: VIEW_ROLES,
+			},
+		],
 	},
 	{
 		label: t("offices"),

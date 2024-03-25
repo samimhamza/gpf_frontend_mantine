@@ -31,6 +31,7 @@ interface ApplicantPackageModalProps {
 	setMutated: Dispatch<SetStateAction<boolean>>;
 	title: string;
 	editId: number | undefined;
+	mutate: any;
 }
 
 const ApplicantPackageModal = ({
@@ -41,6 +42,7 @@ const ApplicantPackageModal = ({
 	setMutated,
 	title,
 	editId,
+	mutate,
 }: ApplicantPackageModalProps) => {
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
@@ -94,6 +96,7 @@ const ApplicantPackageModal = ({
 				data: form.values,
 			});
 			if (status == 201 && response.result) {
+				await mutate();
 				setMutated(true);
 				close();
 			} else {
@@ -145,6 +148,28 @@ const ApplicantPackageModal = ({
 			}
 		})();
 	}, [form?.values?.category_id]);
+
+	useEffect(() => {
+		if (editId) {
+			(async function () {
+				setLoading(true);
+				const { response, status, error } = await callApi({
+					method: "GET",
+					url: `/applicant_surveys/${editId}`,
+				});
+				if (status == 200 && response.result == true) {
+					let values: any = {};
+					Object.entries(response.data).forEach(([key, value]) => {
+						if (Object.keys(initialValues).includes(key)) {
+							values[key] = value ? value : initialValues[key];
+						}
+					});
+					form.setValues(values);
+					setLoading(false);
+				}
+			})();
+		}
+	}, [editId]);
 
 	useEffect(() => {
 		if (surveyDate) {

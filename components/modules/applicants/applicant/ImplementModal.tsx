@@ -2,7 +2,7 @@ import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { useAxios } from "@/customHooks/useAxios";
 import { ApplicantImplementsSchema } from "@/schemas/models/applicant_implements";
-import { getDateTimeUnix, getTime } from "@/shared/functions";
+import { getTimeValue, getTime } from "@/shared/functions";
 import {
 	Box,
 	Button,
@@ -37,6 +37,7 @@ interface ImplementModalProps {
 	setMutated: Dispatch<SetStateAction<boolean>>;
 	title: string;
 	editId: number | undefined;
+	mutate: any;
 }
 
 const ImplementModal = ({
@@ -48,6 +49,7 @@ const ImplementModal = ({
 	setMutated,
 	title,
 	editId,
+	mutate,
 }: ImplementModalProps) => {
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
@@ -132,6 +134,7 @@ const ImplementModal = ({
 						data: form.values,
 				  });
 			if ((!editId ? status == 201 : status == 202) && response.result) {
+				await mutate();
 				setMutated(true);
 				close();
 			} else {
@@ -190,7 +193,7 @@ const ImplementModal = ({
 						values[key] = value.toString();
 						setEditWarehouse(value.toString());
 					} else if (key == "implement_date" && value) {
-						setImplementDate(getDateTimeUnix(value.toString()));
+						setImplementDate(getTimeValue(value.toString()));
 					}
 				}
 			});

@@ -13,6 +13,7 @@ import { Box, LoadingOverlay } from "@mantine/core";
 import { IoIosListBox } from "react-icons/io";
 import CharityPackageStepTwo from "./CharityPackageStepTwo";
 import { type Value } from "react-multi-date-picker";
+import { getTimeValue } from "@/shared/functions";
 
 const CharityPackageModal = ({
 	opened,
@@ -179,9 +180,9 @@ const CharityPackageModal = ({
 									});
 								});
 							} else if (key == "start_date" && value) {
-								setStartDate(new Date(value.toString()).getTime());
+								setStartDate(getTimeValue(value.toString()));
 							} else if (key == "end_date" && value) {
-								setEndDate(new Date(value.toString()).getTime());
+								setEndDate(getTimeValue(value.toString()));
 							}
 						}
 					});

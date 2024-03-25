@@ -19,11 +19,13 @@ const ApplicantSurveys = ({
 	databaseID,
 	applicant,
 	checkPermission,
+	mutate,
 }: {
 	lng: string;
 	databaseID: number;
 	applicant: any;
 	checkPermission: (permission: string) => boolean;
+	mutate: any;
 }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
@@ -95,6 +97,7 @@ const ApplicantSurveys = ({
 							: t("edit_package_for_non_survey")
 					}
 					editId={edit}
+					mutate={mutate}
 				/>
 			)}
 		</>

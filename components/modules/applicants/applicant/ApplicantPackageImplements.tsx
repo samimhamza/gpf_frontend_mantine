@@ -20,11 +20,13 @@ const ApplicantPackageImplements = ({
 	databaseID,
 	applicant,
 	checkPermission,
+	mutate,
 }: {
 	lng: string;
 	databaseID: number;
 	applicant: any;
 	checkPermission: (permission: string) => boolean;
+	mutate: any;
 }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
@@ -51,6 +53,7 @@ const ApplicantPackageImplements = ({
 		});
 
 		if (status == 204) {
+			await mutate();
 			await setMutated(true);
 			setSelectedRecords([]);
 			toast.success(t("successfully_deleted"));
@@ -58,6 +61,13 @@ const ApplicantPackageImplements = ({
 		if (error) toast.error(t("something_went_wrong"));
 
 		setDeleteLoading(false);
+	};
+
+	const isImplementAvailable = () => {
+		return (
+			applicant?.surveys[0]?.implements_count <
+			applicant?.surveys[0]?.charity_package?.period
+		);
 	};
 
 	return (
@@ -68,7 +78,7 @@ const ApplicantPackageImplements = ({
 						title={t("implements_history")}
 						showAdd={
 							checkPermission(ADD_APPLICANT_PACKAGE_IMPLEMENTS) &&
-							applicant?.surveys?.length
+							isImplementAvailable()
 						}
 						showDelete={
 							checkPermission(DELETE_APPLICANT_PACKAGE_IMPLEMENTS) &&
@@ -108,6 +118,7 @@ const ApplicantPackageImplements = ({
 					}}
 					lng={lng}
 					setMutated={setMutated}
+					mutate={mutate}
 					title={!edit ? t("aid_implement") : t("edit_aid_implement")}
 					editId={edit}
 				/>
