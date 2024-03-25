@@ -24,7 +24,7 @@ import { MdSend } from "react-icons/md";
 import { Value } from "react-multi-date-picker";
 import ItemsModal from "./ItemsModal";
 import ItemModal from "./ItemModal";
-import { getTime } from "@/shared/functions";
+import { getDateTimeUnix, getTime } from "@/shared/functions";
 
 interface WarehouseItemModalProps {
 	warehouseId: number | undefined;
@@ -228,7 +228,7 @@ const WarehouseItemsModal = ({
 							if ((key == "item_id" || key == "quantity") && value) {
 								values[key] = value.toString();
 							} else if (key == "store_date" && value) {
-								setStoreDates([new Date(value.toString()).getTime()]);
+								setStoreDates([getDateTimeUnix(value.toString())]);
 							}
 						}
 					});

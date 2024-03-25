@@ -43,7 +43,7 @@ const ApplicantPackageImplements = ({
 
 	const handleDelete = async (e: any) => {
 		setDeleteLoading(true);
-		const ids = selectedRecords.map((rec) => rec.id);
+		const ids = selectedRecords.map((rec: any) => rec.id);
 		const { status, error } = await callApi({
 			method: "DELETE",
 			url: "applicant_package_implements/1",
@@ -51,7 +51,7 @@ const ApplicantPackageImplements = ({
 		});
 
 		if (status == 204) {
-			// await mutate();
+			await setMutated(true);
 			setSelectedRecords([]);
 			toast.success(t("successfully_deleted"));
 		}

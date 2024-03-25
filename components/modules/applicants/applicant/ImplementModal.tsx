@@ -2,7 +2,7 @@ import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { useAxios } from "@/customHooks/useAxios";
 import { ApplicantImplementsSchema } from "@/schemas/models/applicant_implements";
-import { getTime } from "@/shared/functions";
+import { getDateTimeUnix, getTime } from "@/shared/functions";
 import {
 	Box,
 	Button,
@@ -58,9 +58,11 @@ const ImplementModal = ({
 	const [warehouses, setWarehouses] = useState([]);
 	const [applicantPackage, setApplicantPackage] = useState<any>();
 	const [loading, setLoading] = useState(false);
+	const [submitLoading, setSubmitLoading] = useState(false);
 	const [implementDateErrorMessage, setImplementDateErrorMessage] =
 		useState("");
 	const [implementDate, setImplementDate] = useState<Value>();
+	const [editWarehouse, setEditWarehouse] = useState<string>();
 
 	const initialValues: any = {
 		applicant_survey_id: "",
@@ -75,6 +77,26 @@ const ImplementModal = ({
 		validateInputOnBlur: true,
 	});
 
+	const checkAvailability = async () => {
+		const { response, status } = await callApi({
+			method: "POST",
+			url: "/charity_packages/checkAvailability",
+			data: {
+				warehouse_id: form.values?.warehouse_id,
+				charity_package_id: applicantPackage?.charity_package?.id,
+			},
+		});
+		if (status == 200 && response.result) {
+			return true;
+		} else if (status == 226) {
+			toast.error(t("not_found_in_warehouse"));
+			close();
+			return false;
+		}
+		toast.error(t("something_went_wrong"));
+		return false;
+	};
+
 	const validate = async () => {
 		form.validate();
 		let isDateValid = true;
@@ -83,46 +105,44 @@ const ImplementModal = ({
 			isDateValid = false;
 		}
 		if (form.isValid() && isDateValid) {
-			const { response, status } = await callApi({
-				method: "POST",
-				url: "/charity_packages/checkAvailability",
-				data: {
-					warehouse_id: form.values?.warehouse_id,
-					charity_package_id: applicantPackage?.charity_package?.id,
-				},
-			});
-			if (status == 200 && response.result) {
+			if (editId && editWarehouse != form.values.warehouse_id) {
+				return checkAvailability();
+			} else if (editId) {
 				return true;
-			} else if (status == 226) {
-				toast.error(t("not_found_in_warehouse"));
-				close();
-				return false;
+			}
+			if (!editId) {
+				return checkAvailability();
 			}
 		}
 		return false;
 	};
 
 	const submit = async () => {
-		setLoading(true);
+		setSubmitLoading(true);
 		if (await validate()) {
-			const { response, status } = await callApi({
-				method: "POST",
-				url: "/applicant_package_implements",
-				data: form.values,
-			});
-			if (status == 201 && response.result) {
+			const { response, status } = !editId
+				? await callApi({
+						method: "POST",
+						url: "/applicant_package_implements",
+						data: form.values,
+				  })
+				: await callApi({
+						method: "PUT",
+						url: `/applicant_package_implements/${editId}`,
+						data: form.values,
+				  });
+			if ((!editId ? status == 201 : status == 202) && response.result) {
 				setMutated(true);
 				close();
 			} else {
 				toast.error(t("something_went_wrong"));
 			}
 		}
-		setLoading(false);
+		setSubmitLoading(false);
 	};
 
 	useEffect(() => {
 		(async function () {
-			setLoading(true);
 			const { response, status, error } = await callApi({
 				method: "GET",
 				url: `/all_warehouses?office_id=${officeId}`,
@@ -134,22 +154,65 @@ const ImplementModal = ({
 					})
 				);
 			}
-			setLoading(false);
 		})();
 	}, []);
 
+	const getCurrentApplicantPackage = async () => {
+		setLoading(true);
+		const { response, status, error } = await callApi({
+			method: "GET",
+			url: `/applicant_current_package/${applicantId}`,
+		});
+		if (status == 200 && response.result == true) {
+			setApplicantPackage(response.data);
+			form.setFieldValue("applicant_survey_id", response.data.id);
+		}
+		setLoading(false);
+	};
+
+	const getApplicantPackage = async () => {
+		setLoading(true);
+		const { response, status, error } = await callApi({
+			method: "GET",
+			url: `/applicant_package_implements/${editId}`,
+		});
+		if (status == 200 && response.result == true) {
+			let values: any = {};
+			Object.entries(response.data).forEach(([key, value]) => {
+				if (Object.keys(initialValues).includes(key)) {
+					if (
+						key != "warehouse_id" &&
+						key != "applicant_survey_id" &&
+						key != "implement_date"
+					) {
+						values[key] = value ? value : initialValues[key];
+					} else if (key == "warehouse_id" && value) {
+						values[key] = value.toString();
+						setEditWarehouse(value.toString());
+					} else if (key == "implement_date" && value) {
+						setImplementDate(getDateTimeUnix(value.toString()));
+					}
+				}
+			});
+			setApplicantPackage(response?.data?.applicant_survey);
+			form.setFieldValue(
+				"applicant_survey_id",
+				response.data.applicant_survey.id
+			);
+			form.setValues(values);
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
 		(async function () {
-			const { response, status, error } = await callApi({
-				method: "GET",
-				url: `/applicant_current_package/${applicantId}`,
-			});
-			if (status == 200 && response.result == true) {
-				setApplicantPackage(response.data);
-				form.setFieldValue("applicant_survey_id", response.data.id);
+			if (!editId) {
+				getCurrentApplicantPackage();
+			} else {
+				getApplicantPackage();
 			}
 		})();
-	}, []);
+	}, [editId]);
 
 	useEffect(() => {
 		if (implementDate) {
@@ -304,7 +367,7 @@ const ImplementModal = ({
 							variant="gradient"
 							type="submit"
 							onClick={submit}
-							loading={loading}
+							loading={submitLoading}
 						>
 							{t("submit")}
 						</Button>
