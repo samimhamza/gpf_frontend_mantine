@@ -123,6 +123,7 @@ const CharityPackageStepTwo = ({
 								justify={{ sm: "center" }}
 							>
 								<TextInput
+									disabled
 									style={{ flex: 1 }}
 									label={t("unit")}
 									placeholder={t("unit")}

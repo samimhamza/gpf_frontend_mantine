@@ -75,19 +75,36 @@ const ImplementModal = ({
 		validateInputOnBlur: true,
 	});
 
-	const validate = () => {
+	const validate = async () => {
 		form.validate();
 		let isDateValid = true;
 		if (!form.values.implement_date) {
 			setImplementDateErrorMessage(t("field_required"));
 			isDateValid = false;
 		}
-		return form.isValid() && isDateValid;
+		if (form.isValid() && isDateValid) {
+			const { response, status } = await callApi({
+				method: "POST",
+				url: "/charity_packages/checkAvailability",
+				data: {
+					warehouse_id: form.values?.warehouse_id,
+					charity_package_id: applicantPackage?.charity_package?.id,
+				},
+			});
+			if (status == 200 && response.result) {
+				return true;
+			} else if (status == 226) {
+				toast.error(t("not_found_in_warehouse"));
+				close();
+				return false;
+			}
+		}
+		return false;
 	};
 
 	const submit = async () => {
 		setLoading(true);
-		if (validate()) {
+		if (await validate()) {
 			const { response, status } = await callApi({
 				method: "POST",
 				url: "/applicant_package_implements",

@@ -174,5 +174,6 @@
 	"implement_date": "Donation Implement Date",
 	"implements_history": "Received Donations History",
 	"aid_implement": "Donation Implement",
-	"edit_aid_implement": "Edit Donations Implement"
+	"edit_aid_implement": "Edit Donations Implement",
+	"not_found_in_warehouse": "There are not enough items in the warehouse"
 }
