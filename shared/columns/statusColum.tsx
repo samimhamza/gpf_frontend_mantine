@@ -29,8 +29,11 @@ export const statusColum = (
 	};
 
 	const getMenu = (id: number, currentStatus: string) =>
-		statuses.map((item) => (
-			<Menu.Item onClick={() => changeStatus(id, currentStatus, item.status)}>
+		statuses.map((item, index) => (
+			<Menu.Item
+				key={index}
+				onClick={() => changeStatus(id, currentStatus, item.status)}
+			>
 				{item.text}
 			</Menu.Item>
 		));

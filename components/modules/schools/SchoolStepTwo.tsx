@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { Flex, Loader, Select, TextInput, Textarea } from "@mantine/core";
+import { Flex, Loader, Select, Textarea } from "@mantine/core";
 import { useEffect, useState } from "react";
 
 interface SchoolStepTwoProps {

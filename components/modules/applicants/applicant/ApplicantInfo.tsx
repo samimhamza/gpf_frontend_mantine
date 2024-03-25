@@ -35,12 +35,14 @@ import {
 
 const ApplicantInfo = ({
 	applicantId,
+	databaseID,
 	lng,
 	applicant,
 	loading,
 	mutate,
 }: {
-	applicantId: number;
+	applicantId: string | undefined;
+	databaseID: number;
 	lng: string;
 	applicant: any;
 	loading: boolean;
@@ -66,8 +68,11 @@ const ApplicantInfo = ({
 	};
 
 	const getMenu = (id: number, currentStatus: string) =>
-		statuses.map((item) => (
-			<Menu.Item onClick={() => changeStatus(id, currentStatus, item.status)}>
+		statuses.map((item, index) => (
+			<Menu.Item
+				key={index}
+				onClick={() => changeStatus(id, currentStatus, item.status)}
+			>
 				{item.text}
 			</Menu.Item>
 		));
@@ -177,7 +182,7 @@ const ApplicantInfo = ({
 					>
 						<Group flex={1} wrap="nowrap" className="flex-item">
 							<Text>{t("id")} :</Text>
-							<Text>{applicant?.id}</Text>
+							<Text>{applicantId}</Text>
 						</Group>
 						<Group flex={1} wrap="nowrap">
 							<Text>{t("office")} :</Text>
@@ -332,7 +337,7 @@ const ApplicantInfo = ({
 					lng={lng}
 					mutate={mutate}
 					title={t("update_teacher")}
-					editId={applicantId}
+					editId={databaseID}
 				/>
 			)}
 			<style jsx global>{`

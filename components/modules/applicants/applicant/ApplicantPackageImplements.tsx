@@ -3,26 +3,28 @@
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
 import { ApplicantPackageImplementColumns } from "@/shared/columns/applicant_package_implement.columns";
-import { Button, Flex, Group, Title } from "@mantine/core";
-import { useState } from "react";
-import { MdAdd, MdDelete } from "react-icons/md";
+import { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { CustomDataTable } from "@/components/DataTable";
-import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
 	ADD_APPLICANT_PACKAGE_IMPLEMENTS,
 	DELETE_APPLICANT_PACKAGE_IMPLEMENTS,
 	EDIT_APPLICANT_PACKAGE_IMPLEMENTS,
 } from "@/shared/constants/Permissions";
+import ImplementModal from "./ImplementModal";
+import CustomTableTitle from "@/components/CustomTableTitle";
+import toast from "react-hot-toast";
 
 const ApplicantPackageImplements = ({
 	lng,
-	applicantId,
+	databaseID,
 	applicant,
+	checkPermission,
 }: {
 	lng: string;
-	applicantId: number;
+	databaseID: number;
 	applicant: any;
+	checkPermission: (permission: string) => boolean;
 }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
@@ -32,49 +34,54 @@ const ApplicantPackageImplements = ({
 	const [opened, { open, close }] = useDisclosure();
 	const [mutated, setMutated] = useState(false);
 	const [edit, setEdit] = useState<number>();
-	const checkPermission = (permission: string) => {
-		const hasPermission = permissionChecker(permission);
-		return hasPermission && applicant?.status == "active";
+
+	useEffect(() => {
+		if (edit) {
+			open();
+		}
+	}, [edit]);
+
+	const handleDelete = async (e: any) => {
+		setDeleteLoading(true);
+		const ids = selectedRecords.map((rec) => rec.id);
+		const { status, error } = await callApi({
+			method: "DELETE",
+			url: "applicant_package_implements/1",
+			data: { ids },
+		});
+
+		if (status == 204) {
+			// await mutate();
+			setSelectedRecords([]);
+			toast.success(t("successfully_deleted"));
+		}
+		if (error) toast.error(t("something_went_wrong"));
+
+		setDeleteLoading(false);
 	};
-
-	const handleDelete = () => {};
-
-	const title = (
-		<Flex
-			justify={{ base: "center", sm: "space-between" }}
-			align="center"
-			p="sm"
-			gap="sm"
-			wrap="wrap"
-		>
-			<Title order={4}>{t("implements_history")}</Title>
-
-			<Group>
-				{checkPermission(DELETE_APPLICANT_PACKAGE_IMPLEMENTS) &&
-					selectedRecords.length > 0 && (
-						<Button
-							loading={deleteLoading}
-							onClick={handleDelete}
-							color="red"
-							rightSection={<MdDelete size={14} />}
-						>
-							{t("delete")}
-						</Button>
-					)}
-				{checkPermission(ADD_APPLICANT_PACKAGE_IMPLEMENTS) && (
-					<Button onClick={open} rightSection={<MdAdd size={14} />}>
-						{t("implement")}
-					</Button>
-				)}
-			</Group>
-		</Flex>
-	);
 
 	return (
 		<>
 			<CustomDataTable
-				title={title}
-				url={`/applicant_package_implements?applicant_id=${applicantId}`}
+				title={
+					<CustomTableTitle
+						title={t("implements_history")}
+						showAdd={
+							checkPermission(ADD_APPLICANT_PACKAGE_IMPLEMENTS) &&
+							applicant?.surveys?.length
+						}
+						showDelete={
+							checkPermission(DELETE_APPLICANT_PACKAGE_IMPLEMENTS) &&
+							selectedRecords.length > 0
+						}
+						addLabel={t("aid_implement")}
+						deleteLabel={t("delete")}
+						deleteLoading={deleteLoading}
+						handleDelete={handleDelete}
+						openModal={open}
+					/>
+				}
+				url={`/applicant_package_implements?applicant_id=${databaseID}`}
 				deleteUrl="/applicant_package_implements/1"
 				lng={lng}
 				columns={columns}
@@ -90,6 +97,21 @@ const ApplicantPackageImplements = ({
 				showActionMenu={false}
 				setRecords={setSelectedRecords}
 			/>
+			{opened && (
+				<ImplementModal
+					applicantId={databaseID}
+					officeId={applicant?.office_id}
+					opened={opened}
+					close={() => {
+						close();
+						setEdit(undefined);
+					}}
+					lng={lng}
+					setMutated={setMutated}
+					title={!edit ? t("aid_implement") : t("edit_aid_implement")}
+					editId={edit}
+				/>
+			)}
 		</>
 	);
 };
