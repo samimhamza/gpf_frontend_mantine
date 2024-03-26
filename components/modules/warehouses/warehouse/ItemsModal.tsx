@@ -10,6 +10,7 @@ import {
 	Select,
 	TextInput,
 } from "@mantine/core";
+import moment from "jalali-moment";
 import React, { Dispatch, SetStateAction } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
@@ -136,6 +137,7 @@ const ItemsModal = ({
 									return newDates;
 								});
 							}}
+							maxDate={moment().valueOf()}
 							errorMessage={storeDatesErrorMessage[index]}
 						/>
 					</Flex>

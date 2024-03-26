@@ -13,6 +13,7 @@ interface PersianDatePicker {
 	onChange: any;
 	errorMessage?: string;
 	dateTime?: boolean;
+	maxDate?: number | undefined;
 }
 
 const PersianDatePicker = ({
@@ -22,6 +23,7 @@ const PersianDatePicker = ({
 	onChange,
 	errorMessage,
 	dateTime = false,
+	maxDate = undefined,
 }: PersianDatePicker) => {
 	return (
 		<Box style={{ flex: 1 }}>
@@ -53,6 +55,7 @@ const PersianDatePicker = ({
 					plugins={
 						dateTime ? [<TimePicker position="bottom" hideSeconds />] : []
 					}
+					maxDate={maxDate}
 				/>
 			</Box>
 			{errorMessage && (

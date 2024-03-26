@@ -42,6 +42,9 @@ export const WarehouseModule = ({ lng, id }: { lng: string; id: number }) => {
 		}
 	}, [edit]);
 
+	const onDelete = async () => {
+		await mutate();
+	};
 	return (
 		<>
 			<CustomBreadCrumb
@@ -65,6 +68,7 @@ export const WarehouseModule = ({ lng, id }: { lng: string; id: number }) => {
 				showAdd={permissionChecker(ADD_WAREHOUSES)}
 				showDelete={permissionChecker(DELETE_WAREHOUSES)}
 				showEdit={permissionChecker(EDIT_WAREHOUSES)}
+				onDelete={onDelete}
 				// orderBy={{
 				// 	column: "store_date",
 				// 	order: "desc",

@@ -3,6 +3,7 @@
 import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { Flex, Select, TextInput } from "@mantine/core";
+import moment from "jalali-moment";
 import React, { Dispatch, SetStateAction } from "react";
 import { Value } from "react-multi-date-picker";
 
@@ -77,6 +78,7 @@ const ItemModal = ({
 					value={storeDates[0]}
 					onChange={(value: Value) => setStoreDates([value])}
 					errorMessage={storeDatesErrorMessage[0]}
+					maxDate={moment().valueOf()}
 				/>
 			</Flex>
 		</>

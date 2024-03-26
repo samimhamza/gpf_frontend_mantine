@@ -179,8 +179,7 @@ const WarehouseItemsModal = ({
 				setMutated(true);
 				await mutate();
 				close();
-			}
-			if (status == 422) {
+			} else if (status == 422) {
 				toast.error(t("editing_not_allowed"));
 				close();
 			} else {
