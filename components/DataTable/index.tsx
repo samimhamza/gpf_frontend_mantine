@@ -34,7 +34,7 @@ interface DataTableProps {
 	};
 	showSecondTitle?: boolean;
 	secondTitleAddLabel?: string;
-	parentMutate?: any;
+	onDelete?: () => {};
 }
 
 const CustomDataTable = ({
@@ -59,7 +59,7 @@ const CustomDataTable = ({
 	},
 	showSecondTitle = false,
 	secondTitleAddLabel,
-	parentMutate,
+	onDelete,
 	...additionalProps
 }: DataTableProps) => {
 	const { t } = useTranslation(lng);
@@ -130,8 +130,8 @@ const CustomDataTable = ({
 
 		if (status == 204) {
 			await mutate();
-			if (parentMutate) {
-				await parentMutate();
+			if (onDelete) {
+				await onDelete();
 			}
 			setSelectedRecords([]);
 			toast.success(t("successfully_deleted"));

@@ -18,12 +18,14 @@ const ApplicantPackageImplements = ({
 	applicant,
 	checkPermission,
 	mutate,
+	packagesDeleted,
 }: {
 	lng: string;
 	databaseID: number;
 	applicant: any;
 	checkPermission: (permission: string) => boolean;
 	mutate: any;
+	packagesDeleted: boolean;
 }) => {
 	const { t } = useTranslation(lng);
 	const columns = ApplicantPackageImplementColumns(t);
@@ -36,6 +38,12 @@ const ApplicantPackageImplements = ({
 			open();
 		}
 	}, [edit]);
+
+	useEffect(() => {
+		if (packagesDeleted) {
+			setMutated(true);
+		}
+	}, [packagesDeleted]);
 
 	const isImplementAvailable = () => {
 		return (

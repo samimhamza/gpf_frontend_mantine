@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { ApplicantSurveyColumns } from "@/shared/columns/applicant_survey.columns";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { CustomDataTable } from "@/components/DataTable";
 import {
@@ -18,12 +18,14 @@ const ApplicantSurveys = ({
 	applicant,
 	checkPermission,
 	mutate,
+	setPackagesDelete,
 }: {
 	lng: string;
 	databaseID: number;
 	applicant: any;
 	checkPermission: (permission: string) => boolean;
 	mutate: any;
+	setPackagesDelete: Dispatch<SetStateAction<boolean>>;
 }) => {
 	const { t } = useTranslation(lng);
 	const columns = ApplicantSurveyColumns(t);
@@ -36,6 +38,11 @@ const ApplicantSurveys = ({
 			open();
 		}
 	}, [edit]);
+
+	const onDelete = async () => {
+		await mutate();
+		setPackagesDelete(true);
+	};
 
 	return (
 		<>
@@ -58,11 +65,12 @@ const ApplicantSurveys = ({
 				height={300}
 				showSecondTitle={true}
 				secondTitleAddLabel={t("assign_package")}
-				parentMutate={mutate}
+				onDelete={onDelete}
 			/>
 			{opened && (
 				<ApplicantPackageModal
 					applicantId={databaseID}
+					officeId={applicant?.office_id}
 					opened={opened}
 					close={() => {
 						close();
