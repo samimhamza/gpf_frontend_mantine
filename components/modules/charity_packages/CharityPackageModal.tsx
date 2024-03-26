@@ -76,7 +76,7 @@ const CharityPackageModal = ({
 			await setMutated(true);
 			return true;
 		}
-		if (status == 423) {
+		if (status == 422) {
 			toast.error(t("editing_not_allowed"));
 			close();
 			return false;

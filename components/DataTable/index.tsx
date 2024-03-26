@@ -135,8 +135,8 @@ const CustomDataTable = ({
 			}
 			setSelectedRecords([]);
 			toast.success(t("successfully_deleted"));
-		} else if (status == 226) toast.error(t("delete_not_allowed"));
-		if (error) toast.error(t("something_went_wrong"));
+		} else if (status == 422) toast.error(t("delete_not_allowed"));
+		if (error && status != 422) toast.error(t("something_went_wrong"));
 
 		setDeleteLoading(false);
 	};

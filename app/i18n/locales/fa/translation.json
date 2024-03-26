@@ -183,5 +183,6 @@
 	"delete_not_allowed": "دیتای انتخاب شده قابل حذف نمیباشد",
 	"users_count": "تعداد کاربر ها",
 	"permissions_count": "تعداد مجوز ها",
-	"status_change_not_allowed": "تغییر وضیعت ممکن نیست!"
+	"status_change_not_allowed": "تغییر وضیعت ممکن نیست!",
+	"code": "کد"
 }

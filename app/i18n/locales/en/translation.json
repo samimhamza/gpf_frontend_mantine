@@ -183,5 +183,6 @@
 	"delete_not_allowed": "Delete not allowed for selected data!",
 	"permissions_count": "Permissions Count",
 	"users_count": "Users Count",
-	"status_change_not_allowed": "Status change is not allowed!"
+	"status_change_not_allowed": "Status change is not allowed!",
+	"code": "Code"
 }
