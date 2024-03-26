@@ -1,3 +1,4 @@
+import { Center } from "@mantine/core";
 import { logColumns } from ".";
 import { getDateTime } from "../functions";
 
@@ -12,6 +13,7 @@ export const ApplicantPackageImplementColumns = (
 			title: t("id"),
 			noWrap: true,
 			sortable: true,
+			render: ({ id }: { id: number }) => <Center>{id}</Center>,
 		},
 		{
 			accessor: "implement_date",

@@ -20,6 +20,7 @@ interface DataProps {
 
 interface DataTableProps {
 	title: string | ReactNode;
+	showSecondTitle?: boolean;
 	columns: Array<any>;
 	search: string;
 	lng: string;
@@ -39,6 +40,7 @@ interface DataTableProps {
 
 const MantineDataTable = ({
 	title,
+	showSecondTitle,
 	columns,
 	search,
 	lng,
@@ -122,7 +124,7 @@ const MantineDataTable = ({
 	return (
 		<>
 			<Paper withBorder shadow="sm" my="md">
-				{typeof title == "string" ? (
+				{typeof title === "string" ? (
 					<Center className="datatable_title">
 						<Group justify="space-between" align="center" p="sm">
 							<Title order={4}>{title}</Title>

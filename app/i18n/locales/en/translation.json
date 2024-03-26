@@ -173,7 +173,7 @@
 	"save": "Save",
 	"profile": "Profile",
 	"edit": "Edit",
-	"editing_not_allowed": "Editing Not Allowed!",
+	"editing_not_allowed": "Editing not allowed!",
 	"implement_date": "Donation Implement Date",
 	"implements_history": "Received Donations History",
 	"aid_implement": "Donation Implement",
@@ -182,5 +182,6 @@
 	"user_management": "User Management",
 	"delete_not_allowed": "Delete not allowed for selected data!",
 	"permissions_count": "Permissions Count",
-	"users_count": "Users Count"
+	"users_count": "Users Count",
+	"status_change_not_allowed": "Status change is not allowed!"
 }

@@ -1,11 +1,11 @@
+"use client";
+
 import { useTranslation } from "@/app/i18n/client";
 import { ActionIcon, Button, Group, Input, Paper } from "@mantine/core";
 import { MdAdd } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { Dispatch, SetStateAction, useState } from "react";
-import toast from "react-hot-toast";
-import { useAxios } from "@/customHooks/useAxios";
 
 interface ActionMenuProps {
 	deleteUrl: string;
@@ -17,47 +17,27 @@ interface ActionMenuProps {
 	open?: () => void;
 	showAdd: boolean;
 	showDelete: boolean;
+	deleteLoading: boolean;
+	handleDelete: (e: any) => {};
 }
 
 const ActionMenu = ({
-	deleteUrl,
 	selectedRecords,
-	setSelectedRecords,
 	onSearch,
 	lng,
-	mutate,
 	open,
 	showAdd,
 	showDelete,
+	deleteLoading,
+	handleDelete,
 }: ActionMenuProps) => {
 	const { t } = useTranslation(lng);
 	const [search, setSearch] = useState("");
-	const [deleteLoading, setDeleteLoading] = useState(false);
-	const callApi = useAxios();
 
 	const handleSearch = (e: any) => {
 		if (e.keyCode == 13) {
 			onSearch(search);
 		}
-	};
-
-	const handleDelete = async (e: any) => {
-		setDeleteLoading(true);
-		const ids = selectedRecords.map((rec) => rec.id);
-		const { status, error } = await callApi({
-			method: "DELETE",
-			url: deleteUrl,
-			data: { ids },
-		});
-
-		if (status == 204) {
-			await mutate();
-			setSelectedRecords([]);
-			toast.success(t("successfully_deleted"));
-		} else if (status == 226) toast.error(t("delete_not_allowed"));
-		if (error) toast.error(t("something_went_wrong"));
-
-		setDeleteLoading(false);
 	};
 
 	return (

@@ -54,6 +54,8 @@ export const statusColum = (
 			});
 			if (status == 202) {
 				setMutated(true);
+			} else if (status == 226) {
+				toast.error(t("status_change_not_allowed"));
 			} else {
 				toast.error(t("something_went_wrong"));
 			}

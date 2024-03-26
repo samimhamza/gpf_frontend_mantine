@@ -1,3 +1,4 @@
+import { Center } from "@mantine/core";
 import { logColumns } from ".";
 import { getDate } from "../functions";
 
@@ -10,6 +11,7 @@ export const WarehouseItemColumns = (t: (arg: string) => string) => {
 			title: t("id"),
 			noWrap: true,
 			sortable: true,
+			render: ({ id }: { id: number }) => <Center>{id}</Center>,
 		},
 		{
 			accessor: "item_name",
