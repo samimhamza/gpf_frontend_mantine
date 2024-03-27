@@ -57,6 +57,9 @@
 	"max_64_length_error": "حد اکثر ۶۴ حرف اجازه است",
 	"roles": "صلاحیت ها",
 	"role": "صلاحیت",
+	"role_info": "اطلاعات صلاحیت",
+	"add_role": "ایجاد صلاحیت جدید",
+	"update_role": "ویرایش صلاحیت",
 	"schools": "مکاتب",
 	"province": "ولایت",
 	"district": "ولسوالی/شهر",
@@ -175,5 +178,11 @@
 	"implements_history": "تاریخچه کمک های دریافت شده",
 	"aid_implement": "اجرای مساعدت",
 	"edit_aid_implement": "ویرایش اجرای مساعدت",
-	"not_found_in_warehouse": "اجناس به مقدار کافی در انبار موجود نمیباشد"
+	"not_found_in_warehouse": "اجناس به مقدار کافی در انبار موجود نمیباشد",
+	"user_management": "مدیریت کاربر ها",
+	"delete_not_allowed": "دیتای انتخاب شده قابل حذف نمیباشد",
+	"users_count": "تعداد کاربر ها",
+	"permissions_count": "تعداد مجوز ها",
+	"status_change_not_allowed": "تغییر وضیعت ممکن نیست!",
+	"code": "کد"
 }

@@ -19,8 +19,11 @@ export const TeacherColumns = (
 			title: t("id"),
 			noWrap: true,
 			sortable: true,
-			render: (record: any) =>
-				getID(record.office_code, record.created_at, record.id),
+			render: (record: any) => (
+				<Center>
+					{getID(record.office_code, record.created_at, record.id)}
+				</Center>
+			),
 		},
 		{
 			accessor: "office_code",

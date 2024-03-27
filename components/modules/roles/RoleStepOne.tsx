@@ -1,21 +1,10 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import {
-	Box,
-	Checkbox,
-	Flex,
-	MultiSelect,
-	Paper,
-	Stack,
-	Text,
-} from "@mantine/core";
-import React from "react";
-import classes from "./UserStepTwo.module.css";
 import Permissions from "@/components/Permissions";
+import { Box, Checkbox, Flex, Paper, Text, TextInput } from "@mantine/core";
 
-interface UserStepTwoProps {
-	roles: Array<{ value: number; label: string }>;
+interface RoleStepOneProps {
 	permissions: any;
 	form: any;
 	lng: string;
@@ -28,13 +17,12 @@ interface permissionsProps {
 	group_name: string;
 }
 
-const UserStepTwo = ({
-	roles,
-	permissions,
+const RoleStepOne = ({
 	form,
 	lng,
+	permissions,
 	totalPermissions,
-}: UserStepTwoProps) => {
+}: RoleStepOneProps) => {
 	const { t } = useTranslation(lng);
 	const setAllPermissions = () => {
 		const permissionIds: number[] = [];
@@ -52,18 +40,20 @@ const UserStepTwo = ({
 
 	return (
 		<>
-			<Stack p="sm">
-				<MultiSelect
-					label={t("roles")}
-					placeholder={t("roles")}
+			<Flex
+				direction={{ base: "column", sm: "row" }}
+				gap="sm"
+				p="sm"
+				justify={{ sm: "center" }}
+			>
+				<TextInput
+					style={{ flex: 1 }}
+					label={t("name")}
+					placeholder={t("name")}
 					withAsterisk
-					data={roles}
-					searchable
-					clearable
-					nothingFoundMessage={t("noting_found")}
-					{...form.getInputProps("roles")}
+					{...form.getInputProps("name")}
 				/>
-			</Stack>
+			</Flex>
 			<Box dir="ltr">
 				<Paper m="sm" withBorder shadow="xs" radius="xs">
 					<Box className="borderBottom" px="xs">
@@ -105,4 +95,4 @@ const UserStepTwo = ({
 	);
 };
 
-export default UserStepTwo;
+export default RoleStepOne;

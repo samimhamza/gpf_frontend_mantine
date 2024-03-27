@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { useAxios } from "@/customHooks/useAxios";
 import { ApplicantPackageImplementColumns } from "@/shared/columns/applicant_package_implement.columns";
 import { useEffect, useState } from "react";
 import { useDisclosure } from "@mantine/hooks";
@@ -12,25 +11,24 @@ import {
 	EDIT_APPLICANT_PACKAGE_IMPLEMENTS,
 } from "@/shared/constants/Permissions";
 import ImplementModal from "./ImplementModal";
-import CustomTableTitle from "@/components/CustomTableTitle";
-import toast from "react-hot-toast";
 
 const ApplicantPackageImplements = ({
 	lng,
 	databaseID,
 	applicant,
 	checkPermission,
+	mutate,
+	packagesDeleted,
 }: {
 	lng: string;
 	databaseID: number;
 	applicant: any;
 	checkPermission: (permission: string) => boolean;
+	mutate: any;
+	packagesDeleted: boolean;
 }) => {
 	const { t } = useTranslation(lng);
-	const callApi = useAxios();
 	const columns = ApplicantPackageImplementColumns(t);
-	const [selectedRecords, setSelectedRecords] = useState([]);
-	const [deleteLoading, setDeleteLoading] = useState(false);
 	const [opened, { open, close }] = useDisclosure();
 	const [mutated, setMutated] = useState(false);
 	const [edit, setEdit] = useState<number>();
@@ -41,46 +39,23 @@ const ApplicantPackageImplements = ({
 		}
 	}, [edit]);
 
-	const handleDelete = async (e: any) => {
-		setDeleteLoading(true);
-		const ids = selectedRecords.map((rec) => rec.id);
-		const { status, error } = await callApi({
-			method: "DELETE",
-			url: "applicant_package_implements/1",
-			data: { ids },
-		});
-
-		if (status == 204) {
-			// await mutate();
-			setSelectedRecords([]);
-			toast.success(t("successfully_deleted"));
+	useEffect(() => {
+		if (packagesDeleted) {
+			setMutated(true);
 		}
-		if (error) toast.error(t("something_went_wrong"));
+	}, [packagesDeleted]);
 
-		setDeleteLoading(false);
+	const isImplementAvailable = () => {
+		return (
+			applicant?.surveys[0]?.implements_count <
+			applicant?.surveys[0]?.charity_package?.period
+		);
 	};
 
 	return (
 		<>
 			<CustomDataTable
-				title={
-					<CustomTableTitle
-						title={t("implements_history")}
-						showAdd={
-							checkPermission(ADD_APPLICANT_PACKAGE_IMPLEMENTS) &&
-							applicant?.surveys?.length
-						}
-						showDelete={
-							checkPermission(DELETE_APPLICANT_PACKAGE_IMPLEMENTS) &&
-							selectedRecords.length > 0
-						}
-						addLabel={t("aid_implement")}
-						deleteLabel={t("delete")}
-						deleteLoading={deleteLoading}
-						handleDelete={handleDelete}
-						openModal={open}
-					/>
-				}
+				title={t("implements_history")}
 				url={`/applicant_package_implements?applicant_id=${databaseID}`}
 				deleteUrl="/applicant_package_implements/1"
 				lng={lng}
@@ -89,13 +64,16 @@ const ApplicantPackageImplements = ({
 				mutated={mutated}
 				setMutated={setMutated}
 				setEdit={setEdit}
-				showAdd={checkPermission(ADD_APPLICANT_PACKAGE_IMPLEMENTS)}
+				showAdd={
+					checkPermission(ADD_APPLICANT_PACKAGE_IMPLEMENTS) &&
+					isImplementAvailable()
+				}
 				showDelete={checkPermission(DELETE_APPLICANT_PACKAGE_IMPLEMENTS)}
 				showEdit={checkPermission(EDIT_APPLICANT_PACKAGE_IMPLEMENTS)}
 				showView={false}
 				height={300}
-				showActionMenu={false}
-				setRecords={setSelectedRecords}
+				showSecondTitle={true}
+				secondTitleAddLabel={t("aid_implement")}
 			/>
 			{opened && (
 				<ImplementModal
@@ -108,6 +86,7 @@ const ApplicantPackageImplements = ({
 					}}
 					lng={lng}
 					setMutated={setMutated}
+					mutate={mutate}
 					title={!edit ? t("aid_implement") : t("edit_aid_implement")}
 					editId={edit}
 				/>

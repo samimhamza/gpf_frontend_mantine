@@ -1,7 +1,7 @@
 import { Center } from "@mantine/core";
 import { logColumns } from ".";
 
-export const WarehouseColumns = (t: (arg: string) => string) => {
+export const RoleColumns = (t: (arg: string) => string) => {
 	const logs = logColumns(t);
 
 	return [
@@ -19,22 +19,22 @@ export const WarehouseColumns = (t: (arg: string) => string) => {
 			sortable: true,
 		},
 		{
-			accessor: "office_code",
-			title: t("office"),
+			accessor: "users_count",
+			title: t("users_count"),
 			noWrap: true,
 			sortable: true,
+			render: ({ users_count }: { users_count: number }) => (
+				<Center>{users_count}</Center>
+			),
 		},
 		{
-			accessor: "province_name_fa",
-			title: t("province"),
+			accessor: "permissions_count",
+			title: t("permissions_count"),
 			noWrap: true,
 			sortable: true,
-		},
-		{
-			accessor: "items_count",
-			title: t("total_items"),
-			noWrap: true,
-			sortable: true,
+			render: ({ permissions_count }: { permissions_count: number }) => (
+				<Center>{permissions_count}</Center>
+			),
 		},
 		...logs,
 	];

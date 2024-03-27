@@ -9,6 +9,10 @@ export const getDateTime = (utcTime: string) => {
 		.format("YYYY-MM-DD hh:mm:ss A");
 };
 
+export const getTimeValue = (utcTime: string) => {
+	return moment.utc(utcTime).local().locale("fa").valueOf();
+};
+
 export const getDate = (utcDate: string) => {
 	return moment.utc(utcDate).local().locale("fa").format("YYYY-MM-DD");
 };

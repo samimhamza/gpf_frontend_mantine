@@ -71,6 +71,11 @@ const SchoolModal = ({
 			await setMutated(true);
 			return true;
 		}
+		if (status == 422) {
+			toast.error(t("editing_not_allowed"));
+			close();
+			return false;
+		}
 		toast.error(t("something_went_wrong"));
 		return false;
 	};

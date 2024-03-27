@@ -1,9 +1,9 @@
 "use client";
 
-import WarehouseStepOne from "@/components/modules/warehouses/WarehouseStepOne";
+import RoleStepOne from "@/components/modules/roles/RoleStepOne";
 import { useForm, zodResolver } from "@mantine/form";
-import { WarehouseSchema } from "@/schemas/models/warehouses";
-import { MdInventory } from "react-icons/md";
+import { RoleSchema } from "@/schemas/models/roles";
+import { BiSolidBox } from "react-icons/bi";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 
-const WarehouseModal = ({
+const RoleModal = ({
 	opened,
 	close,
 	lng,
@@ -27,21 +27,20 @@ const WarehouseModal = ({
 	editId: number | undefined;
 }) => {
 	const { t } = useTranslation(lng);
-	const warehouseSchema = WarehouseSchema(t);
+	const roleSchema = RoleSchema(t);
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
-	const [provinces, setProvinces] = useState([]);
-	const [offices, setOffices] = useState([]);
+	const [permissions, setPermissions] = useState([]);
+	const [totalPermissions, setTotalPermissions] = useState<number>(0);
 
 	const initialValues: any = {
 		name: "",
-		office_id: "",
-		province_id: "",
+		permissions: [],
 	};
 
 	const form = useForm({
 		initialValues: initialValues,
-		validate: zodResolver(warehouseSchema),
+		validate: zodResolver(roleSchema),
 		validateInputOnBlur: true,
 	});
 
@@ -49,19 +48,19 @@ const WarehouseModal = ({
 		const { response, status } = !editId
 			? await callApi({
 					method: "POST",
-					url: "/warehouses",
+					url: "/roles",
 					data: form.values,
 			  })
 			: await callApi({
 					method: "PUT",
-					url: `/warehouses/${editId}`,
+					url: `/roles/${editId}`,
 					data: form.values,
 			  });
 		if ((!editId ? status == 201 : status == 202) && response.result) {
 			await setMutated(true);
 			return true;
 		}
-		if (status == 422) {
+		if (status == 226) {
 			toast.error(t("editing_not_allowed"));
 			close();
 			return false;
@@ -74,19 +73,23 @@ const WarehouseModal = ({
 		if (editId) {
 			(async function () {
 				setLoading(true);
-				const { response, status, error } = await callApi({
+				const { response, status } = await callApi({
 					method: "GET",
-					url: `/warehouses/${editId}`,
+					url: `/roles/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
 					let values: any = {};
+					values.permissions = [];
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(initialValues).includes(key)) {
-							if (key != "office_id" && key != "province_id") {
+							if (key != "permissions")
 								values[key] = value ? value : initialValues[key];
-							}
-							if ((key == "office_id" || key == "province_id") && value) {
-								values[key] = value.toString();
+						}
+						if (Array.isArray(value) && value.length) {
+							if (key == "permissions") {
+								value.forEach((item: any) => {
+									values.permissions.push(item.id);
+								});
 							}
 						}
 					});
@@ -99,44 +102,23 @@ const WarehouseModal = ({
 
 	useEffect(() => {
 		(async function () {
+			setLoading(true);
 			const { response, status, error } = await callApi({
 				method: "GET",
-				url: "/all_offices",
-				// url: "/office/auto_complete",
+				url: "/grouped_permissions",
 			});
 			if (status == 200 && response.result == true) {
-				setOffices(
-					response.data.map((item: any) => {
-						return {
-							value: item.id.toString(),
-							label: item.name + " (" + item.code + ")",
-						};
-					})
-				);
+				setPermissions(response.data);
+				setTotalPermissions(response.total);
 			}
-		})();
-	}, []);
-
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				method: "GET",
-				url: "/all_provinces",
-			});
-			if (status == 200 && response.result == true) {
-				setProvinces(
-					response.data.map((item: any) => {
-						return { value: item.id.toString(), label: item.name_fa };
-					})
-				);
-			}
+			setLoading(false);
 		})();
 	}, []);
 
 	const steps = [
 		{
-			title: t("warehouse_info"),
-			icon: <MdInventory size={22} />,
+			title: t("role_info"),
+			icon: <BiSolidBox size={22} />,
 			step: (
 				<Box pos="relative">
 					<LoadingOverlay
@@ -144,25 +126,22 @@ const WarehouseModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<WarehouseStepOne
+					<RoleStepOne
 						form={form}
 						lng={lng}
-						offices={offices}
-						provinces={provinces}
+						permissions={permissions}
+						totalPermissions={totalPermissions}
 					/>
 				</Box>
 			),
 			async validate() {
 				form.validate();
-				let res =
-					form.isValid("name") &&
-					form.isValid("office_id") &&
-					form.isValid("province_id");
+				let res = form.isValid("name");
 
 				if (res) {
 					let { response, status } = await callApi({
 						method: "POST",
-						url: "/warehouses/check_uniqueness",
+						url: "/roles/check_uniqueness",
 						data: {
 							name: form.values.name,
 							id: editId ? editId : null,
@@ -196,4 +175,4 @@ const WarehouseModal = ({
 	);
 };
 
-export default WarehouseModal;
+export default RoleModal;

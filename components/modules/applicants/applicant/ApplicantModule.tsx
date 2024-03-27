@@ -13,10 +13,12 @@ import useSWR from "swr";
 import ApplicantSurveys from "./ApplicantSurveys";
 import ApplicantPackageImplements from "./ApplicantPackageImplements";
 import { getID } from "@/shared/functions";
+import { useState } from "react";
 
 export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
+	const [packagesDeleted, setPackagesDelete] = useState(false);
 
 	const { data, error, isLoading, mutate } = useSWR(
 		`/applicants/${id}`,
@@ -72,6 +74,8 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 					databaseID={id}
 					applicant={data}
 					checkPermission={checkPermission}
+					mutate={mutate}
+					packagesDeleted={packagesDeleted}
 				/>
 			)}
 
@@ -81,6 +85,8 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 					databaseID={id}
 					applicant={data}
 					checkPermission={checkPermission}
+					mutate={mutate}
+					setPackagesDelete={setPackagesDelete}
 				/>
 			)}
 			{/* {opened && (

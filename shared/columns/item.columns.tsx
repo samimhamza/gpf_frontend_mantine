@@ -1,3 +1,4 @@
+import { Center } from "@mantine/core";
 import { logColumns } from ".";
 
 export const ItemColumns = (t: (arg: string) => string) => {
@@ -9,6 +10,7 @@ export const ItemColumns = (t: (arg: string) => string) => {
 			title: t("id"),
 			noWrap: true,
 			sortable: true,
+			render: ({ id }: { id: number }) => <Center>{id}</Center>,
 		},
 		{
 			accessor: "name",

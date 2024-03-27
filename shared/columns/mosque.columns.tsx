@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { logColumns } from ".";
 import { statusColum } from "./statusColum";
+import { Center } from "@mantine/core";
 
 export const MosqueColumns = (
 	t: (arg: string) => string,
@@ -39,6 +40,7 @@ export const MosqueColumns = (
 			title: t("id"),
 			noWrap: true,
 			sortable: true,
+			render: ({ id }: { id: number }) => <Center>{id}</Center>,
 		},
 		{
 			accessor: "office_code",

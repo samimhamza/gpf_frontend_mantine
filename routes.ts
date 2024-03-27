@@ -44,4 +44,5 @@ export const protectedRoutes = [
 	"/categories",
 	"/charity_packages",
 	"/users",
+	"/roles",
 ];

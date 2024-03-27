@@ -1,7 +1,7 @@
 import { Button, Flex, Group, Title } from "@mantine/core";
 import { MdAdd, MdDelete } from "react-icons/md";
 
-const CustomTableTitle = ({
+const SecondTableTitle = ({
 	title,
 	handleDelete,
 	showDelete,
@@ -51,4 +51,4 @@ const CustomTableTitle = ({
 	);
 };
 
-export default CustomTableTitle;
+export default SecondTableTitle;

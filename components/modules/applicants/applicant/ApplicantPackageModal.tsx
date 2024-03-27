@@ -25,22 +25,26 @@ import { Value } from "react-multi-date-picker";
 
 interface ApplicantPackageModalProps {
 	applicantId: number | undefined;
+	officeId: number | undefined;
 	opened: boolean;
 	close: () => void;
 	lng: string;
 	setMutated: Dispatch<SetStateAction<boolean>>;
 	title: string;
 	editId: number | undefined;
+	mutate: any;
 }
 
 const ApplicantPackageModal = ({
 	applicantId,
+	officeId,
 	opened,
 	close,
 	lng,
 	setMutated,
 	title,
 	editId,
+	mutate,
 }: ApplicantPackageModalProps) => {
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
@@ -48,7 +52,6 @@ const ApplicantPackageModal = ({
 	const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 	const callApi = useAxios();
 	const surveyResultSchema = SurveyResultSchema(t);
-	const [categories, setCategories] = useState([]);
 	const [packages, setPackages] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [submitLoading, setSubmitLoading] = useState(false);
@@ -57,7 +60,6 @@ const ApplicantPackageModal = ({
 
 	const initialValues: any = {
 		applicant_id: applicantId,
-		category_id: "",
 		charity_package_id: "",
 		survey_date: null,
 		description: "",
@@ -94,6 +96,7 @@ const ApplicantPackageModal = ({
 				data: form.values,
 			});
 			if (status == 201 && response.result) {
+				await mutate();
 				setMutated(true);
 				close();
 			} else {
@@ -105,46 +108,52 @@ const ApplicantPackageModal = ({
 
 	useEffect(() => {
 		(async function () {
-			const { response, status, error } = await callApi({
-				method: "GET",
-				url: "/all_categories",
-			});
-			if (status == 200 && response.result == true) {
-				setCategories(
-					response.data.map((item: any) => {
-						return {
-							value: item.id.toString(),
-							label: item.name,
-						};
-					})
-				);
-			}
-		})();
-	}, []);
-
-	useEffect(() => {
-		(async function () {
-			if (form?.values?.category_id) {
+			if (officeId) {
 				setLoading(true);
 				const { response, status, error } = await callApi({
 					method: "GET",
-					url: `/active_packages?category_id=${form?.values?.category_id}`,
+					url: `/active_packages?office_id=${officeId}`,
 				});
 				if (status == 200 && response.result == true) {
-					setPackages(
-						response.data.map((item: any) => {
-							return {
-								value: item.id.toString(),
-								label: item.name,
-								category_id: item.category_id?.toString(),
-							};
-						})
+					const packages: any = Object.entries(response.data).map(
+						([name, items]: any) => {
+							const packages = items.map((item: any) => {
+								return {
+									value: item.id.toString(),
+									label: item.name,
+								};
+							});
+							return { group: t("category") + " : " + name, items: packages };
+						}
 					);
+					setPackages(packages);
 				}
 				setLoading(false);
 			}
 		})();
-	}, [form?.values?.category_id]);
+	}, [officeId]);
+
+	useEffect(() => {
+		if (editId) {
+			(async function () {
+				setLoading(true);
+				const { response, status, error } = await callApi({
+					method: "GET",
+					url: `/applicant_surveys/${editId}`,
+				});
+				if (status == 200 && response.result == true) {
+					let values: any = {};
+					Object.entries(response.data).forEach(([key, value]) => {
+						if (Object.keys(initialValues).includes(key)) {
+							values[key] = value ? value : initialValues[key];
+						}
+					});
+					form.setValues(values);
+					setLoading(false);
+				}
+			})();
+		}
+	}, [editId]);
 
 	useEffect(() => {
 		if (surveyDate) {
@@ -190,18 +199,6 @@ const ApplicantPackageModal = ({
 						>
 							<Select
 								style={{ flex: 1 }}
-								label={t("category")}
-								placeholder={t("category")}
-								data={categories}
-								withAsterisk
-								searchable
-								clearable
-								nothingFoundMessage={t("noting_found")}
-								{...form.getInputProps("category_id")}
-							/>
-							<Select
-								disabled={packages.length < 1}
-								style={{ flex: 1 }}
 								label={t("charity_package")}
 								placeholder={t("charity_package")}
 								withAsterisk
@@ -212,13 +209,6 @@ const ApplicantPackageModal = ({
 								rightSection={loading && <Loader color="blue" size={15} />}
 								{...form.getInputProps("charity_package_id")}
 							/>
-						</Flex>
-						<Flex
-							direction={{ base: "column", sm: "row" }}
-							gap="sm"
-							p="sm"
-							justify={{ sm: "center" }}
-						>
 							<PersianDatePicker
 								label={t("survey_date")}
 								placeholder={t("survey_date")}
@@ -226,6 +216,13 @@ const ApplicantPackageModal = ({
 								onChange={setSurveyDate}
 								errorMessage={surveyDateErrorMessage}
 							/>
+						</Flex>
+						<Flex
+							direction={{ base: "column", sm: "row" }}
+							gap="sm"
+							p="sm"
+							justify={{ sm: "center" }}
+						>
 							<Textarea
 								resize="vertical"
 								style={{ flex: 1 }}

@@ -1,10 +1,6 @@
-import {
-	Dispatch,
-	ReactNode,
-	SetStateAction,
-	useEffect,
-	useState,
-} from "react";
+"use client";
+
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ActionMenu from "./ActionMenu";
 import { MantineDataTable } from "./MantineDataTable";
 import useSWR from "swr";
@@ -12,9 +8,12 @@ import { Center } from "@mantine/core";
 import { useAxios } from "@/customHooks/useAxios";
 import { TbClick } from "react-icons/tb";
 import { Actions } from "./Actions";
+import toast from "react-hot-toast";
+import SecondTableTitle from "../SecondTableTitle";
+import { useTranslation } from "@/app/i18n/client";
 
 interface DataTableProps {
-	title: string | ReactNode;
+	title: string;
 	url: string;
 	deleteUrl: string;
 	columns: Array<any>;
@@ -23,18 +22,19 @@ interface DataTableProps {
 	mutated: boolean;
 	setMutated: Dispatch<SetStateAction<boolean>>;
 	setEdit: Dispatch<SetStateAction<number | undefined>>;
+	showView?: boolean;
 	setView?: Dispatch<SetStateAction<number | undefined>>;
 	showAdd: boolean;
 	showDelete: boolean;
 	showEdit: boolean;
-	showView?: boolean;
 	height?: number;
 	orderBy?: {
 		column: string;
 		order: "desc" | "asc";
 	};
-	showActionMenu?: boolean;
-	setRecords?: any;
+	showSecondTitle?: boolean;
+	secondTitleAddLabel?: string;
+	onDelete?: () => {};
 }
 
 const CustomDataTable = ({
@@ -57,13 +57,16 @@ const CustomDataTable = ({
 		column: "created_at",
 		order: "desc",
 	},
-	showActionMenu = true,
-	setRecords,
+	showSecondTitle = false,
+	secondTitleAddLabel,
+	onDelete,
 	...additionalProps
 }: DataTableProps) => {
+	const { t } = useTranslation(lng);
 	const callApi = useAxios();
 	const [search, setSearch] = useState("");
 	const [selectedRecords, setSelectedRecords] = useState([]);
+	const [deleteLoading, setDeleteLoading] = useState(false);
 	const [tableDetails, setTableDetails] = useState({
 		page: 1,
 		per_page: 20,
@@ -90,7 +93,7 @@ const CustomDataTable = ({
 				setMutated(false);
 			}
 		})();
-	}, [mutated, setMutated, mutate]);
+	}, [mutated]);
 
 	const renderActions = (record: any) => (
 		<Actions
@@ -116,15 +119,44 @@ const CustomDataTable = ({
 		});
 	}
 
-	useEffect(() => {
-		if (setRecords) {
-			setRecords(selectedRecords);
-		}
-	}, [selectedRecords]);
+	const handleDelete = async (e: any) => {
+		setDeleteLoading(true);
+		const ids = selectedRecords.map((rec: any) => rec.id);
+		const { status, error } = await callApi({
+			method: "DELETE",
+			url: deleteUrl,
+			data: { ids },
+		});
+
+		if (status == 204) {
+			await mutate();
+			if (onDelete) {
+				await onDelete();
+			}
+			setSelectedRecords([]);
+			toast.success(t("successfully_deleted"));
+		} else if (status == 422) toast.error(t("delete_not_allowed"));
+		if (error && status != 422) toast.error(t("something_went_wrong"));
+
+		setDeleteLoading(false);
+	};
+
+	const secondTitle = (
+		<SecondTableTitle
+			title={title}
+			showAdd={showAdd}
+			showDelete={showDelete && selectedRecords.length > 0}
+			addLabel={secondTitleAddLabel}
+			deleteLabel={t("delete")}
+			deleteLoading={deleteLoading}
+			handleDelete={handleDelete}
+			openModal={open}
+		/>
+	);
 
 	return (
 		<>
-			{showActionMenu && (
+			{!showSecondTitle && (
 				<ActionMenu
 					deleteUrl={deleteUrl}
 					onSearch={setSearch}
@@ -135,10 +167,12 @@ const CustomDataTable = ({
 					open={open}
 					showAdd={showAdd}
 					showDelete={showDelete}
+					deleteLoading={deleteLoading}
+					handleDelete={handleDelete}
 				/>
 			)}
 			<MantineDataTable
-				title={title}
+				title={showSecondTitle ? secondTitle : title}
 				lng={lng}
 				columns={columns}
 				search={search}
