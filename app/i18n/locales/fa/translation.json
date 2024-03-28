@@ -184,5 +184,6 @@
 	"users_count": "تعداد کاربر ها",
 	"permissions_count": "تعداد مجوز ها",
 	"status_change_not_allowed": "تغییر وضیعت ممکن نیست!",
-	"code": "کد"
+	"code": "کد",
+	"applicant_already_have_active_package": "متقاضی قبلا بسته فعال دارد"
 }

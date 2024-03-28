@@ -60,7 +60,7 @@ const ApplicantSurveys = ({
 					checkPermission(ADD_APPLICANT_SURVEYS) && !applicant?.surveys?.length
 				}
 				showDelete={checkPermission(DELETE_APPLICANT_SURVEYS)}
-				showEdit={checkPermission(EDIT_APPLICANT_SURVEYS)}
+				showEdit={checkPermission(EDIT_APPLICANT_SURVEYS) && false}
 				showView={false}
 				height={300}
 				showSecondTitle={true}

@@ -77,13 +77,21 @@ export const ApplicantSurveyColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 			render: (record: any) =>
-				record.charity_package.cash_amount +
-				" " +
-				(record.charity_package.currency == "USD"
-					? t("usd")
-					: record.charity_package.currency == "AFN"
-					? t("afn")
-					: ""),
+				record.charity_package.cash_amount
+					? record.charity_package.cash_amount +
+					  " " +
+					  (record.charity_package.currency == "USD"
+							? t("usd")
+							: record.charity_package.currency == "AFN"
+							? t("afn")
+							: "")
+					: "0",
+		},
+		{
+			accessor: "description",
+			title: t("description"),
+			noWrap: true,
+			sortable: true,
 		},
 		...logs,
 	];

@@ -2,13 +2,15 @@ import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { useAxios } from "@/customHooks/useAxios";
 import { SurveyResultSchema } from "@/schemas/models/survey_results";
-import { getTime } from "@/shared/functions";
+import { getTime, getTimeValue } from "@/shared/functions";
 import {
+	Box,
 	Button,
 	CloseButton,
 	Flex,
 	Group,
 	Loader,
+	LoadingOverlay,
 	Modal,
 	ScrollArea,
 	Select,
@@ -18,10 +20,12 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
+import moment from "jalali-moment";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MdSend } from "react-icons/md";
 import { Value } from "react-multi-date-picker";
+import PackageInfo from "./PackageInfo";
 
 interface ApplicantPackageModalProps {
 	applicantId: number | undefined;
@@ -54,9 +58,11 @@ const ApplicantPackageModal = ({
 	const surveyResultSchema = SurveyResultSchema(t);
 	const [packages, setPackages] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [itemsLoading, setItemsLoading] = useState(false);
 	const [submitLoading, setSubmitLoading] = useState(false);
 	const [surveyDateErrorMessage, setSurveyDateErrorMessage] = useState("");
 	const [surveyDate, setSurveyDate] = useState<Value>();
+	const [charityPackage, setCharityPackage] = useState<any>();
 
 	const initialValues: any = {
 		applicant_id: applicantId,
@@ -90,14 +96,26 @@ const ApplicantPackageModal = ({
 	const submit = async () => {
 		setSubmitLoading(true);
 		if (validate()) {
-			const { response, status } = await callApi({
-				method: "POST",
-				url: "/applicant_direct_packages",
-				data: form.values,
-			});
-			if (status == 201 && response.result) {
+			const { response, status } = !editId
+				? await callApi({
+						method: "POST",
+						url: "/applicant_surveys",
+						data: form.values,
+				  })
+				: await callApi({
+						method: "PUT",
+						url: `/applicant_surveys/${editId}`,
+						data: form.values,
+				  });
+			if ((!editId ? status == 201 : status == 202) && response.result) {
 				await mutate();
 				setMutated(true);
+				close();
+			} else if (status == 422) {
+				toast.error(t("editing_not_allowed"));
+				close();
+			} else if (status == 226) {
+				toast.error(t("applicant_already_have_active_package"));
 				close();
 			} else {
 				toast.error(t("something_went_wrong"));
@@ -109,7 +127,6 @@ const ApplicantPackageModal = ({
 	useEffect(() => {
 		(async function () {
 			if (officeId) {
-				setLoading(true);
 				const { response, status, error } = await callApi({
 					method: "GET",
 					url: `/active_packages?office_id=${officeId}`,
@@ -128,14 +145,29 @@ const ApplicantPackageModal = ({
 					);
 					setPackages(packages);
 				}
-				setLoading(false);
 			}
 		})();
 	}, [officeId]);
 
+	const getPackageItems = async () => {
+		setItemsLoading(true);
+		const { response, status, error } = await callApi({
+			method: "GET",
+			url: `/charity_packages/${form.values.charity_package_id}`,
+		});
+		if (status == 200 && response.result == true) {
+			setCharityPackage(response.data);
+		}
+		setItemsLoading(false);
+	};
+
 	useEffect(() => {
-		if (editId) {
-			(async function () {
+		if (form.values.charity_package_id) getPackageItems();
+	}, [form.values.charity_package_id]);
+
+	useEffect(() => {
+		(async function () {
+			if (editId) {
 				setLoading(true);
 				const { response, status, error } = await callApi({
 					method: "GET",
@@ -145,14 +177,20 @@ const ApplicantPackageModal = ({
 					let values: any = {};
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(initialValues).includes(key)) {
-							values[key] = value ? value : initialValues[key];
+							if (key != "charity_package_id" && key != "survey_date") {
+								values[key] = value ? value : initialValues[key];
+							} else if (key == "charity_package_id" && value) {
+								values[key] = value.toString();
+							} else if (key == "survey_date" && value) {
+								setSurveyDate(getTimeValue(value.toString()));
+							}
 						}
 					});
 					form.setValues(values);
 					setLoading(false);
 				}
-			})();
-		}
+			}
+		})();
 	}, [editId]);
 
 	useEffect(() => {
@@ -190,7 +228,12 @@ const ApplicantPackageModal = ({
 							onClick={close}
 						/>
 					</Group>
-					<ScrollArea h={350}>
+					<ScrollArea h={350} p="sm">
+						<LoadingOverlay
+							visible={loading}
+							zIndex={1000}
+							overlayProps={{ radius: "sm", blur: 2 }}
+						/>
 						<Flex
 							direction={{ base: "column", sm: "row" }}
 							gap="sm"
@@ -215,6 +258,7 @@ const ApplicantPackageModal = ({
 								value={surveyDate}
 								onChange={setSurveyDate}
 								errorMessage={surveyDateErrorMessage}
+								maxDate={moment().endOf("day").valueOf()}
 							/>
 						</Flex>
 						<Flex
@@ -231,6 +275,14 @@ const ApplicantPackageModal = ({
 								{...form.getInputProps("description")}
 							/>
 						</Flex>
+						<Box pos="relative">
+							<LoadingOverlay
+								visible={itemsLoading}
+								zIndex={1000}
+								overlayProps={{ radius: "sm", blur: 2 }}
+							/>
+							<PackageInfo lng={lng} charityPackage={charityPackage} />
+						</Box>
 					</ScrollArea>
 					<Group justify="flex-end" p="sm" className="modal-footer">
 						<Button
