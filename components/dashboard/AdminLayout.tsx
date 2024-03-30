@@ -92,12 +92,12 @@ export function AdminLayout({
 							size="sm"
 						/>
 						<Image
-							src="/images/favicon.png"
-							width={50}
-							height={50}
+							src="/images/LOGO ALL TYPE-08.png"
+							width={150}
+							height={150}
 							alt="logo"
 						/>
-						<Title order={3}>{t("gpf")}</Title>
+						{/* <Title order={3}>{t("gpf")}</Title> */}
 					</Group>
 
 					<Menu shadow="md">
