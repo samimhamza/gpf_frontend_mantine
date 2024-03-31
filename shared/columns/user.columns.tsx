@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { logColumns } from ".";
 import { statusColum } from "./statusColum";
-import { Center } from "@mantine/core";
+import { Avatar, Center } from "@mantine/core";
 
 export const UserColumns = (
 	t: (arg: string) => string,
@@ -36,6 +36,17 @@ export const UserColumns = (
 			noWrap: true,
 			sortable: true,
 			render: ({ id }: { id: number }) => <Center>{id}</Center>,
+		},
+		{
+			accessor: "profile",
+			title: t("profile"),
+			noWrap: true,
+			sortable: true,
+			render: ({ profile }: { profile: string }) => (
+				<Center>
+					<Avatar src={profile} alt="profile" size={35} />
+				</Center>
+			),
 		},
 		{
 			accessor: "full_name",
