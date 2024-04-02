@@ -100,7 +100,7 @@ export function AdminLayout({
 							{user.profile ? (
 								<Avatar
 									radius="xl"
-									color="green"
+									color="primary"
 									style={{ cursor: "pointer" }}
 									size={53}
 									src={user.profile}
@@ -109,7 +109,7 @@ export function AdminLayout({
 							) : (
 								<Avatar
 									radius="xl"
-									color="green"
+									color="primary"
 									style={{ cursor: "pointer" }}
 									size={53}
 								>
