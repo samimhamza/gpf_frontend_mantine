@@ -14,7 +14,7 @@ export const UserColumns = (
 	const statuses = [
 		{
 			status: "active",
-			color: "teal",
+			color: "green",
 			text: t("active"),
 		},
 		{

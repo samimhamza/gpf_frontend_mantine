@@ -83,7 +83,7 @@ const UserStepOne = ({
 					clearable
 					nothingFoundMessage={t("noting_found")}
 					// onSearchChange={handleSearch}
-					// rightSection={loading && <Loader color="blue" size={15} />}
+					// rightSection={loading && <Loader color="primary" size={15} />}
 					{...form.getInputProps("office_id")}
 				/>
 			</Flex>

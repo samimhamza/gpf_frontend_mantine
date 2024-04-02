@@ -14,14 +14,23 @@ import { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useTranslation } from "@/app/i18n/client";
 import html2canvas from "html2canvas";
+import Image from "next/image";
 
 interface AddPackageModalProps {
 	opened: boolean;
 	close: () => void;
 	lng: string;
+	mutate: any;
+	applicant: any;
 }
 
-const ApplicantCard = ({ opened, close, lng }: AddPackageModalProps) => {
+const ApplicantCard = ({
+	opened,
+	close,
+	lng,
+	mutate,
+	applicant,
+}: AddPackageModalProps) => {
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
 	const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
@@ -44,7 +53,7 @@ const ApplicantCard = ({ opened, close, lng }: AddPackageModalProps) => {
 
 	const handPrint = useReactToPrint({
 		content: () => cardRef.current,
-		pageStyle: "@page { size: 54mm 85mm }",
+		pageStyle: "@page { size: 85mm 54mm }",
 	});
 	return (
 		<>
@@ -64,7 +73,15 @@ const ApplicantCard = ({ opened, close, lng }: AddPackageModalProps) => {
 				closeOnClickOutside={false}
 			>
 				<Box>
-					<div ref={cardRef} id="print">
+					<div ref={cardRef} id="print" className="card">
+						<Group justify="center">
+							<Image
+								src="/images/logo_with_text.png"
+								width="200"
+								height="200"
+								alt="logo"
+							/>
+						</Group>
 						Hello From div
 					</div>
 				</Box>
@@ -87,6 +104,9 @@ const ApplicantCard = ({ opened, close, lng }: AddPackageModalProps) => {
 				}
 				.custom-modal .modal-footer {
 					border-top: 1px solid var(--mantine-color-gray-4);
+				}
+				.card {
+					border: 1px solid var(--mantine-color-gray-4);
 				}
 			`}</style>
 		</>

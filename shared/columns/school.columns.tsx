@@ -14,7 +14,7 @@ export const SchoolColumns = (
 	const statuses = [
 		{
 			status: "active",
-			color: "teal",
+			color: "green",
 			text: t("active"),
 		},
 		{

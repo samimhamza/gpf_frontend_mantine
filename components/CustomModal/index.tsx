@@ -153,7 +153,7 @@ const CustomModal = ({
 								icon={step.icon}
 								label={smMatches ? step.title : ""}
 								key={i}
-								color="blue"
+								color="primary"
 								loading={loading == i}
 							/>
 						))}
@@ -181,11 +181,7 @@ const CustomModal = ({
 						</Button>
 					)}
 					{active !== 0 && active !== stepInside.length - 1 && (
-						<Button
-							leftSection={<TbChevronRight />}
-							variant="gradient"
-							onClick={prev}
-						>
+						<Button leftSection={<TbChevronRight />} onClick={prev}>
 							{t("prev")}
 						</Button>
 					)}
@@ -198,7 +194,6 @@ const CustomModal = ({
 									}}
 								/>
 							}
-							variant="gradient"
 							type="submit"
 							onClick={submitInside}
 						>
@@ -206,11 +201,7 @@ const CustomModal = ({
 						</Button>
 					) : (
 						active !== stepInside.length - 1 && (
-							<Button
-								rightSection={<TbChevronLeft />}
-								variant="gradient"
-								onClick={next}
-							>
+							<Button rightSection={<TbChevronLeft />} onClick={next}>
 								{t("next")}
 							</Button>
 						)

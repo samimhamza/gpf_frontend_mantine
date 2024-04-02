@@ -96,7 +96,7 @@ const Profile = ({ lng, profileUrl, name, form, title }: ProfileProps) => {
 							className="edit-icon"
 							size="xs"
 							radius="xl"
-							color="blue"
+							color="primary"
 						>
 							<MdEdit size={14} />
 						</ActionIcon>

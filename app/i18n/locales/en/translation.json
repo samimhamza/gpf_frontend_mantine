@@ -185,5 +185,7 @@
 	"users_count": "Users Count",
 	"status_change_not_allowed": "Status change is not allowed!",
 	"code": "Code",
-	"applicant_already_have_active_package": "Applicant already have active package"
+	"applicant_already_have_active_package": "Applicant already have active package",
+	"expired": "Expired",
+	"print_card": "Print card"
 }
