@@ -25,6 +25,33 @@ export async function generateStaticParams() {
 }
 
 const theme = createTheme({
+	colors: {
+		primary: [
+			"#f1f0f9",
+			"#deddec",
+			"#bcb9db",
+			"#9692cb",
+			"#7670bc",
+			"#635bb4",
+			"#5951b1",
+			"#49429c",
+			"#413b8c",
+			"#36327c",
+		],
+		green: [
+			"#f3f8f2",
+			"#e5ede4",
+			"#c7d9c5",
+			"#a6c5a2",
+			"#8bb486",
+			"#78a973",
+			"#6ea568",
+			"#5d9057",
+			"#527f4c",
+			"#436f3f",
+		],
+	},
+	primaryColor: "primary",
 	breakpoints: {
 		xs: "30em",
 		sm: "48em",

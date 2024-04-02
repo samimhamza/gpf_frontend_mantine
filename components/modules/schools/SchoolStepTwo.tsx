@@ -81,7 +81,7 @@ const SchoolStepTwo = ({
 					searchable
 					clearable
 					nothingFoundMessage={t("noting_found")}
-					rightSection={loading && <Loader color="blue" size={15} />}
+					rightSection={loading && <Loader color="primary" size={15} />}
 					{...form.getInputProps("district_id")}
 				/>
 			</Flex>

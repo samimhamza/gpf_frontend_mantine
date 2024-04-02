@@ -23,10 +23,12 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
+import moment from "jalali-moment";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MdSend } from "react-icons/md";
 import { Value } from "react-multi-date-picker";
+import PackageInfo from "./PackageInfo";
 
 interface ImplementModalProps {
 	applicantId: number | undefined;
@@ -137,6 +139,9 @@ const ImplementModal = ({
 				await mutate();
 				setMutated(true);
 				close();
+			} else if (status == 422) {
+				toast.error(t("editing_not_allowed"));
+				close();
 			} else {
 				toast.error(t("something_went_wrong"));
 			}
@@ -226,6 +231,12 @@ const ImplementModal = ({
 		}
 	}, [implementDate]);
 
+	const endDateValue = moment(applicantPackage?.charity_package?.end_date)
+		.endOf("day")
+		.valueOf();
+
+	const currentDateValue = moment().endOf("day").valueOf();
+
 	return (
 		<>
 			<form>
@@ -282,6 +293,11 @@ const ImplementModal = ({
 								onChange={setImplementDate}
 								errorMessage={implementDateErrorMessage}
 								dateTime
+								maxDate={
+									endDateValue > currentDateValue
+										? currentDateValue
+										: endDateValue
+								}
 							/>
 						</Flex>
 						<Flex
@@ -298,65 +314,11 @@ const ImplementModal = ({
 								{...form.getInputProps("description")}
 							/>
 						</Flex>
-						<Divider my="md" px="sm" />
-						<Flex
-							direction={{ base: "column", sm: "row" }}
-							gap="sm"
-							p="sm"
-							justify={{ sm: "center" }}
-						>
-							<Box style={{ flex: 1, cursor: "not-allowed" }}>
-								<Text px="xs">{t("category")}</Text>
-								<Paper withBorder py={5} px="sm">
-									<Text fw="lighter">{applicantPackage?.category?.name}</Text>
-								</Paper>
-							</Box>
-							<Box style={{ flex: 1, cursor: "not-allowed" }}>
-								<Text px="xs">{t("charity_package")}</Text>
-								<Paper withBorder py={5} px="sm">
-									<Text fw="lighter">
-										{applicantPackage?.charity_package?.name}
-									</Text>
-								</Paper>
-							</Box>
-						</Flex>
-						<Fieldset legend={t("package_items")} m="sm">
-							<Flex gap="sm" pt="sm" wrap="wrap">
-								<Box
-									style={{ cursor: "not-allowed" }}
-									w={{ base: "100%", sm: "48%" }}
-								>
-									<Text px="xs">{t("cash_amount")}</Text>
-									<Paper withBorder py={5} px="sm">
-										<Text>
-											{applicantPackage?.charity_package?.cash_amount}{" "}
-											{applicantPackage?.charity_package?.currency == "USD"
-												? t("usd")
-												: applicantPackage?.charity_package?.currency == "AFN"
-												? t("afn")
-												: ""}
-										</Text>
-									</Paper>
-								</Box>
-								{applicantPackage?.charity_package?.items?.map(
-									(item: any, index: number) => (
-										<Box
-											key={index}
-											style={{ cursor: "not-allowed" }}
-											w={{ base: "100%", sm: "48%" }}
-										>
-											<Text px="xs">{t("item")}</Text>
-											<Paper withBorder py={5} px="sm">
-												<Text>
-													{item.name} - {item.pivot.quantity.toString()}{" "}
-													{item.pivot.unit}
-												</Text>
-											</Paper>
-										</Box>
-									)
-								)}
-							</Flex>
-						</Fieldset>
+						<PackageInfo
+							lng={lng}
+							category={applicantPackage?.category}
+							charityPackage={applicantPackage?.charity_package}
+						/>
 					</ScrollArea>
 					<Group justify="flex-end" p="sm" className="modal-footer">
 						<Button

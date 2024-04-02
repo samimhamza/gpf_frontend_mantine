@@ -4,6 +4,7 @@ import { useTranslation } from "@/app/i18n/client";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useAxios } from "@/customHooks/useAxios";
 import {
+	EDIT_APPLICANTS,
 	VIEW_APPLICANT_PACKAGE_IMPLEMENTS,
 	VIEW_APPLICANT_SURVEYS,
 } from "@/shared/constants/Permissions";
@@ -14,11 +15,14 @@ import ApplicantSurveys from "./ApplicantSurveys";
 import ApplicantPackageImplements from "./ApplicantPackageImplements";
 import { getID } from "@/shared/functions";
 import { useState } from "react";
+import ApplicantCard from "./ApplicantCard";
+import { useDisclosure } from "@mantine/hooks";
 
 export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
 	const [packagesDeleted, setPackagesDelete] = useState(false);
+	const [opened, { open, close }] = useDisclosure();
 
 	const { data, error, isLoading, mutate } = useSWR(
 		`/applicants/${id}`,
@@ -35,6 +39,7 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 		const hasPermission = permissionChecker(permission);
 		return hasPermission && data?.status == "active";
 	};
+
 	return (
 		<>
 			<CustomBreadCrumb
@@ -54,6 +59,11 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 							: id.toString(),
 					},
 				]}
+				showButton={
+					checkPermission(EDIT_APPLICANTS) && data?.prints?.length == 0
+				}
+				buttonTitle={t("print_card")}
+				onButtonClick={open}
 			/>
 			<ApplicantInfo
 				applicantId={
@@ -89,23 +99,15 @@ export const ApplicantModule = ({ lng, id }: { lng: string; id: number }) => {
 					setPackagesDelete={setPackagesDelete}
 				/>
 			)}
-			{/* {opened && (
-				<ApplicantItemsModal
+			{opened && (
+				<ApplicantCard
 					opened={opened}
-					close={() => {
-						close();
-						setEdit(undefined);
-					}}
+					close={close}
 					lng={lng}
-					setMutated={setMutated}
-					title={
-						!edit ? t("add_item_to_applicant") : t("update_item_to_applicant")
-					}
-					applicantId={id}
-					editId={edit}
 					mutate={mutate}
+					applicant={data}
 				/>
-			)} */}
+			)}
 		</>
 	);
 };

@@ -106,7 +106,7 @@ const CustomDataTable = ({
 	);
 
 	let actionIndex = columns.findIndex((col) => col.accessor == "actions");
-	if (actionIndex == -1) {
+	if (actionIndex == -1 && (showView || showEdit)) {
 		columns.push({
 			accessor: "actions",
 			title: (

@@ -78,7 +78,7 @@ const ItemModal = ({
 					value={storeDates[0]}
 					onChange={(value: Value) => setStoreDates([value])}
 					errorMessage={storeDatesErrorMessage[0]}
-					maxDate={moment().valueOf()}
+					maxDate={moment().endOf("day").valueOf()}
 				/>
 			</Flex>
 		</>

@@ -36,7 +36,7 @@ export const logColumns = (t: (arg: string) => string) => {
 export const applicantStatuses = (t: (arg: string) => string) => [
 	{
 		status: "active",
-		color: "teal",
+		color: "green",
 		text: t("active"),
 	},
 	{

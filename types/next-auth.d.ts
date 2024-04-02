@@ -7,6 +7,7 @@ interface userProps {
 	email: string;
 	status: string;
 	email_verified_at: string;
+	profile: string;
 	token: string;
 	roles: Array<string>;
 	permissions: Array<string>;

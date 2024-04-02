@@ -137,7 +137,7 @@ const ItemsModal = ({
 									return newDates;
 								});
 							}}
-							maxDate={moment().valueOf()}
+							maxDate={moment().endOf("day").valueOf()}
 							errorMessage={storeDatesErrorMessage[index]}
 						/>
 					</Flex>

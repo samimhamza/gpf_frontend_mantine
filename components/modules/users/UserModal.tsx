@@ -9,9 +9,10 @@ import { TbShieldCheck } from "react-icons/tb";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
+import { getFormData } from "@/shared/functions";
 
 const UserModal = ({
 	opened,
@@ -37,11 +38,13 @@ const UserModal = ({
 	const [permissions, setPermissions] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [totalPermissions, setTotalPermissions] = useState<number>(0);
+	const profileUrl = useRef(null);
 
 	const createInitialValues = {
 		full_name: "",
 		email: "",
 		username: "",
+		profile: "",
 		office_id: "",
 		password: "",
 		confirm_password: "",
@@ -52,6 +55,7 @@ const UserModal = ({
 		full_name: "",
 		email: "",
 		username: "",
+		profile: "",
 		office_id: "",
 		roles: [],
 		permissions: [],
@@ -64,16 +68,24 @@ const UserModal = ({
 	});
 
 	const submit = async () => {
+		const values = getFormData(form.values);
+
 		const { response, status } = !editId
 			? await callApi({
 					method: "POST",
 					url: "/users",
-					data: form.values,
+					data: values,
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
 			  })
 			: await callApi({
-					method: "PUT",
-					url: `/users/${editId}`,
-					data: form.values,
+					method: "POST",
+					url: `/users/${editId}?_method=PUT`,
+					data: values,
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
 			  });
 		if ((!editId ? status == 201 : status == 202) && response.result) {
 			await setMutated(true);
@@ -107,6 +119,9 @@ const UserModal = ({
 						}
 						if (key == "office_id" && value) {
 							values[key] = value.toString();
+						}
+						if (key == "profile" && value) {
+							profileUrl.current = value;
 						}
 						if (Array.isArray(value) && value.length) {
 							if (key == "permissions") {
@@ -195,6 +210,7 @@ const UserModal = ({
 						offices={offices}
 						setOffices={setOffices}
 						editId={editId}
+						profileUrl={profileUrl}
 					/>
 				</Box>
 			),

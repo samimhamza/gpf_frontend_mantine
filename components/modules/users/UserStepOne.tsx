@@ -1,8 +1,16 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import Profile from "@/components/Profile";
 import { useAxios } from "@/customHooks/useAxios";
-import { Flex, Loader, PasswordInput, Select, TextInput } from "@mantine/core";
+import {
+	Center,
+	Flex,
+	Loader,
+	PasswordInput,
+	Select,
+	TextInput,
+} from "@mantine/core";
 import { useState } from "react";
 
 interface UserStepOneProps {
@@ -11,6 +19,7 @@ interface UserStepOneProps {
 	offices: any;
 	setOffices: any;
 	editId: number | undefined;
+	profileUrl: any;
 }
 
 const UserStepOne = ({
@@ -19,6 +28,7 @@ const UserStepOne = ({
 	offices,
 	setOffices,
 	editId,
+	profileUrl,
 }: UserStepOneProps) => {
 	const { t } = useTranslation(lng);
 	const callApi = useAxios();
@@ -41,6 +51,15 @@ const UserStepOne = ({
 	// };
 	return (
 		<>
+			<Center p="sm">
+				<Profile
+					lng={lng}
+					profileUrl={profileUrl}
+					name="profile"
+					form={form}
+					title={t("profile")}
+				/>
+			</Center>
 			<Flex
 				direction={{ base: "column", sm: "row" }}
 				gap="sm"
@@ -64,7 +83,7 @@ const UserStepOne = ({
 					clearable
 					nothingFoundMessage={t("noting_found")}
 					// onSearchChange={handleSearch}
-					// rightSection={loading && <Loader color="blue" size={15} />}
+					// rightSection={loading && <Loader color="primary" size={15} />}
 					{...form.getInputProps("office_id")}
 				/>
 			</Flex>

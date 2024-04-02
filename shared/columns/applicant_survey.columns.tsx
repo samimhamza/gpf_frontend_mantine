@@ -1,6 +1,6 @@
-import { Center } from "@mantine/core";
+import { Badge, Center } from "@mantine/core";
 import { logColumns } from ".";
-import { getDate } from "../functions";
+import { getDate, getTimeValue } from "../functions";
 
 export const ApplicantSurveyColumns = (t: (arg: string) => string) => {
 	const logs = logColumns(t);
@@ -20,6 +20,21 @@ export const ApplicantSurveyColumns = (t: (arg: string) => string) => {
 			sortable: true,
 			render: ({ survey_date }: { survey_date: string }) =>
 				survey_date ? getDate(survey_date) : "",
+		},
+		{
+			accessor: "status",
+			title: t("status"),
+			noWrap: true,
+			sortable: true,
+			render: (record: any) => {
+				let now = new Date();
+				return getTimeValue(record.charity_package.end_date) > now.getTime() &&
+					record.charity_package.period > record.implements_count ? (
+					<Badge bg="green">{t("active")}</Badge>
+				) : (
+					<Badge bg="red">{t("expired")}</Badge>
+				);
+			},
 		},
 		{
 			accessor: "category_name",
@@ -77,13 +92,21 @@ export const ApplicantSurveyColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 			render: (record: any) =>
-				record.charity_package.cash_amount +
-				" " +
-				(record.charity_package.currency == "USD"
-					? t("usd")
-					: record.charity_package.currency == "AFN"
-					? t("afn")
-					: ""),
+				record.charity_package.cash_amount
+					? record.charity_package.cash_amount +
+					  " " +
+					  (record.charity_package.currency == "USD"
+							? t("usd")
+							: record.charity_package.currency == "AFN"
+							? t("afn")
+							: "")
+					: "0",
+		},
+		{
+			accessor: "description",
+			title: t("description"),
+			noWrap: true,
+			sortable: true,
 		},
 		...logs,
 	];

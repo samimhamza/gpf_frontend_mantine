@@ -65,13 +65,15 @@ export const CharityPackageColumns = (t: (arg: string) => string) => {
 			noWrap: true,
 			sortable: true,
 			render: (record: any) =>
-				record.cash_amount +
-				" " +
-				(record.currency == "USD"
-					? t("usd")
-					: record.currency == "AFN"
-					? t("afn")
-					: ""),
+				record.cash_amount
+					? record.cash_amount +
+					  " " +
+					  (record.currency == "USD"
+							? t("usd")
+							: record.currency == "AFN"
+							? t("afn")
+							: "")
+					: "",
 		},
 		...logs,
 	];

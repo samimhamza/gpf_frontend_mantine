@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Box, Center, Group, Paper, Title } from "@mantine/core";
+import { Badge, Box, Center, Group, Paper, Title } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import {
 	Dispatch,
@@ -128,6 +128,7 @@ const MantineDataTable = ({
 					<Center className="datatable_title">
 						<Group justify="space-between" align="center" p="sm">
 							<Title order={4}>{title}</Title>
+							{data?.total && <Badge>{data?.total}</Badge>}
 						</Group>
 					</Center>
 				) : (

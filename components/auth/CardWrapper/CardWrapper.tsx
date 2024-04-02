@@ -30,10 +30,10 @@ export const CardWrapper = ({
 				<Center>
 					<Stack>
 						<Image
-							src="/images/favicon.png"
+							src="/images/logo_with_text.png"
 							alt="logo"
-							width="112"
-							height="112"
+							width={150}
+							height={150}
 						/>
 						<Text ta="center" fw="bold">
 							{headerLabel}
