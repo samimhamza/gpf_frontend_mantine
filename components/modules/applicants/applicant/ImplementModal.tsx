@@ -329,7 +329,6 @@ const ImplementModal = ({
 									}}
 								/>
 							}
-							variant="gradient"
 							type="submit"
 							onClick={submit}
 							loading={submitLoading}

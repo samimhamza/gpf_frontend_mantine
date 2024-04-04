@@ -50,6 +50,18 @@ const theme = createTheme({
 			"#527f4c",
 			"#436f3f",
 		],
+		yellow: [
+			"#fefde4",
+			"#faf8d1",
+			"#f4efa6",
+			"#eee776",
+			"#e8df4e",
+			"#e5db34",
+			"#e4d825",
+			"#cabf15",
+			"#b3aa0a",
+			"#9a9200",
+		],
 	},
 	primaryColor: "primary",
 	breakpoints: {

@@ -86,11 +86,7 @@ const ApplicantCard = ({
 					</div>
 				</Box>
 				<Group justify="flex-end" p="sm" className="modal-footer">
-					<Button
-						rightSection={<IoMdPrint />}
-						variant="gradient"
-						onClick={handPrint}
-					>
+					<Button rightSection={<IoMdPrint />} onClick={handPrint}>
 						{t("print")}
 					</Button>
 				</Group>

@@ -293,7 +293,6 @@ const ApplicantPackageModal = ({
 									}}
 								/>
 							}
-							variant="gradient"
 							type="submit"
 							onClick={submit}
 							loading={submitLoading}
