@@ -83,8 +83,7 @@ export const getID = (
 	created_at: string,
 	id: number | string
 ) => {
-	return `GPF-${office_code}-${getYear(created_at)}-
-								${addLeadingZeros(id)}`;
+	return `GPF-${office_code}-${getYear(created_at)}-${addLeadingZeros(id)}`;
 };
 
 export const getDatabaseID = (id: string): number => {
