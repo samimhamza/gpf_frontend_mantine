@@ -2,11 +2,13 @@ import {
 	VIEW_APPLICANTS,
 	VIEW_CATEGORIES,
 	VIEW_CHARITY_PACKAGES,
+	VIEW_EMPLOYEES,
 	VIEW_ITEMS,
 	VIEW_MOSQUES,
 	VIEW_OFFICES,
 	VIEW_ROLES,
 	VIEW_SCHOOLS,
+	VIEW_TEAMS,
 	VIEW_USERS,
 	VIEW_WAREHOUSES,
 } from "@/shared/constants/Permissions";
@@ -16,6 +18,7 @@ import { MdMosque } from "react-icons/md";
 import { FaUserGroup } from "react-icons/fa6";
 import { BiSolidBox } from "react-icons/bi";
 import { IoHome } from "react-icons/io5";
+import { HiMiniUserGroup } from "react-icons/hi2";
 
 export const NavItems = (t: (arg: string) => string) => [
 	{ label: t("dashboard"), icon: TbGauge, link: "/dashboard" },
@@ -94,6 +97,24 @@ export const NavItems = (t: (arg: string) => string) => [
 				label: t("roles"),
 				link: "/roles",
 				permission: VIEW_ROLES,
+			},
+		],
+	},
+	{
+		label: t("employee_management"),
+		icon: HiMiniUserGroup,
+		initiallyOpened: true,
+		permission: VIEW_EMPLOYEES || VIEW_TEAMS,
+		links: [
+			{
+				label: t("employees"),
+				link: "/employees",
+				permission: VIEW_EMPLOYEES,
+			},
+			{
+				label: t("teams"),
+				link: "/teams",
+				permission: VIEW_TEAMS,
 			},
 		],
 	},

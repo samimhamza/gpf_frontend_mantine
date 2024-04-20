@@ -47,6 +47,12 @@ export const ADD_EMPLOYEES = "create_employees";
 export const EDIT_EMPLOYEES = "update_employees";
 export const DELETE_EMPLOYEES = "delete_employees";
 
+// Teams Permissions
+export const VIEW_TEAMS = "view_teams";
+export const ADD_TEAMS = "create_teams";
+export const EDIT_TEAMS = "update_teams";
+export const DELETE_TEAMS = "delete_teams";
+
 // Roles Permissions
 export const VIEW_ROLES = "view_roles";
 export const ADD_ROLES = "create_roles";

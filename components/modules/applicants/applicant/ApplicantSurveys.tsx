@@ -57,7 +57,7 @@ const ApplicantSurveys = ({
 				setMutated={setMutated}
 				setEdit={setEdit}
 				showAdd={
-					checkPermission(ADD_APPLICANT_SURVEYS) && !applicant?.surveys?.length
+					checkPermission(ADD_APPLICANT_SURVEYS) && !applicant?.surveys?.length 
 				}
 				showDelete={checkPermission(DELETE_APPLICANT_SURVEYS)}
 				showEdit={checkPermission(EDIT_APPLICANT_SURVEYS) && false}
@@ -80,8 +80,8 @@ const ApplicantSurveys = ({
 					setMutated={setMutated}
 					title={
 						!edit
-							? t("assign_package_for_non_survey")
-							: t("edit_package_for_non_survey")
+							? t("assign_package")
+							: t("edit_package")
 					}
 					editId={edit}
 					mutate={mutate}
