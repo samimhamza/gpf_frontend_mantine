@@ -80,6 +80,7 @@
   "invalid_type": "Invalid Type",
   "must_be_number": "Value must be a number",
   "invalid_phone": "Value is not a correct phone number",
+  "invalid_salary": "Value is not a correct salary",
   "next": "Next",
   "prev": "Prev",
   "submit": "Submit",
@@ -196,5 +197,6 @@
   "personal_info": "Personal Info",
   "employee_details": "Employee Details",
   "contract_details": "Contract Details",
-  "invalid_email": "Invalid Email"
+  "invalid_email": "Invalid Email",
+  "file_larger_than_2mb_not_allowed": "File Larger that 2MB is not allowed"
 }

@@ -2,8 +2,9 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
-import { Flex, TextInput, Textarea } from "@mantine/core";
-import { Dispatch, SetStateAction } from "react";
+import { getTime } from "@/shared/functions";
+import { Flex, Select, TextInput, Textarea } from "@mantine/core";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { Value } from "react-multi-date-picker";
 
 interface EmployeeStepTwoProps {
@@ -32,6 +33,36 @@ const EmployeeStepTwo = ({
   setEndDate,
 }: EmployeeStepTwoProps) => {
   const { t } = useTranslation(lng);
+  const currencies = [
+    { value: "AFN", label: t("afn") },
+    { value: "USD", label: t("usd") },
+  ];
+
+  useEffect(() => {
+    if (startDate) {
+      setStartDateErrorMessage("");
+      form.setFieldValue("start_date", getTime(startDate));
+    } else {
+      form.setFieldValue("start_date", null);
+    }
+  }, [startDate]);
+
+  useEffect(() => {
+    setEndDateErrorMessage("");
+    if (endDate) {
+      form.setFieldValue("end_date", getTime(endDate));
+    } else {
+      form.setFieldValue("end_date", null);
+    }
+  }, [endDate]);
+
+  useEffect(() => {
+    if (endDate && startDate) {
+      if (endDate < startDate) {
+        setEndDateErrorMessage(t("end_date_must_be_greater"));
+      }
+    }
+  }, [startDate, endDate]);
 
   return (
     <>
@@ -69,6 +100,29 @@ const EmployeeStepTwo = ({
           withAsterisk
           {...form.getInputProps("job_title")}
         />
+        <PersianDatePicker
+          label={t("start_date")}
+          placeholder={t("start_date")}
+          value={startDate}
+          onChange={setStartDate}
+          errorMessage={startDateErrorMessage}
+        />
+      </Flex>
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        gap="sm"
+        px="sm"
+        pt="sm"
+        justify={{ sm: "center" }}
+      >
+        <PersianDatePicker
+          label={t("end_date")}
+          placeholder={t("end_date")}
+          value={endDate}
+          onChange={setEndDate}
+          errorMessage={endDateErrorMessage}
+          isRequired={false}
+        />
         <TextInput
           style={{ flex: 1 }}
           label={t("salary")}
@@ -80,31 +134,18 @@ const EmployeeStepTwo = ({
       <Flex
         direction={{ base: "column", sm: "row" }}
         gap="sm"
-        px="sm"
-        pt="sm"
-        justify={{ sm: "center" }}
-      >
-        <PersianDatePicker
-          label={t("start_date")}
-          placeholder={t("start_date")}
-          value={startDate}
-          onChange={setStartDate}
-          errorMessage={startDateErrorMessage}
-        />
-        <PersianDatePicker
-          label={t("end_date")}
-          placeholder={t("end_date")}
-          value={endDate}
-          onChange={setEndDate}
-          errorMessage={endDateErrorMessage}
-        />
-      </Flex>
-      <Flex
-        direction={{ base: "column", sm: "row" }}
-        gap="sm"
         p="sm"
         justify={{ sm: "center" }}
       >
+        <Select
+          style={{ flex: 1 }}
+          label={t("currency")}
+          placeholder={t("currency")}
+          data={currencies}
+          withAsterisk
+          clearable
+          {...form.getInputProps("currency")}
+        />
         <Textarea
           resize="vertical"
           style={{ flex: 1 }}

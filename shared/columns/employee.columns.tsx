@@ -90,42 +90,54 @@ export const EmployeeColumns = (
     },
     statusColum(t, statuses, statusUrl, showStatus, setMutated),
     {
-        accessor: "gender",
-        title: t("gender"),
-        noWrap: true,
-        sortable: true,
-        render: ({ gender }: { gender: string }) =>
-          gender == "male" ? t("male") : gender == "female" ? t("female") : "",
-      },
-    {
-      accessor: "start_date",
-      title: t("start_date"),
+      accessor: "gender",
+      title: t("gender"),
       noWrap: true,
       sortable: true,
-      render: ({ start_date }: { start_date: string }) =>
-        start_date ? getDate(start_date) : "",
+      render: ({ gender }: { gender: string }) =>
+        gender == "male" ? t("male") : gender == "female" ? t("female") : "",
     },
     {
-      accessor: "job_title",
+      accessor: "contracts.0.job_title",
       title: t("job_title"),
       noWrap: true,
       sortable: true,
     },
     {
-      accessor: "initial_salary",
-      title: t("initial_salary"),
+      accessor: "contracts.0.salary",
+      title: t("salary"),
       noWrap: true,
       sortable: true,
       render: (record: any) =>
-        record.initial_salary
-          ? record.initial_salary +
+        record.contracts[0].salary
+          ? record.contracts[0].salary +
             " " +
-            (record.charity_package.currency == "USD"
+            (record.contracts[0].currency == "USD"
               ? t("usd")
-              : record.charity_package.currency == "AFN"
+              : record.contracts[0].currency == "AFN"
               ? t("afn")
               : "")
           : "0",
+    },
+    {
+      accessor: "start_date",
+      title: t("start_date"),
+      noWrap: true,
+      sortable: true,
+      render: (record: any) =>
+        record.contracts[0]?.start_date
+          ? getDate(record.contracts[0]?.start_date)
+          : "",
+    },
+    {
+      accessor: "end_date",
+      title: t("end_date"),
+      noWrap: true,
+      sortable: true,
+      render: (record: any) =>
+        record.contracts[0]?.end_date
+          ? getDate(record.contracts[0]?.end_date)
+          : "",
     },
     ...logs,
   ];

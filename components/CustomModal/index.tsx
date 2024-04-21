@@ -97,10 +97,10 @@ const CustomModal = ({
 
   const submitInside = async () => {
     setLoading(active);
-    form.validate();
-    if (form.isValid()) {
-      let isValid = await stepInside[active].validate();
-      if (isValid) {
+    let isValid = await stepInside[active].validate();
+    if (isValid) {
+      form.validate();
+      if (form.isValid()) {
         let res = await submit();
         if (res) {
           // next();

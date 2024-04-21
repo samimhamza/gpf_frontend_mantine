@@ -2,93 +2,97 @@ import * as moment from "jalali-moment";
 import { DateObject } from "react-multi-date-picker";
 
 export const getDateTime = (utcTime: string) => {
-	return moment
-		.utc(utcTime)
-		.local()
-		.locale("fa")
-		.format("YYYY-MM-DD hh:mm:ss A");
+  return moment.utc(utcTime).isValid()
+    ? moment.utc(utcTime).local().locale("fa").format("YYYY-MM-DD hh:mm:ss A")
+    : "";
 };
 
 export const getTimeValue = (utcTime: string) => {
-	return moment.utc(utcTime).local().locale("fa").valueOf();
+  return moment.utc(utcTime).isValid()
+    ? moment.utc(utcTime).local().locale("fa").valueOf()
+    : "";
 };
 
 export const getDate = (utcDate: string) => {
-	return moment.utc(utcDate).local().locale("fa").format("YYYY-MM-DD");
+  return moment.utc(utcDate).isValid()
+    ? moment.utc(utcDate).local().locale("fa").format("YYYY-MM-DD")
+    : "";
 };
 
 export const getYear = (utcDate: string) => {
-	return moment.utc(utcDate).local().locale("fa").format("YYYY");
+  return moment.utc(utcDate).isValid()
+    ? moment.utc(utcDate).local().locale("fa").format("YYYY")
+    : "";
 };
 
 export const getTime = (date: any) => {
-	return date instanceof DateObject
-		? date?.toDate?.().getTime()
-		: date instanceof Date
-		? date.getTime()
-		: typeof date == "string"
-		? new Date(date).getTime()
-		: date;
+  return date instanceof DateObject
+    ? date?.toDate?.().getTime()
+    : date instanceof Date
+    ? date.getTime()
+    : typeof date == "string"
+    ? new Date(date).getTime()
+    : date;
 };
 
 export const isObject = (variable: any) => {
-	return (
-		typeof variable === "object" &&
-		!Array.isArray(variable) &&
-		variable !== null
-	);
+  return (
+    typeof variable === "object" &&
+    !Array.isArray(variable) &&
+    variable !== null
+  );
 };
 
 export const getFormData = (data: any) => {
-	const formData = new FormData();
-	Object.keys(data).forEach((key) => {
-		let keyName = key;
-		if (Array.isArray(data[key])) {
-			keyName = key.toString() + "[]";
-			data[key].forEach((value: any) => {
-				if (value instanceof File) {
-					formData.append(keyName, value);
-				} else if (isObject(value)) {
-					formData.append(keyName, JSON.stringify(value));
-				} else {
-					formData.append(keyName, value);
-				}
-			});
-		} else if (isObject(data[keyName])) {
-			if (data[keyName] instanceof File) {
-				formData.append(keyName, data[keyName]);
-			} else {
-				formData.append(keyName, JSON.stringify(data[keyName]));
-			}
-		} else {
-			if (data[key] !== null && data[key] !== undefined) {
-				formData.append(keyName, data[key]);
-			}
-		}
-	});
-	return formData;
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    let keyName = key;
+    if (Array.isArray(data[key])) {
+      keyName = key.toString() + "[]";
+      data[key].forEach((value: any) => {
+        if (value instanceof File) {
+          formData.append(keyName, value);
+        } else if (isObject(value)) {
+          formData.append(keyName, JSON.stringify(value));
+        } else {
+          formData.append(keyName, value);
+        }
+      });
+    } else if (isObject(data[keyName])) {
+      if (data[keyName] instanceof File) {
+        formData.append(keyName, data[keyName]);
+      } else {
+        formData.append(keyName, JSON.stringify(data[keyName]));
+      }
+    } else {
+      if (data[key] !== null && data[key] !== undefined) {
+        formData.append(keyName, data[key]);
+      }
+    }
+  });
+  return formData;
 };
 
 export const addLeadingZeros = (number: number | string) => {
-	let numberStr = number?.toString();
-	if (numberStr.length < 4) {
-		let zerosNeeded = 4 - numberStr.length;
-		numberStr = "0".repeat(zerosNeeded) + numberStr;
-	}
-	return numberStr;
+  let numberStr = number?.toString();
+  if (numberStr.length < 4) {
+    let zerosNeeded = 4 - numberStr.length;
+    numberStr = "0".repeat(zerosNeeded) + numberStr;
+  }
+  return numberStr;
 };
 
 export const getID = (
-	office_code: string,
-	created_at: string,
-	id: number | string
+  office_code: string,
+  created_at: string,
+  id: number | string
 ) => {
-	return `GPF-${office_code}-${getYear(created_at)}-${addLeadingZeros(id)}`;
+  return `GPF-${office_code}-${getYear(created_at)}-${addLeadingZeros(id)}`;
 };
 
 export const getDatabaseID = (id: string): number => {
-	let parts = id.split("-");
-	return parseInt(parts[parts.length - 1]);
+  let parts = id.split("-");
+  return parseInt(parts[parts.length - 1]);
 };
 
 // Sample of checking uniqueness of multiple insert

@@ -41,6 +41,17 @@ const Profile = ({ lng, profileUrl, name, form, title }: ProfileProps) => {
     }
   }, [files]);
 
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 5000);
+
+      // Clear the timer if status changes before 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   return (
     <>
       <Box>
@@ -49,65 +60,68 @@ const Profile = ({ lng, profileUrl, name, form, title }: ProfileProps) => {
             {title}
           </Title>
         </Center>
-        <Dropzone
-          multiple={false}
-          onDrop={setFiles}
-          onReject={(files) => {
-            files[0]?.errors?.forEach((error) => {
-              if (error.code == "file-invalid-type") {
-                setError(t("invalid_file_type"));
-              } else if (error.code == "file-too-large") {
-                setError(t("file_too_large"));
-              } else {
-                setError(error.message);
-              }
-            });
-          }}
-          maxSize={2 * 1024 ** 2}
-          accept={IMAGE_MIME_TYPE}
-        >
-          <Group
-            style={{ cursor: "pointer" }}
-            pos="relative"
-            className="dropzone"
+        <Center>
+          <Dropzone
+            multiple={false}
+            onDrop={setFiles}
+            onReject={(files) => {
+              files[0]?.errors?.forEach((error) => {
+                if (error.code == "file-invalid-type") {
+                  setError(t("invalid_file_type"));
+                } else if (error.code == "file-too-large") {
+                  setError(t("file_larger_than_2mb_not_allowed"));
+                } else {
+                  setError(error.message);
+                }
+              });
+            }}
+            maxSize={2 * 1024 ** 2}
+            accept={IMAGE_MIME_TYPE}
           >
-            {profileUrl.current && (
+            <Group
+              style={{ cursor: "pointer" }}
+              pos="relative"
+              className="dropzone"
+            >
+              {profileUrl.current && (
+                <ActionIcon
+                  size="xs"
+                  radius="xl"
+                  color="red"
+                  style={{
+                    position: "absolute",
+                    top: "8px",
+                    right: "0",
+                    zIndex: 1000,
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    profileUrl.current = "";
+                    form.setFieldValue("deleted", true);
+                  }}
+                >
+                  <IoClose size={16} />
+                </ActionIcon>
+              )}
+              <Avatar size={100} src={profileUrl.current} />
               <ActionIcon
+                className="edit-icon"
                 size="xs"
                 radius="xl"
-                color="red"
-                style={{
-                  position: "absolute",
-                  top: "8px",
-                  right: "0",
-                  zIndex: 1000,
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  profileUrl.current = "";
-                  form.setFieldValue("deleted", true);
-                }}
+                color="primary"
               >
-                <IoClose size={16} />
+                <MdEdit size={14} />
               </ActionIcon>
-            )}
-            <Avatar size={100} src={profileUrl.current} />
-            <ActionIcon
-              className="edit-icon"
-              size="xs"
-              radius="xl"
-              color="primary"
-            >
-              <MdEdit size={14} />
-            </ActionIcon>
-          </Group>
-        </Dropzone>
+            </Group>
+          </Dropzone>
+        </Center>
+        {error && (
+          <Text mt="sm" c="red" style={{ display: "block" }}>
+            {error}
+          </Text>
+        )}
       </Box>
-      {error && (
-        <Text mt="sm" c="red">
-          {error}
-        </Text>
-      )}
+
       {opened && (
         <AvatarCropper
           opened={opened}

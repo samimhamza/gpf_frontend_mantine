@@ -82,6 +82,7 @@
   "invalid_type": "اطلاعات درست نمیباشد",
   "must_be_number": "اطلاعات وارد شده باید نمبر باشد",
   "invalid_phone": "نمبر تماس وارد شده درست نمیباشد",
+  "invalid_salary": "معاش وارد شده درست نمیباشد",
   "next": "بعدی",
   "close": "بستن",
   "submit": "ثبت",
@@ -198,5 +199,6 @@
   "personal_info": "اطلاعات شخصی",
   "employee_details": "اطلاعات کارمند",
   "contract_details": "جزییات قرارداد",
-  "invalid_email": "ایمیل درست نمیباشد"
+  "invalid_email": "ایمیل درست نمیباشد",
+  "file_larger_than_2mb_not_allowed": "فایل باید کوچکتر از ۲ میگابایت باشد"
 }

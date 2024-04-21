@@ -13,6 +13,7 @@ import { Value } from "react-multi-date-picker";
 import EmployeeStepTwo from "./EmployeeStepTwo";
 import { TbUserCircle } from "react-icons/tb";
 import { CiViewList } from "react-icons/ci";
+import { getTimeValue } from "@/shared/functions";
 
 const EmployeeModal = ({
   opened,
@@ -51,8 +52,8 @@ const EmployeeModal = ({
     phone: "",
     address: "",
     job_title: "",
-    start_date: "",
-    end_date: "",
+    start_date: null,
+    end_date: null,
     salary: "",
     currency: "",
     description: "",
@@ -120,12 +121,30 @@ const EmployeeModal = ({
           let values: any = {};
           Object.entries(response.data).forEach(([key, value]) => {
             if (Object.keys(initialValues).includes(key)) {
-              if (key != "office_id" && key != "profile")
+              if (key != "office_id" && key != "profile") {
                 values[key] = value ? value : initialValues[key];
-
-              if (key == "office_id" && value) values[key] = value.toString();
-
-              if (key == "profile" && value) profileUrl.current = value;
+              } else if (key == "office_id" && value) {
+                values[key] = value.toString();
+              } else if (key == "profile" && value) {
+                profileUrl.current = value;
+              }
+            }
+            if (Array.isArray(value) && value.length) {
+              if (key == "contracts") {
+                Object.entries(value[0]).forEach(([key, contractValue]) => {
+                  if (Object.keys(initialValues).includes(key)) {
+                    if (key != "start_date" && key != "end_date") {
+                      values[key] = contractValue
+                        ? contractValue
+                        : initialValues[key];
+                    } else if (key == "start_date" && contractValue) {
+                      setStartDate(getTimeValue(contractValue.toString()));
+                    } else if (key == "end_date" && contractValue) {
+                      setEndDate(getTimeValue(contractValue.toString()));
+                    }
+                  }
+                });
+              }
             }
           });
           form.setValues(values);
@@ -191,15 +210,16 @@ const EmployeeModal = ({
       ),
       async validate() {
         form.validate();
+        if (!form.values.start_date) {
+          setStartDateErrorMessage(t("field_required"));
+        }
         let res =
-          form.isValid("first_name") &&
-          form.isValid("last_name") &&
-          form.isValid("father_name") &&
+          form.isValid("job_title") &&
+          form.isValid("salary") &&
+          form.isValid("currency") &&
           form.isValid("phone") &&
           form.isValid("email") &&
-          form.isValid("gender") &&
-          form.isValid("office_id");
-
+          form.values.start_date;
         if (res) {
           let { response, status } = await callApi({
             method: "POST",
