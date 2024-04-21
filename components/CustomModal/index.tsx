@@ -223,6 +223,10 @@ const CustomModal = ({
         .custom-modal .modal-footer {
           border-top: 1px solid var(--mantine-color-gray-4);
         }
+        .custom-modal .mantine-Modal-inner {
+          left: 0;
+          right: 0;
+        }
       `}</style>
     </>
   );
