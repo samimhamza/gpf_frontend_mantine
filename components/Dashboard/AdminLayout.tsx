@@ -78,7 +78,7 @@ export function AdminLayout({
 	));
 	return (
 		<AppShell
-			header={{ height: 70 }}
+			header={{ height: 60 }}
 			navbar={{ width: 300, breakpoint: "sm", collapsed: { mobile: !opened } }}
 			padding="md"
 		>
@@ -91,7 +91,7 @@ export function AdminLayout({
 							hiddenFrom="sm"
 							size="sm"
 						/>
-						<Image src="/images/logo.png" width={60} height={60} alt="logo" />
+						<Image src="/images/logo.png" width={50} height={50} alt="logo" />
 						<Title order={4}>{t("gpf")}</Title>
 					</Group>
 
@@ -102,7 +102,7 @@ export function AdminLayout({
 									radius="xl"
 									color="primary"
 									style={{ cursor: "pointer" }}
-									size={53}
+									size={45}
 									src={user.profile}
 									alt=""
 								/>
@@ -111,7 +111,7 @@ export function AdminLayout({
 									radius="xl"
 									color="primary"
 									style={{ cursor: "pointer" }}
-									size={53}
+									size={45}
 								>
 									{getNameAbbr(user.full_name)}
 								</Avatar>

@@ -2,26 +2,26 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { OfficeColumns } from "@/shared/columns/office.columns";
+import { EmployeeColumns } from "@/shared/columns/employee.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import OfficeModal from "./OfficeModal";
+import EmployeeModal from "./EmployeeModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-  UPDATE_OFFICES,
-  CREATE_OFFICES,
-  DELETE_OFFICES,
+  UPDATE_EMPLOYEES,
+  CREATE_EMPLOYEES,
+  DELETE_EMPLOYEES,
   CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
 
-export const OfficeModule = ({ lng }: { lng: string }) => {
+export const EmployeeModule = ({ lng }: { lng: string }) => {
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
-  const columns = OfficeColumns(
+  const columns = EmployeeColumns(
     t,
     permissionChecker(CHANGE_STATUS),
-    "/offices/",
+    "/employees/",
     setMutated
   );
   const [opened, { open, close }] = useDisclosure(false);
@@ -39,13 +39,13 @@ export const OfficeModule = ({ lng }: { lng: string }) => {
       <CustomBreadCrumb
         items={[
           { title: t("dashboard"), link: "/dashboard" },
-          { title: t("offices") },
+          { title: t("employees") },
         ]}
       />
       <CustomDataTable
-        title={t("offices")}
-        url="/offices"
-        deleteUrl="/offices/1"
+        title={t("employees")}
+        url="/employees"
+        deleteUrl="/employees/1"
         lng={lng}
         columns={columns}
         open={open}
@@ -53,13 +53,13 @@ export const OfficeModule = ({ lng }: { lng: string }) => {
         setMutated={setMutated}
         setEdit={setEdit}
         setView={setView}
-        showAdd={permissionChecker(CREATE_OFFICES)}
-        showDelete={permissionChecker(DELETE_OFFICES)}
-        showEdit={permissionChecker(UPDATE_OFFICES)}
+        showAdd={permissionChecker(CREATE_EMPLOYEES)}
+        showDelete={permissionChecker(DELETE_EMPLOYEES)}
+        showEdit={permissionChecker(UPDATE_EMPLOYEES)}
         showView={false}
       />
       {opened && (
-        <OfficeModal
+        <EmployeeModal
           opened={opened}
           close={() => {
             close();
@@ -67,7 +67,7 @@ export const OfficeModule = ({ lng }: { lng: string }) => {
           }}
           lng={lng}
           setMutated={setMutated}
-          title={!edit ? t("add_office") : t("update_office")}
+          title={!edit ? t("add_employee") : t("update_employee")}
           editId={edit}
         />
       )}
