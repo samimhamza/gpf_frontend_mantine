@@ -91,3 +91,10 @@ export const VIEW_WAREHOUSES = "view_warehouses";
 export const CREATE_WAREHOUSES = "create_warehouses";
 export const UPDATE_WAREHOUSES = "update_warehouses";
 export const DELETE_WAREHOUSES = "delete_warehouses";
+
+//Survey Module
+// Warehouses Permissions
+export const VIEW_QUESTIONS = "view_questions";
+export const CREATE_QUESTIONS = "create_questions";
+export const UPDATE_QUESTIONS = "update_questions";
+export const DELETE_QUESTIONS = "delete_questions";

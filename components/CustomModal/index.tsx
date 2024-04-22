@@ -23,6 +23,8 @@ interface CustomModalProps {
   opened: boolean;
   close: () => void;
   steps: any;
+  dynamicStep?: any;
+  showDynamicStep?: boolean;
   form: any;
   submit: any;
   lng: string;
@@ -35,6 +37,8 @@ const CustomModal = ({
   opened,
   close,
   steps,
+  dynamicStep = undefined,
+  showDynamicStep = false,
   form,
   submit,
   lng,
@@ -49,14 +53,15 @@ const CustomModal = ({
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 
-  let stepInside = [
-    ...steps,
-    {
-      title: t("done"),
-      icon: <FaCheck />,
-      step: <Done />,
-    },
-  ];
+  let doneStep = {
+    title: t("done"),
+    icon: <FaCheck />,
+    step: <Done />,
+  };
+
+  let stepInside = showDynamicStep
+    ? [...steps, dynamicStep, doneStep]
+    : [...steps, doneStep];
 
   const next = async () => {
     setLoading(active);

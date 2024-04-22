@@ -2,6 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
+import { Currencies } from "@/shared/constants";
 import { getTime } from "@/shared/functions";
 import { Flex, Select, TextInput, Textarea } from "@mantine/core";
 import { Dispatch, SetStateAction, useEffect } from "react";
@@ -33,10 +34,7 @@ const EmployeeStepTwo = ({
   setEndDate,
 }: EmployeeStepTwoProps) => {
   const { t } = useTranslation(lng);
-  const currencies = [
-    { value: "AFN", label: t("afn") },
-    { value: "USD", label: t("usd") },
-  ];
+  const currencies = Currencies(t);
 
   useEffect(() => {
     if (startDate) {

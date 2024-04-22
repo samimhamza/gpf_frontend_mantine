@@ -200,5 +200,18 @@
   "employee_details": "اطلاعات کارمند",
   "contract_details": "جزییات قرارداد",
   "invalid_email": "ایمیل درست نمیباشد",
-  "file_larger_than_2mb_not_allowed": "فایل باید کوچکتر از ۲ میگابایت باشد"
+  "file_larger_than_2mb_not_allowed": "فایل باید کوچکتر از ۲ میگابایت باشد",
+  "surveys": "سروی ها",
+  "questions": "سوالات",
+  "question": "سوال",
+  "type": "نوعیت",
+  "parent_question": "سوال اصلی",
+  "add_question": "ایجاد سوال جدید",
+  "edit_question": "ویرایش سوال",
+  "mark": "نمره",
+  "question_details": "جزییات سوال",
+  "multiple_choice": "چند گزینه ای",
+  "descriptive": "تشریحی",
+  "answer": "جواب",
+  "question_choices": "گزینه ها"
 }
