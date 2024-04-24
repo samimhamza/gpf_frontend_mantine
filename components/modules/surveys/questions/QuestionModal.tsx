@@ -2,7 +2,10 @@
 
 import QuestionStepOne from "@/components/modules/surveys/questions/QuestionStepOne";
 import { useForm, zodResolver } from "@mantine/form";
-import { QuestionSchema } from "@/schemas/models/surveys/qustions";
+import {
+  DescriptiveQuestionSchema,
+  MultipleChoiceQuestionSchema,
+} from "@/schemas/models/surveys/qustions";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
@@ -10,7 +13,6 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import QuestionStepTwo from "./QuestionStepTwo";
-import { getFormData } from "@/shared/functions";
 import { IoIosListBox } from "react-icons/io";
 import { FaClipboardQuestion } from "react-icons/fa6";
 
@@ -30,11 +32,14 @@ const QuestionModal = ({
   editId: number | undefined;
 }) => {
   const { t } = useTranslation(lng);
-  const questionSchema = QuestionSchema(t);
+  const descriptiveQuestionSchema = DescriptiveQuestionSchema(t);
+  const multipleChoiceQuestionSchema = MultipleChoiceQuestionSchema(t);
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [showSecondStep, setShowSecondStep] = useState(false);
+  const [formSchema, setFormSchema] = useState<any>(descriptiveQuestionSchema);
+  const [fieldSetError, setFieldSetError] = useState(false);
 
   const initialValues: any = {
     question: "",
@@ -42,27 +47,26 @@ const QuestionModal = ({
     type: "",
     parent_id: "",
     mark: "",
-    choices: [{ answer: "", mark: "" }],
+    choices: [{ id: "", answer: "", mark: "" }],
   };
 
   const form = useForm({
     initialValues: initialValues,
-    validate: zodResolver(questionSchema),
+    validate: zodResolver(formSchema),
     validateInputOnBlur: true,
   });
 
   const submit = async () => {
-    const values = getFormData(form.values);
     const { response, status } = !editId
       ? await callApi({
           method: "POST",
           url: "/questions",
-          data: values,
+          data: form.values,
         })
       : await callApi({
           method: "PUT",
           url: `/questions/${editId}`,
-          data: values,
+          data: form.values,
         });
     if ((!editId ? status == 201 : status == 202) && response.result) {
       await setMutated(true);
@@ -89,10 +93,19 @@ const QuestionModal = ({
           let values: any = {};
           Object.entries(response.data).forEach(([key, value]) => {
             if (Object.keys(initialValues).includes(key)) {
-              if (key != "parent_id") {
+              if (key != "parent_id" && key != "choices" && key != "mark") {
                 values[key] = value ? value : initialValues[key];
-              } else if (key == "parent_id" && value) {
+              } else if ((key == "parent_id" || key == "mark") && value) {
                 values[key] = value.toString();
+              } else if (key == "choices" && Array.isArray(value)) {
+                values["choices"] = [];
+                value.forEach((choice) => {
+                  values["choices"].push({
+                    id: choice?.id?.toString(),
+                    answer: choice?.answer?.toString(),
+                    mark: choice?.mark.toString(),
+                  });
+                });
               }
             }
           });
@@ -172,7 +185,14 @@ const QuestionModal = ({
   const stepTwo = {
     title: t("choices"),
     icon: <IoIosListBox size={22} />,
-    step: <QuestionStepTwo form={form} lng={lng} />,
+    step: (
+      <QuestionStepTwo
+        form={form}
+        lng={lng}
+        fieldSetError={fieldSetError}
+        setFieldSetError={setFieldSetError}
+      />
+    ),
     async validate() {
       form.validate();
       let res = form.isValid("choices");
@@ -184,8 +204,10 @@ const QuestionModal = ({
 
   useEffect(() => {
     if (form.values?.type == "multiple_choice") {
+      setFormSchema(multipleChoiceQuestionSchema);
       setShowSecondStep(true);
     } else {
+      setFormSchema(descriptiveQuestionSchema);
       setShowSecondStep(false);
     }
   }, [form.values?.type]);

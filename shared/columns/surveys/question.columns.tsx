@@ -29,6 +29,29 @@ export const QuestionColumns = (t: (arg: string) => string) => {
       title: t("type"),
       noWrap: true,
       sortable: true,
+      render: ({ type }: { type: string }) =>
+        type == "descriptive"
+          ? t("descriptive")
+          : type == "multiple_choice"
+          ? t("multiple_choice")
+          : "",
+    },
+    {
+      accessor: "mark",
+      title: t("mark"),
+      noWrap: true,
+      sortable: true,
+    },
+    {
+      accessor: "choices",
+      title: t("total_choices"),
+      noWrap: true,
+      sortable: true,
+      render: ({
+        choices,
+      }: {
+        choices: Array<{ key: string; value: string }>;
+      }) => <Center>{choices.length}</Center>,
     },
     {
       accessor: "parent_code",

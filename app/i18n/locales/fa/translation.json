@@ -55,6 +55,7 @@
   "all": "انتخاب همه",
   "min_3_length_error": "حد اقل ۳ حرف ضروری است",
   "max_64_length_error": "حد اکثر ۶۴ حرف اجازه است",
+  "max_255_length_error": "حد اکثر ۲۵۵ حرف اجازه است",
   "roles": "صلاحیت ها",
   "role": "صلاحیت",
   "role_info": "اطلاعات صلاحیت",
@@ -207,11 +208,11 @@
   "type": "نوعیت",
   "parent_question": "سوال اصلی",
   "add_question": "ایجاد سوال جدید",
-  "edit_question": "ویرایش سوال",
+  "update_question": "ویرایش سوال",
   "mark": "نمره",
   "question_details": "جزییات سوال",
   "multiple_choice": "چند گزینه ای",
   "descriptive": "تشریحی",
   "answer": "جواب",
-  "question_choices": "گزینه ها"
+  "choices": "گزینه ها"
 }

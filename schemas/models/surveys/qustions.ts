@@ -1,6 +1,46 @@
 import * as z from "zod";
 
-export const QuestionSchema = (t: (arg: string) => string) => {
+export const DescriptiveQuestionSchema = (t: (arg: string) => string) => {
+  return z.object({
+    code: z
+      .string({
+        invalid_type_error: t("invalid_type"),
+      })
+      .min(1, {
+        message: t("field_required"),
+      })
+      .max(16, {
+        message: t("max_64_length_error"),
+      }),
+    question: z
+      .string({
+        invalid_type_error: t("invalid_type"),
+      })
+      .min(3, {
+        message: t("min_3_length_error"),
+      })
+      .max(255, {
+        message: t("max_255_length_error"),
+      }),
+    type: z
+      .string({
+        invalid_type_error: t("invalid_type"),
+      })
+      .min(1, {
+        message: t("field_required"),
+      }),
+    mark: z
+      .string({
+        invalid_type_error: t("invalid_type"),
+      })
+      .regex(/^[0-9\-]*$/, t("only_number_allowed"))
+      .min(1, {
+        message: t("field_required"),
+      }),
+  });
+};
+
+export const MultipleChoiceQuestionSchema = (t: (arg: string) => string) => {
   return z
     .object({
       code: z
@@ -21,7 +61,7 @@ export const QuestionSchema = (t: (arg: string) => string) => {
           message: t("min_3_length_error"),
         })
         .max(255, {
-          message: t("max_64_length_error"),
+          message: t("max_255_length_error"),
         }),
       type: z
         .string({
@@ -30,7 +70,6 @@ export const QuestionSchema = (t: (arg: string) => string) => {
         .min(1, {
           message: t("field_required"),
         }),
-      mark: z.string().regex(/^[0-9\-]*$/, t("only_number_allowed")),
       choices: z
         .array(
           z.object({
@@ -40,6 +79,9 @@ export const QuestionSchema = (t: (arg: string) => string) => {
               })
               .min(1, {
                 message: t("field_required"),
+              })
+              .max(255, {
+                message: t("max_255_length_error"),
               }),
             mark: z.string().regex(/^-?\d+(\.\d+)?$/, t("only_number_allowed")),
           })
@@ -48,22 +90,23 @@ export const QuestionSchema = (t: (arg: string) => string) => {
           const uniqueItemsCount = new Set(
             choices.map((value: any) => value.answer)
           ).size;
-          const errorPosition = choices.length - 1;
           if (uniqueItemsCount !== choices.length) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
               message: t("value_already_exists"),
-              path: [errorPosition, "answer"],
+              path: [choices.length - 1, "answer"],
             });
           }
         }),
     })
     .superRefine((values, ctx) => {
-      if (values.type == "descriptive" && !values.mark) {
+      console.log(values.choices.length);
+
+      if (values.choices.length < 2) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: t("field_required"),
-          path: ["mark"],
+          message: t("min_2_choice_required"),
+          path: [0, "answer"],
         });
       }
     });

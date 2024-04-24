@@ -55,6 +55,7 @@
   "all": "All",
   "min_3_length_error": "Minimum 3 characters required",
   "max_64_length_error": "Maximum 64 characters allowed",
+  "max_255_length_error": "Maximum 255 characters allowed",
   "roles": "Roles",
   "role": "Role",
   "role_info": "Role Info",
@@ -206,5 +207,10 @@
   "parent_question": "Parent Question",
   "add_question": "Add New Question",
   "edit_question": "Edit Question",
-  "mark": "Mark"
+  "mark": "Mark",
+  "question_details": "Question Details",
+  "multiple_choice": "Multiple Choice",
+  "descriptive": "Descriptive",
+  "answer": "Answer",
+  "choices": "Choices"
 }

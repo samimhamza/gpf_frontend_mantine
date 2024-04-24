@@ -8,24 +8,34 @@ import {
   Flex,
   Text,
   TextInput,
+  Textarea,
 } from "@mantine/core";
+import { useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 
 interface QuestionStepTwoProps {
   form: any;
   lng: string;
+  fieldSetError: boolean;
+  setFieldSetError: (error: boolean) => void;
 }
 
-const QuestionStepTwo = ({ form, lng }: QuestionStepTwoProps) => {
+const QuestionStepTwo = ({
+  form,
+  lng,
+  fieldSetError,
+  setFieldSetError,
+}: QuestionStepTwoProps) => {
   const { t } = useTranslation(lng);
 
   return (
     <Box>
-      <Fieldset m="sm" legend={t("question_choices")}>
+      <Fieldset m="sm" legend={t("choices")}>
         {form.values.choices.map(
           (
             item: {
+              id: string | number;
               answer: string;
               mark: string;
             },
@@ -37,6 +47,7 @@ const QuestionStepTwo = ({ form, lng }: QuestionStepTwoProps) => {
                   <ActionIcon
                     onClick={() =>
                       form.insertListItem("choices", {
+                        id: "",
                         answer: "",
                         mark: "",
                       })
@@ -54,13 +65,13 @@ const QuestionStepTwo = ({ form, lng }: QuestionStepTwoProps) => {
                   </ActionIcon>
                 )}
               </Flex>
-
               <Flex
                 direction={{ base: "column", sm: "row" }}
                 gap="sm"
-                justify={{ sm: "center" }}
+                align={{ sm: "center" }}
               >
-                <TextInput
+                <Textarea
+                  resize="vertical"
                   style={{ flex: 1 }}
                   label={t("answer") + " : " + (index + 1)}
                   placeholder={t("answer")}
@@ -80,6 +91,7 @@ const QuestionStepTwo = ({ form, lng }: QuestionStepTwoProps) => {
           )
         )}
       </Fieldset>
+      {fieldSetError && <Text>{t("two_choices_are_required")}</Text>}
     </Box>
   );
 };

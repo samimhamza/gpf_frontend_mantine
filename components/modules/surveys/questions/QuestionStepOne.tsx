@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { QuestionTypes } from "@/shared/constants";
-import { Box, Flex, Select, TextInput } from "@mantine/core";
+import { Box, Flex, Select, TextInput, Textarea } from "@mantine/core";
 
 interface QuestionStepOneProps {
   form: any;
@@ -22,13 +22,21 @@ const QuestionStepOne = ({ form, lng, questions }: QuestionStepOneProps) => {
         p="sm"
         justify={{ sm: "center" }}
       >
-        <TextInput
+        <Textarea
+          resize="vertical"
           style={{ flex: 1 }}
           label={t("question")}
           placeholder={t("question")}
           withAsterisk
           {...form.getInputProps("question")}
         />
+      </Flex>
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        gap="sm"
+        px="sm"
+        justify={{ sm: "center" }}
+      >
         <TextInput
           style={{ flex: 1 }}
           label={t("code")}
@@ -36,13 +44,6 @@ const QuestionStepOne = ({ form, lng, questions }: QuestionStepOneProps) => {
           withAsterisk
           {...form.getInputProps("code")}
         />
-      </Flex>
-      <Flex
-        direction={{ base: "column", sm: "row" }}
-        gap="sm"
-        p="sm"
-        justify={{ sm: "center" }}
-      >
         <Select
           style={{ flex: 1 }}
           label={t("type")}
@@ -52,6 +53,24 @@ const QuestionStepOne = ({ form, lng, questions }: QuestionStepOneProps) => {
           clearable
           {...form.getInputProps("type")}
         />
+      </Flex>
+
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        gap="sm"
+        p="sm"
+        justify={{ sm: "center" }}
+      >
+        {form.values.type == "descriptive" && (
+          <TextInput
+            style={{ flex: 1 }}
+            label={t("mark")}
+            placeholder={t("mark")}
+            type="number"
+            withAsterisk
+            {...form.getInputProps(`mark`)}
+          />
+        )}
         <Select
           style={{ flex: 1 }}
           label={t("parent_question")}
@@ -62,25 +81,8 @@ const QuestionStepOne = ({ form, lng, questions }: QuestionStepOneProps) => {
           nothingFoundMessage={t("noting_found")}
           {...form.getInputProps("parent_id")}
         />
+        {form.values.type != "descriptive" && <Box style={{ flex: 1 }}></Box>}
       </Flex>
-      {form.values.type == "descriptive" && (
-        <Flex
-          direction={{ base: "column", sm: "row" }}
-          gap="sm"
-          p="sm"
-          justify={{ sm: "center" }}
-        >
-          <TextInput
-            style={{ flex: 1 }}
-            label={t("mark")}
-            placeholder={t("mark")}
-            type="number"
-            withAsterisk
-            {...form.getInputProps(`mark`)}
-          />
-          <Box style={{ flex: 1 }}></Box>
-        </Flex>
-      )}
     </>
   );
 };
