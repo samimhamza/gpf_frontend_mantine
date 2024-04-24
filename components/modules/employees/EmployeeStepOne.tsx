@@ -4,8 +4,6 @@ import { useTranslation } from "@/app/i18n/client";
 import Profile from "@/components/Profile";
 import { Genders } from "@/shared/constants";
 import { Center, Flex, Select, TextInput, Textarea } from "@mantine/core";
-import { Dispatch, SetStateAction } from "react";
-import { Value } from "react-multi-date-picker";
 
 interface EmployeeStepOneProps {
   form: any;

@@ -3,17 +3,16 @@ import usePermissionChecker from "@/customHooks/usePermissionChecker";
 import { VIEW_ITEMS } from "@/shared/constants/Permissions";
 
 const ItemsPage = async ({
-	params: { lng, warehouse },
+  params: { lng, warehouse },
 }: {
-	params: {
-		lng: string;
-		warehouse: string;
-	};
+  params: {
+    lng: string;
+    warehouse: string;
+  };
 }) => {
-	await usePermissionChecker(VIEW_ITEMS);
-	console.log(warehouse);
+  await usePermissionChecker(VIEW_ITEMS);
 
-	return <ItemModule lng={lng} />;
+  return <ItemModule lng={lng} />;
 };
 
 export default ItemsPage;

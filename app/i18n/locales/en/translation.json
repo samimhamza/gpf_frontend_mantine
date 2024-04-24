@@ -55,6 +55,7 @@
   "all": "All",
   "min_3_length_error": "Minimum 3 characters required",
   "max_64_length_error": "Maximum 64 characters allowed",
+  "max_255_length_error": "Maximum 255 characters allowed",
   "roles": "Roles",
   "role": "Role",
   "role_info": "Role Info",
@@ -198,5 +199,18 @@
   "employee_details": "Employee Details",
   "contract_details": "Contract Details",
   "invalid_email": "Invalid Email",
-  "file_larger_than_2mb_not_allowed": "File Larger that 2MB is not allowed"
+  "file_larger_than_2mb_not_allowed": "File Larger that 2MB is not allowed",
+  "surveys": "Surveys",
+  "questions": "Questions",
+  "question": "Question",
+  "type": "Type",
+  "parent_question": "Parent Question",
+  "add_question": "Add New Question",
+  "edit_question": "Edit Question",
+  "mark": "Mark",
+  "question_details": "Question Details",
+  "multiple_choice": "Multiple Choice",
+  "descriptive": "Descriptive",
+  "answer": "Answer",
+  "choices": "Choices"
 }

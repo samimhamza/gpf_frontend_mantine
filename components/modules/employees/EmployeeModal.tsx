@@ -13,7 +13,7 @@ import { Value } from "react-multi-date-picker";
 import EmployeeStepTwo from "./EmployeeStepTwo";
 import { TbUserCircle } from "react-icons/tb";
 import { CiViewList } from "react-icons/ci";
-import { getTimeValue } from "@/shared/functions";
+import { getFormData, getTimeValue } from "@/shared/functions";
 
 const EmployeeModal = ({
   opened,
@@ -66,16 +66,23 @@ const EmployeeModal = ({
   });
 
   const submit = async () => {
+    const values = getFormData(form.values);
     const { response, status } = !editId
       ? await callApi({
           method: "POST",
           url: "/employees",
-          data: form.values,
+          data: values,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
       : await callApi({
-          method: "PUT",
-          url: `/employees/${editId}`,
-          data: form.values,
+          method: "POST",
+          url: `/employees/${editId}?_method=PUT`,
+          data: values,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
     if ((!editId ? status == 201 : status == 202) && response.result) {
       await setMutated(true);
@@ -133,10 +140,16 @@ const EmployeeModal = ({
               if (key == "contracts") {
                 Object.entries(value[0]).forEach(([key, contractValue]) => {
                   if (Object.keys(initialValues).includes(key)) {
-                    if (key != "start_date" && key != "end_date") {
+                    if (
+                      key != "start_date" &&
+                      key != "end_date" &&
+                      key != "salary"
+                    ) {
                       values[key] = contractValue
                         ? contractValue
                         : initialValues[key];
+                    } else if (key == "salary" && contractValue) {
+                      values[key] = contractValue.toString();
                     } else if (key == "start_date" && contractValue) {
                       setStartDate(getTimeValue(contractValue.toString()));
                     } else if (key == "end_date" && contractValue) {
