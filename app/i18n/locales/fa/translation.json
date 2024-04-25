@@ -214,5 +214,8 @@
   "multiple_choice": "چند گزینه ای",
   "descriptive": "تشریحی",
   "answer": "جواب",
-  "choices": "گزینه ها"
+  "choices": "گزینه ها",
+  "select_office": "دفتر را انتخاب نمایید",
+  "no_office_exists": "هیج دفتری در سیستم موجود نیست. اینجا را کلیک نمایید",
+  "all_offices": "تمام دفاتر"
 }

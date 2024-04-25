@@ -212,5 +212,8 @@
   "multiple_choice": "Multiple Choice",
   "descriptive": "Descriptive",
   "answer": "Answer",
-  "choices": "Choices"
+  "choices": "Choices",
+  "select_office": "Select Office",
+  "no_office_exists": "No Office Exists, Click to continue",
+  "all_offices": "All Offices"
 }
