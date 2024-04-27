@@ -19,7 +19,7 @@ const SelectOffice = ({
   const { t } = useTranslation(lng);
   const [offices, setOffices] = useState([]);
   const callApi = useAxios();
-  const [cookies, setCookie] = useCookies(["office", "office_name"]);
+  const [cookies, setCookie] = useCookies(["office"]);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -38,10 +38,6 @@ const SelectOffice = ({
 
   const setOffice = (office: any) => {
     setCookie("office", office?.id ? office?.id : office);
-    setCookie(
-      "office_name",
-      office?.name ? office?.name + " (" + office?.code + ")" : office
-    );
     if (redirect) {
       router.push("/dashboard");
     }
