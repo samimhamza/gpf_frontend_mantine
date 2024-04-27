@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/auth/LoginForm/LoginForm";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 const LoginPage = ({
   params: { lng },
