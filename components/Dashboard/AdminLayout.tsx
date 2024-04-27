@@ -56,11 +56,8 @@ export function AdminLayout({
   const callApi = useAxios();
   const navList = NavItems(t);
   const [openOfficeModal, setOpenOfficeModal] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies([
-    "office",
-    "office_name",
-  ]);
-  const [officeName, setOfficeName] = useState<string>("");
+  const [cookies, setCookie, removeCookie] = useCookies(["office"]);
+  const [office, setOffice] = useState<any>("");
 
   const userNavList = navList.filter((item) => {
     if (
@@ -74,7 +71,6 @@ export function AdminLayout({
     setLoading(true);
     const { status } = await callApi({ method: "POST", url: "/logout" });
     removeCookie("office");
-    removeCookie("office_name");
     await signOut({
       redirect: false,
     });
@@ -90,11 +86,36 @@ export function AdminLayout({
     />
   ));
 
-  useEffect(() => {
-    if (cookies.office_name) {
-      setOfficeName(cookies.office_name);
+  const checkAdmin = () => {
+    if (user?.roles?.includes(ADMIN) || user?.roles?.includes(SUPERADMIN)) {
+      return true;
     }
-  }, [cookies.office_name]);
+    return false;
+  };
+
+  useEffect(() => {
+    if (checkAdmin()) {
+      if (cookies.office) {
+        if (cookies.office != "all" && typeof cookies.office == "number") {
+          (async function () {
+            const { response, status, error } = await callApi({
+              method: "GET",
+              url: `offices/${cookies.office}`,
+            });
+            if (status == 200 && response.result == true) {
+              setOffice(response.data);
+            } else {
+              router.push("/office");
+            }
+          })();
+        } else {
+          setOffice(cookies.office);
+        }
+      } else {
+        router.push("/office");
+      }
+    }
+  }, [cookies.office]);
 
   return (
     <>
@@ -118,8 +139,7 @@ export function AdminLayout({
               />
               <Image src="/images/logo.png" width={50} height={50} alt="logo" />
               <Title order={4}>{t("gpf")}</Title>
-              {(user?.roles?.includes(SUPERADMIN) ||
-                user?.roles?.includes(ADMIN)) && (
+              {checkAdmin() ? (
                 <Button
                   variant="default"
                   mx="xl"
@@ -128,16 +148,21 @@ export function AdminLayout({
                   }}
                 >
                   {t("office") + " : "}
-                  {officeName ? (
-                    officeName == "all" ? (
+                  {office ? (
+                    office == "all" ? (
                       t("all_offices")
                     ) : (
-                      officeName
+                      office?.name + " (" + office?.code + ")"
                     )
                   ) : (
                     <Loader mx="xs" size={15} />
                   )}
                 </Button>
+              ) : (
+                <Box className="border" py="xs" px="sm" mx="xl">
+                  {t("office") + " : "}
+                  {user?.office_name + " (" + user?.office_code + ")"}
+                </Box>
               )}
             </Group>
 
@@ -205,6 +230,12 @@ export function AdminLayout({
         opened={openOfficeModal}
         close={setOpenOfficeModal}
       />
+      <style jsx global>{`
+        .border {
+          border: 1px solid var(--mantine-color-gray-4);
+          border-radius: 7px;
+        }
+      `}</style>
     </>
   );
 }
