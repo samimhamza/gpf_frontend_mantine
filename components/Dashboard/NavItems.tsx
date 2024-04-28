@@ -134,4 +134,10 @@ export const NavItems = (t: (arg: string) => string) => [
     link: "/offices",
     permission: VIEW_OFFICES,
   },
+  {
+    label: t("teams"),
+    icon: IoHome,
+    link: "/teams",
+    permission: VIEW_TEAMS,
+  },
 ];
