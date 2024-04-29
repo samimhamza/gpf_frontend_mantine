@@ -14,8 +14,10 @@ import {
   UPDATE_TEAMS,
 } from "@/shared/constants/Permissions";
 import { TeamColumns } from "@/shared/columns/team.columns";
+import { useRouter } from "next/navigation";
 
 export const TeamModule = ({ lng }: { lng: string }) => {
+  const router = useRouter();
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
   const columns = TeamColumns(
@@ -33,6 +35,12 @@ export const TeamModule = ({ lng }: { lng: string }) => {
       open();
     }
   }, [edit]);
+
+  useEffect(() => {
+    if (view) {
+      router.push(`/teams_info/${view}`);
+    }
+  }, [view]);
 
   return (
     <>
@@ -52,6 +60,7 @@ export const TeamModule = ({ lng }: { lng: string }) => {
         mutated={mutated}
         setMutated={setMutated}
         setEdit={setEdit}
+        setView={setView}
         showAdd={permissionChecker(CREATE_TEAMS)}
         showDelete={permissionChecker(DELETE_TEAMS)}
         showEdit={permissionChecker(UPDATE_TEAMS)}
