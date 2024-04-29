@@ -167,9 +167,7 @@ const TeamModal = ({
           });
           if (status == 226) {
             form.setErrors({
-              name:
-                (response.message == 1 || response.message == 0) &&
-                t("value_already_exists"),
+              name: response.message == 0 && t("value_already_exists"),
             });
             return false;
           } else if (status !== 200) return false;
