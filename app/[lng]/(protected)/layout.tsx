@@ -14,11 +14,7 @@ const AdminPanelLayout = async ({
   if (!data?.user) {
     redirect("auth/login");
   }
-  return (
-    <AdminLayout lng={lng} user={data.user}>
-      {children}
-    </AdminLayout>
-  );
+  return <AdminLayout lng={lng}>{children}</AdminLayout>;
 };
 
 export default AdminPanelLayout;

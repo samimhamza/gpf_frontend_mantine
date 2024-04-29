@@ -19,17 +19,16 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import Image from "next/image";
 import { LinksGroup } from "./NavbarLinksGroup/NavbarLinksGroup";
-import { userProps } from "@/types/next-auth";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { TbLogout2 } from "react-icons/tb";
 import { IoIosSettings } from "react-icons/io";
 import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import { NavItems } from "./NavItems";
-import { useCookies } from "react-cookie";
 import SelectOfficeModal from "../Office/SelectOfficeModal";
 import { ADMIN, SUPERADMIN } from "@/shared/constants/Roles";
+import { useCookies } from "react-cookie";
 
 const getNameAbbr = (name: string) => {
   var words = name.split(" ");
@@ -43,12 +42,11 @@ const getNameAbbr = (name: string) => {
 export function AdminLayout({
   children,
   lng,
-  user,
 }: {
   children: React.ReactNode;
   lng: string;
-  user: userProps;
 }) {
+  const { data: session } = useSession();
   const [opened, { toggle }] = useDisclosure();
   const { t } = useTranslation(lng);
   const [loading, setLoading] = useState(false);
@@ -56,64 +54,77 @@ export function AdminLayout({
   const callApi = useAxios();
   const navList = NavItems(t);
   const [openOfficeModal, setOpenOfficeModal] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies(["office"]);
   const [office, setOffice] = useState<any>("");
+  const [cookies, setCookie, removeCookie] = useCookies(["office"]);
+
+  const checkPermission = (permission: string | string[] | undefined) => {
+    if (typeof permission == "string") {
+      return session?.user?.permissions.includes(permission);
+    } else if (permission && permission?.length > 0) {
+      let hasAccess = false;
+      permission?.forEach((per) => {
+        hasAccess = hasAccess || session?.user?.permissions.includes(per);
+      });
+      return hasAccess;
+    }
+    return true;
+  };
 
   const userNavList = navList.filter((item) => {
-    if (
-      (item.permission && user.permissions.includes(item.permission)) ||
-      !item.permission
-    )
-      return item;
+    if (checkPermission(item.permission)) return item;
   });
 
   const logout = async () => {
     setLoading(true);
-    const { status } = await callApi({ method: "POST", url: "/logout" });
-    removeCookie("office");
     await signOut({
       redirect: false,
     });
-    router.push("/auth/login");
+    removeCookie("office");
+    const { status } = await callApi({ method: "GET", url: "/logout" });
     setLoading(false);
+    router.push("/auth/login");
   };
 
   const links = userNavList.map((item) => (
     <LinksGroup
       {...item}
       key={item.label}
-      user_permissions={user.permissions}
+      user_permissions={session?.user?.permissions}
     />
   ));
 
   const checkAdmin = () => {
-    if (user?.roles?.includes(ADMIN) || user?.roles?.includes(SUPERADMIN)) {
-      return true;
-    }
-    return false;
+    return (
+      session?.user?.roles?.includes(ADMIN) ||
+      session?.user?.roles?.includes(SUPERADMIN)
+    );
   };
 
   useEffect(() => {
+    let office = cookies.office;
     if (checkAdmin()) {
-      if (cookies.office) {
-        if (cookies.office != "all" && typeof cookies.office == "number") {
+      if (office) {
+        if (office !== "all") {
           (async function () {
-            const { response, status, error } = await callApi({
+            const { response, status } = await callApi({
               method: "GET",
-              url: `offices/${cookies.office}`,
+              url: `offices/${office}`,
             });
-            if (status == 200 && response.result == true) {
+            if (status === 200 && response.result) {
               setOffice(response.data);
             } else {
               setOpenOfficeModal(true);
             }
           })();
         } else {
-          setOffice(cookies.office);
+          setOffice(office);
         }
       } else {
         setOpenOfficeModal(true);
       }
+    } else {
+      removeCookie("office");
+      setCookie("office", session?.user?.office_id?.toString());
     }
   }, [cookies.office]);
 
@@ -161,20 +172,23 @@ export function AdminLayout({
               ) : (
                 <Box className="border" py="xs" px="sm" mx="xl">
                   {t("office") + " : "}
-                  {user?.office_name + " (" + user?.office_code + ")"}
+                  {session?.user?.office_name +
+                    " (" +
+                    session?.user?.office_code +
+                    ")"}
                 </Box>
               )}
             </Group>
 
             <Menu shadow="md">
               <Menu.Target>
-                {user.profile ? (
+                {session?.user?.profile ? (
                   <Avatar
                     radius="xl"
                     color="primary"
                     style={{ cursor: "pointer" }}
                     size={45}
-                    src={user.profile}
+                    src={session?.user?.profile}
                     alt=""
                   />
                 ) : (
@@ -184,7 +198,8 @@ export function AdminLayout({
                     style={{ cursor: "pointer" }}
                     size={45}
                   >
-                    {getNameAbbr(user.full_name)}
+                    {session?.user?.full_name &&
+                      getNameAbbr(session?.user?.full_name)}
                   </Avatar>
                 )}
               </Menu.Target>
@@ -225,11 +240,13 @@ export function AdminLayout({
           <AppShell.Main>{children}</AppShell.Main>
         </>
       </AppShell>
-      <SelectOfficeModal
-        lng={lng}
-        opened={openOfficeModal}
-        close={setOpenOfficeModal}
-      />
+      {openOfficeModal && (
+        <SelectOfficeModal
+          lng={lng}
+          opened={openOfficeModal}
+          close={setOpenOfficeModal}
+        />
+      )}
       <style jsx global>{`
         .border {
           border: 1px solid var(--mantine-color-gray-4);
