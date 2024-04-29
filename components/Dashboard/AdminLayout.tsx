@@ -105,14 +105,14 @@ export function AdminLayout({
             if (status == 200 && response.result == true) {
               setOffice(response.data);
             } else {
-              router.push("/office");
+              setOpenOfficeModal(true);
             }
           })();
         } else {
           setOffice(cookies.office);
         }
       } else {
-        router.push("/office");
+        setOpenOfficeModal(true);
       }
     }
   }, [cookies.office]);

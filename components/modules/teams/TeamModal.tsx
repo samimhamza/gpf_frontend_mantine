@@ -7,7 +7,7 @@ import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
-import { IoHome } from "react-icons/io5";
+import { HiMiniUsers } from "react-icons/hi2";
 import { TeamsSchema } from "@/schemas/models/teams";
 import TeamStepOne from "./TeamStepOne";
 
@@ -117,14 +117,15 @@ const TeamModal = ({
     (async function () {
       const { response, status, error } = await callApi({
         method: "GET",
-        url: "/employees",
+        url: "/all_employees",
       });
       if (status == 200 && response.result == true) {
         SetEmployees(
           response.data.map((item: any) => {
             return {
               value: item.id.toString(),
-              label: `${item.first_name} ${item.last_name}`,
+              label: `${item.first_name + " " + item.last_name}`,
+              profile: item.profile,
             };
           })
         );
@@ -135,7 +136,7 @@ const TeamModal = ({
   const steps = [
     {
       title: t("team_info"),
-      icon: <IoHome size={22} />,
+      icon: <HiMiniUsers size={22} />,
       step: (
         <Box pos="relative">
           <LoadingOverlay
@@ -155,35 +156,30 @@ const TeamModal = ({
         form.validate();
         let res = form.isValid();
         if (res) {
-          if (!editId) {
-            // Only perform uniqueness check if not editing
-            let { response, status } = await callApi({
-              method: "POST",
-              url: "/teams/check_uniqueness",
-              data: {
-                name: form.values.name,
-                office_id: form.values.office_id,
-                members: editId ? editId : null,
-              },
+          let { response, status } = await callApi({
+            method: "POST",
+            url: "/teams/check_uniqueness",
+            data: {
+              name: form.values.name,
+              office_id: form.values.office_id,
+              id: editId ? editId : null,
+            },
+          });
+          if (status == 226) {
+            form.setErrors({
+              name:
+                (response.message == 1 || response.message == 0) &&
+                t("value_already_exists"),
             });
-            if (status == 226) {
-              form.setErrors({
-                name:
-                  (response.message == 1 || response.message == 0) &&
-                  t("value_already_exists"),
-                code:
-                  (response.message == 2 || response.message == 0) &&
-                  t("value_already_exists"),
-              });
-              return false;
-            } else if (status !== 200) return false;
-          }
+            return false;
+          } else if (status !== 200) return false;
           return true;
         }
         return res;
       },
     },
   ];
+
   return (
     <form>
       <CustomModal

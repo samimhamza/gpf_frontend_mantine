@@ -88,12 +88,17 @@ export const NavItems = (t: (arg: string) => string) => [
     label: t("surveys"),
     icon: RiSurveyFill,
     initiallyOpened: true,
-    permission: VIEW_QUESTIONS,
+    permission: VIEW_QUESTIONS || VIEW_TEAMS,
     links: [
       {
         label: t("questions"),
         link: "/questions",
         permission: VIEW_QUESTIONS,
+      },
+      {
+        label: t("teams"),
+        link: "/teams",
+        permission: VIEW_TEAMS,
       },
     ],
   },
@@ -119,7 +124,7 @@ export const NavItems = (t: (arg: string) => string) => [
     label: t("employee_management"),
     icon: HiMiniUserGroup,
     initiallyOpened: true,
-    permission: VIEW_EMPLOYEES || VIEW_TEAMS,
+    permission: VIEW_EMPLOYEES,
     links: [
       {
         label: t("employees"),
@@ -133,11 +138,5 @@ export const NavItems = (t: (arg: string) => string) => [
     icon: IoHome,
     link: "/offices",
     permission: VIEW_OFFICES,
-  },
-  {
-    label: t("teams"),
-    icon: IoHome,
-    link: "/teams",
-    permission: VIEW_TEAMS,
   },
 ];
