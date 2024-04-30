@@ -114,7 +114,7 @@ const QuestionModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, form, callApi, initialValues]);
 
   useEffect(() => {
     (async function () {

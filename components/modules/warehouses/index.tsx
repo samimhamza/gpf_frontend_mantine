@@ -28,7 +28,7 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   useEffect(() => {
     if (view) {

@@ -43,7 +43,7 @@ const EmployeeStepTwo = ({
     } else {
       form.setFieldValue("start_date", null);
     }
-  }, [startDate]);
+  }, [startDate, form, setStartDateErrorMessage]);
 
   useEffect(() => {
     setEndDateErrorMessage("");
@@ -52,7 +52,7 @@ const EmployeeStepTwo = ({
     } else {
       form.setFieldValue("end_date", null);
     }
-  }, [endDate]);
+  }, [endDate, form, setEndDateErrorMessage]);
 
   useEffect(() => {
     if (endDate && startDate) {
@@ -60,7 +60,7 @@ const EmployeeStepTwo = ({
         setEndDateErrorMessage(t("end_date_must_be_greater"));
       }
     }
-  }, [startDate, endDate]);
+  }, [startDate, endDate, setEndDateErrorMessage]);
 
   return (
     <>

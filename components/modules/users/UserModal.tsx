@@ -143,7 +143,7 @@ const UserModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form]);
 
   useEffect(() => {
     (async function () {
@@ -160,7 +160,7 @@ const UserModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   useEffect(() => {
     (async function () {
@@ -173,7 +173,7 @@ const UserModal = ({
         setTotalPermissions(response.total);
       }
     })();
-  }, []);
+  }, [callApi]);
 
   const steps = [
     {

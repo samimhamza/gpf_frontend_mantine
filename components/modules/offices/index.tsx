@@ -32,7 +32,7 @@ export const OfficeModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   return (
     <>

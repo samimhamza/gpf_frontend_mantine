@@ -148,7 +148,7 @@ const EmployeeModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form, initialValues]);
 
   const steps = [
     {

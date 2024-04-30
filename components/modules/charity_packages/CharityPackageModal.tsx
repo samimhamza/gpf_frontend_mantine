@@ -101,7 +101,7 @@ const CharityPackageModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   useEffect(() => {
     (async function () {
@@ -121,7 +121,7 @@ const CharityPackageModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   useEffect(() => {
     if (editId) {

@@ -93,7 +93,7 @@ const CustomDataTable = ({
         setMutated(false);
       }
     })();
-  }, [mutated]);
+  }, [mutated, mutate, setMutated]);
 
   const renderActions = (record: any) => (
     <Actions

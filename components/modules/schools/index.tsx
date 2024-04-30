@@ -32,7 +32,7 @@ export const SchoolModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   return (
     <>

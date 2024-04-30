@@ -34,7 +34,7 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   useEffect(() => {
     if (view) {

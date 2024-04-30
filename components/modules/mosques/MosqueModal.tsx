@@ -115,7 +115,7 @@ const MosqueModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form, initialValues]);
 
   useEffect(() => {
     (async function () {

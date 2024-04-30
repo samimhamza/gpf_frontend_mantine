@@ -37,7 +37,7 @@ const ApplicantPackageImplements = ({
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   useEffect(() => {
     if (packagesDeleted) {
