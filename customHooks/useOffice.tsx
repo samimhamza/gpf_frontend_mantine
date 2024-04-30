@@ -30,7 +30,7 @@ const useOffice = (form?: any) => {
     } else if (office) {
       form && form.setValues({ office_id: office?.toString() });
     }
-  }, [office]);
+  }, [office, callApi]);
 
   return { offices, office };
 };

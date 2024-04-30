@@ -7,7 +7,7 @@ import { BiSolidBox } from "react-icons/bi";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { IoIosListBox } from "react-icons/io";
@@ -42,17 +42,19 @@ const CharityPackageModal = ({
   const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
   const [endDate, setEndDate] = useState<Value>();
 
-  const initialValues: any = {
-    name: "",
-    office_id: "",
-    category_id: "",
-    period: "",
-    start_date: null,
-    end_date: null,
-    cash_amount: "",
-    currency: "",
-    items: [{ item_id: "", quantity: "", unit: "" }],
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      name: "",
+      office_id: "",
+      category_id: "",
+      period: "",
+      start_date: null,
+      end_date: null,
+      cash_amount: "",
+      currency: "",
+      items: [{ item_id: "", quantity: "", unit: "" }],
+    };
+  }, []);
 
   const form = useForm({
     initialValues: initialValues,
@@ -174,7 +176,7 @@ const CharityPackageModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form, initialValues]);
 
   const steps = [
     {

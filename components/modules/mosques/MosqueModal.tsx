@@ -8,7 +8,7 @@ import { FaMosque } from "react-icons/fa";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import useOffice from "@/customHooks/useOffice";
@@ -35,14 +35,16 @@ const MosqueModal = ({
   const [districts, setDistricts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const initialValues: any = {
-    name: "",
-    office_id: "",
-    province_id: "",
-    district_id: "",
-    mosque_type: "",
-    mosque_formal: "",
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      name: "",
+      office_id: "",
+      province_id: "",
+      district_id: "",
+      mosque_type: "",
+      mosque_formal: "",
+    };
+  }, []);
 
   const form = useForm({
     initialValues: initialValues,

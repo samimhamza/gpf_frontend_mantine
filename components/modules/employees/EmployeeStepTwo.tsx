@@ -60,7 +60,7 @@ const EmployeeStepTwo = ({
         setEndDateErrorMessage(t("end_date_must_be_greater"));
       }
     }
-  }, [startDate, endDate, setEndDateErrorMessage]);
+  }, [startDate, endDate, setEndDateErrorMessage, t]);
 
   return (
     <>

@@ -7,7 +7,7 @@ import { BiSolidBox } from "react-icons/bi";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 
@@ -31,10 +31,12 @@ const ItemModal = ({
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
 
-  const initialValues: any = {
-    name: "",
-    unit: "",
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      name: "",
+      unit: "",
+    };
+  }, []);
 
   const form = useForm({
     initialValues: initialValues,
