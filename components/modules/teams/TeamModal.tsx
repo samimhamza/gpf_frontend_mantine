@@ -10,6 +10,7 @@ import { Box, LoadingOverlay } from "@mantine/core";
 import { HiMiniUsers } from "react-icons/hi2";
 import { TeamsSchema } from "@/schemas/models/teams";
 import TeamStepOne from "./TeamStepOne";
+import useOffice from "@/customHooks/useOffice";
 
 const TeamModal = ({
   opened,
@@ -30,7 +31,6 @@ const TeamModal = ({
   const teamsSchema = TeamsSchema(t);
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
-  const [offices, setOffices] = useState([]);
   const [employees, SetEmployees] = useState([]);
 
   const initialValues: any = {
@@ -44,6 +44,8 @@ const TeamModal = ({
     validate: zodResolver(teamsSchema),
     validateInputOnBlur: true,
   });
+
+  const { offices, office } = useOffice(form);
 
   const submit = async () => {
     const { response, status } = !editId
@@ -97,25 +99,6 @@ const TeamModal = ({
     (async function () {
       const { response, status, error } = await callApi({
         method: "GET",
-        url: "/all_offices",
-      });
-      if (status == 200 && response.result == true) {
-        setOffices(
-          response.data.map((item: any) => {
-            return {
-              value: item.id.toString(),
-              label: item.name + " (" + item.code + ")",
-            };
-          })
-        );
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async function () {
-      const { response, status, error } = await callApi({
-        method: "GET",
         url: "/all_employees",
       });
       if (status == 200 && response.result == true) {
@@ -148,6 +131,7 @@ const TeamModal = ({
             employees={employees}
             form={form}
             lng={lng}
+            office={office}
           />
         </Box>
       ),

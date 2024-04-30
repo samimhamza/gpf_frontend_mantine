@@ -14,6 +14,7 @@ import EmployeeStepTwo from "./EmployeeStepTwo";
 import { TbUserCircle } from "react-icons/tb";
 import { CiViewList } from "react-icons/ci";
 import { getFormData, getTimeValue } from "@/shared/functions";
+import useOffice from "@/customHooks/useOffice";
 
 const EmployeeModal = ({
   opened,
@@ -34,7 +35,6 @@ const EmployeeModal = ({
   const employeeSchema = EmployeeSchema(t);
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
-  const [offices, setOffices] = useState([]);
   const profileUrl = useRef<any>(null);
   const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
   const [startDate, setStartDate] = useState<Value>();
@@ -64,6 +64,8 @@ const EmployeeModal = ({
     validate: zodResolver(employeeSchema),
     validateInputOnBlur: true,
   });
+
+  const { offices, office } = useOffice(form);
 
   const submit = async () => {
     const values = getFormData(form.values);
@@ -96,25 +98,6 @@ const EmployeeModal = ({
     toast.error(t("something_went_wrong"));
     return false;
   };
-
-  useEffect(() => {
-    (async function () {
-      const { response, status, error } = await callApi({
-        method: "GET",
-        url: "/all_offices",
-      });
-      if (status == 200 && response.result == true) {
-        setOffices(
-          response.data.map((item: any) => {
-            return {
-              value: item.id.toString(),
-              label: item.name + " (" + item.code + ")",
-            };
-          })
-        );
-      }
-    })();
-  }, []);
 
   useEffect(() => {
     if (editId) {
@@ -183,6 +166,7 @@ const EmployeeModal = ({
             lng={lng}
             profileUrl={profileUrl}
             offices={offices}
+            office={office}
           />
         </Box>
       ),

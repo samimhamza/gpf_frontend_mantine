@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { getFormData } from "@/shared/functions";
+import useOffice from "@/customHooks/useOffice";
 
 const UserModal = ({
   opened,
@@ -33,7 +34,6 @@ const UserModal = ({
   const createUserSchema = CreateUserSchema(t);
   const editUserSchema = EditUserSchema(t);
   const callApi = useAxios();
-  const [offices, setOffices] = useState([]);
   const [roles, setRoles] = useState([]);
   const [permissions, setPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,6 +66,8 @@ const UserModal = ({
     validate: zodResolver(!editId ? createUserSchema : editUserSchema),
     validateInputOnBlur: true,
   });
+
+  const { offices, office } = useOffice(form);
 
   const submit = async () => {
     const values = getFormData(form.values);
@@ -147,26 +149,6 @@ const UserModal = ({
     (async function () {
       const { response, status, error } = await callApi({
         method: "GET",
-        url: "/all_offices",
-        // url: "/office/auto_complete",
-      });
-      if (status == 200 && response.result == true) {
-        setOffices(
-          response.data.map((item: any) => {
-            return {
-              value: item.id.toString(),
-              label: item.name + " (" + item.code + ")",
-            };
-          })
-        );
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async function () {
-      const { response, status, error } = await callApi({
-        method: "GET",
         url: "/all_roles",
         // url: "/office/auto_complete",
       });
@@ -208,9 +190,9 @@ const UserModal = ({
             form={form}
             lng={lng}
             offices={offices}
-            setOffices={setOffices}
             editId={editId}
             profileUrl={profileUrl}
+            office={office}
           />
         </Box>
       ),

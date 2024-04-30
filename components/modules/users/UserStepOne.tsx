@@ -4,6 +4,7 @@ import { useTranslation } from "@/app/i18n/client";
 import Profile from "@/components/Profile";
 import { useAxios } from "@/customHooks/useAxios";
 import {
+  Box,
   Center,
   Flex,
   Loader,
@@ -17,18 +18,18 @@ interface UserStepOneProps {
   form: any;
   lng: string;
   offices: Array<{ value: string; label: string }>;
-  setOffices: any;
   editId: number | undefined;
   profileUrl: any;
+  office: string | null;
 }
 
 const UserStepOne = ({
   form,
   lng,
   offices,
-  setOffices,
   editId,
   profileUrl,
+  office,
 }: UserStepOneProps) => {
   const { t } = useTranslation(lng);
   const callApi = useAxios();
@@ -49,6 +50,7 @@ const UserStepOne = ({
   // 	}
   // 	setLoading(false);
   // };
+
   return (
     <>
       <Center p="sm">
@@ -73,18 +75,12 @@ const UserStepOne = ({
           withAsterisk
           {...form.getInputProps("full_name")}
         />
-        <Select
+        <TextInput
           style={{ flex: 1 }}
-          label={t("office")}
-          placeholder={t("office")}
+          label={t("email")}
+          placeholder={t("email")}
           withAsterisk
-          data={offices}
-          searchable
-          clearable
-          nothingFoundMessage={t("noting_found")}
-          // onSearchChange={handleSearch}
-          // rightSection={loading && <Loader color="primary" size={15} />}
-          {...form.getInputProps("office_id")}
+          {...form.getInputProps("email")}
         />
       </Flex>
       <Flex
@@ -95,17 +91,17 @@ const UserStepOne = ({
       >
         <TextInput
           style={{ flex: 1 }}
-          label={t("email")}
-          placeholder={t("email")}
-          withAsterisk
-          {...form.getInputProps("email")}
-        />
-        <TextInput
-          style={{ flex: 1 }}
           label={t("username")}
           placeholder={t("username")}
           withAsterisk
           {...form.getInputProps("username")}
+        />
+        <PasswordInput
+          style={{ flex: 1 }}
+          label={t("password")}
+          placeholder={t("password")}
+          withAsterisk
+          {...form.getInputProps("password")}
         />
       </Flex>
       {!editId && (
@@ -117,18 +113,28 @@ const UserStepOne = ({
         >
           <PasswordInput
             style={{ flex: 1 }}
-            label={t("password")}
-            placeholder={t("password")}
-            withAsterisk
-            {...form.getInputProps("password")}
-          />
-          <PasswordInput
-            style={{ flex: 1 }}
             label={t("confirm_password")}
             placeholder={t("confirm_password")}
             withAsterisk
             {...form.getInputProps("confirm_password")}
           />
+          {office == "all" ? (
+            <Select
+              style={{ flex: 1 }}
+              label={t("office")}
+              placeholder={t("office")}
+              withAsterisk
+              data={offices}
+              searchable
+              clearable
+              nothingFoundMessage={t("noting_found")}
+              // onSearchChange={handleSearch}
+              // rightSection={loading && <Loader color="primary" size={15} />}
+              {...form.getInputProps("office_id")}
+            />
+          ) : (
+            <Box style={{ flex: 1 }}></Box>
+          )}
         </Flex>
       )}
     </>
