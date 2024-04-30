@@ -9,7 +9,6 @@ import { zodResolver } from "mantine-form-zod-resolver";
 import * as z from "zod";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
-
 import { FormError } from "@/components/FormError";
 import { CardWrapper } from "../CardWrapper/CardWrapper";
 

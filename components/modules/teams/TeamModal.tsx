@@ -1,19 +1,17 @@
 "use client";
 
-import SchoolStepOne from "@/components/modules/schools/SchoolStepOne";
 import { useForm, zodResolver } from "@mantine/form";
-import { SchoolSchema } from "@/schemas/models/schools";
-import { FaSchool } from "react-icons/fa";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
-import SchoolStepTwo from "@/components/modules/schools/SchoolStepTwo";
-import { FaLocationDot } from "react-icons/fa6";
+import { HiMiniUsers } from "react-icons/hi2";
+import { TeamsSchema } from "@/schemas/models/teams";
+import TeamStepOne from "./TeamStepOne";
 
-const SchoolModal = ({
+const TeamModal = ({
   opened,
   close,
   lng,
@@ -29,29 +27,21 @@ const SchoolModal = ({
   editId: number | undefined;
 }) => {
   const { t } = useTranslation(lng);
-  const schoolSchema = SchoolSchema(t);
+  const teamsSchema = TeamsSchema(t);
   const callApi = useAxios();
-  const [offices, setOffices] = useState([]);
-  const [provinces, setProvinces] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [editDistrict, setEditDistrict] = useState("");
+  const [offices, setOffices] = useState([]);
+  const [employees, SetEmployees] = useState([]);
 
   const initialValues: any = {
     name: "",
-    total_staff: "",
     office_id: "",
-    type: "",
-    status: "",
-    head_name: "",
-    head_phone: "",
-    province_id: "",
-    district_id: "",
-    address: "",
+    members: [],
   };
 
   const form = useForm({
     initialValues: initialValues,
-    validate: zodResolver(schoolSchema),
+    validate: zodResolver(teamsSchema),
     validateInputOnBlur: true,
   });
 
@@ -59,12 +49,12 @@ const SchoolModal = ({
     const { response, status } = !editId
       ? await callApi({
           method: "POST",
-          url: "/schools",
+          url: "/teams",
           data: form.values,
         })
       : await callApi({
           method: "PUT",
-          url: `/schools/${editId}`,
+          url: `/teams/${editId}`,
           data: form.values,
         });
     if ((!editId ? status == 201 : status == 202) && response.result) {
@@ -86,33 +76,17 @@ const SchoolModal = ({
         setLoading(true);
         const { response, status, error } = await callApi({
           method: "GET",
-          url: `/schools/${editId}`,
+          url: `/teams/${editId}`,
         });
         if (status == 200 && response.result == true) {
           let values: any = {};
-          Object.entries(response.data).forEach(([key, value]) => {
-            if (Object.keys(initialValues).includes(key)) {
-              if (
-                key != "province_id" &&
-                key != "district_id" &&
-                key != "total_staff" &&
-                key != "office_id"
-              )
-                values[key] = value ? value : initialValues[key];
-            }
-            if (
-              (key == "office_id" ||
-                key == "province_id" ||
-                key == "total_staff") &&
-              value
-            ) {
-              values[key] = value.toString();
-            }
-            if (key == "district_id" && value) {
-              setEditDistrict(value.toString());
-            }
+          form.setValues({
+            name: response.data.name,
+            office_id: response.data.office_id.toString(),
+            members: response.data.members.map((item: any) =>
+              item.id.toString()
+            ),
           });
-          form.setValues(values);
           setLoading(false);
         }
       })();
@@ -142,12 +116,16 @@ const SchoolModal = ({
     (async function () {
       const { response, status, error } = await callApi({
         method: "GET",
-        url: "/all_provinces",
+        url: "/all_employees",
       });
       if (status == 200 && response.result == true) {
-        setProvinces(
+        SetEmployees(
           response.data.map((item: any) => {
-            return { value: item.id.toString(), label: item.name_fa };
+            return {
+              value: item.id.toString(),
+              label: `${item.first_name + " " + item.last_name}`,
+              profile: item.profile,
+            };
           })
         );
       }
@@ -156,8 +134,8 @@ const SchoolModal = ({
 
   const steps = [
     {
-      title: t("school_info"),
-      icon: <FaSchool size={22} />,
+      title: t("team_info"),
+      icon: <HiMiniUsers size={22} />,
       step: (
         <Box pos="relative">
           <LoadingOverlay
@@ -165,40 +143,40 @@ const SchoolModal = ({
             zIndex={1000}
             overlayProps={{ radius: "sm", blur: 2 }}
           />
-          <SchoolStepOne form={form} lng={lng} offices={offices} />
+          <TeamStepOne
+            offices={offices}
+            employees={employees}
+            form={form}
+            lng={lng}
+          />
         </Box>
       ),
       async validate() {
         form.validate();
-        let res =
-          form.isValid("name") &&
-          form.isValid("office_id") &&
-          form.isValid("total_staff") &&
-          form.isValid("head_name") &&
-          form.isValid("head_phone") &&
-          form.isValid("type");
-        return res;
-      },
-    },
-    {
-      title: t("school_location"),
-      icon: <FaLocationDot size={22} />,
-      step: (
-        <SchoolStepTwo
-          provinces={provinces}
-          form={form}
-          lng={lng}
-          editDistrict={editDistrict}
-          setEditDistrict={setEditDistrict}
-        />
-      ),
-      async validate() {
-        form.validate();
-        let res = form.isValid("province_id") && form.isValid("district_id");
+        let res = form.isValid();
+        if (res) {
+          let { response, status } = await callApi({
+            method: "POST",
+            url: "/teams/check_uniqueness",
+            data: {
+              name: form.values.name,
+              office_id: form.values.office_id,
+              id: editId ? editId : null,
+            },
+          });
+          if (status == 226) {
+            form.setErrors({
+              name: response.message == 0 && t("value_already_exists"),
+            });
+            return false;
+          } else if (status !== 200) return false;
+          return true;
+        }
         return res;
       },
     },
   ];
+
   return (
     <form>
       <CustomModal
@@ -207,12 +185,13 @@ const SchoolModal = ({
         steps={steps}
         form={form}
         submit={submit}
+        lng={lng}
         title={title}
         editId={editId}
-        lng={lng}
+        width="40%"
       />
     </form>
   );
 };
 
-export default SchoolModal;
+export default TeamModal;

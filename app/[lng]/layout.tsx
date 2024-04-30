@@ -7,7 +7,7 @@ import "mantine-datatable/styles.layer.css";
 import "./layout.css";
 import "@mantine/notifications/styles.css";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 import { MantineProvider, createTheme } from "@mantine/core";
 import { ColorSchemeScript } from "@mantine/core";
@@ -19,6 +19,7 @@ import { Notifications } from "@mantine/notifications";
 import { Toaster } from "react-hot-toast";
 import { authOptions } from "@/auth";
 import { getServerSession } from "next-auth";
+import { Metadata } from "next";
 
 export async function generateStaticParams() {
 	return languages.map((lng) => ({ lng }));
@@ -73,6 +74,11 @@ const theme = createTheme({
 	},
 });
 
+export const metadata: Metadata = {
+	title: "GPF",
+	description: "This is an MIS for GPF",
+};
+
 export default async function RootLayout({
 	children,
 	params: { lng },
@@ -88,7 +94,9 @@ export default async function RootLayout({
 			<head>
 				<ColorSchemeScript defaultColorScheme="light" />
 			</head>
-			<body className={inter.className}>
+			<body
+			//  className={inter.className}
+			>
 				<AuthProvider session={session}>
 					<MantineProvider theme={theme}>
 						<Notifications position="bottom-left" />

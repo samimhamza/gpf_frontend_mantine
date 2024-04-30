@@ -54,6 +54,7 @@
   "permissions": "Permissions",
   "all": "All",
   "min_3_length_error": "Minimum 3 characters required",
+  "min_1_length_error": "Minimum 1 characters required",
   "max_64_length_error": "Maximum 64 characters allowed",
   "max_255_length_error": "Maximum 255 characters allowed",
   "roles": "Roles",
@@ -212,5 +213,14 @@
   "multiple_choice": "Multiple Choice",
   "descriptive": "Descriptive",
   "answer": "Answer",
-  "choices": "Choices"
+  "choices": "Choices",
+  "select_office": "Select Office",
+  "no_office_exists": "No Office Exists, Click to continue",
+  "all_offices": "All Offices",
+  "teams": "Teams",
+  "select_team": "Select Teams",
+  "add_team": "Add New Team",
+  "update_team": "Update Team",
+  "team_info": "Team Info",
+  "team": "Team"
 }

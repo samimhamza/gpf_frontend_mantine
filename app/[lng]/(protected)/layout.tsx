@@ -4,21 +4,17 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 const AdminPanelLayout = async ({
-	children,
-	params: { lng },
+  children,
+  params: { lng },
 }: {
-	children: React.ReactNode;
-	params: { lng: string };
+  children: React.ReactNode;
+  params: { lng: string };
 }) => {
-	const data = await getServerSession(authOptions);
-	if (!data?.user) {
-		redirect("auth/login");
-	}
-	return (
-		<AdminLayout lng={lng} user={data.user}>
-			{children}
-		</AdminLayout>
-	);
+  const data = await getServerSession(authOptions);
+  if (!data?.user) {
+    redirect("auth/login");
+  }
+  return <AdminLayout lng={lng}>{children}</AdminLayout>;
 };
 
 export default AdminPanelLayout;
