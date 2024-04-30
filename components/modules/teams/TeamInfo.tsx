@@ -6,7 +6,6 @@ import { teamStatuses } from "@/shared/columns";
 // import { Genders, getType, StaffTypes, SurveyTypes } from "@/shared/constants";
 import { getDateTime } from "@/shared/functions";
 import {
-  Avatar,
   Badge,
   Box,
   Button,
@@ -22,17 +21,14 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { GoChevronDown } from "react-icons/go";
 import { TbEdit } from "react-icons/tb";
 // import TeacherModal from "../../teachers/TeacherModal";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
-import {
-  CHANGE_STATUS,
-  UPDATE_APPLICANT_PACKAGE_IMPLEMENTS,
-  UPDATE_TEAMS,
-} from "@/shared/constants/Permissions";
+import { CHANGE_STATUS, UPDATE_TEAMS } from "@/shared/constants/Permissions";
+import TeamModal from "./TeamModal";
 
 const TeamInfo = ({
   teamId,
@@ -50,9 +46,6 @@ const TeamInfo = ({
   mutate: any;
 }) => {
   const { t } = useTranslation(lng);
-  // const types = SurveyTypes(t);
-  // const genders = Genders(t);
-  // const staffTypes = StaffTypes(t);
   const theme = useMantineTheme();
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const statuses = teamStatuses(t);
@@ -134,24 +127,7 @@ const TeamInfo = ({
           wrap="wrap"
         >
           <Title order={3}>{t("team_info")}</Title>
-          {/* {team?.profile && (
-            <Center>
-              <Avatar
-                size={80}
-                src={team?.profile}
-                style={{ cursor: "pointer" }}
-              />
-            </Center>
-          )} */}
           <Group>
-            {checkPermission(UPDATE_TEAMS) && (
-              <Button
-                onClick={() => open()}
-                rightSection={<TbEdit size={16} />}
-              >
-                {t("edit")}
-              </Button>
-            )}
             {permissionChecker(CHANGE_STATUS) ? (
               <Menu shadow="md" width={100}>
                 <Menu.Target>{badge}</Menu.Target>
@@ -159,6 +135,14 @@ const TeamInfo = ({
               </Menu>
             ) : (
               badge
+            )}
+            {checkPermission(UPDATE_TEAMS) && (
+              <Button
+                onClick={() => open()}
+                rightSection={<TbEdit size={16} />}
+              >
+                {t("edit")}
+              </Button>
             )}
           </Group>
         </Flex>
@@ -236,16 +220,18 @@ const TeamInfo = ({
           </Flex>
         </Box>
       </Paper>
-      {/* {opened && (
-        <TeacherModal
+      {opened && (
+        <TeamModal
           opened={opened}
-          close={close}
+          close={() => {
+            close();
+          }}
           lng={lng}
-          mutate={mutate}
-          title={t("update_teacher")}
+          setMutated={mutate}
+          title={t("update_team")}
           editId={databaseID}
         />
-      )} */}
+      )}
       <style jsx global>{`
         .applicant-title {
           border-bottom: 1px solid var(--mantine-color-gray-4);

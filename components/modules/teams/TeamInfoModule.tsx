@@ -48,7 +48,12 @@ export const TeamInfoModule = ({ lng, id }: { lng: string; id: number }) => {
         loading={isLoading}
         mutate={mutate}
       />
-      <TeamMemberInfo lng={lng} databaseID={id} team={data} mutate={mutate} />
+      <TeamMemberInfo
+        loading={isLoading}
+        lng={lng}
+        team={data}
+        mutate={mutate}
+      />
     </>
   );
 };

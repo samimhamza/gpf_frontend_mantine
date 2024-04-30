@@ -1,10 +1,6 @@
 import { Avatar, Center } from "@mantine/core";
-import { logColumns } from ".";
-import { getDateTime } from "../functions";
 
 export const TeamMembersColumns = (t: (arg: string) => string) => {
-  const logs = logColumns(t);
-
   return [
     {
       accessor: "id",
@@ -20,7 +16,7 @@ export const TeamMembersColumns = (t: (arg: string) => string) => {
       sortable: true,
       render: ({ profile }: { profile: string }) => (
         <Center>
-          <Avatar src={profile} alt="profile" size={35} />
+          <Avatar src={profile} alt="profile" size={45} />
         </Center>
       ),
     },
@@ -29,13 +25,18 @@ export const TeamMembersColumns = (t: (arg: string) => string) => {
       title: t("first_name"),
       noWrap: true,
       sortable: true,
+      render: ({ first_name }: { first_name: string }) => (
+        <Center>{first_name}</Center>
+      ),
     },
     {
       accessor: "last_name",
       title: t("last_name"),
       noWrap: true,
       sortable: true,
+      render: ({ last_name }: { last_name: string }) => (
+        <Center>{last_name}</Center>
+      ),
     },
-    ...logs,
   ];
 };

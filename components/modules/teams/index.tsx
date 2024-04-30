@@ -15,6 +15,7 @@ import {
 } from "@/shared/constants/Permissions";
 import { TeamColumns } from "@/shared/columns/team.columns";
 import { useRouter } from "next/navigation";
+import TeamModal from "./TeamModal";
 
 export const TeamModule = ({ lng }: { lng: string }) => {
   const router = useRouter();
@@ -66,7 +67,7 @@ export const TeamModule = ({ lng }: { lng: string }) => {
         showEdit={permissionChecker(UPDATE_TEAMS)}
       />
       {opened && (
-        <OfficeModal
+        <TeamModal
           opened={opened}
           close={() => {
             close();

@@ -75,7 +75,7 @@ export const getFormData = (data: any) => {
 
 export const addLeadingZeros = (number: number | string) => {
   let numberStr = number?.toString();
-  if (numberStr.length < 4) {
+  if (numberStr && numberStr.length < 4) {
     let zerosNeeded = 4 - numberStr.length;
     numberStr = "0".repeat(zerosNeeded) + numberStr;
   }
