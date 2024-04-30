@@ -46,7 +46,6 @@ const TeamModal = ({
   });
 
   const submit = async () => {
-    console.log(form.values);
     const { response, status } = !editId
       ? await callApi({
           method: "POST",
