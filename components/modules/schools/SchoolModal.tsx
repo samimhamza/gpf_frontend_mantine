@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import SchoolStepTwo from "@/components/modules/schools/SchoolStepTwo";
 import { FaLocationDot } from "react-icons/fa6";
+import useOffice from "@/customHooks/useOffice";
 
 const SchoolModal = ({
   opened,
@@ -31,7 +32,6 @@ const SchoolModal = ({
   const { t } = useTranslation(lng);
   const schoolSchema = SchoolSchema(t);
   const callApi = useAxios();
-  const [offices, setOffices] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editDistrict, setEditDistrict] = useState("");
@@ -54,6 +54,8 @@ const SchoolModal = ({
     validate: zodResolver(schoolSchema),
     validateInputOnBlur: true,
   });
+
+  const { offices, office } = useOffice(form);
 
   const submit = async () => {
     const { response, status } = !editId
@@ -123,25 +125,6 @@ const SchoolModal = ({
     (async function () {
       const { response, status, error } = await callApi({
         method: "GET",
-        url: "/all_offices",
-      });
-      if (status == 200 && response.result == true) {
-        setOffices(
-          response.data.map((item: any) => {
-            return {
-              value: item.id.toString(),
-              label: item.name + " (" + item.code + ")",
-            };
-          })
-        );
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async function () {
-      const { response, status, error } = await callApi({
-        method: "GET",
         url: "/all_provinces",
       });
       if (status == 200 && response.result == true) {
@@ -165,7 +148,12 @@ const SchoolModal = ({
             zIndex={1000}
             overlayProps={{ radius: "sm", blur: 2 }}
           />
-          <SchoolStepOne form={form} lng={lng} offices={offices} />
+          <SchoolStepOne
+            form={form}
+            lng={lng}
+            offices={offices}
+            office={office}
+          />
         </Box>
       ),
       async validate() {

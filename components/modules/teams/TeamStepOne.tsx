@@ -8,9 +8,16 @@ interface TeamStepOneProps {
   lng: string;
   offices: Array<{ value: string; label: string }>;
   employees: Array<{ value: string; label: string }>;
+  office: string | null;
 }
 
-const TeamStepOne = ({ form, lng, offices, employees }: TeamStepOneProps) => {
+const TeamStepOne = ({
+  form,
+  lng,
+  offices,
+  employees,
+  office,
+}: TeamStepOneProps) => {
   const { t } = useTranslation(lng);
 
   return (
@@ -27,19 +34,6 @@ const TeamStepOne = ({ form, lng, offices, employees }: TeamStepOneProps) => {
           placeholder={t("name")}
           withAsterisk
           {...form.getInputProps("name")}
-        />
-        <Select
-          style={{ flex: 1 }}
-          label={t("office")}
-          placeholder={t("office")}
-          withAsterisk
-          data={offices}
-          searchable
-          clearable
-          nothingFoundMessage={t("noting_found")}
-          // onSearchChange={handleSearch}
-          // rightSection={loading && <Loader color="primary" size={15} />}
-          {...form.getInputProps("office_id")}
         />
       </Flex>
       <Flex
@@ -62,6 +56,21 @@ const TeamStepOne = ({ form, lng, offices, employees }: TeamStepOneProps) => {
           size="sm"
           maxDropdownHeight={140}
         />
+        {office == "all" && (
+          <Select
+            style={{ flex: 1 }}
+            label={t("office")}
+            placeholder={t("office")}
+            withAsterisk
+            data={offices}
+            searchable
+            clearable
+            nothingFoundMessage={t("noting_found")}
+            // onSearchChange={handleSearch}
+            // rightSection={loading && <Loader color="primary" size={15} />}
+            {...form.getInputProps("office_id")}
+          />
+        )}
       </Flex>
     </>
   );
