@@ -3,7 +3,6 @@
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
 import { teamStatuses } from "@/shared/columns";
-// import { Genders, getType, StaffTypes, SurveyTypes } from "@/shared/constants";
 import { getDateTime } from "@/shared/functions";
 import {
   Badge,
@@ -21,11 +20,10 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { GoChevronDown } from "react-icons/go";
 import { TbEdit } from "react-icons/tb";
-// import TeacherModal from "../../teachers/TeacherModal";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import { CHANGE_STATUS, UPDATE_TEAMS } from "@/shared/constants/Permissions";
 import TeamModal from "./TeamModal";

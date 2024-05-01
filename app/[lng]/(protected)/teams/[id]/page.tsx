@@ -2,7 +2,7 @@ import { TeamInfoModule } from "@/components/modules/teams/TeamInfoModule";
 import usePermissionChecker from "@/customHooks/usePermissionChecker";
 import { VIEW_TEAMS } from "@/shared/constants/Permissions";
 
-const WarehousePage = async ({
+const TeamPage = async ({
   params: { lng, id },
 }: {
   params: {
@@ -15,4 +15,4 @@ const WarehousePage = async ({
   return <TeamInfoModule lng={lng} id={id} />;
 };
 
-export default WarehousePage;
+export default TeamPage;
