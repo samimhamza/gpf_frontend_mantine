@@ -39,7 +39,7 @@ export const TeamModule = ({ lng }: { lng: string }) => {
 
   useEffect(() => {
     if (view) {
-      router.push(`/teams_info/${view}`);
+      router.push(`/teams/${view}`);
     }
   }, [view]);
 

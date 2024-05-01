@@ -30,9 +30,7 @@ export const TeamInfoModule = ({ lng, id }: { lng: string; id: number }) => {
           { title: t("dashboard"), link: "/dashboard" },
           { title: t("team"), link: "/teams" },
           {
-            title: data
-              ? getID(data?.office?.code, data?.created_at, data?.id)
-              : id.toString(),
+            title: data ? data?.name : id.toString(),
           },
         ]}
       />
@@ -48,12 +46,7 @@ export const TeamInfoModule = ({ lng, id }: { lng: string; id: number }) => {
         loading={isLoading}
         mutate={mutate}
       />
-      <TeamMemberInfo
-        loading={isLoading}
-        lng={lng}
-        team={data}
-        mutate={mutate}
-      />
+      <TeamMemberInfo loading={isLoading} lng={lng} team={data} />
     </>
   );
 };
