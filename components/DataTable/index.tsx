@@ -85,7 +85,7 @@ const CustomDataTable = ({
       return response;
     }
   );
-
+  console.log("King", data);
   useEffect(() => {
     (async function () {
       if (mutated) {

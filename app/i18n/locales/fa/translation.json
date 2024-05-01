@@ -226,5 +226,11 @@
   "team_info": "اطلاعات تیم",
   "team": "تیم",
   "team_members_info": " اطلاعات اعضای تیم",
-  "survey_plans": "برنامه های نظرسنجی"
+  "survey_plans": "برنامه های نظرسنجی",
+  "subject": "عنوان",
+  "survey_plan_info": " اطلاعات برنامه  نظرسنجی",
+  "add_survey_plan": "ایجاد برنامه نظرسنجی",
+  "update_survey_plan": "ویرایش برنامه نظرسنجی",
+  "show_more": "اطلاعات بیشتر",
+  "hide": "پنهان کردن"
 }

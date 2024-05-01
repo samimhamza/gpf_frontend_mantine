@@ -224,5 +224,11 @@
   "team_info": "Team Info",
   "team": "Team",
   "team_members_info": "Team Members Info",
-  "survey_plans": "Survey Plans"
+  "survey_plans": "Survey Plans",
+  "subject": "Subject",
+  "survey_plan_info": "Survey Plans Info",
+  "add_survey_plan": "Add Survey Plan",
+  "update_survey_plan": "Update Survey Plan",
+  "show_more": "Show More",
+  "hide": "Hide"
 }

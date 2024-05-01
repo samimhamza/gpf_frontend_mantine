@@ -1,6 +1,6 @@
 import { SurveyPlansModule } from "@/components/modules/survey_plans";
 import usePermissionChecker from "@/customHooks/usePermissionChecker";
-import { VIEW_APPLICANT_SURVEYS } from "@/shared/constants/Permissions";
+import { VIEW_SURVEY_PLANS } from "@/shared/constants/Permissions";
 
 const SurveryPlansPage = async ({
   params: { lng },
@@ -9,7 +9,7 @@ const SurveryPlansPage = async ({
     lng: string;
   };
 }) => {
-  await usePermissionChecker(VIEW_APPLICANT_SURVEYS);
+  await usePermissionChecker(VIEW_SURVEY_PLANS);
   return <SurveyPlansModule lng={lng} />;
 };
 
