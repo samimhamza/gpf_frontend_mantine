@@ -49,7 +49,7 @@ const CharityPackageStepOne = ({
     } else {
       form.setFieldValue("start_date", null);
     }
-  }, [startDate, setStartDateErrorMessage, form]);
+  }, [startDate]);
 
   useEffect(() => {
     if (endDate) {
@@ -58,7 +58,7 @@ const CharityPackageStepOne = ({
     } else {
       form.setFieldValue("end_date", null);
     }
-  }, [endDate, setEndDateErrorMessage, form]);
+  }, [endDate]);
 
   useEffect(() => {
     if (endDate && startDate) {
