@@ -28,7 +28,7 @@ export const TeamInfoModule = ({ lng, id }: { lng: string; id: number }) => {
       <CustomBreadCrumb
         items={[
           { title: t("dashboard"), link: "/dashboard" },
-          { title: t("team"), link: "/teams" },
+          { title: t("teams"), link: "/teams" },
           {
             title: data ? data?.name : id.toString(),
           },
