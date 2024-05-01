@@ -134,7 +134,7 @@ const MosqueModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   const steps = [
     {

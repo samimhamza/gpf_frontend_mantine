@@ -9,7 +9,7 @@ import {
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import QuestionStepTwo from "./QuestionStepTwo";
@@ -41,14 +41,16 @@ const QuestionModal = ({
   const [formSchema, setFormSchema] = useState<any>(descriptiveQuestionSchema);
   const [fieldSetError, setFieldSetError] = useState(false);
 
-  const initialValues: any = {
-    question: "",
-    code: "",
-    type: "",
-    parent_id: "",
-    mark: "",
-    choices: [{ id: "", answer: "", mark: "" }],
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      question: "",
+      code: "",
+      type: "",
+      parent_id: "",
+      mark: "",
+      choices: [{ id: "", answer: "", mark: "" }],
+    };
+  }, []);
 
   const form = useForm({
     initialValues: initialValues,
@@ -133,7 +135,7 @@ const QuestionModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   const stepOne = {
     title: t("question_details"),
@@ -210,7 +212,11 @@ const QuestionModal = ({
       setFormSchema(descriptiveQuestionSchema);
       setShowSecondStep(false);
     }
-  }, [form.values?.type]);
+  }, [
+    form.values?.type,
+    multipleChoiceQuestionSchema,
+    descriptiveQuestionSchema,
+  ]);
 
   return (
     <form>

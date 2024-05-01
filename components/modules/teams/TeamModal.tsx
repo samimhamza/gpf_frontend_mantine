@@ -93,7 +93,7 @@ const TeamModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form]);
 
   useEffect(() => {
     (async function () {
@@ -113,7 +113,7 @@ const TeamModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   const steps = [
     {

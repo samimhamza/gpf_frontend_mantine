@@ -40,7 +40,7 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
     if (view) {
       router.push(`/applicants/${view}`);
     }
-  }, [view]);
+  }, [view, router]);
 
   return (
     <>

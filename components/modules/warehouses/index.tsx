@@ -34,7 +34,7 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
     if (view) {
       router.push(`/warehouses/${view}`);
     }
-  }, [view]);
+  }, [view, router]);
 
   return (
     <>

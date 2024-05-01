@@ -39,17 +39,10 @@ const TeamMemberInfo = ({
   return (
     <>
       <Paper withBorder shadow="sm" mb="md" pb="lg">
-        <Flex
-          justify={{ base: "center", xs: "space-between" }}
-          align="center"
-          className="applicant-title"
-          p="md"
-          gap="sm"
-          wrap="wrap"
-        >
-          <Title order={3}>{t("team_members_info")}</Title>
-        </Flex>
-        <Box pos="relative" p="md">
+        <Title order={3} p="sm" className="applicant-title" ta="center">
+          {t("team_members_info")}
+        </Title>
+        <Box pos="relative">
           <LoadingOverlay
             visible={loading}
             zIndex={1000}

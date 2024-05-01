@@ -41,7 +41,7 @@ export const TeamModule = ({ lng }: { lng: string }) => {
     if (view) {
       router.push(`/teams/${view}`);
     }
-  }, [view]);
+  }, [view, router]);
 
   return (
     <>

@@ -8,7 +8,7 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { FcSurvey } from "react-icons/fc";
@@ -40,23 +40,25 @@ const TeacherModal = ({
   const [districts, setDistricts] = useState([]);
   const profileUrl = useRef<any>(null);
 
-  const initialValues: any = {
-    first_name: "",
-    father_name: "",
-    last_name: "",
-    profile: "",
-    phone: "",
-    staff_type: "",
-    national_id: "",
-    school_id: "",
-    main_residence_id: "",
-    current_residence_id: "",
-    district_id: "",
-    address: "",
-    type: "",
-    description: "",
-    gender: "",
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      first_name: "",
+      father_name: "",
+      last_name: "",
+      profile: "",
+      phone: "",
+      staff_type: "",
+      national_id: "",
+      school_id: "",
+      main_residence_id: "",
+      current_residence_id: "",
+      district_id: "",
+      address: "",
+      type: "",
+      description: "",
+      gender: "",
+    };
+  }, []);
 
   const form = useForm({
     initialValues: initialValues,
@@ -105,7 +107,7 @@ const TeacherModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   useEffect(() => {
     (async function () {
@@ -125,7 +127,7 @@ const TeacherModal = ({
         setSchools(schools);
       }
     })();
-  }, []);
+  }, [callApi]);
 
   useEffect(() => {
     if (editId) {
@@ -167,7 +169,7 @@ const TeacherModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form, initialValues]);
 
   const steps = [
     {

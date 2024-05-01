@@ -254,6 +254,7 @@ const CharityPackageModal = ({
       },
     },
   ];
+
   return (
     <form>
       <CustomModal
