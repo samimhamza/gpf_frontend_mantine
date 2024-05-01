@@ -8,15 +8,18 @@ import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
   CHANGE_STATUS,
+  CREATE_APPLICANT_SURVEYS,
   CREATE_TEAMS,
+  DELETE_APPLICANT_SURVEYS,
   DELETE_TEAMS,
+  UPDATE_APPLICANT_SURVEYS,
   UPDATE_TEAMS,
 } from "@/shared/constants/Permissions";
 import { TeamColumns } from "@/shared/columns/team.columns";
 import { useRouter } from "next/navigation";
 import TeamModal from "./TeamModal";
 
-export const TeamModule = ({ lng }: { lng: string }) => {
+export const SurveyPlansModule = ({ lng }: { lng: string }) => {
   const router = useRouter();
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
@@ -47,13 +50,13 @@ export const TeamModule = ({ lng }: { lng: string }) => {
       <CustomBreadCrumb
         items={[
           { title: t("dashboard"), link: "/dashboard" },
-          { title: t("teams") },
+          { title: t("survey_plans") },
         ]}
       />
       <CustomDataTable
-        title={t("teams")}
-        url="/teams"
-        deleteUrl="/teams/1"
+        title={t("survey_plans")}
+        url="/applicant_surveys"
+        deleteUrl="/applicant_surveys/1"
         lng={lng}
         columns={columns}
         open={open}
@@ -61,9 +64,9 @@ export const TeamModule = ({ lng }: { lng: string }) => {
         setMutated={setMutated}
         setEdit={setEdit}
         setView={setView}
-        showAdd={permissionChecker(CREATE_TEAMS)}
-        showDelete={permissionChecker(DELETE_TEAMS)}
-        showEdit={permissionChecker(UPDATE_TEAMS)}
+        showAdd={permissionChecker(CREATE_APPLICANT_SURVEYS)}
+        showDelete={permissionChecker(DELETE_APPLICANT_SURVEYS)}
+        showEdit={permissionChecker(UPDATE_APPLICANT_SURVEYS)}
       />
       {opened && (
         <TeamModal

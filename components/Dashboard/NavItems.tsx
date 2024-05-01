@@ -105,8 +105,8 @@ export const NavItems = (t: (arg: string) => string) => [
         permission: VIEW_TEAMS,
       },
       {
-        label: t("survery_plans"),
-        link: "/survery_plans",
+        label: t("survey_plans"),
+        link: "/survey_plans",
         permission: VIEW_TEAMS,
       },
     ],
