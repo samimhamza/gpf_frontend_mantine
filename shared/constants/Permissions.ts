@@ -98,3 +98,5 @@ export const VIEW_QUESTIONS = "view_questions";
 export const CREATE_QUESTIONS = "create_questions";
 export const UPDATE_QUESTIONS = "update_questions";
 export const DELETE_QUESTIONS = "delete_questions";
+
+export const MULTIPLE_OFFICE = "multiple_office";
