@@ -45,12 +45,12 @@ const TeamMemberInfo = ({
   const handleDelete = async (e: any) => {
     console.log(selectedRecord);
     // setDeleteLoading(true);
-    const ids = selectedRecord.map((rec: any) => rec);
-    console.log(ids);
+    const ids = selectedRecord.map((rec: any) => rec.id).join(","); // Assuming selectedRecord contains objects with an 'id' property
+    const teamId = team.id;
     const { status, error } = await callApi({
       method: "DELETE",
-      url: `/teams/members`,
-      data: { ids, team_id: team.id },
+      url: `/teams/members/${ids}`,
+      data: { teamId: teamId },
     });
     if (status == 204) {
       await mutate();
