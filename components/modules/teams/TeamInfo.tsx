@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { teamStatuses } from "@/shared/columns";
+import { sharedStatuses } from "@/shared/columns";
 import { getDateTime } from "@/shared/functions";
 import {
   Badge,
@@ -46,7 +46,7 @@ const TeamInfo = ({
   const { t } = useTranslation(lng);
   const theme = useMantineTheme();
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const statuses = teamStatuses(t);
+  const statuses = sharedStatuses(t);
   const callApi = useAxios();
   const [statusLoading, setStatusLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
@@ -160,11 +160,11 @@ const TeamInfo = ({
             wrap="wrap"
           >
             <Group flex={1} wrap="nowrap" className="flex-item">
-              <Text>{t("id")} :</Text>
+              <Text className="title">{t("id")} :</Text>
               <Text>{teamId}</Text>
             </Group>
             <Group flex={1} wrap="nowrap">
-              <Text>{t("office")} :</Text>
+              <Text className="title">{t("office")} :</Text>
               <Text>{team?.office?.name}</Text>
             </Group>
           </Flex>
@@ -176,11 +176,11 @@ const TeamInfo = ({
             justify="center"
           >
             <Group flex={1} wrap="nowrap">
-              <Text>{t("team")} :</Text>
+              <Text className="title">{t("team")} :</Text>
               <Text>{team?.name}</Text>
             </Group>
             <Group flex={1}>
-              <Text>{t("status")} :</Text>
+              <Text className="title">{t("status")} :</Text>
               <Text>{team?.status}</Text>
             </Group>
           </Flex>
@@ -192,11 +192,11 @@ const TeamInfo = ({
             justify="center"
           >
             <Group flex={1}>
-              <Text>{t("created_by")} :</Text>
+              <Text className="title">{t("created_by")} :</Text>
               <Text>{team?.created_by?.username}</Text>
             </Group>
             <Group flex={1}>
-              <Text>{t("updated_by")} :</Text>
+              <Text className="title">{t("updated_by")} :</Text>
               <Text>{team?.updated_by?.username}</Text>
             </Group>
           </Flex>
@@ -208,11 +208,11 @@ const TeamInfo = ({
             justify="center"
           >
             <Group flex={1}>
-              <Text>{t("created_at")} :</Text>
+              <Text className="title">{t("created_at")} :</Text>
               {team?.created_at && <Text>{getDateTime(team?.created_at)}</Text>}
             </Group>
             <Group flex={1}>
-              <Text>{t("updated_at")} :</Text>
+              <Text className="title">{t("updated_at")} :</Text>
               {team?.updated_at && <Text>{getDateTime(team?.updated_at)}</Text>}
             </Group>
           </Flex>
@@ -234,7 +234,9 @@ const TeamInfo = ({
         .applicant-title {
           border-bottom: 1px solid var(--mantine-color-gray-4);
         }
-
+        .title {
+          font-weight: bold;
+        }
         @media (min-width: ${mdMatches}) {
           .flex-item {
             flex-basis: calc(50% - 6px);

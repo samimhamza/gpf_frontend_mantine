@@ -231,5 +231,6 @@
   "add_survey_plan": "Add Survey Plan",
   "update_survey_plan": "Update Survey Plan",
   "show_more": "Show More",
-  "hide": "Hide"
+  "hide": "Hide",
+  "total_choices": "Total Choices"
 }
