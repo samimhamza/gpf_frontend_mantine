@@ -212,5 +212,6 @@
   "multiple_choice": "Multiple Choice",
   "descriptive": "Descriptive",
   "answer": "Answer",
-  "choices": "Choices"
+  "choices": "Choices",
+  "references": "References"
 }
