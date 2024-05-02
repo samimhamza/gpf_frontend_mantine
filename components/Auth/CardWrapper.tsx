@@ -2,7 +2,7 @@
 
 import { Center, Card, Flex, Stack, Text } from "@mantine/core";
 import Image from "next/image";
-import BackButton from "../BackButton";
+import BackButton from "./BackButton";
 
 interface CardWrapperProps {
 	children: React.ReactNode;

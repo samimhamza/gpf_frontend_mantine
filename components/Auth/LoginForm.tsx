@@ -11,7 +11,7 @@ import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
 
 import { FormError } from "@/components/FormError";
-import CardWrapper from "../CardWrapper";
+import CardWrapper from "./CardWrapper";
 
 export const LoginForm = ({ lng }: { lng: string }) => {
 	const [error, setError] = useState<string | undefined>("");
