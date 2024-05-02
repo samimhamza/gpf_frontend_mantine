@@ -14,8 +14,10 @@ import {
   UPDATE_USERS,
   CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
+import { useRouter } from "next/navigation";
 
 export const UserModule = ({ lng }: { lng: string }) => {
+  const router = useRouter();
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
   const columns = UserColumns(
@@ -33,6 +35,12 @@ export const UserModule = ({ lng }: { lng: string }) => {
       open();
     }
   }, [edit, open]);
+
+  useEffect(() => {
+    if (view) {
+      router.push(`/users/${view}`);
+    }
+  }, [view, router]);
 
   return (
     <>

@@ -56,25 +56,7 @@ export const applicantStatuses = (t: (arg: string) => string) => [
   },
 ];
 
-export const teamStatuses = (t: (arg: string) => string) => [
-  {
-    status: "active",
-    color: "green",
-    text: t("active"),
-  },
-  {
-    status: "inactive",
-    color: "gray",
-    text: t("inactive"),
-  },
-  {
-    status: "pending",
-    color: "yellow",
-    text: t("pending"),
-  },
-];
-
-export const surveyPlanStatuses = (t: (arg: string) => string) => [
+export const sharedStatuses = (t: (arg: string) => string) => [
   {
     status: "active",
     color: "green",
