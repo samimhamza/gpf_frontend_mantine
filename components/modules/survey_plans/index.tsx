@@ -38,7 +38,7 @@ export const SurveyPlansModule = ({ lng }: { lng: string }) => {
 
   useEffect(() => {
     if (view) {
-      router.push(`/teams/${view}`);
+      router.push(`/survey_plans/${view}`);
     }
   }, [view]);
 

@@ -12,6 +12,7 @@ import useOffice from "@/customHooks/useOffice";
 import SurveyPlanStepOne from "./SurveyPlanStepOne";
 import { Value } from "react-multi-date-picker";
 import { SurveyPlansSchema } from "@/schemas/models/survey_plans";
+import { getTimeValue } from "@/shared/functions";
 
 const SurveyPlansModal = ({
   opened,
@@ -92,7 +93,6 @@ const SurveyPlansModal = ({
           url: `/survey_plans/${editId}`,
         });
         if (status == 200 && response.result == true) {
-          console.log("Response", response?.data);
           let values: any = {};
           form.setValues({
             title: response?.data?.title,
@@ -100,8 +100,12 @@ const SurveyPlansModal = ({
             province_id: response?.data?.province_id?.toString(),
             district_id: response?.data?.district_id?.toString(),
             description: response?.data?.description,
-            startDate: response?.data?.start_date,
-            endDate: response?.data?.end_date,
+            startDate: setStartDate(
+              getTimeValue(response?.data?.start_date.toString())
+            ),
+            endDate: setEndDate(
+              getTimeValue(response?.data?.end_date.toString())
+            ),
           });
           setLoading(false);
         }
