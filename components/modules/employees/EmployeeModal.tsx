@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import EmployeeStepOne from "@/components/modules/employees/EmployeeStepOne";
-import { useForm, zodResolver } from "@mantine/form";
-import { EmployeeSchema } from "@/schemas/models/employees";
-import { useTranslation } from "@/app/i18n/client";
-import CustomModal from "@/components/CustomModal";
-import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
-import { Box, LoadingOverlay } from "@mantine/core";
-import { Value } from "react-multi-date-picker";
-import EmployeeStepTwo from "./EmployeeStepTwo";
-import { TbUserCircle } from "react-icons/tb";
-import { CiViewList } from "react-icons/ci";
-import { getFormData, getTimeValue } from "@/shared/functions";
+import { useTranslation } from '@/app/i18n/client';
+import CustomModal from '@/components/CustomModal';
+import EmployeeStepOne from '@/components/modules/employees/EmployeeStepOne';
+import { useAxios } from '@/customHooks/useAxios';
+import { EmployeeSchema } from '@/schemas/models/employees';
+import { getFormData, getTimeValue } from '@/shared/functions';
+import { Box, LoadingOverlay } from '@mantine/core';
+import { useForm, zodResolver } from '@mantine/form';
+import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { CiViewList } from 'react-icons/ci';
+import { TbUserCircle } from 'react-icons/tb';
+import { Value } from 'react-multi-date-picker';
+import EmployeeStepTwo from './EmployeeStepTwo';
 
 const EmployeeModal = ({
   opened,
@@ -36,27 +36,27 @@ const EmployeeModal = ({
   const [loading, setLoading] = useState(false);
   const [offices, setOffices] = useState([]);
   const profileUrl = useRef<any>(null);
-  const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
+  const [startDateErrorMessage, setStartDateErrorMessage] = useState('');
   const [startDate, setStartDate] = useState<Value>();
-  const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
+  const [endDateErrorMessage, setEndDateErrorMessage] = useState('');
   const [endDate, setEndDate] = useState<Value>();
 
   const initialValues: any = {
-    profile: "",
-    office_id: "",
-    first_name: "",
-    last_name: "",
-    father_name: "",
-    gender: "",
-    email: "",
-    phone: "",
-    address: "",
-    job_title: "",
+    profile: '',
+    office_id: '',
+    first_name: '',
+    last_name: '',
+    father_name: '',
+    gender: '',
+    email: '',
+    phone: '',
+    address: '',
+    job_title: '',
     start_date: null,
     end_date: null,
-    salary: "",
-    currency: "",
-    description: "",
+    salary: '',
+    currency: '',
+    description: '',
   };
 
   const form = useForm({
@@ -69,19 +69,19 @@ const EmployeeModal = ({
     const values = getFormData(form.values);
     const { response, status } = !editId
       ? await callApi({
-          method: "POST",
-          url: "/employees",
+          method: 'POST',
+          url: '/employees',
           data: values,
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
         })
       : await callApi({
-          method: "POST",
+          method: 'POST',
           url: `/employees/${editId}?_method=PUT`,
           data: values,
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
         });
     if ((!editId ? status == 201 : status == 202) && response.result) {
@@ -89,26 +89,26 @@ const EmployeeModal = ({
       return true;
     }
     if (status == 422) {
-      toast.error(t("editing_not_allowed"));
+      toast.error(t('editing_not_allowed'));
       close();
       return false;
     }
-    toast.error(t("something_went_wrong"));
+    toast.error(t('something_went_wrong'));
     return false;
   };
 
   useEffect(() => {
     (async function () {
       const { response, status, error } = await callApi({
-        method: "GET",
-        url: "/all_offices",
+        method: 'GET',
+        url: '/all_offices',
       });
       if (status == 200 && response.result == true) {
         setOffices(
           response.data.map((item: any) => {
             return {
               value: item.id.toString(),
-              label: item.name + " (" + item.code + ")",
+              label: item.name + ' (' + item.code + ')',
             };
           })
         );
@@ -121,38 +121,38 @@ const EmployeeModal = ({
       (async function () {
         setLoading(true);
         const { response, status, error } = await callApi({
-          method: "GET",
+          method: 'GET',
           url: `/employees/${editId}`,
         });
         if (status == 200 && response.result == true) {
           let values: any = {};
           Object.entries(response.data).forEach(([key, value]) => {
             if (Object.keys(initialValues).includes(key)) {
-              if (key != "office_id" && key != "profile") {
+              if (key != 'office_id' && key != 'profile') {
                 values[key] = value ? value : initialValues[key];
-              } else if (key == "office_id" && value) {
+              } else if (key == 'office_id' && value) {
                 values[key] = value.toString();
-              } else if (key == "profile" && value) {
+              } else if (key == 'profile' && value) {
                 profileUrl.current = value;
               }
             }
             if (Array.isArray(value) && value.length) {
-              if (key == "contracts") {
+              if (key == 'contracts') {
                 Object.entries(value[0]).forEach(([key, contractValue]) => {
                   if (Object.keys(initialValues).includes(key)) {
                     if (
-                      key != "start_date" &&
-                      key != "end_date" &&
-                      key != "salary"
+                      key != 'start_date' &&
+                      key != 'end_date' &&
+                      key != 'salary'
                     ) {
                       values[key] = contractValue
                         ? contractValue
                         : initialValues[key];
-                    } else if (key == "salary" && contractValue) {
+                    } else if (key == 'salary' && contractValue) {
                       values[key] = contractValue.toString();
-                    } else if (key == "start_date" && contractValue) {
+                    } else if (key == 'start_date' && contractValue) {
                       setStartDate(getTimeValue(contractValue.toString()));
-                    } else if (key == "end_date" && contractValue) {
+                    } else if (key == 'end_date' && contractValue) {
                       setEndDate(getTimeValue(contractValue.toString()));
                     }
                   }
@@ -169,14 +169,14 @@ const EmployeeModal = ({
 
   const steps = [
     {
-      title: t("personal_info"),
+      title: t('personal_info'),
       icon: <TbUserCircle size={22} />,
       step: (
-        <Box pos="relative">
+        <Box pos='relative'>
           <LoadingOverlay
             visible={loading}
             zIndex={1000}
-            overlayProps={{ radius: "sm", blur: 2 }}
+            overlayProps={{ radius: 'sm', blur: 2 }}
           />
           <EmployeeStepOne
             form={form}
@@ -189,23 +189,23 @@ const EmployeeModal = ({
       async validate() {
         form.validate();
         let res =
-          form.isValid("first_name") &&
-          form.isValid("last_name") &&
-          form.isValid("father_name") &&
-          form.isValid("gender") &&
-          form.isValid("office_id");
+          form.isValid('first_name') &&
+          form.isValid('last_name') &&
+          form.isValid('father_name') &&
+          form.isValid('gender') &&
+          form.isValid('office_id');
         return res;
       },
     },
     {
-      title: t("contract_details"),
+      title: t('contract_details'),
       icon: <CiViewList size={22} />,
       step: (
-        <Box pos="relative">
+        <Box pos='relative'>
           <LoadingOverlay
             visible={loading}
             zIndex={1000}
-            overlayProps={{ radius: "sm", blur: 2 }}
+            overlayProps={{ radius: 'sm', blur: 2 }}
           />
           <EmployeeStepTwo
             form={form}
@@ -224,19 +224,19 @@ const EmployeeModal = ({
       async validate() {
         form.validate();
         if (!form.values.start_date) {
-          setStartDateErrorMessage(t("field_required"));
+          setStartDateErrorMessage(t('field_required'));
         }
         let res =
-          form.isValid("job_title") &&
-          form.isValid("salary") &&
-          form.isValid("currency") &&
-          form.isValid("phone") &&
-          form.isValid("email") &&
+          form.isValid('job_title') &&
+          form.isValid('salary') &&
+          form.isValid('currency') &&
+          form.isValid('phone') &&
+          form.isValid('email') &&
           form.values.start_date;
         if (res) {
           let { response, status } = await callApi({
-            method: "POST",
-            url: "/employees/check_uniqueness",
+            method: 'POST',
+            url: '/employees/check_uniqueness',
             data: {
               email: form.values.email,
               phone: form.values.phone,
@@ -247,10 +247,10 @@ const EmployeeModal = ({
             form.setErrors({
               phone:
                 (response.message == 1 || response.message == 0) &&
-                t("value_already_exists"),
+                t('value_already_exists'),
               email:
                 (response.message == 2 || response.message == 0) &&
-                t("email_already_exists"),
+                t('email_already_exists'),
             });
             return false;
           } else if (status !== 200) return false;

@@ -74,6 +74,7 @@ const CustomDataTable = ({
 		order_by: orderBy,
 		filter_data: {},
 	});
+	
 	const { data, error, isLoading, mutate } = useSWR(
 		[url, tableDetails],
 		async () => {

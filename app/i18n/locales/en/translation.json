@@ -213,5 +213,6 @@
   "descriptive": "Descriptive",
   "answer": "Answer",
   "choices": "Choices",
-  "references": "References"
-}
+  "references": "References",
+  "add_reference": "Add New Reference",
+  "update_reference": "Update Reference"}

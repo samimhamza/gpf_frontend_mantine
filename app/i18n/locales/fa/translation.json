@@ -215,5 +215,7 @@
   "descriptive": "تشریحی",
   "answer": "جواب",
   "choices": "گزینه ها",
-  "references": "منابع"
+  "references": "منابع",
+  "add_reference": "ایجاد مرجع جدید",
+  "update_reference": "ویرایش مرجع"
 }

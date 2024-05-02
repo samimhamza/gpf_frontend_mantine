@@ -47,6 +47,9 @@ export const CREATE_EMPLOYEES = "create_employees";
 export const UPDATE_EMPLOYEES = "update_employees";
 export const DELETE_EMPLOYEES = "delete_employees";
 
+// References Permissions
+export const VIEW_REFERENCES = 'view-references'
+
 // Teams Permissions
 export const VIEW_TEAMS = "view_teams";
 export const CREATE_TEAMS = "create_teams";
