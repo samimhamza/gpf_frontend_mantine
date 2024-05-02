@@ -28,13 +28,13 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   useEffect(() => {
     if (view) {
       router.push(`/warehouses/${view}`);
     }
-  }, [view]);
+  }, [view, router]);
 
   return (
     <>

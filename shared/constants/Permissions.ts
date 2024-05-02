@@ -93,8 +93,17 @@ export const UPDATE_WAREHOUSES = "update_warehouses";
 export const DELETE_WAREHOUSES = "delete_warehouses";
 
 //Survey Module
+
+// Survey Plans Permissions
+export const VIEW_SURVEY_PLANS = "view_survey_plans";
+export const CREATE_SURVEY_PLANS = "create_survey_plans";
+export const UPDATE_SURVEY_PLANS = "update_survey_plans";
+export const DELETE_SURVEY_PLANS = "delete_survey_plans";
+
 // Warehouses Permissions
 export const VIEW_QUESTIONS = "view_questions";
 export const CREATE_QUESTIONS = "create_questions";
 export const UPDATE_QUESTIONS = "update_questions";
 export const DELETE_QUESTIONS = "delete_questions";
+
+export const MULTIPLE_OFFICE = "multiple_office";

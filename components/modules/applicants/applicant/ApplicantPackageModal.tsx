@@ -21,7 +21,14 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import moment from "jalali-moment";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { MdSend } from "react-icons/md";
 import { Value } from "react-multi-date-picker";
@@ -64,12 +71,14 @@ const ApplicantPackageModal = ({
   const [surveyDate, setSurveyDate] = useState<Value>();
   const [charityPackage, setCharityPackage] = useState<any>();
 
-  const initialValues: any = {
-    applicant_id: applicantId,
-    charity_package_id: "",
-    survey_date: null,
-    description: "",
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      applicant_id: applicantId,
+      charity_package_id: "",
+      survey_date: null,
+      description: "",
+    };
+  }, [applicantId]);
 
   const form = useForm({
     initialValues: initialValues,
@@ -81,7 +90,7 @@ const ApplicantPackageModal = ({
     if (applicantId) {
       form.setFieldValue("applicant_id", applicantId);
     }
-  }, [applicantId]);
+  }, [applicantId, form]);
 
   const validate = () => {
     form.validate();
@@ -147,9 +156,9 @@ const ApplicantPackageModal = ({
         }
       }
     })();
-  }, [officeId]);
+  }, [officeId, callApi, t]);
 
-  const getPackageItems = async () => {
+  const getPackageItems = useCallback(async () => {
     setItemsLoading(true);
     const { response, status, error } = await callApi({
       method: "GET",
@@ -159,11 +168,11 @@ const ApplicantPackageModal = ({
       setCharityPackage(response.data);
     }
     setItemsLoading(false);
-  };
+  }, [form, callApi]);
 
   useEffect(() => {
     if (form.values.charity_package_id) getPackageItems();
-  }, [form.values.charity_package_id]);
+  }, [form.values.charity_package_id, getPackageItems]);
 
   useEffect(() => {
     (async function () {
@@ -191,7 +200,7 @@ const ApplicantPackageModal = ({
         }
       }
     })();
-  }, [editId]);
+  }, [editId, callApi, form, initialValues]);
 
   useEffect(() => {
     if (surveyDate) {
@@ -200,7 +209,7 @@ const ApplicantPackageModal = ({
     } else {
       form.setFieldValue("survey_date", null);
     }
-  }, [surveyDate]);
+  }, [surveyDate, form]);
 
   return (
     <>

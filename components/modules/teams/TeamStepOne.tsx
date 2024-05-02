@@ -36,6 +36,28 @@ const TeamStepOne = ({
           {...form.getInputProps("name")}
         />
       </Flex>
+      {office == "all" && (
+        <Flex
+          direction={{ base: "column", sm: "row" }}
+          gap="sm"
+          p="sm"
+          justify={{ sm: "center" }}
+        >
+          <Select
+            style={{ flex: 1 }}
+            label={t("office")}
+            placeholder={t("office")}
+            withAsterisk
+            data={offices}
+            searchable
+            clearable
+            nothingFoundMessage={t("noting_found")}
+            // onSearchChange={handleSearch}
+            // rightSection={loading && <Loader color="primary" size={15} />}
+            {...form.getInputProps("office_id")}
+          />
+        </Flex>
+      )}
       <Flex
         direction={{ base: "column", sm: "row" }}
         gap="sm"
@@ -56,21 +78,6 @@ const TeamStepOne = ({
           size="sm"
           maxDropdownHeight={140}
         />
-        {office == "all" && (
-          <Select
-            style={{ flex: 1 }}
-            label={t("office")}
-            placeholder={t("office")}
-            withAsterisk
-            data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
-            // onSearchChange={handleSearch}
-            // rightSection={loading && <Loader color="primary" size={15} />}
-            {...form.getInputProps("office_id")}
-          />
-        )}
       </Flex>
     </>
   );

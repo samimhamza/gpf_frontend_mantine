@@ -8,11 +8,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { HiMiniUsers } from "react-icons/hi2";
-import { TeamsSchema } from "@/schemas/models/teams";
-import TeamStepOne from "./TeamStepOne";
 import useOffice from "@/customHooks/useOffice";
+import SurveyPlanStepOne from "./SurveyPlanStepOne";
+import { Value } from "react-multi-date-picker";
+import { SurveyPlansSchema } from "@/schemas/models/survey_plans";
+import { getTimeValue } from "@/shared/functions";
 
-const TeamModal = ({
+const SurveyPlansModal = ({
   opened,
   close,
   lng,
@@ -28,20 +30,30 @@ const TeamModal = ({
   editId: number | undefined;
 }) => {
   const { t } = useTranslation(lng);
-  const teamsSchema = TeamsSchema(t);
+  const surveyPlansSchema = SurveyPlansSchema(t);
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
   const [employees, SetEmployees] = useState([]);
+  const [startDate, setStartDate] = useState<Value>();
+  const [endDate, setEndDate] = useState<Value>();
+  const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
+  const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
+  const [districts, setDistricts] = useState([]);
+  const [provinces, setProvinces] = useState([]);
 
   const initialValues: any = {
-    name: "",
+    title: "",
     office_id: "",
-    members: [],
+    province_id: "",
+    district_id: "",
+    description: "",
+    start_date: null,
+    end_date: null,
   };
 
   const form = useForm({
     initialValues: initialValues,
-    validate: zodResolver(teamsSchema),
+    validate: zodResolver(surveyPlansSchema),
     validateInputOnBlur: true,
   });
 
@@ -51,12 +63,12 @@ const TeamModal = ({
     const { response, status } = !editId
       ? await callApi({
           method: "POST",
-          url: "/teams",
+          url: "/survey_plans",
           data: form.values,
         })
       : await callApi({
           method: "PUT",
-          url: `/teams/${editId}`,
+          url: `/survey_plans/${editId}`,
           data: form.values,
         });
     if ((!editId ? status == 201 : status == 202) && response.result) {
@@ -78,46 +90,64 @@ const TeamModal = ({
         setLoading(true);
         const { response, status, error } = await callApi({
           method: "GET",
-          url: `/teams/${editId}`,
+          url: `/survey_plans/${editId}`,
         });
         if (status == 200 && response.result == true) {
           let values: any = {};
           form.setValues({
-            name: response.data.name,
-            office_id: response.data.office_id.toString(),
-            members: response.data.members.map((item: any) =>
-              item.id.toString()
+            title: response?.data?.title,
+            office_id: response?.data?.office_id.toString(),
+            province_id: response?.data?.province_id?.toString(),
+            district_id: response?.data?.district_id?.toString(),
+            description: response?.data?.description,
+            startDate: setStartDate(
+              getTimeValue(response?.data?.start_date.toString())
+            ),
+            endDate: setEndDate(
+              getTimeValue(response?.data?.end_date.toString())
             ),
           });
           setLoading(false);
         }
       })();
     }
-  }, [editId, callApi, form]);
+  }, [editId]);
 
   useEffect(() => {
     (async function () {
       const { response, status, error } = await callApi({
         method: "GET",
-        url: "/all_employees",
+        url: "/all_provinces",
       });
       if (status == 200 && response.result == true) {
-        SetEmployees(
+        setProvinces(
           response.data.map((item: any) => {
-            return {
-              value: item.id.toString(),
-              label: `${item.first_name + " " + item.last_name}`,
-              profile: item.profile,
-            };
+            return { value: item.id.toString(), label: item.name_fa };
           })
         );
       }
     })();
-  }, [callApi]);
+  }, []);
+
+  useEffect(() => {
+    (async function () {
+      const { response, status, error } = await callApi({
+        method: "GET",
+        url: "/all_districts",
+      });
+      if (status == 200 && response.result == true) {
+        setDistricts(
+          response.data.map((item: any) => {
+            return { value: item.id.toString(), label: item.name_fa };
+          })
+        );
+      }
+    })();
+  }, []);
 
   const steps = [
     {
-      title: t("team_info"),
+      title: t("survey_plan_info"),
       icon: <HiMiniUsers size={22} />,
       step: (
         <Box pos="relative">
@@ -126,12 +156,23 @@ const TeamModal = ({
             zIndex={1000}
             overlayProps={{ radius: "sm", blur: 2 }}
           />
-          <TeamStepOne
+          <SurveyPlanStepOne
             offices={offices}
             employees={employees}
             form={form}
             lng={lng}
             office={office}
+            startDate={startDate}
+            endDate={endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            startDateErrorMessage={startDateErrorMessage}
+            setStartDateErrorMessage={setStartDateErrorMessage}
+            endDateErrorMessage={endDateErrorMessage}
+            setEndDateErrorMessage={setEndDateErrorMessage}
+            districts={districts}
+            setDistricts={setDistricts}
+            provinces={provinces}
           />
         </Box>
       ),
@@ -141,7 +182,7 @@ const TeamModal = ({
         if (res) {
           let { response, status } = await callApi({
             method: "POST",
-            url: "/teams/check_uniqueness",
+            url: "/survey_plans/check_uniqueness",
             data: {
               name: form.values.name,
               office_id: form.values.office_id,
@@ -172,10 +213,9 @@ const TeamModal = ({
         lng={lng}
         title={title}
         editId={editId}
-        width="40%"
       />
     </form>
   );
 };
 
-export default TeamModal;
+export default SurveyPlansModal;

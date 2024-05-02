@@ -7,7 +7,7 @@ import { MdInventory } from "react-icons/md";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import useOffice from "@/customHooks/useOffice";
@@ -33,11 +33,13 @@ const WarehouseModal = ({
   const [loading, setLoading] = useState(false);
   const [provinces, setProvinces] = useState([]);
 
-  const initialValues: any = {
-    name: "",
-    office_id: "",
-    province_id: "",
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      name: "",
+      office_id: "",
+      province_id: "",
+    };
+  }, []);
 
   const form = useForm({
     initialValues: initialValues,
@@ -96,7 +98,7 @@ const WarehouseModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form, initialValues]);
 
   useEffect(() => {
     (async function () {
@@ -112,7 +114,7 @@ const WarehouseModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   const steps = [
     {

@@ -2,26 +2,28 @@
 
 import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { EmployeeColumns } from "@/shared/columns/employee.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import EmployeeModal from "./EmployeeModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
-  UPDATE_EMPLOYEES,
-  CREATE_EMPLOYEES,
-  DELETE_EMPLOYEES,
   CHANGE_STATUS,
+  CREATE_SURVEY_PLANS,
+  DELETE_SURVEY_PLANS,
+  UPDATE_SURVEY_PLANS,
 } from "@/shared/constants/Permissions";
+import { useRouter } from "next/navigation";
+import { SurveyPlansColumns } from "@/shared/columns/survey_plans.columns copy";
+import SurveyPlansModal from "./SurveyPlansModal";
 
-export const EmployeeModule = ({ lng }: { lng: string }) => {
+export const SurveyPlansModule = ({ lng }: { lng: string }) => {
+  const router = useRouter();
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
-  const columns = EmployeeColumns(
+  const columns = SurveyPlansColumns(
     t,
     permissionChecker(CHANGE_STATUS),
-    "/employees/",
+    "/survey_plans/",
     setMutated
   );
   const [opened, { open, close }] = useDisclosure(false);
@@ -34,18 +36,24 @@ export const EmployeeModule = ({ lng }: { lng: string }) => {
     }
   }, [edit, open]);
 
+  useEffect(() => {
+    if (view) {
+      router.push(`/survey_plans/${view}`);
+    }
+  }, [view]);
+
   return (
     <>
       <CustomBreadCrumb
         items={[
           { title: t("dashboard"), link: "/dashboard" },
-          { title: t("employees") },
+          { title: t("survey_plans") },
         ]}
       />
       <CustomDataTable
-        title={t("employees")}
-        url="/employees"
-        deleteUrl="/employees/1"
+        title={t("survey_plans")}
+        url="/survey_plans"
+        deleteUrl="/survey_plans/1"
         lng={lng}
         columns={columns}
         open={open}
@@ -53,13 +61,12 @@ export const EmployeeModule = ({ lng }: { lng: string }) => {
         setMutated={setMutated}
         setEdit={setEdit}
         setView={setView}
-        showAdd={permissionChecker(CREATE_EMPLOYEES)}
-        showDelete={permissionChecker(DELETE_EMPLOYEES)}
-        showEdit={permissionChecker(UPDATE_EMPLOYEES)}
-        showView={false}
+        showAdd={permissionChecker(CREATE_SURVEY_PLANS)}
+        showDelete={permissionChecker(DELETE_SURVEY_PLANS)}
+        showEdit={permissionChecker(UPDATE_SURVEY_PLANS)}
       />
       {opened && (
-        <EmployeeModal
+        <SurveyPlansModal
           opened={opened}
           close={() => {
             close();
@@ -67,7 +74,7 @@ export const EmployeeModule = ({ lng }: { lng: string }) => {
           }}
           lng={lng}
           setMutated={setMutated}
-          title={!edit ? t("add_employee") : t("update_employee")}
+          title={!edit ? t("add_survey_plan") : t("update_survey_plan")}
           editId={edit}
         />
       )}

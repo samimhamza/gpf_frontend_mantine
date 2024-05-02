@@ -9,7 +9,7 @@ import { TbShieldCheck } from "react-icons/tb";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { getFormData } from "@/shared/functions";
@@ -51,15 +51,17 @@ const UserModal = ({
     roles: [],
     permissions: [],
   };
-  const editInitialValues: any = {
-    full_name: "",
-    email: "",
-    username: "",
-    profile: "",
-    office_id: "",
-    roles: [],
-    permissions: [],
-  };
+  const editInitialValues: any = useMemo(() => {
+    return {
+      full_name: "",
+      email: "",
+      username: "",
+      profile: "",
+      office_id: "",
+      roles: [],
+      permissions: [],
+    };
+  }, []);
 
   const form = useForm({
     initialValues: !editId ? createInitialValues : editInitialValues,
@@ -143,7 +145,7 @@ const UserModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form, editInitialValues]);
 
   useEffect(() => {
     (async function () {
@@ -160,7 +162,7 @@ const UserModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   useEffect(() => {
     (async function () {
@@ -173,7 +175,7 @@ const UserModal = ({
         setTotalPermissions(response.total);
       }
     })();
-  }, []);
+  }, [callApi]);
 
   const steps = [
     {

@@ -7,7 +7,7 @@ import { FaSchool } from "react-icons/fa";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import SchoolStepTwo from "@/components/modules/schools/SchoolStepTwo";
@@ -36,18 +36,20 @@ const SchoolModal = ({
   const [loading, setLoading] = useState(false);
   const [editDistrict, setEditDistrict] = useState("");
 
-  const initialValues: any = {
-    name: "",
-    total_staff: "",
-    office_id: "",
-    type: "",
-    status: "",
-    head_name: "",
-    head_phone: "",
-    province_id: "",
-    district_id: "",
-    address: "",
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      name: "",
+      total_staff: "",
+      office_id: "",
+      type: "",
+      status: "",
+      head_name: "",
+      head_phone: "",
+      province_id: "",
+      district_id: "",
+      address: "",
+    };
+  }, []);
 
   const form = useForm({
     initialValues: initialValues,
@@ -119,7 +121,7 @@ const SchoolModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, initialValues, form]);
 
   useEffect(() => {
     (async function () {
@@ -135,7 +137,7 @@ const SchoolModal = ({
         );
       }
     })();
-  }, []);
+  }, [callApi]);
 
   const steps = [
     {

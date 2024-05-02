@@ -4,7 +4,6 @@ import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useDisclosure } from "@mantine/hooks";
-import OfficeModal from "./TeamModal";
 import { useEffect, useState } from "react";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
@@ -14,8 +13,11 @@ import {
   UPDATE_TEAMS,
 } from "@/shared/constants/Permissions";
 import { TeamColumns } from "@/shared/columns/team.columns";
+import { useRouter } from "next/navigation";
+import TeamModal from "./TeamModal";
 
 export const TeamModule = ({ lng }: { lng: string }) => {
+  const router = useRouter();
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
   const columns = TeamColumns(
@@ -32,7 +34,13 @@ export const TeamModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
+
+  useEffect(() => {
+    if (view) {
+      router.push(`/teams/${view}`);
+    }
+  }, [view, router]);
 
   return (
     <>
@@ -52,12 +60,13 @@ export const TeamModule = ({ lng }: { lng: string }) => {
         mutated={mutated}
         setMutated={setMutated}
         setEdit={setEdit}
+        setView={setView}
         showAdd={permissionChecker(CREATE_TEAMS)}
         showDelete={permissionChecker(DELETE_TEAMS)}
         showEdit={permissionChecker(UPDATE_TEAMS)}
       />
       {opened && (
-        <OfficeModal
+        <TeamModal
           opened={opened}
           close={() => {
             close();

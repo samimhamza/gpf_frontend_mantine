@@ -26,7 +26,7 @@ export const CharityPackageModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   return (
     <>

@@ -6,7 +6,7 @@ import { EmployeeSchema } from "@/schemas/models/employees";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { Value } from "react-multi-date-picker";
@@ -41,23 +41,25 @@ const EmployeeModal = ({
   const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
   const [endDate, setEndDate] = useState<Value>();
 
-  const initialValues: any = {
-    profile: "",
-    office_id: "",
-    first_name: "",
-    last_name: "",
-    father_name: "",
-    gender: "",
-    email: "",
-    phone: "",
-    address: "",
-    job_title: "",
-    start_date: null,
-    end_date: null,
-    salary: "",
-    currency: "",
-    description: "",
-  };
+  const initialValues: any = useMemo(() => {
+    return {
+      profile: "",
+      office_id: "",
+      first_name: "",
+      last_name: "",
+      father_name: "",
+      gender: "",
+      email: "",
+      phone: "",
+      address: "",
+      job_title: "",
+      start_date: null,
+      end_date: null,
+      salary: "",
+      currency: "",
+      description: "",
+    };
+  }, []);
 
   const form = useForm({
     initialValues: initialValues,
@@ -148,7 +150,7 @@ const EmployeeModal = ({
         }
       })();
     }
-  }, [editId]);
+  }, [editId, callApi, form, initialValues]);
 
   const steps = [
     {

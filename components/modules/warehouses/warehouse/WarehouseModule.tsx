@@ -40,7 +40,7 @@ export const WarehouseModule = ({ lng, id }: { lng: string; id: number }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   const onDelete = async () => {
     await mutate();

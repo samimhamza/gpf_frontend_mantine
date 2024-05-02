@@ -47,5 +47,6 @@ export const protectedRoutes = [
   "/roles",
   "/employees",
   "/teams",
+  "/teams/[id]",
   "/survey_plans",
 ];

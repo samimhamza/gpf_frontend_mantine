@@ -37,7 +37,7 @@ const ApplicantSurveys = ({
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   const onDelete = async () => {
     await mutate();
