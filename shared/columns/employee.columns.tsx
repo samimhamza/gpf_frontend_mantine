@@ -109,8 +109,8 @@ export const EmployeeColumns = (
       noWrap: true,
       sortable: true,
       render: (record: any) =>
-        record.contracts[0].salary
-          ? record.contracts[0].salary +
+        record.contracts[0]?.salary
+          ? record.contracts[0]?.salary +
             " " +
             (record.contracts[0].currency == "USD"
               ? t("usd")
