@@ -155,7 +155,6 @@ const CustomDataTable = ({
     />
   );
 
-  console.log(data?.data);
 
   return (
     <>
@@ -174,6 +173,7 @@ const CustomDataTable = ({
           handleDelete={handleDelete}
         />
       )}
+      
       <MantineDataTable
         title={showSecondTitle ? secondTitle : title}
         lng={lng}
