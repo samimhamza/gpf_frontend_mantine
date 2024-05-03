@@ -215,4 +215,7 @@
   "choices": "Choices",
   "references": "References",
   "add_reference": "Add New Reference",
-  "update_reference": "Update Reference"}
+  "update_reference": "Update Reference",
+   "job_location": "Location",
+   "job_position": "Job Position"
+}

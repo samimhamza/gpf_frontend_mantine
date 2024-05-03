@@ -3,12 +3,12 @@
 import { useTranslation } from '@/app/i18n/client';
 import CustomBreadCrumb from '@/components/CustomBreadCrumb';
 import { CustomDataTable } from '@/components/DataTable';
-import { OfficeColumns } from '@/shared/columns/office.columns';
+import { ReferencesColumns } from '@/shared/columns/references.columns';
 import {
   CHANGE_STATUS,
-  CREATE_OFFICES,
-  DELETE_OFFICES,
-  UPDATE_OFFICES,
+  CREATE_REFERENCES,
+  DELETE_REFERENCES,
+  UPDATE_REFERENCES,
 } from '@/shared/constants/Permissions';
 import { permissionChecker } from '@/shared/functions/permissionChecker';
 import { useDisclosure } from '@mantine/hooks';
@@ -19,7 +19,7 @@ export const ReferenceModule = ({ lng }: { lng: string }) => {
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
 
-  const columns = OfficeColumns(
+  const columns = ReferencesColumns(
     t,
     permissionChecker(CHANGE_STATUS),
     '/references/',
@@ -56,9 +56,9 @@ export const ReferenceModule = ({ lng }: { lng: string }) => {
         setMutated={setMutated}
         setEdit={setEdit}
         setView={setView}
-        showAdd={permissionChecker(CREATE_OFFICES)}
-        showDelete={permissionChecker(DELETE_OFFICES)}
-        showEdit={permissionChecker(UPDATE_OFFICES)}
+        showAdd={permissionChecker(CREATE_REFERENCES)}
+        showDelete={permissionChecker(DELETE_REFERENCES)}
+        showEdit={permissionChecker(UPDATE_REFERENCES)}
         showView={false}
       />
       {opened && (
