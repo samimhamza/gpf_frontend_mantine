@@ -34,13 +34,13 @@ export const TeacherModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   useEffect(() => {
     if (view) {
       router.push(`/applicants/${view}`);
     }
-  }, [view]);
+  }, [view, router]);
 
   return (
     <>

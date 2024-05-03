@@ -39,7 +39,7 @@ const Profile = ({ lng, profileUrl, name, form, title }: ProfileProps) => {
     if (files.length) {
       open();
     }
-  }, [files]);
+  }, [files, open]);
 
   useEffect(() => {
     if (error) {

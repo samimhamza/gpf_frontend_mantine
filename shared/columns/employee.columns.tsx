@@ -112,9 +112,9 @@ export const EmployeeColumns = (
         record.contracts[0]?.salary
           ? record.contracts[0]?.salary +
             " " +
-            (record.contracts[0].currency == "USD"
+            (record.contracts[0]?.currency == "USD"
               ? t("usd")
-              : record.contracts[0].currency == "AFN"
+              : record.contracts[0]?.currency == "AFN"
               ? t("afn")
               : "")
           : "0",

@@ -7,9 +7,10 @@ import { MdInventory } from "react-icons/md";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
+import useOffice from "@/customHooks/useOffice";
 
 const WarehouseModal = ({
 	opened,
@@ -31,19 +32,21 @@ const WarehouseModal = ({
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 	const [provinces, setProvinces] = useState([]);
-	const [offices, setOffices] = useState([]);
 
-	const initialValues: any = {
-		name: "",
-		office_id: "",
-		province_id: "",
-	};
+	const initialValues: any = useMemo(() => {
+		return {
+			name: "",
+			office_id: "",
+			province_id: "",
+		};
+	}, []);
 
 	const form = useForm({
 		initialValues: initialValues,
 		validate: zodResolver(warehouseSchema),
 		validateInputOnBlur: true,
 	});
+	const { offices, office } = useOffice(form);
 
 	const submit = async () => {
 		const { response, status } = !editId
@@ -95,27 +98,7 @@ const WarehouseModal = ({
 				}
 			})();
 		}
-	}, [editId]);
-
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				method: "GET",
-				url: "/all_offices",
-				// url: "/office/auto_complete",
-			});
-			if (status == 200 && response.result == true) {
-				setOffices(
-					response.data.map((item: any) => {
-						return {
-							value: item.id.toString(),
-							label: item.name + " (" + item.code + ")",
-						};
-					})
-				);
-			}
-		})();
-	}, []);
+	}, [editId, callApi, initialValues]);
 
 	useEffect(() => {
 		(async function () {
@@ -131,7 +114,7 @@ const WarehouseModal = ({
 				);
 			}
 		})();
-	}, []);
+	}, [callApi]);
 
 	const steps = [
 		{
@@ -149,6 +132,7 @@ const WarehouseModal = ({
 						lng={lng}
 						offices={offices}
 						provinces={provinces}
+						office={office}
 					/>
 				</Box>
 			),

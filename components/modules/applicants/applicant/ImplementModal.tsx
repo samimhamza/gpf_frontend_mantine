@@ -24,7 +24,14 @@ import {
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import moment from "jalali-moment";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import toast from "react-hot-toast";
 import { MdSend } from "react-icons/md";
 import { Value } from "react-multi-date-picker";
@@ -68,12 +75,14 @@ const ImplementModal = ({
 	const [implementDate, setImplementDate] = useState<Value>();
 	const [editWarehouse, setEditWarehouse] = useState<string>();
 
-	const initialValues: any = {
-		applicant_survey_id: "",
-		warehouse_id: "",
-		implement_date: null,
-		description: "",
-	};
+	const initialValues: any = useMemo(() => {
+		return {
+			applicant_survey_id: "",
+			warehouse_id: "",
+			implement_date: null,
+			description: "",
+		};
+	}, []);
 
 	const form = useForm({
 		initialValues: initialValues,
@@ -163,9 +172,9 @@ const ImplementModal = ({
 				);
 			}
 		})();
-	}, []);
+	}, [callApi, officeId]);
 
-	const getCurrentApplicantPackage = async () => {
+	const getCurrentApplicantPackage = useCallback(async () => {
 		setLoading(true);
 		const { response, status, error } = await callApi({
 			method: "GET",
@@ -176,9 +185,9 @@ const ImplementModal = ({
 			form.setFieldValue("applicant_survey_id", response.data.id);
 		}
 		setLoading(false);
-	};
+	}, [callApi, applicantId]);
 
-	const getApplicantPackage = async () => {
+	const getApplicantPackage = useCallback(async () => {
 		setLoading(true);
 		const { response, status, error } = await callApi({
 			method: "GET",
@@ -210,7 +219,7 @@ const ImplementModal = ({
 			form.setValues(values);
 			setLoading(false);
 		}
-	};
+	}, [callApi, editId, initialValues]);
 
 	useEffect(() => {
 		(async function () {
@@ -220,7 +229,7 @@ const ImplementModal = ({
 				getApplicantPackage();
 			}
 		})();
-	}, [editId]);
+	}, [editId, getCurrentApplicantPackage, getApplicantPackage]);
 
 	useEffect(() => {
 		if (implementDate) {

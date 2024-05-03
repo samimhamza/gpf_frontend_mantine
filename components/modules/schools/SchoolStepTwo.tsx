@@ -50,7 +50,7 @@ const SchoolStepTwo = ({
 				setLoading(false);
 			}
 		})();
-	}, [form?.values?.province_id]);
+	}, [form?.values?.province_id, callApi, setEditDistrict, editDistrict]);
 
 	return (
 		<>

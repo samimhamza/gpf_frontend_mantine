@@ -7,11 +7,12 @@ import { FaSchool } from "react-icons/fa";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import SchoolStepTwo from "@/components/modules/schools/SchoolStepTwo";
 import { FaLocationDot } from "react-icons/fa6";
+import useOffice from "@/customHooks/useOffice";
 
 const SchoolModal = ({
 	opened,
@@ -31,29 +32,32 @@ const SchoolModal = ({
 	const { t } = useTranslation(lng);
 	const schoolSchema = SchoolSchema(t);
 	const callApi = useAxios();
-	const [offices, setOffices] = useState([]);
 	const [provinces, setProvinces] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [editDistrict, setEditDistrict] = useState("");
 
-	const initialValues: any = {
-		name: "",
-		total_staff: "",
-		office_id: "",
-		type: "",
-		status: "",
-		head_name: "",
-		head_phone: "",
-		province_id: "",
-		district_id: "",
-		address: "",
-	};
+	const initialValues: any = useMemo(() => {
+		return {
+			name: "",
+			total_staff: "",
+			office_id: "",
+			type: "",
+			status: "",
+			head_name: "",
+			head_phone: "",
+			province_id: "",
+			district_id: "",
+			address: "",
+		};
+	}, []);
 
 	const form = useForm({
 		initialValues: initialValues,
 		validate: zodResolver(schoolSchema),
 		validateInputOnBlur: true,
 	});
+
+	const { offices, office } = useOffice(form);
 
 	const submit = async () => {
 		const { response, status } = !editId
@@ -117,27 +121,7 @@ const SchoolModal = ({
 				}
 			})();
 		}
-	}, [editId]);
-
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				method: "GET",
-				url: "/all_offices",
-				// url: "/office/auto_complete",
-			});
-			if (status == 200 && response.result == true) {
-				setOffices(
-					response.data.map((item: any) => {
-						return {
-							value: item.id.toString(),
-							label: item.name + " (" + item.code + ")",
-						};
-					})
-				);
-			}
-		})();
-	}, []);
+	}, [editId, callApi, initialValues]);
 
 	useEffect(() => {
 		(async function () {
@@ -153,7 +137,7 @@ const SchoolModal = ({
 				);
 			}
 		})();
-	}, []);
+	}, [callApi]);
 
 	const steps = [
 		{
@@ -166,7 +150,12 @@ const SchoolModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: "sm", blur: 2 }}
 					/>
-					<SchoolStepOne form={form} lng={lng} offices={offices} />
+					<SchoolStepOne
+						form={form}
+						lng={lng}
+						offices={offices}
+						office={office}
+					/>
 				</Box>
 			),
 			async validate() {

@@ -18,7 +18,7 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { MdSend } from "react-icons/md";
 import { Value } from "react-multi-date-picker";
@@ -80,13 +80,15 @@ const WarehouseItemsModal = ({
 		],
 	};
 
-	const editInitialValues: any = {
-		warehouse_id: warehouseId,
-		item_id: "",
-		quantity: "",
-		store_date: null,
-		unit: "",
-	};
+	const editInitialValues: any = useMemo(() => {
+		return {
+			warehouse_id: warehouseId,
+			item_id: "",
+			quantity: "",
+			store_date: null,
+			unit: "",
+		};
+	}, [warehouseId]);
 
 	const form = useForm({
 		initialValues: editId ? editInitialValues : createInitialValues,
@@ -124,7 +126,7 @@ const WarehouseItemsModal = ({
 				? form.setFieldValue("store_date", null)
 				: form.setFieldValue(`items.${0}.store_date`, null);
 		}
-	}, [storeDates]);
+	}, [storeDates, editId, editInitialValues]);
 
 	const validate = () => {
 		form.validate();
@@ -207,7 +209,7 @@ const WarehouseItemsModal = ({
 				);
 			}
 		})();
-	}, []);
+	}, [callApi]);
 
 	useEffect(() => {
 		if (editId) {
@@ -240,7 +242,7 @@ const WarehouseItemsModal = ({
 				}
 			})();
 		}
-	}, [editId]);
+	}, [editId, callApi, editInitialValues]);
 
 	return (
 		<>

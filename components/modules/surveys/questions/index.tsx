@@ -26,7 +26,7 @@ export const QuestionModule = ({ lng }: { lng: string }) => {
     if (edit) {
       open();
     }
-  }, [edit]);
+  }, [edit, open]);
 
   return (
     <>

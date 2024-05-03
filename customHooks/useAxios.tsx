@@ -4,10 +4,11 @@ import { useCallback } from "react";
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { readLocalStorageValue } from "@mantine/hooks";
 
 export const useAxios: any = () => {
 	const router = useRouter();
-
+	const office = readLocalStorageValue({ key: "office" });
 	const { data: session } = useSession();
 
 	const callAPI = useCallback(
@@ -16,7 +17,6 @@ export const useAxios: any = () => {
 			let loading = false;
 			let error = null;
 			let status = 404;
-
 			const api = axios.create({
 				baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 			});
@@ -32,7 +32,10 @@ export const useAxios: any = () => {
 				const rawResponse = await api.request({
 					method,
 					url,
-					params,
+					params: {
+						...params,
+						office: office ? office : session?.user.office_id,
+					},
 					headers: {
 						...defaultHeaders,
 						headers,
@@ -43,7 +46,7 @@ export const useAxios: any = () => {
 				status = rawResponse.status;
 				response = rawResponse.data;
 				if (rawResponse.status == 401) {
-					signOut({
+					await signOut({
 						redirect: false,
 					});
 					router.push("/auth/login");

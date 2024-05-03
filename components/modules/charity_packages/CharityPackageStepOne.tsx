@@ -21,6 +21,7 @@ interface CharityPackageStepOneProps {
   setStartDate: Dispatch<SetStateAction<Value | undefined>>;
   endDate: Value | undefined;
   setEndDate: Dispatch<SetStateAction<Value | undefined>>;
+  office: string | null;
 }
 
 const CharityPackageStepOne = ({
@@ -36,6 +37,7 @@ const CharityPackageStepOne = ({
   endDate,
   setStartDate,
   setEndDate,
+  office,
 }: CharityPackageStepOneProps) => {
   const { t } = useTranslation(lng);
   const currencies = Currencies(t);
@@ -97,36 +99,6 @@ const CharityPackageStepOne = ({
         pt="sm"
         justify={{ sm: "center" }}
       >
-        <Select
-          style={{ flex: 1 }}
-          label={t("category")}
-          placeholder={t("category")}
-          data={categories}
-          withAsterisk
-          searchable
-          clearable
-          nothingFoundMessage={t("noting_found")}
-          {...form.getInputProps("category_id")}
-        />
-        <Select
-          style={{ flex: 1 }}
-          label={t("office")}
-          placeholder={t("office")}
-          withAsterisk
-          data={offices}
-          searchable
-          clearable
-          nothingFoundMessage={t("noting_found")}
-          {...form.getInputProps("office_id")}
-        />
-      </Flex>
-      <Flex
-        direction={{ base: "column", sm: "row" }}
-        gap="sm"
-        px="sm"
-        pt="sm"
-        justify={{ sm: "center" }}
-      >
         <PersianDatePicker
           label={t("start_date")}
           placeholder={t("start_date")}
@@ -162,6 +134,40 @@ const CharityPackageStepOne = ({
           clearable
           {...form.getInputProps("currency")}
         />
+      </Flex>
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        gap="sm"
+        px="sm"
+        pt="sm"
+        justify={{ sm: "center" }}
+      >
+        <Select
+          style={{ flex: 1 }}
+          label={t("category")}
+          placeholder={t("category")}
+          data={categories}
+          withAsterisk
+          searchable
+          clearable
+          nothingFoundMessage={t("noting_found")}
+          {...form.getInputProps("category_id")}
+        />
+        {office == "all" ? (
+          <Select
+            style={{ flex: 1 }}
+            label={t("office")}
+            placeholder={t("office")}
+            withAsterisk
+            data={offices}
+            searchable
+            clearable
+            nothingFoundMessage={t("noting_found")}
+            {...form.getInputProps("office_id")}
+          />
+        ) : (
+          <Box style={{ flex: 1 }}></Box>
+        )}
       </Flex>
     </Box>
   );

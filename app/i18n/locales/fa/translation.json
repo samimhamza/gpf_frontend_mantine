@@ -54,6 +54,7 @@
   "permissions": "مجوز ها",
   "all": "انتخاب همه",
   "min_3_length_error": "حد اقل ۳ حرف ضروری است",
+  "min_1_length_error": "حد اقل ۱ حرف ضروری است",
   "max_64_length_error": "حد اکثر ۶۴ حرف اجازه است",
   "max_255_length_error": "حد اکثر ۲۵۵ حرف اجازه است",
   "roles": "صلاحیت ها",

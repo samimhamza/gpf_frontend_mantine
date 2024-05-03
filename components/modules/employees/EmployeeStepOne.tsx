@@ -10,6 +10,7 @@ interface EmployeeStepOneProps {
   lng: string;
   profileUrl: any;
   offices: Array<{ value: string; label: string }>;
+  office: string | null;
 }
 
 const EmployeeStepOne = ({
@@ -17,6 +18,7 @@ const EmployeeStepOne = ({
   lng,
   profileUrl,
   offices,
+  office,
 }: EmployeeStepOneProps) => {
   const { t } = useTranslation(lng);
   const genders = Genders(t);
@@ -38,17 +40,6 @@ const EmployeeStepOne = ({
         p="sm"
         justify={{ sm: "center" }}
       >
-        <Select
-          style={{ flex: 1 }}
-          label={t("office")}
-          placeholder={t("office")}
-          withAsterisk
-          data={offices}
-          searchable
-          clearable
-          nothingFoundMessage={t("noting_found")}
-          {...form.getInputProps("office_id")}
-        />
         <TextInput
           style={{ flex: 1 }}
           label={t("first_name")}
@@ -56,13 +47,6 @@ const EmployeeStepOne = ({
           withAsterisk
           {...form.getInputProps("first_name")}
         />
-      </Flex>
-      <Flex
-        direction={{ base: "column", sm: "row" }}
-        gap="sm"
-        p="sm"
-        justify={{ sm: "center" }}
-      >
         <TextInput
           style={{ flex: 1 }}
           label={t("last_name")}
@@ -70,13 +54,6 @@ const EmployeeStepOne = ({
           withAsterisk
           {...form.getInputProps("last_name")}
         />
-        <TextInput
-          style={{ flex: 1 }}
-          label={t("father_name")}
-          placeholder={t("father_name")}
-          withAsterisk
-          {...form.getInputProps("father_name")}
-        />
       </Flex>
       <Flex
         direction={{ base: "column", sm: "row" }}
@@ -84,6 +61,13 @@ const EmployeeStepOne = ({
         p="sm"
         justify={{ sm: "center" }}
       >
+        <TextInput
+          style={{ flex: 1 }}
+          label={t("father_name")}
+          placeholder={t("father_name")}
+          withAsterisk
+          {...form.getInputProps("father_name")}
+        />
         <Select
           style={{ flex: 1 }}
           label={t("gender")}
@@ -95,6 +79,26 @@ const EmployeeStepOne = ({
           nothingFoundMessage={t("noting_found")}
           {...form.getInputProps("gender")}
         />
+      </Flex>
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        gap="sm"
+        p="sm"
+        justify={{ sm: "center" }}
+      >
+        {office == "all" && (
+          <Select
+            style={{ flex: 1 }}
+            label={t("office")}
+            placeholder={t("office")}
+            withAsterisk
+            data={offices}
+            searchable
+            clearable
+            nothingFoundMessage={t("noting_found")}
+            {...form.getInputProps("office_id")}
+          />
+        )}
         <Textarea
           resize="vertical"
           style={{ flex: 1 }}

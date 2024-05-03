@@ -4,10 +4,7 @@ import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import OfficeStepOne from "@/components/modules/offices/OfficeStepOne";
 import { useAxios } from "@/customHooks/useAxios";
-import { OfficeSchema } from "@/schemas/models/offices";
-import { Box, LoadingOverlay } from "@mantine/core";
-import { useForm, zodResolver } from "@mantine/form";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { IoHome } from "react-icons/io5";
 
@@ -31,10 +28,12 @@ const OfficeModal = ({
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 
-	const initialValues: any = {
-		name: "",
-		code: "",
-	};
+	const initialValues: any = useMemo(() => {
+		return {
+			name: "",
+			code: "",
+		};
+	}, []);
 
 	const form = useForm({
 		initialValues: initialValues,
@@ -87,7 +86,7 @@ const OfficeModal = ({
 				}
 			})();
 		}
-	}, [editId]);
+	}, [editId, callApi, initialValues]);
 
 	const steps = [
 		{

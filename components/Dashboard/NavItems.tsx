@@ -27,7 +27,7 @@ export const NavItems = (t: (arg: string) => string) => [
     label: t('covered_areas'),
     icon: MdMosque,
     initiallyOpened: true,
-    permission: VIEW_MOSQUES || VIEW_SCHOOLS,
+    permission: [VIEW_MOSQUES, VIEW_SCHOOLS],
     links: [
       {
         label: t('schools'),
@@ -58,8 +58,12 @@ export const NavItems = (t: (arg: string) => string) => [
     label: t('inventory'),
     icon: BiSolidBox,
     initiallyOpened: false,
-    permission:
-      VIEW_ITEMS || VIEW_WAREHOUSES || VIEW_CATEGORIES || VIEW_CHARITY_PACKAGES,
+    permission: [
+      VIEW_ITEMS,
+      VIEW_WAREHOUSES,
+      VIEW_CATEGORIES,
+      VIEW_CHARITY_PACKAGES,
+    ],
     links: [
       {
         label: t('items'),
@@ -87,12 +91,22 @@ export const NavItems = (t: (arg: string) => string) => [
     label: t('surveys'),
     icon: RiSurveyFill,
     initiallyOpened: true,
-    permission: VIEW_QUESTIONS,
+    permission: [VIEW_QUESTIONS, VIEW_TEAMS],
     links: [
       {
         label: t('questions'),
         link: '/questions',
         permission: VIEW_QUESTIONS,
+      },
+      {
+        label: t("teams"),
+        link: "/teams",
+        permission: VIEW_TEAMS,
+      },
+      {
+        label: t("survey_plans"),
+        link: "/survey_plans",
+        permission: VIEW_TEAMS,
       },
     ],
   },
@@ -100,7 +114,7 @@ export const NavItems = (t: (arg: string) => string) => [
     label: t('user_management'),
     icon: FaUsers,
     initiallyOpened: true,
-    permission: VIEW_USERS || VIEW_ROLES,
+    permission: [VIEW_USERS, VIEW_ROLES],
     links: [
       {
         label: t('users'),
@@ -118,7 +132,7 @@ export const NavItems = (t: (arg: string) => string) => [
     label: t('employee_management'),
     icon: HiMiniUserGroup,
     initiallyOpened: true,
-    permission: VIEW_EMPLOYEES || VIEW_TEAMS,
+    permission: [VIEW_EMPLOYEES],
     links: [
       {
         label: t('employees'),

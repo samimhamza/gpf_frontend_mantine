@@ -1,9 +1,8 @@
 "use client";
 
 import { Center, Card, Flex, Stack, Text } from "@mantine/core";
-import { BackButton } from "../BackButton";
-import classes from "./CardWrapper.module.css";
 import Image from "next/image";
+import BackButton from "./BackButton";
 
 interface CardWrapperProps {
 	children: React.ReactNode;
@@ -12,7 +11,7 @@ interface CardWrapperProps {
 	backButtonLabel?: string;
 }
 
-export const CardWrapper = ({
+const CardWrapper = ({
 	children,
 	headerLabel,
 	backButtonHref,
@@ -48,3 +47,5 @@ export const CardWrapper = ({
 		</Flex>
 	);
 };
+
+export default CardWrapper;

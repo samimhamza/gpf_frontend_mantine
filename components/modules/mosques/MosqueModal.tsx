@@ -8,9 +8,10 @@ import { FaMosque } from "react-icons/fa";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
+import useOffice from "@/customHooks/useOffice";
 
 const MosqueModal = ({
 	opened,
@@ -30,25 +31,28 @@ const MosqueModal = ({
 	const { t } = useTranslation(lng);
 	const mosqueSchema = MosqueSchema(t);
 	const callApi = useAxios();
-	const [offices, setOffices] = useState([]);
 	const [provinces, setProvinces] = useState([]);
 	const [districts, setDistricts] = useState([]);
 	const [loading, setLoading] = useState(false);
 
-	const initialValues: any = {
-		name: "",
-		office_id: "",
-		province_id: "",
-		district_id: "",
-		mosque_type: "",
-		mosque_formal: "",
-	};
+	const initialValues: any = useMemo(() => {
+		return {
+			name: "",
+			office_id: "",
+			province_id: "",
+			district_id: "",
+			mosque_type: "",
+			mosque_formal: "",
+		};
+	}, []);
 
 	const form = useForm({
 		initialValues: initialValues,
 		validate: zodResolver(mosqueSchema),
 		validateInputOnBlur: true,
 	});
+
+	const { offices, office } = useOffice(form);
 
 	const submit = async () => {
 		const { response, status } = !editId
@@ -113,27 +117,7 @@ const MosqueModal = ({
 				}
 			})();
 		}
-	}, [editId]);
-
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				method: "GET",
-				url: "/all_offices",
-				// url: "/office/auto_complete",
-			});
-			if (status == 200 && response.result == true) {
-				setOffices(
-					response.data.map((item: any) => {
-						return {
-							value: item.id.toString(),
-							label: item.name + " (" + item.code + ")",
-						};
-					})
-				);
-			}
-		})();
-	}, []);
+	}, [editId, callApi, initialValues]);
 
 	useEffect(() => {
 		(async function () {
@@ -150,7 +134,7 @@ const MosqueModal = ({
 				);
 			}
 		})();
-	}, []);
+	}, [callApi]);
 
 	const steps = [
 		{
@@ -169,6 +153,7 @@ const MosqueModal = ({
 						offices={offices}
 						provinces={provinces}
 						districts={districts}
+						office={office}
 					/>
 				</Box>
 			),

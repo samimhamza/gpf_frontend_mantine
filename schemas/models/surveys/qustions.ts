@@ -100,8 +100,6 @@ export const MultipleChoiceQuestionSchema = (t: (arg: string) => string) => {
         }),
     })
     .superRefine((values, ctx) => {
-      console.log(values.choices.length);
-
       if (values.choices.length < 2) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,

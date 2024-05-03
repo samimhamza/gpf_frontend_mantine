@@ -61,7 +61,7 @@ const TeacherStepTwo = ({
 				});
 			}
 		})();
-	}, [form.values.school_id, schools]);
+	}, [form.values.school_id, schools, callApi, setDistricts, provinces]);
 
 	return (
 		<>

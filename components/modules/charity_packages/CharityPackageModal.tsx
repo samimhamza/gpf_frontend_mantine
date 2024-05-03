@@ -7,13 +7,14 @@ import { BiSolidBox } from "react-icons/bi";
 import { useTranslation } from "@/app/i18n/client";
 import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
 import { IoIosListBox } from "react-icons/io";
 import CharityPackageStepTwo from "./CharityPackageStepTwo";
 import { type Value } from "react-multi-date-picker";
 import { getTimeValue } from "@/shared/functions";
+import useOffice from "@/customHooks/useOffice";
 
 const CharityPackageModal = ({
 	opened,
@@ -34,7 +35,6 @@ const CharityPackageModal = ({
 	const itemSchema = CharityPackageSchema(t);
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
-	const [offices, setOffices] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [items, setItems] = useState<any>([]);
 	const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
@@ -42,23 +42,27 @@ const CharityPackageModal = ({
 	const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
 	const [endDate, setEndDate] = useState<Value>();
 
-	const initialValues: any = {
-		name: "",
-		office_id: "",
-		category_id: "",
-		period: "",
-		start_date: null,
-		end_date: null,
-		cash_amount: "",
-		currency: "",
-		items: [{ item_id: "", quantity: "", unit: "" }],
-	};
+	const initialValues: any = useMemo(() => {
+		return {
+			name: "",
+			office_id: "",
+			category_id: "",
+			period: "",
+			start_date: null,
+			end_date: null,
+			cash_amount: "",
+			currency: "",
+			items: [{ item_id: "", quantity: "", unit: "" }],
+		};
+	}, []);
 
 	const form = useForm({
 		initialValues: initialValues,
 		validate: zodResolver(itemSchema),
 		validateInputOnBlur: true,
 	});
+
+	const { offices, office } = useOffice(form);
 
 	const submit = async () => {
 		const { response, status } = !editId
@@ -99,26 +103,7 @@ const CharityPackageModal = ({
 				);
 			}
 		})();
-	}, []);
-
-	useEffect(() => {
-		(async function () {
-			const { response, status, error } = await callApi({
-				method: "GET",
-				url: "/all_offices",
-			});
-			if (status == 200 && response.result == true) {
-				setOffices(
-					response.data.map((item: any) => {
-						return {
-							value: item.id.toString(),
-							label: item.name + " (" + item.code + ")",
-						};
-					})
-				);
-			}
-		})();
-	}, []);
+	}, [callApi]);
 
 	useEffect(() => {
 		(async function () {
@@ -138,7 +123,7 @@ const CharityPackageModal = ({
 				);
 			}
 		})();
-	}, []);
+	}, [callApi]);
 
 	useEffect(() => {
 		if (editId) {
@@ -191,7 +176,7 @@ const CharityPackageModal = ({
 				}
 			})();
 		}
-	}, [editId]);
+	}, [editId, callApi, initialValues]);
 
 	const steps = [
 		{
@@ -217,6 +202,7 @@ const CharityPackageModal = ({
 						endDate={endDate}
 						setStartDate={setStartDate}
 						setEndDate={setEndDate}
+						office={office}
 					/>
 				</Box>
 			),
@@ -268,6 +254,7 @@ const CharityPackageModal = ({
 			},
 		},
 	];
+
 	return (
 		<form>
 			<CustomModal
