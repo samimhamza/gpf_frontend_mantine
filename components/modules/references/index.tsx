@@ -13,6 +13,7 @@ import {
 import { permissionChecker } from '@/shared/functions/permissionChecker';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
+import ReferenceModal from './ReferenceModal';
 
 export const ReferenceModule = ({ lng }: { lng: string }) => {
   const { t } = useTranslation(lng);
@@ -61,7 +62,7 @@ export const ReferenceModule = ({ lng }: { lng: string }) => {
         showView={false}
       />
       {opened && (
-        <ReferenceModule
+        <ReferenceModal
           opened={opened}
           close={() => {
             close();

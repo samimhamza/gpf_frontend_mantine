@@ -3,13 +3,15 @@
 import { useTranslation } from '@/app/i18n/client';
 import { Flex, TextInput } from '@mantine/core';
 
-interface OfficeStepOneProps {
+interface ReferenceStepOneProps {
   form: any;
   lng: string;
 }
 
-const OfficeStepOne = ({ form, lng }: OfficeStepOneProps) => {
+const ReferenceStepOne = ({ form, lng }: ReferenceStepOneProps) => {
   const { t } = useTranslation(lng);
+
+  console.log('hello');
 
   return (
     <>
@@ -38,4 +40,4 @@ const OfficeStepOne = ({ form, lng }: OfficeStepOneProps) => {
   );
 };
 
-export default OfficeStepOne;
+export default ReferenceStepOne;

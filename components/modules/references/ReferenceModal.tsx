@@ -2,7 +2,6 @@
 
 import { useTranslation } from '@/app/i18n/client';
 import CustomModal from '@/components/CustomModal';
-import OfficeStepOne from '@/components/modules/offices/OfficeStepOne';
 import { useAxios } from '@/customHooks/useAxios';
 import { OfficeSchema } from '@/schemas/models/offices';
 import { Box, LoadingOverlay } from '@mantine/core';
@@ -10,8 +9,9 @@ import { useForm, zodResolver } from '@mantine/form';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { IoHome } from 'react-icons/io5';
+import ReferenceStepOne from './ReferenceStepOne';
 
-const ReferenceModel = ({
+const ReferenceModal = ({
   opened,
   close,
   lng,
@@ -30,6 +30,7 @@ const ReferenceModel = ({
   const officeSchema = OfficeSchema(t);
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
+
 
   const initialValues: any = {
     name: '',
@@ -100,9 +101,10 @@ const ReferenceModel = ({
             zIndex={1000}
             overlayProps={{ radius: 'sm', blur: 2 }}
           />
-          <OfficeStepOne form={form} lng={lng} />
+          <ReferenceStepOne form={form} lng={lng} />
         </Box>
       ),
+
       async validate() {
         form.validate();
         let res = form.isValid();
@@ -133,7 +135,7 @@ const ReferenceModel = ({
       },
     },
   ];
-  
+
   return (
     <form>
       <CustomModal
@@ -151,4 +153,4 @@ const ReferenceModel = ({
   );
 };
 
-export default ReferenceModel;
+export default ReferenceModal;
