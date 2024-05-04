@@ -31,10 +31,10 @@ const ReferenceModal = ({
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
 
-
   const initialValues: any = {
     name: '',
     code: '',
+    car: '',
   };
 
   const form = useForm({
@@ -47,12 +47,12 @@ const ReferenceModal = ({
     const { response, status } = !editId
       ? await callApi({
           method: 'POST',
-          url: '/offices',
+          url: '/references',
           data: form.values,
         })
       : await callApi({
           method: 'PUT',
-          url: `/offices/${editId}`,
+          url: `/references/${editId}`,
           data: form.values,
         });
     if ((!editId ? status == 201 : status == 202) && response.result) {

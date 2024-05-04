@@ -11,7 +11,6 @@ interface ReferenceStepOneProps {
 const ReferenceStepOne = ({ form, lng }: ReferenceStepOneProps) => {
   const { t } = useTranslation(lng);
 
-  console.log('hello');
 
   return (
     <>

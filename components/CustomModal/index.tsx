@@ -1,3 +1,4 @@
+import { useTranslation } from '@/app/i18n/client';
 import {
   Button,
   CloseButton,
@@ -7,17 +8,14 @@ import {
   Stepper,
   Title,
   useMantineTheme,
-} from "@mantine/core";
-import { useState } from "react";
-import { TbChevronRight } from "react-icons/tb";
-import { TbChevronLeft } from "react-icons/tb";
-import { FaArrowRotateLeft } from "react-icons/fa6";
-import { FaCheck } from "react-icons/fa6";
-import { MdSend } from "react-icons/md";
-import { useMediaQuery } from "@mantine/hooks";
-import Done from "./Done";
-import { IoMdCloseCircle } from "react-icons/io";
-import { useTranslation } from "@/app/i18n/client";
+} from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import { useState } from 'react';
+import { FaArrowRotateLeft, FaCheck } from 'react-icons/fa6';
+import { IoMdCloseCircle } from 'react-icons/io';
+import { MdSend } from 'react-icons/md';
+import { TbChevronLeft, TbChevronRight } from 'react-icons/tb';
+import Done from './Done';
 
 interface CustomModalProps {
   opened: boolean;
@@ -53,8 +51,10 @@ const CustomModal = ({
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 
+  console.log(form);
+  
   let doneStep = {
-    title: t("done"),
+    title: t('done'),
     icon: <FaCheck />,
     step: <Done />,
   };
@@ -62,6 +62,8 @@ const CustomModal = ({
   let stepInside = showDynamicStep
     ? [...steps, dynamicStep, doneStep]
     : [...steps, doneStep];
+
+    console.log(stepInside)
 
   const next = async () => {
     setLoading(active);
@@ -116,49 +118,50 @@ const CustomModal = ({
     }
     setLoading(null);
   };
+
   return (
     <>
       <Modal
         opened={opened}
         onClose={close}
         centered
-        size={mdMatches ? (width ? width : "65%") : smMatches ? "80%" : "100%"}
-        className="custom-modal"
+        size={mdMatches ? (width ? width : '65%') : smMatches ? '80%' : '100%'}
+        className='custom-modal'
         withCloseButton={false}
         overlayProps={{
           backgroundOpacity: 0.55,
           blur: 3,
         }}
-        transitionProps={{ transition: "pop" }}
+        transitionProps={{ transition: 'pop' }}
         lockScroll={true}
         closeOnClickOutside={false}
       >
-        <Group justify="space-between" className="modal-header" p="xs">
+        <Group justify='space-between' className='modal-header' p='xs'>
           <Title order={4}>{title}</Title>
           <CloseButton
-            className="close-btn"
-            aria-label="Close modal"
+            className='close-btn'
+            aria-label='Close modal'
             onClick={close}
           />
         </Group>
         <Group
-          justify="space-between"
-          align="flex-start"
-          p="xs"
-          className="modal-header"
+          justify='space-between'
+          align='flex-start'
+          p='xs'
+          className='modal-header'
         >
           <Stepper
             active={active}
             onStepClick={changeStep}
             style={{ flex: 1 }}
-            py="sm"
+            py='sm'
           >
             {stepInside.map((step, i) => (
               <Stepper.Step
                 icon={step.icon}
-                label={smMatches ? step.title : ""}
+                label={smMatches ? step.title : ''}
                 key={i}
-                color="primary"
+                color='primary'
                 loading={loading == i}
               />
             ))}
@@ -168,26 +171,26 @@ const CustomModal = ({
           {stepInside.map((step, i) => (
             <div
               key={i}
-              className={`stepper-item ${active == i ? "show" : "hide"} `}
+              className={`stepper-item ${active == i ? 'show' : 'hide'} `}
             >
               {active == i && step.step}
             </div>
           ))}
         </ScrollArea>
-        <Group justify="flex-end" p="sm" className="modal-footer">
+        <Group justify='flex-end' p='sm' className='modal-footer'>
           {active == stepInside.length - 1 && (
             <Button
               rightSection={<IoMdCloseCircle />}
-              variant="filled"
-              color="red"
+              variant='filled'
+              color='red'
               onClick={close}
             >
-              {t("close")}
+              {t('close')}
             </Button>
           )}
           {active !== 0 && active !== stepInside.length - 1 && (
             <Button leftSection={<TbChevronRight />} onClick={prev}>
-              {t("prev")}
+              {t('prev')}
             </Button>
           )}
           {active == stepInside.length - 2 ? (
@@ -195,25 +198,25 @@ const CustomModal = ({
               rightSection={
                 <MdSend
                   style={{
-                    transform: "rotate(-180deg)",
+                    transform: 'rotate(-180deg)',
                   }}
                 />
               }
-              type="submit"
+              type='submit'
               onClick={submitInside}
             >
-              {t("submit")}
+              {t('submit')}
             </Button>
           ) : (
             active !== stepInside.length - 1 && (
               <Button rightSection={<TbChevronLeft />} onClick={next}>
-                {t("next")}
+                {t('next')}
               </Button>
             )
           )}
           {active == stepInside.length - 1 && !editId && (
             <Button rightSection={<FaArrowRotateLeft />} onClick={restart}>
-              {t("restart")}
+              {t('restart')}
             </Button>
           )}
         </Group>

@@ -10,13 +10,8 @@ import { redirect } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import * as z from 'zod';
 
-<<<<<<< HEAD:components/auth/LoginForm/LoginForm.tsx
-import { FormError } from '@/components/FormError';
-import { CardWrapper } from '../CardWrapper/CardWrapper';
-=======
 import { FormError } from "@/components/FormError";
 import CardWrapper from "./CardWrapper";
->>>>>>> 38441230a9161de241b53e651abb26d93c602a20:components/Auth/LoginForm.tsx
 
 export const LoginForm = ({ lng }: { lng: string }) => {
   const [error, setError] = useState<string | undefined>('');
@@ -39,60 +34,6 @@ export const LoginForm = ({ lng }: { lng: string }) => {
         redirect: false,
       });
 
-<<<<<<< HEAD:components/auth/LoginForm/LoginForm.tsx
-      if (!res?.error) {
-        redirect('/dashboard');
-      }
-      setError(t('invalid_credentials'));
-    });
-  };
-
-  return (
-    <CardWrapper headerLabel={t('welcome_back')}>
-      <Box component='form' onSubmit={form.onSubmit(onSubmit)}>
-        <TextInput
-          label={t('email_or_username')}
-          placeholder={t('enter_email_or_username')}
-          withAsterisk
-          mt='md'
-          {...form.getInputProps('email_or_username')}
-          disabled={isPending}
-        />
-        <PasswordInput
-          label={t('password')}
-          placeholder='********'
-          type='password'
-          withAsterisk
-          {...form.getInputProps('password')}
-          disabled={isPending}
-          mt='md'
-        />
-        <FormError message={error} />
-        <Button type='submit' fullWidth mt='md'>
-          {isPending ? (
-            <Loader
-              className='loadingButton'
-              type='bars'
-              color='white'
-              size={32}
-            />
-          ) : (
-            t('login')
-          )}
-        </Button>
-      </Box>
-      <style jsx>{`
-        .loadingButton {
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .loadingButton:hover {
-          fill: white;
-        }
-      `}</style>
-    </CardWrapper>
-  );
-=======
 			if (!res?.error) {
 				redirect("/office");
 			}
@@ -145,5 +86,4 @@ export const LoginForm = ({ lng }: { lng: string }) => {
 			`}</style>
 		</CardWrapper>
 	);
->>>>>>> 38441230a9161de241b53e651abb26d93c602a20:components/Auth/LoginForm.tsx
 };
