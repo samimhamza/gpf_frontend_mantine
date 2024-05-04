@@ -111,6 +111,7 @@ const SurveyPlansModal = ({
         }
       })();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editId]);
 
   useEffect(() => {
@@ -127,23 +128,8 @@ const SurveyPlansModal = ({
         );
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   (async function () {
-  //     const { response, status, error } = await callApi({
-  //       method: "GET",
-  //       url: "/all_districts",
-  //     });
-  //     if (status == 200 && response.result == true) {
-  //       setDistricts(
-  //         response.data.map((item: any) => {
-  //           return { value: item.id.toString(), label: item.name_fa };
-  //         })
-  //       );
-  //     }
-  //   })();
-  // }, []);
 
   const steps = [
     {
@@ -176,6 +162,12 @@ const SurveyPlansModal = ({
       ),
       async validate() {
         form.validate();
+        if (!form.values.start_date) {
+          setStartDateErrorMessage(t("field_required"));
+        }
+        if (!form.values.end_date) {
+          setEndDateErrorMessage(t("field_required"));
+        }
         let res = form.isValid();
         if (res) {
           let { response, status } = await callApi({

@@ -19,7 +19,6 @@ const TeamStepOne = ({
   office,
 }: TeamStepOneProps) => {
   const { t } = useTranslation(lng);
-
   return (
     <>
       <Flex
@@ -52,8 +51,6 @@ const TeamStepOne = ({
             searchable
             clearable
             nothingFoundMessage={t("noting_found")}
-            // onSearchChange={handleSearch}
-            // rightSection={loading && <Loader color="primary" size={15} />}
             {...form.getInputProps("office_id")}
           />
         </Flex>

@@ -3,14 +3,7 @@
 import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { getTime } from "@/shared/functions";
-import {
-  Flex,
-  Loader,
-  Select,
-  Spoiler,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
+import { Flex, Loader, Select, Textarea, TextInput } from "@mantine/core";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Value } from "react-multi-date-picker";
 import { useAxios } from "@/customHooks/useAxios";
@@ -59,6 +52,7 @@ const SurveyPlanStepOne = ({
     } else {
       form.setFieldValue("start_date", null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate]);
 
   useEffect(() => {
@@ -68,6 +62,7 @@ const SurveyPlanStepOne = ({
     } else {
       form.setFieldValue("end_date", null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endDate]);
 
   useEffect(() => {
@@ -76,11 +71,13 @@ const SurveyPlanStepOne = ({
         setEndDateErrorMessage(t("end_date_must_be_greater"));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate]);
 
   useEffect(() => {
     (async function () {
       if (form?.values?.province_id) {
+        form.setValues({ district_id: null });
         setLoading(true);
         const { response, status, error } = await callApi({
           method: "GET",
@@ -96,7 +93,8 @@ const SurveyPlanStepOne = ({
         setLoading(false);
       }
     })();
-  }, [form?.values?.province_id, callApi, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form?.values?.province_id]);
 
   return (
     <>
