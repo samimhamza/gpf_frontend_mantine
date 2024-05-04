@@ -38,8 +38,8 @@ const SurveyPlansModal = ({
   const [endDate, setEndDate] = useState<Value>();
   const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
   const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
-  const [districts, setDistricts] = useState([]);
   const [provinces, setProvinces] = useState([]);
+  // const [districts, setDistricts] = useState([]);
 
   const initialValues: any = {
     title: "",
@@ -129,21 +129,21 @@ const SurveyPlansModal = ({
     })();
   }, []);
 
-  useEffect(() => {
-    (async function () {
-      const { response, status, error } = await callApi({
-        method: "GET",
-        url: "/all_districts",
-      });
-      if (status == 200 && response.result == true) {
-        setDistricts(
-          response.data.map((item: any) => {
-            return { value: item.id.toString(), label: item.name_fa };
-          })
-        );
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async function () {
+  //     const { response, status, error } = await callApi({
+  //       method: "GET",
+  //       url: "/all_districts",
+  //     });
+  //     if (status == 200 && response.result == true) {
+  //       setDistricts(
+  //         response.data.map((item: any) => {
+  //           return { value: item.id.toString(), label: item.name_fa };
+  //         })
+  //       );
+  //     }
+  //   })();
+  // }, []);
 
   const steps = [
     {
@@ -170,8 +170,6 @@ const SurveyPlansModal = ({
             setStartDateErrorMessage={setStartDateErrorMessage}
             endDateErrorMessage={endDateErrorMessage}
             setEndDateErrorMessage={setEndDateErrorMessage}
-            districts={districts}
-            setDistricts={setDistricts}
             provinces={provinces}
           />
         </Box>

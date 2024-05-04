@@ -3,9 +3,17 @@
 import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { getTime } from "@/shared/functions";
-import { Flex, Select, Spoiler, Textarea, TextInput } from "@mantine/core";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import {
+  Flex,
+  Loader,
+  Select,
+  Spoiler,
+  Textarea,
+  TextInput,
+} from "@mantine/core";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Value } from "react-multi-date-picker";
+import { useAxios } from "@/customHooks/useAxios";
 
 interface SurveyPlanStepOneProps {
   form: any;
@@ -21,9 +29,7 @@ interface SurveyPlanStepOneProps {
   setEndDate: Dispatch<SetStateAction<Value | undefined>>;
   endDateErrorMessage: string;
   setEndDateErrorMessage: Dispatch<SetStateAction<string>>;
-  districts: Array<{ value: string; label: string }>;
   provinces: Array<{ value: string; label: string }>;
-  setDistricts: any;
 }
 
 const SurveyPlanStepOne = ({
@@ -39,11 +45,12 @@ const SurveyPlanStepOne = ({
   setEndDate,
   endDateErrorMessage,
   setEndDateErrorMessage,
-  districts,
-  setDistricts,
   provinces,
 }: SurveyPlanStepOneProps) => {
   const { t } = useTranslation(lng);
+  const [districts, setDistricts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const callApi = useAxios();
 
   useEffect(() => {
     if (startDate) {
@@ -70,6 +77,26 @@ const SurveyPlanStepOne = ({
       }
     }
   }, [startDate, endDate]);
+
+  useEffect(() => {
+    (async function () {
+      if (form?.values?.province_id) {
+        setLoading(true);
+        const { response, status, error } = await callApi({
+          method: "GET",
+          url: `/all_districts?province_id=${form?.values?.province_id}`,
+        });
+        if (status == 200 && response.result == true) {
+          setDistricts(
+            response.data.map((item: any) => {
+              return { value: item.id.toString(), label: item.name_fa };
+            })
+          );
+        }
+        setLoading(false);
+      }
+    })();
+  }, [form?.values?.province_id, callApi, form]);
 
   return (
     <>
@@ -117,6 +144,7 @@ const SurveyPlanStepOne = ({
           {...form.getInputProps("province_id")}
         />
         <Select
+          disabled={districts.length < 1}
           style={{ flex: 1 }}
           label={t("districts")}
           placeholder={t("districts")}
@@ -124,6 +152,7 @@ const SurveyPlanStepOne = ({
           searchable
           clearable
           nothingFoundMessage={t("noting_found")}
+          rightSection={loading && <Loader color="primary" size={15} />}
           {...form.getInputProps("district_id")}
         />
       </Flex>
