@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { applicantStatuses } from "@/shared/columns";
+import { FourSharedStatuses } from "@/shared/columns";
 import { Genders, getType, StaffTypes, SurveyTypes } from "@/shared/constants";
 import { getDateTime } from "@/shared/functions";
 import {
@@ -54,7 +54,7 @@ const ApplicantInfo = ({
   const staffTypes = StaffTypes(t);
   const theme = useMantineTheme();
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const statuses = applicantStatuses(t);
+  const statuses = FourSharedStatuses(t);
   const callApi = useAxios();
   const [statusLoading, setStatusLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);

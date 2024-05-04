@@ -2,6 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
+import { FourSharedStatuses } from "@/shared/columns";
 import { getDateTime } from "@/shared/functions";
 import {
   Badge,
@@ -24,38 +25,34 @@ import toast from "react-hot-toast";
 import { GoChevronDown } from "react-icons/go";
 import { TbEdit } from "react-icons/tb";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
-import {
-  CHANGE_STATUS,
-  UPDATE_SURVEY_PLANS,
-} from "@/shared/constants/Permissions";
-import SurveyPlansModal from "./SurveyPlansModal";
-import { ThreeSharedStatuses } from "@/shared/columns";
+import { CHANGE_STATUS, UPDATE_MOSQUES } from "@/shared/constants/Permissions";
+import MosqueModal from "./MosqueModal";
 
-const SurveyPlanInfo = ({
-  surveyPlanId,
+const MosqueInfo = ({
+  mosqueId,
   databaseID,
   lng,
-  surveyPlan,
+  mosque,
   loading,
   mutate,
 }: {
-  surveyPlanId: string | undefined;
+  mosqueId: string | undefined;
   databaseID: number;
   lng: string;
-  surveyPlan: any;
+  mosque: any;
   loading: boolean;
   mutate: any;
 }) => {
   const { t } = useTranslation(lng);
   const theme = useMantineTheme();
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const statuses = ThreeSharedStatuses(t);
+  const statuses = FourSharedStatuses(t);
   const callApi = useAxios();
   const [statusLoading, setStatusLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
   const checkPermission = (permission: string) => {
     const hasPermission = permissionChecker(permission);
-    return hasPermission && surveyPlan?.status == "active";
+    return hasPermission && mosque?.status == "active";
   };
 
   const getStatus = (status: string) => {
@@ -81,7 +78,7 @@ const SurveyPlanInfo = ({
       setStatusLoading(true);
       const { status } = await callApi({
         method: "PUT",
-        url: "survey_plans/" + id + "/status",
+        url: "mosques/" + id + "/status",
         data: {
           status: newStatus,
         },
@@ -100,7 +97,7 @@ const SurveyPlanInfo = ({
   const badge = (
     <Badge
       style={{ cursor: "pointer" }}
-      color={getStatus(surveyPlan?.status)?.color}
+      color={getStatus(mosque?.status)?.color}
       rightSection={<GoChevronDown size={16} />}
       p="sm"
     >
@@ -110,7 +107,7 @@ const SurveyPlanInfo = ({
         </Center>
       ) : (
         <Text size="md" fw={500}>
-          {getStatus(surveyPlan?.status)?.text}
+          {getStatus(mosque?.status)?.text}
         </Text>
       )}
     </Badge>
@@ -127,19 +124,19 @@ const SurveyPlanInfo = ({
           gap="sm"
           wrap="wrap"
         >
-          <Title order={3}>{t("survey_plan_info")}</Title>
+          <Title order={3}>{t("mosque_info")}</Title>
           <Group>
             {permissionChecker(CHANGE_STATUS) ? (
               <Menu shadow="md" width={100}>
                 <Menu.Target>{badge}</Menu.Target>
                 <Menu.Dropdown>
-                  {getMenu(surveyPlan?.id, surveyPlan?.status)}
+                  {getMenu(mosque?.id, mosque?.status)}
                 </Menu.Dropdown>
               </Menu>
             ) : (
               badge
             )}
-            {checkPermission(UPDATE_SURVEY_PLANS) && (
+            {checkPermission(UPDATE_MOSQUES) && (
               <Button
                 onClick={() => open()}
                 rightSection={<TbEdit size={16} />}
@@ -155,7 +152,6 @@ const SurveyPlanInfo = ({
             zIndex={1000}
             overlayProps={{ radius: "sm", blur: 2 }}
           />
-
           <Flex
             px="sm"
             direction={{ base: "column", sm: "row" }}
@@ -166,59 +162,11 @@ const SurveyPlanInfo = ({
           >
             <Group flex={1} wrap="nowrap" className="flex-item">
               <Text className="title">{t("id")} :</Text>
-              <Text>{surveyPlanId}</Text>
+              <Text>{mosqueId}</Text>
             </Group>
-            <Group flex={1} wrap="nowrap">
-              <Text className="title">{t("office")} :</Text>
-              <Text>{surveyPlan?.office?.name}</Text>
-            </Group>
-          </Flex>
-          <Flex
-            px="sm"
-            direction={{ base: "column", sm: "row" }}
-            gap="sm"
-            pt="sm"
-            justify="center"
-          >
             <Group flex={1} wrap="nowrap">
               <Text className="title">{t("name")} :</Text>
-              <Text>{surveyPlan?.title}</Text>
-            </Group>
-            <Group flex={1}>
-              <Text className="title">{t("status")} :</Text>
-              <Text>{surveyPlan?.status}</Text>
-            </Group>
-          </Flex>
-          <Flex
-            px="sm"
-            direction={{ base: "column", sm: "row" }}
-            gap="sm"
-            pt="sm"
-            justify="center"
-          >
-            <Group flex={1} wrap="nowrap">
-              <Text className="title">{t("province")} :</Text>
-              <Text>{surveyPlan?.province?.name_fa}</Text>
-            </Group>
-            <Group flex={1}>
-              <Text className="title">{t("district")} :</Text>
-              <Text>{surveyPlan?.district?.name_fa}</Text>
-            </Group>
-          </Flex>
-          <Flex
-            px="sm"
-            direction={{ base: "column", sm: "row" }}
-            gap="sm"
-            pt="sm"
-            justify="center"
-          >
-            <Group flex={1}>
-              <Text className="title">{t("created_by")} :</Text>
-              <Text>{surveyPlan?.created_by?.username}</Text>
-            </Group>
-            <Group flex={1}>
-              <Text className="title">{t("updated_by")} :</Text>
-              <Text>{surveyPlan?.updated_by?.username}</Text>
+              <Text>{mosque?.name}</Text>
             </Group>
           </Flex>
           <Flex
@@ -230,40 +178,28 @@ const SurveyPlanInfo = ({
           >
             <Group flex={1}>
               <Text className="title">{t("created_at")} :</Text>
-              {surveyPlan?.created_at && (
-                <Text>{getDateTime(surveyPlan?.created_at)}</Text>
+              {mosque?.created_at && (
+                <Text>{getDateTime(mosque?.created_at)}</Text>
               )}
             </Group>
             <Group flex={1}>
               <Text className="title">{t("updated_at")} :</Text>
-              {surveyPlan?.updated_at && (
-                <Text>{getDateTime(surveyPlan?.updated_at)}</Text>
+              {mosque?.updated_at && (
+                <Text>{getDateTime(mosque?.updated_at)}</Text>
               )}
-            </Group>
-          </Flex>
-          <Flex
-            px="sm"
-            direction={{ base: "column", sm: "row" }}
-            gap="sm"
-            pt="sm"
-            justify="center"
-          >
-            <Group flex={1}>
-              <Text className="title">{t("description")} :</Text>
-              {surveyPlan?.description}
             </Group>
           </Flex>
         </Box>
       </Paper>
       {opened && (
-        <SurveyPlansModal
+        <MosqueModal
           opened={opened}
           close={() => {
             close();
           }}
           lng={lng}
           setMutated={mutate}
-          title={t("update_survey_plan")}
+          title={t("update_mosque")}
           editId={databaseID}
         />
       )}
@@ -289,4 +225,4 @@ const SurveyPlanInfo = ({
   );
 };
 
-export default SurveyPlanInfo;
+export default MosqueInfo;

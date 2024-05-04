@@ -14,8 +14,10 @@ import {
   UPDATE_MOSQUES,
   CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
+import { useRouter } from "next/navigation";
 
 export const MosqueModule = ({ lng }: { lng: string }) => {
+  const router = useRouter();
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
   const columns = MosqueColumns(
@@ -33,6 +35,12 @@ export const MosqueModule = ({ lng }: { lng: string }) => {
       open();
     }
   }, [edit, open]);
+
+  useEffect(() => {
+    if (view) {
+      router.push(`/covered_areas/mosques/${view}`);
+    }
+  }, [view, router]);
 
   return (
     <>

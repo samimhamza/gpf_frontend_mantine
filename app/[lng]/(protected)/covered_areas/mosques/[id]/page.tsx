@@ -1,8 +1,8 @@
-import { SchoolInfoModule } from "@/components/modules/schools/SchoolInfoModule";
+import { MosqueInfoModule } from "@/components/modules/mosques/MosqueInfoModule";
 import usePermissionChecker from "@/customHooks/usePermissionChecker";
 import { VIEW_USERS } from "@/shared/constants/Permissions";
 
-const SchoolPage = async ({
+const MosquePage = async ({
   params: { lng, id },
 }: {
   params: {
@@ -12,7 +12,7 @@ const SchoolPage = async ({
 }) => {
   await usePermissionChecker(VIEW_USERS);
 
-  return <SchoolInfoModule lng={lng} id={id} />;
+  return <MosqueInfoModule lng={lng} id={id} />;
 };
 
-export default SchoolPage;
+export default MosquePage;
