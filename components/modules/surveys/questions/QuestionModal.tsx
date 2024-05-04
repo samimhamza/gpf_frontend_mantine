@@ -41,16 +41,14 @@ const QuestionModal = ({
 	const [formSchema, setFormSchema] = useState<any>(descriptiveQuestionSchema);
 	const [fieldSetError, setFieldSetError] = useState(false);
 
-	const initialValues: any = useMemo(() => {
-		return {
-			question: "",
-			code: "",
-			type: "",
-			parent_id: "",
-			mark: "",
-			choices: [{ id: "", answer: "", mark: "" }],
-		};
-	}, []);
+	const initialValues: any = {
+		question: "",
+		code: "",
+		type: "",
+		parent_id: "",
+		mark: "",
+		choices: [{ id: "", answer: "", mark: "" }],
+	};
 
 	const form = useForm({
 		initialValues: initialValues,
@@ -116,7 +114,7 @@ const QuestionModal = ({
 				}
 			})();
 		}
-	}, [editId, callApi, initialValues]);
+	}, [editId, callApi]);
 
 	useEffect(() => {
 		(async function () {
@@ -212,11 +210,7 @@ const QuestionModal = ({
 			setFormSchema(descriptiveQuestionSchema);
 			setShowSecondStep(false);
 		}
-	}, [
-		form.values?.type,
-		multipleChoiceQuestionSchema,
-		descriptiveQuestionSchema,
-	]);
+	}, [form.values?.type]);
 
 	return (
 		<form>
