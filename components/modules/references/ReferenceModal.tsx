@@ -3,6 +3,7 @@
 import { useTranslation } from '@/app/i18n/client';
 import CustomModal from '@/components/CustomModal';
 import { useAxios } from '@/customHooks/useAxios';
+import useOffice from '@/customHooks/useOffice';
 import { ReferenceSchema } from '@/schemas/models/references';
 import { Box, LoadingOverlay } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
@@ -46,6 +47,8 @@ const ReferenceModal = ({
     validate: zodResolver(referenceSchema),
     validateInputOnBlur: true,
   });
+
+  const { offices, office } = useOffice(form);
 
   const submit = async () => {
     const { response, status } = !editId
@@ -105,7 +108,12 @@ const ReferenceModal = ({
             zIndex={1000}
             overlayProps={{ radius: 'sm', blur: 2 }}
           />
-          <ReferenceStepOne form={form} lng={lng} />
+          <ReferenceStepOne
+            offices={offices}
+            office={office}
+            form={form}
+            lng={lng}
+          />
         </Box>
       ),
 

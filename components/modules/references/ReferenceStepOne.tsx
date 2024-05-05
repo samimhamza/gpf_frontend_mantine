@@ -1,14 +1,21 @@
 'use client';
 
 import { useTranslation } from '@/app/i18n/client';
-import { Flex, TextInput } from '@mantine/core';
+import { Flex, Select, TextInput } from '@mantine/core';
 
 interface ReferenceStepOneProps {
   form: any;
   lng: string;
+  offices: Array<{ value: string; label: string }>;
+  office: string | null;
 }
 
-const ReferenceStepOne = ({ form, lng }: ReferenceStepOneProps) => {
+const ReferenceStepOne = ({
+  form,
+  lng,
+  office,
+  offices,
+}: ReferenceStepOneProps) => {
   const { t } = useTranslation(lng);
 
   return (
@@ -68,13 +75,28 @@ const ReferenceStepOne = ({ form, lng }: ReferenceStepOneProps) => {
         p='sm'
         justify={{ sm: 'center' }}
       >
-        <TextInput
-          style={{ flex: 1 }}
-          label={t('office_id')}
-          placeholder={t('office_id')}
-          withAsterisk
-          {...form.getInputProps('office_id')}
-        />
+        {office == 'all' && (
+          <Flex
+            direction={{ base: 'column', sm: 'row' }}
+            gap='sm'
+            p='sm'
+            justify={{ sm: 'center' }}
+          >
+            <Select
+              style={{ flex: 1 }}
+              label={t('office')}
+              placeholder={t('office')}
+              withAsterisk
+              data={offices}
+              searchable
+              clearable
+              nothingFoundMessage={t('noting_found')}
+              // onSearchChange={handleSearch}
+              // rightSection={loading && <Loader color="primary" size={15} />}
+              {...form.getInputProps('office_id')}
+            />
+          </Flex>
+        )}
         <TextInput
           style={{ flex: 1 }}
           label={t('user_id')}
