@@ -1,26 +1,76 @@
 import * as z from "zod";
 
-export const OfficeSchema = (t: (arg: string) => string) => {
+export const ReferenceSchema = (t: (arg: string) => string) => {
 	return z.object({
-		name: z
-			.string({
+		office_id: z
+			.number({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(3, {
-				message: t("min_3_length_error"),
+			.min(1, {
+				message: t("min_2_length_error"),
 			})
 			.max(64, {
-				message: t("max_64_length_error"),
+				message: t("max_16_length_error"),
 			}),
-		code: z
+		first_name: z
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
 			.min(2, {
-				message: t("min_3_length_error"),
+				message: t("min_2_length_error"),
 			})
 			.max(16, {
-				message: t("max_64_length_error"),
+				message: t("max_16_length_error"),
+			}),
+		last_name: z
+			.string({
+				invalid_type_error: t("invalid_type"),
+			})
+			.min(2, {
+				message: t("min_2_length_error"),
+			})
+			.max(16, {
+				message: t("max_16_length_error"),
+			}),
+		father_name: z
+			.string({
+				invalid_type_error: t("invalid_type"),
+			})
+			.min(2, {
+				message: t("min_2_length_error"),
+			})
+			.max(16, {
+				message: t("max_16_length_error"),
+			}),
+		position_name: z
+			.string({
+				invalid_type_error: t("invalid_type"),
+			})
+			.min(2, {
+				message: t("min_2_length_error"),
+			})
+			.max(16, {
+				message: t("max_16_length_error"),
+			}),
+		job_location: z
+			.string({
+				invalid_type_error: t("invalid_type"),
+			})
+			.min(2, {
+				message: t("min_2_length_error"),
+			})
+			.max(16, {
+				message: t("max_16_length_error"),
+			}),
+		user_id: z
+			.number({
+				invalid_type_error: t("invalid_type"),
+			})
+			.min(2, {
+				message: t("min_2_length_error"),
+			})
+			.max(16, {
+				message: t("max_16_length_error"),
 			}),
 	});
 };

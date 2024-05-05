@@ -51,7 +51,6 @@ const CustomModal = ({
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
   const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 
-  console.log(form);
   
   let doneStep = {
     title: t('done'),
@@ -63,7 +62,6 @@ const CustomModal = ({
     ? [...steps, dynamicStep, doneStep]
     : [...steps, doneStep];
 
-    console.log(stepInside)
 
   const next = async () => {
     setLoading(active);

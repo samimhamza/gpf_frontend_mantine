@@ -3,7 +3,7 @@
 import { useTranslation } from '@/app/i18n/client';
 import CustomModal from '@/components/CustomModal';
 import { useAxios } from '@/customHooks/useAxios';
-import { OfficeSchema } from '@/schemas/models/offices';
+import { ReferenceSchema } from '@/schemas/models/references';
 import { Box, LoadingOverlay } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useEffect, useState } from 'react';
@@ -27,19 +27,23 @@ const ReferenceModal = ({
   editId: number | undefined;
 }) => {
   const { t } = useTranslation(lng);
-  const officeSchema = OfficeSchema(t);
+  const referenceSchema = ReferenceSchema(t);
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
 
   const initialValues: any = {
-    name: '',
-    code: '',
-    car: '',
+    office_id: null,
+    first_name: '',
+    last_name: '',
+    father_name: '',
+    position_name: '',
+    job_location: '',
+    user_id: null,
   };
 
   const form = useForm({
     initialValues: initialValues,
-    validate: zodResolver(officeSchema),
+    validate: zodResolver(referenceSchema),
     validateInputOnBlur: true,
   });
 
@@ -74,7 +78,7 @@ const ReferenceModal = ({
         setLoading(true);
         const { response, status, error } = await callApi({
           method: 'GET',
-          url: `/offices/${editId}`,
+          url: `/references/${editId}`,
         });
         if (status == 200 && response.result == true) {
           let values: any = {};
@@ -147,7 +151,7 @@ const ReferenceModal = ({
         lng={lng}
         title={title}
         editId={editId}
-        width='40%'
+        width='60%'
       />
     </form>
   );
