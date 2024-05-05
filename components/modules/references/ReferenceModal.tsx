@@ -4,6 +4,7 @@ import { useTranslation } from '@/app/i18n/client';
 import CustomModal from '@/components/CustomModal';
 import { useAxios } from '@/customHooks/useAxios';
 import useOffice from '@/customHooks/useOffice';
+import useUsers from '@/customHooks/useUser';
 import { ReferenceSchema } from '@/schemas/models/references';
 import { Box, LoadingOverlay } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
@@ -39,7 +40,7 @@ const ReferenceModal = ({
     father_name: '',
     position_name: '',
     job_location: '',
-    user_id: null,
+    user_id: '',
   };
 
   const form = useForm({
@@ -49,6 +50,12 @@ const ReferenceModal = ({
   });
 
   const { offices, office } = useOffice(form);
+  const { users, user } = useUsers(form);
+
+
+  console.log(offices);
+
+  console.log(users.length);
 
   const submit = async () => {
     const { response, status } = !editId
