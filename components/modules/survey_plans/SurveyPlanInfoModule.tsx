@@ -6,6 +6,7 @@ import { useAxios } from "@/customHooks/useAxios";
 import useSWR from "swr";
 import { getID } from "@/shared/functions";
 import SurveyPlanInfo from "./SurveyPlanInfo";
+import SurveyPlanQuestionsInfo from "./SurveyPlanQuestionsInfo";
 
 export const SurveyPlanInfoModule = ({
   lng,
@@ -51,6 +52,7 @@ export const SurveyPlanInfoModule = ({
         loading={isLoading}
         mutate={mutate}
       />
+      <SurveyPlanQuestionsInfo lng={lng} loading={isLoading} data={data} />
     </>
   );
 };
