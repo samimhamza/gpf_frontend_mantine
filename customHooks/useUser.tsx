@@ -24,7 +24,7 @@ const useUsers = (form?: any) => {
             response.data.map((item: any) => {
               return {
                 value: item.id.toString(),
-                label: item.full_name + ' (' + item.id + ')',
+                label: `${item.id}-${item.full_name}`,
               };
             })
           );

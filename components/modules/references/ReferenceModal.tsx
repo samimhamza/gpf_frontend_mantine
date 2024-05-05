@@ -52,11 +52,6 @@ const ReferenceModal = ({
   const { offices, office } = useOffice(form);
   const { users, user } = useUsers(form);
 
-
-  console.log(offices);
-
-  console.log(users.length);
-
   const submit = async () => {
     const { response, status } = !editId
       ? await callApi({
@@ -120,6 +115,8 @@ const ReferenceModal = ({
             office={office}
             form={form}
             lng={lng}
+            users={users}
+            user={user}
           />
         </Box>
       ),

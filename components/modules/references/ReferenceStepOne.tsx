@@ -8,6 +8,8 @@ interface ReferenceStepOneProps {
   lng: string;
   offices: Array<{ value: string; label: string }>;
   office: string | null;
+  users: Array<{ value: string; label: string }>;
+  user: string | null;
 }
 
 const ReferenceStepOne = ({
@@ -15,8 +17,15 @@ const ReferenceStepOne = ({
   lng,
   office,
   offices,
+  user,
+  users,
 }: ReferenceStepOneProps) => {
   const { t } = useTranslation(lng);
+
+  // ! Sorted by id
+  const sortedUserById = users.sort(
+    (a: { value: any }, b: { value: any }) => a.value - b.value
+  );
 
   return (
     <>
@@ -73,7 +82,7 @@ const ReferenceStepOne = ({
         direction={{ base: 'column', sm: 'row' }}
         gap='sm'
         p='sm'
-        justify={{ sm: 'center' }}
+        justify={{ sm: 'left' }}
       >
         {office == 'all' && (
           <Flex
@@ -97,13 +106,28 @@ const ReferenceStepOne = ({
             />
           </Flex>
         )}
-        <TextInput
-          style={{ flex: 1 }}
-          label={t('user_id')}
-          placeholder={t('user_id')}
-          withAsterisk
-          {...form.getInputProps('user_id')}
-        />
+        {user == 'all' && (
+          <Flex
+            direction={{ base: 'column', sm: 'row' }}
+            gap='sm'
+            p='sm'
+            justify={{ sm: 'left' }}
+          >
+            <Select
+              style={{ flex: 2 }}
+              label={t('user')}
+              placeholder={t('user')}
+              withAsterisk
+              data={sortedUserById}
+              searchable
+              clearable
+              nothingFoundMessage={t('noting_found')}
+              // onSearchChange={handleSearch}
+              // rightSection={loading && <Loader color="primary" size={15} />}
+              {...form.getInputProps('user_id')}
+            />
+          </Flex>
+        )}
       </Flex>
     </>
   );
