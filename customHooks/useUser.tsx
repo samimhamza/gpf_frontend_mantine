@@ -10,14 +10,13 @@ const useUsers = (form?: any) => {
   const user: string | null = readLocalStorageValue({ key: 'office' }) || 'all';
   const callApi = useAxios();
 
-  console.log(user);
-
   useEffect(() => {
     if (user == 'all') {
       (async function () {
         const { response, status, error } = await callApi({
           method: 'GET',
           url: '/users',
+          params: { per_page: 1000 }, // ! TODO Later -------------
         });
 
         if (status == 200 && response.result == true) {
