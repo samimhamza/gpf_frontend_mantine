@@ -96,7 +96,7 @@ const ReferenceModal = ({
 
   const steps = [
     {
-      title: t('office_info'),
+      title: t('references_info'),
       icon: <IoHome size={22} />,
       step: (
         <Box pos='relative'>

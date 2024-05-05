@@ -217,6 +217,7 @@
   "answer": "جواب",
   "choices": "گزینه ها",
   "references": "منابع",
+  "references_info": "اطلاعات مرجع",
   "add_reference": "ایجاد مرجع جدید",
   "update_reference": "ویرایش مرجع",
   "job_location": "محل کار",
