@@ -9,8 +9,9 @@ import { zodResolver } from "mantine-form-zod-resolver";
 import * as z from "zod";
 import { signIn } from "next-auth/react";
 import { redirect } from "next/navigation";
+
 import { FormError } from "@/components/FormError";
-import { CardWrapper } from "../CardWrapper/CardWrapper";
+import CardWrapper from "./CardWrapper";
 
 export const LoginForm = ({ lng }: { lng: string }) => {
 	const [error, setError] = useState<string | undefined>("");
@@ -34,7 +35,7 @@ export const LoginForm = ({ lng }: { lng: string }) => {
 			});
 
 			if (!res?.error) {
-				redirect("/dashboard");
+				redirect("/office");
 			}
 			setError(t("invalid_credentials"));
 		});
@@ -67,7 +68,7 @@ export const LoginForm = ({ lng }: { lng: string }) => {
 							className="loadingButton"
 							type="bars"
 							color="white"
-							size={32}
+							size={27}
 						/>
 					) : (
 						t("login")
