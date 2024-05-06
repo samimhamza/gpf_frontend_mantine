@@ -93,12 +93,12 @@ export function AdminLayout({
     />
   ));
 
-  const checkAdmin = useCallback(() => {
+  const checkIsMultipleOffice = useCallback(() => {
     return session?.user?.permissions?.includes(MULTIPLE_OFFICE);
-  }, [session?.user?.roles]);
+  }, [session?.user?.permissions]);
 
   useEffect(() => {
-    if (checkAdmin()) {
+    if (checkIsMultipleOffice()) {
       if (office) {
         if (office !== "all") {
           (async function () {
@@ -121,7 +121,7 @@ export function AdminLayout({
     } else {
       localStorage.setItem("office", session?.user?.office_id?.toString());
     }
-  }, [office, checkAdmin, callApi, session?.user]);
+  }, [office, checkIsMultipleOffice, callApi, session?.user]);
 
   return (
     <>
@@ -145,7 +145,7 @@ export function AdminLayout({
               />
               <Image src="/images/logo.png" width={50} height={50} alt="logo" />
               <Title order={4}>{t("gpf")}</Title>
-              {checkAdmin() ? (
+              {checkIsMultipleOffice() ? (
                 <Button
                   variant="default"
                   mx="xl"
