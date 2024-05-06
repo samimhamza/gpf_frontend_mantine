@@ -27,7 +27,7 @@ import { useAxios } from "@/customHooks/useAxios";
 import { useCallback, useEffect, useState } from "react";
 import { NavItems } from "./NavItems";
 import SelectOfficeModal from "../Office/SelectOfficeModal";
-import { ADMIN, SUPERADMIN } from "@/shared/constants/Roles";
+import { MULTIPLE_OFFICE } from "@/shared/constants/Permissions";
 
 const getNameAbbr = (name: string) => {
   var words = name.split(" ");
@@ -93,15 +93,12 @@ export function AdminLayout({
     />
   ));
 
-  const checkAdmin = useCallback(() => {
-    return (
-      session?.user?.roles?.includes(ADMIN) ||
-      session?.user?.roles?.includes(SUPERADMIN)
-    );
-  }, [session?.user?.roles]);
+  const checkIsMultipleOffice = useCallback(() => {
+    return session?.user?.permissions?.includes(MULTIPLE_OFFICE);
+  }, [session?.user?.permissions]);
 
   useEffect(() => {
-    if (checkAdmin()) {
+    if (checkIsMultipleOffice()) {
       if (office) {
         if (office !== "all") {
           (async function () {
@@ -124,7 +121,7 @@ export function AdminLayout({
     } else {
       localStorage.setItem("office", session?.user?.office_id?.toString());
     }
-  }, [office, checkAdmin, callApi, session?.user]);
+  }, [office, checkIsMultipleOffice, callApi, session?.user]);
 
   return (
     <>
@@ -148,7 +145,7 @@ export function AdminLayout({
               />
               <Image src="/images/logo.png" width={50} height={50} alt="logo" />
               <Title order={4}>{t("gpf")}</Title>
-              {checkAdmin() ? (
+              {checkIsMultipleOffice() ? (
                 <Button
                   variant="default"
                   mx="xl"
