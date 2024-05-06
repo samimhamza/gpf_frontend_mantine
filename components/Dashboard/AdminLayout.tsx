@@ -27,7 +27,7 @@ import { useAxios } from "@/customHooks/useAxios";
 import { useCallback, useEffect, useState } from "react";
 import { NavItems } from "./NavItems";
 import SelectOfficeModal from "../Office/SelectOfficeModal";
-import { ADMIN, SUPERADMIN } from "@/shared/constants/Roles";
+import { MULTIPLE_OFFICE } from "@/shared/constants/Permissions";
 
 const getNameAbbr = (name: string) => {
   var words = name.split(" ");
@@ -94,10 +94,7 @@ export function AdminLayout({
   ));
 
   const checkAdmin = useCallback(() => {
-    return (
-      session?.user?.roles?.includes(ADMIN) ||
-      session?.user?.roles?.includes(SUPERADMIN)
-    );
+    return session?.user?.permissions?.includes(MULTIPLE_OFFICE);
   }, [session?.user?.roles]);
 
   useEffect(() => {
