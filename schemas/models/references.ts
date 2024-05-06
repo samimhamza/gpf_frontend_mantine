@@ -7,70 +7,64 @@ export const ReferenceSchema = (t: (arg: string) => string) => {
 				invalid_type_error: t("invalid_type"),
 			})
 			.min(1, {
-				message: t("min_2_length_error"),
-			})
-			.max(64, {
-				message: t("max_16_length_error"),
+				message: t("field_required"),
 			}),
 		first_name: z
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(2, {
-				message: t("min_2_length_error"),
+			.min(3, {
+				message: t("min_3_length_error"),
 			})
-			.max(16, {
-				message: t("max_16_length_error"),
+			.max(64, {
+				message: t("max_64_length_error"),
 			}),
 		last_name: z
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(2, {
-				message: t("min_2_length_error"),
+			.min(3, {
+				message: t("min_3_length_error"),
 			})
-			.max(16, {
-				message: t("max_16_length_error"),
+			.max(64, {
+				message: t("max_64_length_error"),
 			}),
 		father_name: z
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(2, {
-				message: t("min_2_length_error"),
+			.min(3, {
+				message: t("min_3_length_error"),
 			})
-			.max(16, {
-				message: t("max_16_length_error"),
+			.max(64, {
+				message: t("max_64_length_error"),
 			}),
-		position_name: z
+		position: z
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(2, {
-				message: t("min_2_length_error"),
+			.min(3, {
+				message: t("min_3_length_error"),
 			})
-			.max(16, {
-				message: t("max_16_length_error"),
+			.max(64, {
+				message: t("max_64_length_error"),
 			}),
 		job_location: z
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(2, {
-				message: t("min_2_length_error"),
+			.min(3, {
+				message: t("min_3_length_error"),
 			})
-			.max(16, {
-				message: t("max_16_length_error"),
+			.max(64, {
+				message: t("max_64_length_error"),
 			}),
 		user_id: z
 			.string({
 				invalid_type_error: t("invalid_type"),
 			})
-			.min(2, {
-				message: t("min_2_length_error"),
-			})
-			.max(16, {
-				message: t("max_16_length_error"),
+			.min(1, {
+				message: t("field_required"),
 			}),
 	});
 };
