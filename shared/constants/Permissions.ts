@@ -32,14 +32,10 @@ export const UPDATE_APPLICANT_SURVEYS = "update_applicant_surveys";
 export const DELETE_APPLICANT_SURVEYS = "delete_applicant_surveys";
 
 // Applicant Package Implements Permissions
-export const VIEW_APPLICANT_PACKAGE_IMPLEMENTS =
-  "view_applicant_package_implements";
-export const CREATE_APPLICANT_PACKAGE_IMPLEMENTS =
-  "create_applicant_package_implements";
-export const UPDATE_APPLICANT_PACKAGE_IMPLEMENTS =
-  "update_applicant_package_implements";
-export const DELETE_APPLICANT_PACKAGE_IMPLEMENTS =
-  "delete_applicant_package_implements";
+export const VIEW_PACKAGE_IMPLEMENTS = "view_package_implements";
+export const CREATE_PACKAGE_IMPLEMENTS = "create_package_implements";
+export const UPDATE_PACKAGE_IMPLEMENTS = "update_package_implements";
+export const DELETE_PACKAGE_IMPLEMENTS = "delete_package_implements";
 
 // Employees Permissions
 export const VIEW_EMPLOYEES = "view_employees";

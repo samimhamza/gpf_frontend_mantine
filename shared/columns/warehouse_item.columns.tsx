@@ -69,11 +69,20 @@ export const WarehouseItemTotalColumns = (t: (arg: string) => string) => {
       render: (item: any) => item.total_quantity + " " + item.item_unit,
     },
     {
-      accessor: "total_implements",
-      title: t("total_implements"),
+      accessor: "total_surveyd_implements",
+      title: t("total_surveyd_implements"),
       noWrap: true,
       textAlign: "center",
-      render: (item: any) => item.total_implements + " " + item.item_unit,
+      render: (item: any) =>
+        item.total_surveyd_implements + " " + item.item_unit,
+    },
+    {
+      accessor: "total_direct_implements",
+      title: t("total_direct_implements"),
+      noWrap: true,
+      textAlign: "center",
+      render: (item: any) =>
+        item.total_direct_implements + " " + item.item_unit,
     },
     {
       accessor: "remaining_quantity",
@@ -81,7 +90,10 @@ export const WarehouseItemTotalColumns = (t: (arg: string) => string) => {
       noWrap: true,
       textAlign: "center",
       render: (item: any) =>
-        item.total_quantity - item.total_implements + " " + item.item_unit,
+        item.total_quantity -
+        (item.total_surveyed_implements + item.total_direct_implements) +
+        " " +
+        item.item_unit,
     },
   ];
 };

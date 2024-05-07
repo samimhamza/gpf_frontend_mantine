@@ -30,7 +30,7 @@ import TeacherModal from "../../teachers/TeacherModal";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
   CHANGE_STATUS,
-  UPDATE_APPLICANT_PACKAGE_IMPLEMENTS,
+  UPDATE_PACKAGE_IMPLEMENTS,
 } from "@/shared/constants/Permissions";
 
 const ApplicantInfo = ({
@@ -147,7 +147,7 @@ const ApplicantInfo = ({
             </Center>
           )}
           <Group>
-            {checkPermission(UPDATE_APPLICANT_PACKAGE_IMPLEMENTS) && (
+            {checkPermission(UPDATE_PACKAGE_IMPLEMENTS) && (
               <Button
                 onClick={() => open()}
                 rightSection={<TbEdit size={16} />}
