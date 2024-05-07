@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { ActionIcon, Button, Group, Input, Paper } from "@mantine/core";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdFilter } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -19,6 +19,8 @@ interface ActionMenuProps {
   showDelete: boolean;
   deleteLoading: boolean;
   handleDelete: (e: any) => {};
+  openFilterCliked: any;
+  showFilter?: boolean;
 }
 
 const ActionMenu = ({
@@ -30,6 +32,8 @@ const ActionMenu = ({
   showDelete,
   deleteLoading,
   handleDelete,
+  openFilterCliked,
+  showFilter,
 }: ActionMenuProps) => {
   const { t } = useTranslation(lng);
   const [search, setSearch] = useState("");
@@ -44,6 +48,15 @@ const ActionMenu = ({
     <Paper p="md" withBorder shadow="sm" mb="md">
       <Group justify="space-between" align="center">
         <Group>
+          {showFilter && (
+            <Button
+              onClick={openFilterCliked}
+              rightSection={<MdFilter size={14} />}
+            >
+              {t("filter")}
+            </Button>
+          )}
+
           <Input
             radius="xl"
             placeholder={t("search")}
