@@ -12,10 +12,12 @@ import {
 } from '@/shared/constants/Permissions';
 import { permissionChecker } from '@/shared/functions/permissionChecker';
 import { useDisclosure } from '@mantine/hooks';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ReferenceModal from './ReferenceModal';
 
 export const ReferenceModule = ({ lng }: { lng: string }) => {
+  const router = useRouter();
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
 
@@ -35,6 +37,12 @@ export const ReferenceModule = ({ lng }: { lng: string }) => {
       open();
     }
   }, [edit, open]);
+
+  useEffect(() => {
+    if (view) {
+      router.push(`/references/${view}`);
+    }
+  }, [view, router]);
 
   return (
     <>
@@ -59,7 +67,6 @@ export const ReferenceModule = ({ lng }: { lng: string }) => {
         showAdd={permissionChecker(CREATE_REFERENCES)}
         showDelete={permissionChecker(DELETE_REFERENCES)}
         showEdit={permissionChecker(UPDATE_REFERENCES)}
-        showView={false}
       />
       {opened && (
         <ReferenceModal
