@@ -90,10 +90,10 @@ export const TeamModule = ({ lng }: { lng: string }) => {
       {openFilter && (
         <CustomFilterModal
           open={openFilter}
-          toggleOpen={() => setOpenFilter((d) => !d)}
+          toggleOpen={() => setOpenFilter((open) => !open)}
           initialData={filterData}
           updateFilterData={setFilterData}
-          title="Customers Filter"
+          title="Team Filter"
           content={filterContent}
         />
       )}

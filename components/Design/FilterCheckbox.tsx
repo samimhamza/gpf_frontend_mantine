@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Checkbox, Button, Box, Group } from "@mantine/core";
+import { Checkbox, Box, Card, Grid, TextInput, Text } from "@mantine/core";
 
 interface FilterCheckboxProps {
   label: string;
@@ -14,7 +14,9 @@ export default function FilterCheckbox({
   values,
   changeHandler,
 }: FilterCheckboxProps) {
+  const [filterData, setFilterData] = useState([]);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       setCheckedItems((state) => {
@@ -38,30 +40,29 @@ export default function FilterCheckbox({
   }, [values]);
 
   return (
-    <Box>
-      <Group
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-        }}
-        me={30}
-      >
-        <Box>{label}</Box>
-        {items?.map((value: any, index) => (
-          <Checkbox
-            key={index + value}
-            label={value.charAt(0).toUpperCase() + value.slice(1)}
-            checked={checkedItems.includes(value)}
-            onChange={(event) => onChange(event)}
-            size="sm"
-          />
-        ))}
-      </Group>
-      <Button onClick={() => changeHandler([])} mt={10} size="xs">
-        Clear
-      </Button>
-    </Box>
+    <Grid>
+      <Grid.Col mb={20}>
+        <Box mb={5}>{label}</Box>
+        <Card withBorder shadow="xs" p="xs">
+          {items && items.length > 0 && (
+            <Grid>
+              {items.map((value: any, index) => (
+                <>
+                  <Grid.Col span={6}>
+                    <Checkbox
+                      key={index + value}
+                      label={value.charAt(0).toUpperCase() + value.slice(1)}
+                      checked={checkedItems.includes(value)}
+                      onChange={(event) => onChange(event)}
+                      size="sm"
+                    />
+                  </Grid.Col>
+                </>
+              ))}
+            </Grid>
+          )}
+        </Card>
+      </Grid.Col>
+    </Grid>
   );
 }

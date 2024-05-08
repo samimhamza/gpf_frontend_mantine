@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DateValue } from "@mantine/dates";
 import PersianDatePicker from "../PersianDatePicker";
+import { Box, Divider, Grid } from "@mantine/core";
 
 interface DateRange {
   from?: DateValue;
@@ -24,46 +25,35 @@ export default function FilterDateRange({
     setDateRange(values);
   }, [values]);
 
+  // Function to handle date range change
+  const handleDateChange = (fieldName: keyof DateRange, date: DateValue) => {
+    const newDateRange = { ...dateRange, [fieldName]: date };
+    setDateRange(newDateRange);
+    // Pass the updated date range back to the parent component
+    changeHandler(newDateRange);
+  };
+
   return (
     <div>
-      <div>{label}</div>
-      <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
-        <PersianDatePicker
-          label="Start Date"
-          value={dateRange.from ?? undefined}
-          onChange={(event: any) => {
-            if (event) {
-              setDateRange((state) => {
-                const date = {
-                  ...state,
-                  from: event,
-                };
-                changeHandler(date);
-                return date;
-              });
-            }
-          }}
-          placeholder="Start Date"
-        />
-
-        <PersianDatePicker
-          label="End Date"
-          value={dateRange.to ?? undefined}
-          onChange={(event: any) => {
-            if (event) {
-              setDateRange((state) => {
-                const date = {
-                  ...state,
-                  to: event,
-                };
-                changeHandler(date);
-                return date;
-              });
-            }
-          }}
-          placeholder="End Date"
-        />
-      </div>
+      <Box>{label}</Box>
+      <Grid>
+        <Grid.Col>
+          <PersianDatePicker
+            label="Start Date"
+            value={dateRange.from}
+            onChange={(date: any) => handleDateChange("from", date)}
+            placeholder="Start Date"
+          />
+        </Grid.Col>
+        <Grid.Col>
+          <PersianDatePicker
+            label="End Date"
+            value={dateRange.to}
+            onChange={(date: any) => handleDateChange("to", date)}
+            placeholder="End Date"
+          />
+        </Grid.Col>
+      </Grid>
     </div>
   );
 }

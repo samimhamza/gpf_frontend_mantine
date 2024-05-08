@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-
 import {
   Box,
   Button,
   Card,
   Divider,
+  Grid,
   Group,
   Modal,
+  ScrollArea,
   Text,
-  TextInput,
   useMantineTheme,
 } from "@mantine/core";
 import FilterAutocomplete from "../Design/FilterAutocomplete";
 import FilterCheckbox from "../Design/FilterCheckbox";
-import FilterNumberRange from "../Design/FilterNumberRange";
 import FilterDateRange from "../Design/FilterDateRange";
-import { useMediaQuery } from "@mantine/hooks";
+
+// Import statements...
 
 const CustomFilterModal = ({
   open = false,
@@ -24,7 +24,6 @@ const CustomFilterModal = ({
   content,
   initialData,
   updateFilterData,
-  width,
 }: {
   open?: boolean;
   toggleOpen: () => void;
@@ -32,116 +31,99 @@ const CustomFilterModal = ({
   content: any;
   initialData: any;
   updateFilterData: any;
-  width?: string;
 }) => {
   const [filterData, setFilterData] = useState(initialData);
-  const theme = useMantineTheme();
-  const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 
   return (
     <Modal
+      title={title}
       opened={open}
       onClose={toggleOpen}
-      size={mdMatches ? (width ? width : "65%") : smMatches ? "80%" : "100%"}
+      size={"70%"}
+      removeScrollProps={{ allowPinchZoom: true }}
     >
-      <Card shadow="md" padding="lg" radius="lg">
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "10px",
-          }}
-        >
-          <Text style={{ lineHeight: 1 }} variant="h2">
-            {title}
-          </Text>
-        </Box>
+      <Card>
         <Divider m="xs" />
-        <Box style={{ maxHeight: "70vh", overflowY: "auto" }}>
-          {content.map((section: any) => (
-            <Group title={section.title} key={section.title}>
-              {section.items.map((item: any, index: any) => (
-                <div style={{ marginBottom: 20 }} key={`${item.name}-${index}`}>
-                  {item.type === "autocomplete" && (
-                    <FilterAutocomplete
-                      url={item.url}
-                      label={item.label}
-                      name={item.name}
-                      keyName={item.keyName ?? item.name}
-                      values={filterData[item.name] ?? []}
-                      onChange={(event: any) => {
-                        setFilterData((state: any) => ({
-                          ...state,
-                          [item.name]: event,
-                        }));
-                      }}
-                    />
-                  )}
-                  {item.type === "checkbox" && (
-                    <FilterCheckbox
-                      label={item.label}
-                      items={item.items}
-                      values={filterData[item.name] ?? []}
-                      changeHandler={(checkedItems: any) => {
-                        setFilterData((state: any) => ({
-                          ...state,
-                          [item.name]: checkedItems,
-                        }));
-                      }}
-                    />
-                  )}
-                  {item.type === "textfield" && (
-                    <TextInput
-                      label={item.label}
-                      value={filterData[item.name] ?? ""}
-                      onChange={(event: any) => {
-                        setFilterData((state: any) => ({
-                          ...state,
-                          [item.name]: event.target.value,
-                        }));
-                      }}
-                      style={{ marginBottom: 20 }}
-                    />
-                  )}
-                  {item.type === "number_range" && (
-                    <FilterNumberRange
-                      item={item}
-                      values={filterData[item.name] ?? []}
-                      changeHandler={(numberRange: any) => {
-                        setFilterData((state: any) => ({
-                          ...state,
-                          [item.name]: numberRange,
-                        }));
-                      }}
-                    />
-                  )}
-                  {item.type === "date_range" && (
-                    <FilterDateRange
-                      label={item.label}
-                      values={filterData[item.name] ?? []}
-                      changeHandler={(dateRange: any) => {
-                        setFilterData((state: any) => ({
-                          ...state,
-                          [item.name]: dateRange,
-                        }));
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
-            </Group>
-          ))}
+        <Box>
+          <Grid>
+            {content.map((section: any) => (
+              <Grid.Col key={section.title} span={{ base: 12, md: 12, lg: 4 }}>
+                <ScrollArea h={500} scrollbars="y">
+                  <Card shadow="sm" padding="md" radius="md" withBorder>
+                    <Text style={{ textAlign: "center", marginBottom: "15px" }}>
+                      {section.title}
+                    </Text>
+                    {section.items.map((item: any, index: any) => (
+                      <Box key={`${item.name}-${index}`}>
+                        {item.type === "autocomplete" && (
+                          <FilterAutocomplete
+                            url={item.url}
+                            label={item.label}
+                            name={item.name}
+                            keyName={item.keyName ?? item.name}
+                            values={filterData[item.name] ?? []}
+                            onChange={(event: any) => {
+                              setFilterData((state: any) => ({
+                                ...state,
+                                [item.name]: event,
+                              }));
+                            }}
+                          />
+                        )}
+                      </Box>
+                    ))}
+                    {section.items.map((item: any, index: any) => (
+                      <Box key={`${item.name}-${index}`}>
+                        {item.type === "checkbox" && (
+                          <FilterCheckbox
+                            label={item.label}
+                            items={item.items}
+                            values={filterData[item.name] ?? []}
+                            changeHandler={(checkedItems: any) => {
+                              setFilterData((state: any) => ({
+                                ...state,
+                                [item.name]: checkedItems,
+                              }));
+                            }}
+                          />
+                        )}
+                      </Box>
+                    ))}
+                    {section.items.map((item: any, index: any) => (
+                      <Box key={`${item.name}-${index}`}>
+                        {item.type === "date_range" && (
+                          <>
+                            <FilterDateRange
+                              label={item.label}
+                              values={filterData[item.name] ?? []}
+                              changeHandler={(dateRange: any) => {
+                                setFilterData((state: any) => ({
+                                  ...state,
+                                  [item.name]: dateRange,
+                                }));
+                              }}
+                            />
+                            {section.items.length - 1 != index && (
+                              <Divider my="md" />
+                            )}
+                          </>
+                        )}
+                      </Box>
+                    ))}
+                  </Card>
+                </ScrollArea>
+              </Grid.Col>
+            ))}
+          </Grid>
         </Box>
 
         <Divider m="xs" />
-
         <Group style={{ marginTop: 10 }}>
           <Button
             variant="outline"
             onClick={() => {
               updateFilterData(filterData);
-              toggleOpen();
+              console.log(filterData);
             }}
           >
             Apply

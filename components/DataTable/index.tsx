@@ -78,6 +78,7 @@ const CustomDataTable = ({
     order_by: orderBy,
     filter_data: {},
   });
+
   const { data, error, isLoading, mutate } = useSWR(
     [url, tableDetails],
     async () => {
@@ -89,6 +90,7 @@ const CustomDataTable = ({
       return response;
     }
   );
+
   useEffect(() => {
     (async function () {
       if (mutated) {
