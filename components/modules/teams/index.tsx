@@ -15,12 +15,11 @@ import {
 import { TeamColumns } from "@/shared/columns/team.columns";
 import { useRouter } from "next/navigation";
 import TeamModal from "./TeamModal";
-import CustomFilterModal from "@/components/CustomFilterModal/CustomFilterModal";
+import CustomFilterModal from "@/components/CustomFilterModal";
 import { TeamFilterContent } from "@/shared/filterContents/team.filter.content";
 
 export const TeamModule = ({ lng }: { lng: string }) => {
   const [openFilter, setOpenFilter] = useState(false);
-  const [showFiterButton, setShowFilterButton] = useState(true);
   const [filterData, setFilterData] = useState({});
   const router = useRouter();
   const { t } = useTranslation(lng);
@@ -72,7 +71,7 @@ export const TeamModule = ({ lng }: { lng: string }) => {
         showDelete={permissionChecker(DELETE_TEAMS)}
         showEdit={permissionChecker(UPDATE_TEAMS)}
         openFilterCliked={() => setOpenFilter(true)}
-        showFilter={showFiterButton}
+        showFilter={true}
       />
       {opened && (
         <TeamModal
@@ -90,10 +89,10 @@ export const TeamModule = ({ lng }: { lng: string }) => {
       {openFilter && (
         <CustomFilterModal
           open={openFilter}
-          toggleOpen={() => setOpenFilter((open) => !open)}
+          close={() => setOpenFilter((open) => !open)}
           initialData={filterData}
           updateFilterData={setFilterData}
-          title="Team Filter"
+          title={t("teams_filter")}
           content={filterContent}
         />
       )}

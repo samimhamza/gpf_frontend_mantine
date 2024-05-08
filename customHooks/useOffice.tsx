@@ -14,7 +14,7 @@ const useOffice = (form?: any) => {
       (async function () {
         const { response, status, error } = await callApi({
           method: "GET",
-          url: "/all_offices",
+          url: "/office/auto_complete",
         });
         if (status == 200 && response.result == true) {
           setOffices(
@@ -32,7 +32,7 @@ const useOffice = (form?: any) => {
     }
   }, [office, callApi]);
 
-  return { offices, office };
+  return { offices, office, setOffices };
 };
 
 export default useOffice;

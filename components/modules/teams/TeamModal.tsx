@@ -45,7 +45,7 @@ const TeamModal = ({
     validateInputOnBlur: true,
   });
 
-  const { offices, office } = useOffice(form);
+  const { offices, office, setOffices } = useOffice(form);
 
   const submit = async () => {
     const { response, status } = !editId
@@ -129,6 +129,7 @@ const TeamModal = ({
           />
           <TeamStepOne
             offices={offices}
+            setOffices={setOffices}
             employees={employees}
             form={form}
             lng={lng}
@@ -173,7 +174,6 @@ const TeamModal = ({
         lng={lng}
         title={title}
         editId={editId}
-        width="40%"
       />
     </form>
   );

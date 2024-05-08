@@ -3,56 +3,74 @@ import {
   Box,
   Button,
   Card,
+  CloseButton,
   Divider,
   Grid,
   Group,
   Modal,
   ScrollArea,
-  Text,
-  useMantineTheme,
+  Title,
+  useSafeMantineTheme,
 } from "@mantine/core";
 import FilterAutocomplete from "../Design/FilterAutocomplete";
 import FilterCheckbox from "../Design/FilterCheckbox";
 import FilterDateRange from "../Design/FilterDateRange";
-
-// Import statements...
+import { useMediaQuery } from "@mantine/hooks";
 
 const CustomFilterModal = ({
   open = false,
-  toggleOpen,
+  close,
   title,
   content,
   initialData,
   updateFilterData,
 }: {
   open?: boolean;
-  toggleOpen: () => void;
+  close: () => void;
   title: string;
   content: any;
   initialData: any;
   updateFilterData: any;
 }) => {
   const [filterData, setFilterData] = useState(initialData);
+  const theme = useSafeMantineTheme();
+  const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
+  const smMatches = useMediaQuery(`(min-width: ${theme.breakpoints.sm})`);
 
   return (
-    <Modal
-      title={title}
-      opened={open}
-      onClose={toggleOpen}
-      size={"70%"}
-      removeScrollProps={{ allowPinchZoom: true }}
-    >
-      <Card>
-        <Divider m="xs" />
-        <Box>
+    <>
+      <Modal
+        opened={open}
+        onClose={close}
+        centered
+        size={mdMatches ? "70%" : smMatches ? "80%" : "100%"}
+        className="custom-modal"
+        withCloseButton={false}
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+        transitionProps={{ transition: "pop" }}
+        lockScroll={true}
+        closeOnClickOutside={false}
+      >
+        <Group justify="space-between" className="modal-header" p="xs">
+          <Title order={4}>{title}</Title>
+          <CloseButton
+            className="close-btn"
+            aria-label="Close modal"
+            onClick={close}
+          />
+        </Group>
+        <Box p="sm">
           <Grid>
             {content.map((section: any) => (
               <Grid.Col key={section.title} span={{ base: 12, md: 12, lg: 4 }}>
-                <ScrollArea h={500} scrollbars="y">
+                <ScrollArea h={{ lg: 450 }} scrollbars="y">
                   <Card shadow="sm" padding="md" radius="md" withBorder>
-                    <Text style={{ textAlign: "center", marginBottom: "15px" }}>
+                    <Title order={4} ta="center">
                       {section.title}
-                    </Text>
+                    </Title>
                     {section.items.map((item: any, index: any) => (
                       <Box key={`${item.name}-${index}`}>
                         {item.type === "autocomplete" && (
@@ -116,17 +134,9 @@ const CustomFilterModal = ({
             ))}
           </Grid>
         </Box>
-
-        <Divider m="xs" />
-        <Group style={{ marginTop: 10 }}>
-          <Button
-            variant="outline"
-            onClick={() => {
-              updateFilterData(filterData);
-              console.log(filterData);
-            }}
-          >
-            Apply
+        <Group p="sm" className="modal-footer" justify="flex-end">
+          <Button variant="outline" onClick={close}>
+            Cancel
           </Button>
           <Button
             variant="outline"
@@ -137,12 +147,32 @@ const CustomFilterModal = ({
           >
             Reset
           </Button>
-          <Button variant="outline" onClick={toggleOpen}>
-            Cancel
+          <Button
+            onClick={() => {
+              updateFilterData(filterData);
+              console.log(filterData);
+            }}
+          >
+            Apply
           </Button>
         </Group>
-      </Card>
-    </Modal>
+      </Modal>
+      <style jsx global>{`
+        .custom-modal .mantine-Modal-body {
+          padding: 0;
+        }
+        .custom-modal .modal-header {
+          border-bottom: 1px solid var(--mantine-color-gray-4);
+        }
+        .custom-modal .modal-footer {
+          border-top: 1px solid var(--mantine-color-gray-4);
+        }
+        .custom-modal .mantine-Modal-inner {
+          left: 0;
+          right: 0;
+        }
+      `}</style>
+    </>
   );
 };
 
