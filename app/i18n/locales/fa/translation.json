@@ -225,5 +225,6 @@
 	"office_id": "آی دی دفتر",
 	"position": "شغل",
 	"user_id": "آی دی کاربر",
-	"all_offices": "تمام دفاتر"
+	"all_offices": "تمام دفاتر",
+	"export": "دانلود"
 }

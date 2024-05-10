@@ -30,7 +30,7 @@ interface DataTableProps {
   height?: number;
   orderBy?: {
     column: string;
-    order: "desc" | "asc";
+    order: 'desc' | 'asc';
   };
   showSecondTitle?: boolean;
   secondTitleAddLabel?: string;
@@ -54,8 +54,8 @@ const CustomDataTable = ({
   showView = true,
   height = undefined,
   orderBy = {
-    column: "created_at",
-    order: "desc",
+    column: 'created_at',
+    order: 'desc',
   },
   showSecondTitle = false,
   secondTitleAddLabel,
@@ -64,13 +64,13 @@ const CustomDataTable = ({
 }: DataTableProps) => {
   const { t } = useTranslation(lng);
   const callApi = useAxios();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [selectedRecords, setSelectedRecords] = useState([]);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [tableDetails, setTableDetails] = useState({
     page: 1,
     per_page: 20,
-    search: "",
+    search: '',
     order_by: orderBy,
     filter_data: {},
   });
@@ -78,7 +78,7 @@ const CustomDataTable = ({
     [url, tableDetails],
     async () => {
       const { response } = await callApi({
-        method: "GET",
+        method: 'GET',
         url,
         params: tableDetails,
       });
@@ -104,16 +104,16 @@ const CustomDataTable = ({
     />
   );
 
-  let actionIndex = columns.findIndex((col) => col.accessor == "actions");
+  let actionIndex = columns.findIndex((col) => col.accessor == 'actions');
   if (actionIndex == -1 && (showView || showEdit)) {
     columns.push({
-      accessor: "actions",
+      accessor: 'actions',
       title: (
         <Center>
           <TbClick size={16} />
         </Center>
       ),
-      width: "0%", // 👈 use minimal width
+      width: '0%', // 👈 use minimal width
       render: renderActions,
     });
   }
@@ -122,7 +122,7 @@ const CustomDataTable = ({
     setDeleteLoading(true);
     const ids = selectedRecords.map((rec: any) => rec.id);
     const { status, error } = await callApi({
-      method: "DELETE",
+      method: 'DELETE',
       url: deleteUrl,
       data: { ids },
     });
@@ -133,9 +133,9 @@ const CustomDataTable = ({
         await onDelete();
       }
       setSelectedRecords([]);
-      toast.success(t("successfully_deleted"));
-    } else if (status == 422) toast.error(t("delete_not_allowed"));
-    if (error && status != 422) toast.error(t("something_went_wrong"));
+      toast.success(t('successfully_deleted'));
+    } else if (status == 422) toast.error(t('delete_not_allowed'));
+    if (error && status != 422) toast.error(t('something_went_wrong'));
 
     setDeleteLoading(false);
   };
@@ -146,13 +146,14 @@ const CustomDataTable = ({
       showAdd={showAdd}
       showDelete={showDelete && selectedRecords.length > 0}
       addLabel={secondTitleAddLabel}
-      deleteLabel={t("delete")}
+      deleteLabel={t('delete')}
       deleteLoading={deleteLoading}
       handleDelete={handleDelete}
       openModal={open}
     />
   );
 
+  console.log();
   return (
     <>
       {!showSecondTitle && (
@@ -168,6 +169,7 @@ const CustomDataTable = ({
           showDelete={showDelete}
           deleteLoading={deleteLoading}
           handleDelete={handleDelete}
+          showExport={!!data?.data?.length} // TODO LATER
         />
       )}
       <MantineDataTable
