@@ -3,9 +3,10 @@ import { Checkbox, Box, Card, Grid, TextInput, Text } from "@mantine/core";
 
 interface FilterCheckboxProps {
   label: string;
-  items: { label: string; value: string }[];
+  items: string[];
   values: string[];
-  changeHandler: (checkedItems: string[]) => void;
+  changeHandler: (updatedValues: any) => void;
+  item: any;
 }
 
 export default function FilterCheckbox({
@@ -13,31 +14,23 @@ export default function FilterCheckbox({
   items,
   values,
   changeHandler,
+  item,
 }: FilterCheckboxProps) {
-  const [filterData, setFilterData] = useState([]);
-  const [checkedItems, setCheckedItems] = useState<string[]>([]);
-
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setCheckedItems((state) => {
-        changeHandler([...state, event.target.name]);
-        return [...state, event.target.name];
-      });
-    } else {
-      setCheckedItems((state) => {
-        const index = state.indexOf(event.target.name);
-        if (index > -1) {
-          state.splice(index, 1);
-        }
-        changeHandler([...state]);
-        return [...state];
-      });
-    }
+  const [checkboxValues, setCheckboxValues] = useState<string[]>(values ?? []);
+  const handleCheckboxChange = (checked: boolean, value: string) => {
+    setCheckboxValues((items) =>
+      checked
+        ? items.includes(value)
+          ? items
+          : [...items, value]
+        : items.filter((el) => el != value)
+    );
   };
 
   useEffect(() => {
-    setCheckedItems(values);
-  }, [values]);
+    changeHandler({ [item.name]: checkboxValues });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkboxValues]);
 
   return (
     <Grid>
@@ -46,18 +39,19 @@ export default function FilterCheckbox({
         <Card withBorder shadow="xs" p="xs">
           {items && items.length > 0 && (
             <Grid>
-              {items.map((value: any, index) => (
-                <>
+              {items.map((item: any, index) => (
+                <React.Fragment key={index}>
                   <Grid.Col span={6}>
                     <Checkbox
-                      key={index + value}
-                      label={value.charAt(0).toUpperCase() + value.slice(1)}
-                      checked={checkedItems.includes(value)}
-                      onChange={(event) => onChange(event)}
+                      label={item}
+                      checked={checkboxValues.includes(item)}
+                      onChange={(event) => {
+                        handleCheckboxChange(event.currentTarget.checked, item);
+                      }}
                       size="sm"
                     />
                   </Grid.Col>
-                </>
+                </React.Fragment>
               ))}
             </Grid>
           )}

@@ -35,8 +35,8 @@ interface DataTableProps {
   showSecondTitle?: boolean;
   secondTitleAddLabel?: string;
   onDelete?: () => {};
-  openFilterCliked: any;
   showFilter?: boolean;
+  openFilterCliked?: any;
 }
 
 const CustomDataTable = ({
@@ -52,7 +52,6 @@ const CustomDataTable = ({
   setView,
   showAdd,
   showDelete,
-  showFilter,
   showEdit,
   showView = true,
   height = undefined,
@@ -63,6 +62,7 @@ const CustomDataTable = ({
   showSecondTitle = false,
   secondTitleAddLabel,
   onDelete,
+  showFilter,
   openFilterCliked,
   ...additionalProps
 }: DataTableProps) => {
@@ -174,8 +174,8 @@ const CustomDataTable = ({
           showDelete={showDelete}
           deleteLoading={deleteLoading}
           handleDelete={handleDelete}
-          openFilterCliked={openFilterCliked}
           showFilter={showFilter}
+          openFilterCliked={openFilterCliked}
         />
       )}
       <MantineDataTable

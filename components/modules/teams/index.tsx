@@ -15,12 +15,8 @@ import {
 import { TeamColumns } from "@/shared/columns/team.columns";
 import { useRouter } from "next/navigation";
 import TeamModal from "./TeamModal";
-import CustomFilterModal from "@/components/CustomFilterModal";
-import { TeamFilterContent } from "@/shared/filterContents/team.filter.content";
 
 export const TeamModule = ({ lng }: { lng: string }) => {
-  const [openFilter, setOpenFilter] = useState(false);
-  const [filterData, setFilterData] = useState({});
   const router = useRouter();
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
@@ -30,8 +26,6 @@ export const TeamModule = ({ lng }: { lng: string }) => {
     "/teams/",
     setMutated
   );
-
-  const filterContent = TeamFilterContent(t);
   const [opened, { open, close }] = useDisclosure(false);
   const [edit, setEdit] = useState<number>();
   const [view, setView] = useState<number>();
@@ -70,8 +64,6 @@ export const TeamModule = ({ lng }: { lng: string }) => {
         showAdd={permissionChecker(CREATE_TEAMS)}
         showDelete={permissionChecker(DELETE_TEAMS)}
         showEdit={permissionChecker(UPDATE_TEAMS)}
-        openFilterCliked={() => setOpenFilter(true)}
-        showFilter={true}
       />
       {opened && (
         <TeamModal
@@ -84,16 +76,6 @@ export const TeamModule = ({ lng }: { lng: string }) => {
           setMutated={setMutated}
           title={!edit ? t("add_team") : t("update_team")}
           editId={edit}
-        />
-      )}
-      {openFilter && (
-        <CustomFilterModal
-          open={openFilter}
-          close={() => setOpenFilter((open) => !open)}
-          initialData={filterData}
-          updateFilterData={setFilterData}
-          title={t("teams_filter")}
-          content={filterContent}
         />
       )}
     </>

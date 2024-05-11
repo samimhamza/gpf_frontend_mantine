@@ -27,6 +27,7 @@ export default function FilterDateRange({
 
   // Function to handle date range change
   const handleDateChange = (fieldName: keyof DateRange, date: DateValue) => {
+    console.log(date);
     const newDateRange = { ...dateRange, [fieldName]: date };
     setDateRange(newDateRange);
     // Pass the updated date range back to the parent component
@@ -49,7 +50,9 @@ export default function FilterDateRange({
           <PersianDatePicker
             label="End Date"
             value={dateRange.to}
-            onChange={(date: any) => handleDateChange("to", date)}
+            onChange={(date: any) => {
+              handleDateChange("to", date);
+            }}
             placeholder="End Date"
           />
         </Grid.Col>

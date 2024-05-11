@@ -9,6 +9,7 @@ import {
   Group,
   Modal,
   ScrollArea,
+  TextInput,
   Title,
   useSafeMantineTheme,
 } from "@mantine/core";
@@ -92,19 +93,34 @@ const CustomFilterModal = ({
                     ))}
                     {section.items.map((item: any, index: any) => (
                       <Box key={`${item.name}-${index}`}>
-                        {item.type === "checkbox" && (
-                          <FilterCheckbox
-                            label={item.label}
-                            items={item.items}
-                            values={filterData[item.name] ?? []}
-                            changeHandler={(checkedItems: any) => {
-                              setFilterData((state: any) => ({
-                                ...state,
-                                [item.name]: checkedItems,
-                              }));
-                            }}
-                          />
-                        )}
+                        {item.type === "data" &&
+                          (item.subType == "checkbox" ? (
+                            <FilterCheckbox
+                              item={item}
+                              label={item.label}
+                              items={item.items}
+                              values={filterData[item.name] ?? []}
+                              changeHandler={(updatedValues: any) => {
+                                setFilterData((prevFilterData: any) => ({
+                                  ...prevFilterData,
+                                  ...updatedValues,
+                                }));
+                              }}
+                            />
+                          ) : (
+                            <TextInput
+                              label={item.label}
+                              placeholder={item.label}
+                              value={filterData[item.name]}
+                              name={item.name}
+                              onChange={(e) => {
+                                setFilterData((prevFilterData: any) => ({
+                                  ...prevFilterData,
+                                  [item.name]: e.target.value ?? "",
+                                }));
+                              }}
+                            />
+                          ))}
                       </Box>
                     ))}
                     {section.items.map((item: any, index: any) => (
@@ -150,7 +166,7 @@ const CustomFilterModal = ({
           <Button
             onClick={() => {
               updateFilterData(filterData);
-              console.log(filterData);
+              console.log("Filter Data", filterData);
             }}
           >
             Apply

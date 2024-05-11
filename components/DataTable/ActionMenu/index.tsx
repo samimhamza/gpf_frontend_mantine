@@ -19,8 +19,8 @@ interface ActionMenuProps {
   showDelete: boolean;
   deleteLoading: boolean;
   handleDelete: (e: any) => {};
-  openFilterCliked: any;
   showFilter?: boolean;
+  openFilterCliked: any;
 }
 
 const ActionMenu = ({
@@ -32,8 +32,8 @@ const ActionMenu = ({
   showDelete,
   deleteLoading,
   handleDelete,
-  openFilterCliked,
   showFilter,
+  openFilterCliked,
 }: ActionMenuProps) => {
   const { t } = useTranslation(lng);
   const [search, setSearch] = useState("");
