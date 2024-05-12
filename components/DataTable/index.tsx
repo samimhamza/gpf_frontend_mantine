@@ -37,6 +37,7 @@ interface DataTableProps {
   onDelete?: () => {};
   showFilter?: boolean;
   openFilterCliked?: any;
+  filterData?: any;
 }
 
 const CustomDataTable = ({
@@ -64,6 +65,7 @@ const CustomDataTable = ({
   onDelete,
   showFilter,
   openFilterCliked,
+  filterData,
   ...additionalProps
 }: DataTableProps) => {
   const { t } = useTranslation(lng);
@@ -76,7 +78,7 @@ const CustomDataTable = ({
     per_page: 20,
     search: "",
     order_by: orderBy,
-    filter_data: {},
+    filter_data: filterData ?? {},
   });
 
   const { data, error, isLoading, mutate } = useSWR(
@@ -98,7 +100,7 @@ const CustomDataTable = ({
         setMutated(false);
       }
     })();
-  }, [mutated, mutate, setMutated]);
+  }, [mutated, mutate, setMutated, filterData]);
 
   const renderActions = (record: any) => (
     <Actions

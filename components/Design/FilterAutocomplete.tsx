@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Grid, Loader, MultiSelect, Select } from "@mantine/core";
-import { useAxios } from "@/customHooks/useAxios";
+import React, { useState } from "react";
+import { Box, Grid, Loader, MultiSelect } from "@mantine/core";
+import { useTranslation } from "@/app/i18n/client";
+import useOffice from "@/customHooks/useOffice";
 
 interface FilterAutocompleteProps {
   url: string;
@@ -9,6 +10,7 @@ interface FilterAutocompleteProps {
   keyName?: any;
   values: any;
   onChange: (event: string[]) => void;
+  lng: string;
 }
 
 export default function FilterAutocomplete({
@@ -18,44 +20,35 @@ export default function FilterAutocomplete({
   keyName,
   values,
   onChange,
+  lng,
 }: FilterAutocompleteProps) {
-  const [offices, setOffices] = useState([]);
+  const { offices, office } = useOffice();
   const [loading, setLoading] = useState(false);
-  const callApi = useAxios();
-
-  useEffect(() => {
-    (async function () {
-      const { response, status, error } = await callApi({
-        method: "GET",
-        url: url,
-      });
-      if (status == 200 && response.result == true) {
-        setOffices(response.data);
-      }
-      setLoading(false);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [callApi]);
+  const { t } = useTranslation(lng);
 
   return (
     <Grid>
       <Grid.Col span={12} mb={10}>
-        <Select
-          name={name}
-          label={label}
-          value={values}
-          placeholder={label}
-          data={offices.map((office: any) => {
-            return { value: office.id.toString(), label: office.name };
-          })}
-          searchable
-          clearable
-          rightSection={loading && <Loader color="primary" size={15} />}
-          allowDeselect
-          onChange={(value: any) => {
-            onChange(value);
-          }}
-        />
+        {office == "all" ? (
+          <MultiSelect
+            name={name}
+            value={values}
+            label={label}
+            placeholder={label}
+            data={offices}
+            searchable
+            clearable
+            hidePickedOptions
+            nothingFoundMessage={t("noting_found")}
+            rightSection={loading && <Loader color="primary" size={15} />}
+            size="sm"
+            onChange={(value: any) => {
+              onChange(value);
+            }}
+          />
+        ) : (
+          <Box style={{ flex: 1 }}></Box>
+        )}
       </Grid.Col>
     </Grid>
   );

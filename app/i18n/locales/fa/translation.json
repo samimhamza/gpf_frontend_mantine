@@ -241,5 +241,14 @@
   "in_leave": "در ترک",
   "survey_plan_questions_info": "اطلاعات سوالات طرح نظرسنجی",
   "filter": "فیلتر",
-  "members": "اعضا"
+  "members": "اعضا",
+  "users_filter": "فیلتر کاربر ها",
+  "date_range_filtering": "فیلتر محدوده زمانی",
+  "id_filtering": "فیلتر آی دی",
+  "data_filtering": "فیلتر اطلاعات",
+  "from_date": "از تاریخ",
+  "to_date": "تا تاریخ",
+  "min": "حد اقل",
+  "max": "حد اکثر",
+  "age": "سن"
 }

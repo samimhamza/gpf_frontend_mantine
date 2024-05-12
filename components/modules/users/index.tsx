@@ -71,6 +71,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
         showEdit={permissionChecker(UPDATE_USERS)}
         showFilter={true}
         openFilterCliked={() => setOpenFilter(true)}
+        filterData={filterData}
       />
       {opened && (
         <UserModal
@@ -91,8 +92,9 @@ export const UserModule = ({ lng }: { lng: string }) => {
           close={() => setOpenFilter((open) => !open)}
           initialData={filterData}
           updateFilterData={setFilterData}
-          title={t("teams_filter")}
+          title={t("users_filter")}
           content={filterContent}
+          lng={lng}
         />
       )}
     </>

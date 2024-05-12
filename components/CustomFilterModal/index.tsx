@@ -8,7 +8,9 @@ import {
   Grid,
   Group,
   Modal,
+  NumberInput,
   ScrollArea,
+  Text,
   TextInput,
   Title,
   useSafeMantineTheme,
@@ -17,6 +19,7 @@ import FilterAutocomplete from "../Design/FilterAutocomplete";
 import FilterCheckbox from "../Design/FilterCheckbox";
 import FilterDateRange from "../Design/FilterDateRange";
 import { useMediaQuery } from "@mantine/hooks";
+import { useTranslation } from "react-i18next";
 
 const CustomFilterModal = ({
   open = false,
@@ -25,6 +28,7 @@ const CustomFilterModal = ({
   content,
   initialData,
   updateFilterData,
+  lng,
 }: {
   open?: boolean;
   close: () => void;
@@ -32,7 +36,9 @@ const CustomFilterModal = ({
   content: any;
   initialData: any;
   updateFilterData: any;
+  lng: string;
 }) => {
+  const { t } = useTranslation(lng);
   const [filterData, setFilterData] = useState(initialData);
   const theme = useSafeMantineTheme();
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
@@ -69,13 +75,14 @@ const CustomFilterModal = ({
               <Grid.Col key={section.title} span={{ base: 12, md: 12, lg: 4 }}>
                 <ScrollArea h={{ lg: 450 }} scrollbars="y">
                   <Card shadow="sm" padding="md" radius="md" withBorder>
-                    <Title order={4} ta="center">
+                    <Title mb={20} order={4} ta="center" fw={500}>
                       {section.title}
                     </Title>
                     {section.items.map((item: any, index: any) => (
                       <Box key={`${item.name}-${index}`}>
                         {item.type === "autocomplete" && (
                           <FilterAutocomplete
+                            lng={lng}
                             url={item.url}
                             label={item.label}
                             name={item.name}
@@ -94,33 +101,69 @@ const CustomFilterModal = ({
                     {section.items.map((item: any, index: any) => (
                       <Box key={`${item.name}-${index}`}>
                         {item.type === "data" &&
-                          (item.subType == "checkbox" ? (
+                          item.subType === "textInput" && (
+                            <TextInput
+                              mb={10}
+                              label={item.label}
+                              placeholder={item.label}
+                              value={filterData[item.name]}
+                              name={item.name ?? ""}
+                              onChange={(event) => {
+                                setFilterData((state: any) => ({
+                                  ...state,
+                                  [item.name]: event.target.value ?? "",
+                                }));
+                              }}
+                            />
+                          )}
+                        {item.type === "data" &&
+                          item.subType === "checkbox" && (
                             <FilterCheckbox
+                              lng={lng}
                               item={item}
                               label={item.label}
                               items={item.items}
                               values={filterData[item.name] ?? []}
-                              changeHandler={(updatedValues: any) => {
-                                setFilterData((prevFilterData: any) => ({
-                                  ...prevFilterData,
-                                  ...updatedValues,
+                              changeHandler={(event: any) => {
+                                setFilterData((state: any) => ({
+                                  ...state,
+                                  ...event,
                                 }));
                               }}
                             />
-                          ) : (
-                            <TextInput
-                              label={item.label}
-                              placeholder={item.label}
-                              value={filterData[item.name]}
-                              name={item.name}
-                              onChange={(e) => {
-                                setFilterData((prevFilterData: any) => ({
-                                  ...prevFilterData,
-                                  [item.name]: e.target.value ?? "",
-                                }));
-                              }}
-                            />
-                          ))}
+                          )}
+
+                        {item.type === "data" &&
+                          item.subType === "numberRange" && (
+                            <>
+                              <Text>{item.label}</Text>
+                              <Box
+                                style={{
+                                  display: "flex",
+                                  columnGap: "10px",
+                                }}
+                              >
+                                <NumberInput
+                                  mb={10}
+                                  placeholder={t("min")}
+                                  value={filterData[item.name]}
+                                  name={item.name ?? ""}
+                                  onChange={(event) => {
+                                    console.log(event);
+                                  }}
+                                />
+                                <NumberInput
+                                  mb={10}
+                                  placeholder={t("max")}
+                                  value={filterData[item.name]}
+                                  name={item.name ?? ""}
+                                  onChange={(event) => {
+                                    console.log(event);
+                                  }}
+                                />
+                              </Box>
+                            </>
+                          )}
                       </Box>
                     ))}
                     {section.items.map((item: any, index: any) => (
@@ -128,12 +171,13 @@ const CustomFilterModal = ({
                         {item.type === "date_range" && (
                           <>
                             <FilterDateRange
+                              lng={lng}
                               label={item.label}
                               values={filterData[item.name] ?? []}
-                              changeHandler={(dateRange: any) => {
+                              changeHandler={(event: any) => {
                                 setFilterData((state: any) => ({
                                   ...state,
-                                  [item.name]: dateRange,
+                                  [item.name]: event,
                                 }));
                               }}
                             />
@@ -166,7 +210,7 @@ const CustomFilterModal = ({
           <Button
             onClick={() => {
               updateFilterData(filterData);
-              console.log("Filter Data", filterData);
+              close();
             }}
           >
             Apply

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Checkbox, Box, Card, Grid, TextInput, Text } from "@mantine/core";
+import { Checkbox, Box, Card, Grid } from "@mantine/core";
 
 interface FilterCheckboxProps {
   label: string;
@@ -7,6 +7,7 @@ interface FilterCheckboxProps {
   values: string[];
   changeHandler: (updatedValues: any) => void;
   item: any;
+  lng: string;
 }
 
 export default function FilterCheckbox({
@@ -15,12 +16,18 @@ export default function FilterCheckbox({
   values,
   changeHandler,
   item,
+  lng,
 }: FilterCheckboxProps) {
   const [checkboxValues, setCheckboxValues] = useState<string[]>(values ?? []);
+
   const handleCheckboxChange = (checked: boolean, value: string) => {
     setCheckboxValues((items) =>
       checked
-        ? items.includes(value)
+        ? items
+            .map((item: any) => {
+              return item.value;
+            })
+            .includes(value)
           ? items
           : [...items, value]
         : items.filter((el) => el != value)
@@ -43,10 +50,14 @@ export default function FilterCheckbox({
                 <React.Fragment key={index}>
                   <Grid.Col span={6}>
                     <Checkbox
-                      label={item}
-                      checked={checkboxValues.includes(item)}
+                      value={item}
+                      label={item.text}
+                      checked={checkboxValues.includes(item.value)}
                       onChange={(event) => {
-                        handleCheckboxChange(event.currentTarget.checked, item);
+                        handleCheckboxChange(
+                          event.currentTarget.checked,
+                          item.value
+                        );
                       }}
                       size="sm"
                     />

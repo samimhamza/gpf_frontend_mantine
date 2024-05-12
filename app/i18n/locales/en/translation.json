@@ -23,7 +23,7 @@
   "name": "Name",
   "first_name": "First Name",
   "email": "Email",
-  "username": "Username",
+  "username": "User Name",
   "office": "Office",
   "status": "Status",
   "active": "Active",
@@ -239,5 +239,14 @@
   "in_leave": "In Leave",
   "survey_plan_questions_info": "Survey Plan Questions Info",
   "filter": "Filter",
-  "members": "Members"
+  "members": "Members",
+  "users_filter": "Users Filter",
+  "date_range_filtering": "Date Range Filter",
+  "id_filtering": "ID Filter ",
+  "data_filtering": "Data Filter",
+  "from_date": "From Date",
+  "to_date": "To Date",
+  "min": "Min",
+  "max": "Max",
+  "age": "Age"
 }
