@@ -19,6 +19,7 @@ interface DataTableProps {
   columns: Array<any>;
   lng: string;
   open?: () => void;
+  anotherOpen?: () => void;
   mutated: boolean;
   setMutated: Dispatch<SetStateAction<boolean>>;
   setEdit: Dispatch<SetStateAction<number | undefined>>;
@@ -44,6 +45,7 @@ const CustomDataTable = ({
   columns,
   lng,
   open,
+  anotherOpen,
   mutated,
   setMutated,
   setEdit,
@@ -165,6 +167,7 @@ const CustomDataTable = ({
           setSelectedRecords={setSelectedRecords}
           mutate={mutate}
           open={open}
+          anotherOpen={anotherOpen}
           showAdd={showAdd}
           showDelete={showDelete}
           deleteLoading={deleteLoading}

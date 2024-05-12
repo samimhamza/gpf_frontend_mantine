@@ -16,6 +16,7 @@ interface ActionMenuProps {
   lng: string;
   mutate: any;
   open?: () => void;
+  anotherOpen?: () => void;
   showAdd: boolean;
   showDelete: boolean;
   deleteLoading: boolean;
@@ -28,6 +29,7 @@ const ActionMenu = ({
   onSearch,
   lng,
   open,
+  anotherOpen,
   showAdd,
   showDelete,
   showExport,
@@ -80,7 +82,7 @@ const ActionMenu = ({
           )}
           {showExport && (
             <Button
-              onClick={open}
+              onClick={anotherOpen}
               color='green'
               rightSection={<FaFileDownload size={14} />}
             >
