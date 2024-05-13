@@ -57,7 +57,7 @@ const SurveyPlansModal = ({
     validateInputOnBlur: true,
   });
 
-  const { offices, office } = useOffice(form);
+  const { offices, office, setOffices } = useOffice(form);
 
   const submit = async () => {
     const { response, status } = !editId
@@ -144,6 +144,7 @@ const SurveyPlansModal = ({
           />
           <SurveyPlanStepOne
             offices={offices}
+            setOffices={setOffices}
             employees={employees}
             form={form}
             lng={lng}

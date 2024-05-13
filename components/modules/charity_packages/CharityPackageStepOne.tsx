@@ -7,12 +7,14 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { getTime } from "@/shared/functions";
 import { Currencies } from "@/shared/constants";
+import { ListType } from "@/types/list";
 
 interface CharityPackageStepOneProps {
   form: any;
   lng: string;
-  offices: Array<{ value: string; label: string }>;
-  categories: Array<{ value: string; label: string }>;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<ListType[]>>;
+  categories: ListType[];
   startDateErrorMessage: string;
   setStartDateErrorMessage: Dispatch<SetStateAction<string>>;
   endDateErrorMessage: string;

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Box, Grid, Loader, MultiSelect } from "@mantine/core";
+import { Grid } from "@mantine/core";
 import { useTranslation } from "@/app/i18n/client";
 import useOffice from "@/customHooks/useOffice";
+import CustomAutoComplete from "./CustomAutoComplete";
 
 interface FilterAutocompleteProps {
   url: string;
@@ -22,32 +22,27 @@ export default function FilterAutocomplete({
   onChange,
   lng,
 }: FilterAutocompleteProps) {
-  const { offices, office } = useOffice();
-  const [loading, setLoading] = useState(false);
+  const { offices, office, setOffices } = useOffice();
   const { t } = useTranslation(lng);
 
   return (
     <Grid>
       <Grid.Col span={12} mb={10}>
-        {office == "all" ? (
-          <MultiSelect
-            name={name}
-            value={values}
+        {office == "all" && (
+          <CustomAutoComplete
+            lng={lng}
             label={label}
             placeholder={label}
             data={offices}
-            searchable
-            clearable
-            hidePickedOptions
-            nothingFoundMessage={t("noting_found")}
-            rightSection={loading && <Loader color="primary" size={15} />}
-            size="sm"
-            onChange={(value: any) => {
-              onChange(value);
+            setData={setOffices}
+            url={url}
+            isSingle={false}
+            {...{
+              name: name,
+              value: values,
+              onChange: (value: any) => onChange(value),
             }}
           />
-        ) : (
-          <Box style={{ flex: 1 }}></Box>
         )}
       </Grid.Col>
     </Grid>

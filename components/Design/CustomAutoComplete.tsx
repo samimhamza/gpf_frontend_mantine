@@ -2,8 +2,9 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { Loader, Select } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { ListType } from "@/types/list";
+import { Loader, MultiSelect, Select } from "@mantine/core";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 const CustomAutoComplete = ({
   lng,
@@ -12,17 +13,17 @@ const CustomAutoComplete = ({
   data,
   setData,
   url,
-  columnName,
+  isSingle = true,
   ...props
 }: {
   lng: string;
   label: string;
   placeholder: string;
   data: any[];
-  setData: (data: any[]) => void;
+  setData: Dispatch<SetStateAction<any[]>>;
   url: string;
-  columnName: string;
-  props: any;
+  isSingle?: boolean;
+  props?: any;
 }) => {
   const { t } = useTranslation(lng);
   const callApi = useAxios();
@@ -38,7 +39,7 @@ const CustomAutoComplete = ({
           method: "GET",
           url: url,
           params: {
-            [columnName]: searchValue,
+            content: searchValue,
           },
         });
         if (status == 200 && response.result == true) {
@@ -56,7 +57,7 @@ const CustomAutoComplete = ({
     }
   }, [searchValue]);
 
-  return (
+  return isSingle ? (
     <Select
       label={label}
       placeholder={placeholder}
@@ -65,8 +66,27 @@ const CustomAutoComplete = ({
       searchValue={searchValue}
       onSearchChange={setSearchValue}
       clearable
-      nothingFoundMessage={t("noting_found")}
+      nothingFoundMessage={loading ? <Loader m="sm" /> : t("noting_found")}
       rightSection={loading && <Loader size={15} />}
+      comboboxProps={{
+        transitionProps: { transition: "pop", duration: 100 },
+      }}
+      {...props}
+    />
+  ) : (
+    <MultiSelect
+      label={label}
+      placeholder={placeholder}
+      data={data}
+      searchable
+      searchValue={searchValue}
+      onSearchChange={setSearchValue}
+      clearable
+      nothingFoundMessage={loading ? <Loader m="sm" /> : t("noting_found")}
+      rightSection={loading && <Loader size={15} />}
+      comboboxProps={{
+        transitionProps: { transition: "pop", duration: 100 },
+      }}
       {...props}
     />
   );

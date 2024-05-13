@@ -1,15 +1,19 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
 import Profile from "@/components/Profile";
 import { Genders } from "@/shared/constants";
+import { ListType } from "@/types/list";
 import { Center, Flex, Select, TextInput, Textarea } from "@mantine/core";
+import { Dispatch, SetStateAction } from "react";
 
 interface EmployeeStepOneProps {
   form: any;
   lng: string;
   profileUrl: any;
-  offices: Array<{ value: string; label: string }>;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<ListType[]>>;
   office: string | null;
 }
 
@@ -18,6 +22,7 @@ const EmployeeStepOne = ({
   lng,
   profileUrl,
   offices,
+  setOffices,
   office,
 }: EmployeeStepOneProps) => {
   const { t } = useTranslation(lng);
@@ -87,15 +92,15 @@ const EmployeeStepOne = ({
         justify={{ sm: "center" }}
       >
         {office == "all" && (
-          <Select
+          <CustomAutoComplete
             style={{ flex: 1 }}
+            lng={lng}
             label={t("office")}
             placeholder={t("office")}
-            withAsterisk
             data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
+            setData={setOffices}
+            url={`/office/auto_complete`}
+            withAsterisk
             {...form.getInputProps("office_id")}
           />
         )}

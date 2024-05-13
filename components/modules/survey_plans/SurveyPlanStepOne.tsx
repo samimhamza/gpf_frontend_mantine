@@ -7,12 +7,15 @@ import { Flex, Loader, Select, Textarea, TextInput } from "@mantine/core";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Value } from "react-multi-date-picker";
 import { useAxios } from "@/customHooks/useAxios";
+import { ListType } from "@/types/list";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
 
 interface SurveyPlanStepOneProps {
   form: any;
   lng: string;
-  offices: Array<{ value: string; label: string }>;
-  employees: Array<{ value: string; label: string }>;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<ListType[]>>;
+  employees: ListType[];
   office: string | null;
   startDate: Value | undefined;
   setStartDate: Dispatch<SetStateAction<Value | undefined>>;
@@ -22,13 +25,14 @@ interface SurveyPlanStepOneProps {
   setEndDate: Dispatch<SetStateAction<Value | undefined>>;
   endDateErrorMessage: string;
   setEndDateErrorMessage: Dispatch<SetStateAction<string>>;
-  provinces: Array<{ value: string; label: string }>;
+  provinces: ListType[];
 }
 
 const SurveyPlanStepOne = ({
   form,
   lng,
   offices,
+  setOffices,
   office,
   startDate,
   setStartDate,
@@ -98,33 +102,33 @@ const SurveyPlanStepOne = ({
 
   return (
     <>
-      {office == "all" && (
-        <Flex
-          direction={{ base: "column", sm: "row" }}
-          gap="sm"
-          p="sm"
-          justify={{ sm: "center" }}
-        >
-          <TextInput
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        gap="sm"
+        p="sm"
+        justify={{ sm: "center" }}
+      >
+        <TextInput
+          style={{ flex: 1 }}
+          label={t("subject")}
+          placeholder={t("subject")}
+          withAsterisk
+          {...form.getInputProps("title")}
+        />
+        {office == "all" && (
+          <CustomAutoComplete
             style={{ flex: 1 }}
-            label={t("subject")}
-            placeholder={t("subject")}
-            withAsterisk
-            {...form.getInputProps("title")}
-          />
-          <Select
-            style={{ flex: 1 }}
+            lng={lng}
             label={t("office")}
             placeholder={t("office")}
-            withAsterisk
             data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
+            setData={setOffices}
+            url={`/office/auto_complete`}
+            withAsterisk
             {...form.getInputProps("office_id")}
           />
-        </Flex>
-      )}
+        )}
+      </Flex>
       <Flex
         direction={{ base: "column", sm: "row" }}
         gap="sm"

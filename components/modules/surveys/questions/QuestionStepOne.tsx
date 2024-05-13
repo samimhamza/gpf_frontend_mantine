@@ -2,12 +2,13 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { QuestionTypes } from "@/shared/constants";
+import { ListType } from "@/types/list";
 import { Box, Flex, Select, TextInput, Textarea } from "@mantine/core";
 
 interface QuestionStepOneProps {
   form: any;
   lng: string;
-  questions: Array<{ value: string; label: string }>;
+  questions: ListType[];
 }
 
 const QuestionStepOne = ({ form, lng, questions }: QuestionStepOneProps) => {

@@ -7,7 +7,7 @@ export const UserFilterContent = (t: (arg: string) => string) => {
           name: "users.office_id",
           label: t("office"),
           type: "autocomplete",
-          url: "/all_offices",
+          url: "/office/auto_complete",
           keyName: "name",
         },
       ],
