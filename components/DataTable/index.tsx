@@ -100,7 +100,13 @@ const CustomDataTable = ({
         setMutated(false);
       }
     })();
-  }, [mutated, mutate, setMutated, filterData]);
+  }, [mutated, mutate, setMutated]);
+
+  useEffect(() => {
+    setTableDetails((d: any) => {
+      return { ...d, filter_data: JSON.stringify(filterData) };
+    });
+  }, [filterData]);
 
   const renderActions = (record: any) => (
     <Actions

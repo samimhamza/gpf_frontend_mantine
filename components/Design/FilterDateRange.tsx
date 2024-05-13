@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useTransition } from "react";
-import { DateValue } from "@mantine/dates";
+import React, { useEffect, useState } from "react";
 import PersianDatePicker from "../PersianDatePicker";
 import { Box, Grid } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 
 interface DateRange {
-  from?: DateValue;
-  to?: DateValue;
+  from?: Date;
+  to?: Date;
 }
 
 interface FilterDateRangeProps {
@@ -29,11 +28,16 @@ export default function FilterDateRange({
     setDateRange(values);
   }, [values]);
 
-  const handleDateChange = (fieldName: keyof DateRange, date: DateValue) => {
-    console.log(date);
-    const newDateRange = { ...dateRange, [fieldName]: date };
-    setDateRange(newDateRange);
-    changeHandler(newDateRange);
+  const handleFromDateChange = (date: Date) => {
+    const updatedRange = { ...dateRange, from: date };
+    setDateRange(updatedRange);
+    changeHandler(updatedRange);
+  };
+
+  const handleToDateChange = (date: Date) => {
+    const updatedRange = { ...dateRange, to: date };
+    setDateRange(updatedRange);
+    changeHandler(updatedRange);
   };
 
   return (
@@ -43,7 +47,7 @@ export default function FilterDateRange({
         <Grid.Col>
           <PersianDatePicker
             value={dateRange.from}
-            onChange={(date: any) => handleDateChange("from", date)}
+            onChange={handleFromDateChange}
             placeholder={t("from_date")}
             isRequired={false}
           />
@@ -51,9 +55,7 @@ export default function FilterDateRange({
         <Grid.Col>
           <PersianDatePicker
             value={dateRange.to}
-            onChange={(date: any) => {
-              handleDateChange("to", date);
-            }}
+            onChange={handleToDateChange}
             placeholder={t("to_date")}
             isRequired={false}
           />

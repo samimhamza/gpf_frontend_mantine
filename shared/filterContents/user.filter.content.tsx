@@ -4,7 +4,7 @@ export const UserFilterContent = (t: (arg: string) => string) => {
       title: t("id_filtering"),
       items: [
         {
-          name: "office_code",
+          name: "users.office_id",
           label: t("office"),
           type: "autocomplete",
           url: "/all_offices",
@@ -15,22 +15,21 @@ export const UserFilterContent = (t: (arg: string) => string) => {
     {
       title: t("data_filtering"),
       items: [
+        // {
+        //   name: "age",
+        //   label: t("age"),
+        //   type: "data",
+        //   subType: "numberRange",
+        // },
         {
-          name: "age",
-          label: t("age"),
-          type: "data",
-          subType: "numberRange",
-        },
-        {
-          name: "full_name",
+          name: "users.full_name",
           label: t("full_name"),
           type: "data",
           subType: "textInput",
-          url: "/teams/",
           keyName: "name",
         },
         {
-          name: "username",
+          name: "users.username",
           label: t("username"),
           type: "data",
           subType: "textInput",
@@ -38,7 +37,7 @@ export const UserFilterContent = (t: (arg: string) => string) => {
           keyName: "name",
         },
         {
-          name: "created_by",
+          name: "users.created_by",
           label: t("created_by"),
           type: "data",
           subType: "textInput",
@@ -46,7 +45,7 @@ export const UserFilterContent = (t: (arg: string) => string) => {
           keyName: "name",
         },
         {
-          name: "updated_by",
+          name: "users.updated_by",
           label: t("updated_by"),
           type: "data",
           subType: "textInput",
@@ -54,7 +53,7 @@ export const UserFilterContent = (t: (arg: string) => string) => {
           keyName: "name",
         },
         {
-          name: "statuses",
+          name: "users.status",
           label: t("status"),
           type: "data",
           subType: "checkbox",
@@ -80,12 +79,12 @@ export const UserFilterContent = (t: (arg: string) => string) => {
       title: t("date_range_filtering"),
       items: [
         {
-          name: "created_at",
+          name: "users.created_at",
           label: t("created_at"),
           type: "date_range",
         },
         {
-          name: "updated_at",
+          name: "users.updated_at",
           label: t("updated_at"),
           type: "date_range",
         },

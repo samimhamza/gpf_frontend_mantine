@@ -75,7 +75,7 @@ const CustomFilterModal = ({
               <Grid.Col key={section.title} span={{ base: 12, md: 12, lg: 4 }}>
                 <ScrollArea h={{ lg: 450 }} scrollbars="y">
                   <Card shadow="sm" padding="md" radius="md" withBorder>
-                    <Title mb={20} order={4} ta="center" fw={500}>
+                    <Title mb={20} order={5} ta="center">
                       {section.title}
                     </Title>
                     {section.items.map((item: any, index: any) => (
@@ -106,7 +106,7 @@ const CustomFilterModal = ({
                               mb={10}
                               label={item.label}
                               placeholder={item.label}
-                              value={filterData[item.name]}
+                              value={filterData[item.name] ?? ""}
                               name={item.name ?? ""}
                               onChange={(event) => {
                                 setFilterData((state: any) => ({
@@ -132,7 +132,6 @@ const CustomFilterModal = ({
                               }}
                             />
                           )}
-
                         {item.type === "data" &&
                           item.subType === "numberRange" && (
                             <>
@@ -146,19 +145,32 @@ const CustomFilterModal = ({
                                 <NumberInput
                                   mb={10}
                                   placeholder={t("min")}
-                                  value={filterData[item.name]}
-                                  name={item.name ?? ""}
+                                  value={filterData[item.name]?.min ?? ""}
+                                  name={`${item.name}_min`}
                                   onChange={(event) => {
-                                    console.log(event);
+                                    setFilterData((state: any) => ({
+                                      ...state,
+                                      [item.name]: {
+                                        ...state[item.name],
+                                        min: event,
+                                      },
+                                    }));
                                   }}
                                 />
+
                                 <NumberInput
                                   mb={10}
                                   placeholder={t("max")}
-                                  value={filterData[item.name]}
-                                  name={item.name ?? ""}
+                                  value={filterData[item.name]?.max ?? ""}
+                                  name={`${item.name}_max`}
                                   onChange={(event) => {
-                                    console.log(event);
+                                    setFilterData((state: any) => ({
+                                      ...state,
+                                      [item.name]: {
+                                        ...state[item.name], // Preserve the existing state for other properties
+                                        max: event, // Update the max value
+                                      },
+                                    }));
                                   }}
                                 />
                               </Box>

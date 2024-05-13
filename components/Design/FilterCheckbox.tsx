@@ -21,23 +21,16 @@ export default function FilterCheckbox({
   const [checkboxValues, setCheckboxValues] = useState<string[]>(values ?? []);
 
   const handleCheckboxChange = (checked: boolean, value: string) => {
-    setCheckboxValues((items) =>
-      checked
-        ? items
-            .map((item: any) => {
-              return item.value;
-            })
-            .includes(value)
-          ? items
-          : [...items, value]
-        : items.filter((el) => el != value)
-    );
+    const updatedValues = checked
+      ? [...values, value]
+      : values.filter((item) => item !== value);
+
+    changeHandler({ [item.name]: updatedValues });
   };
 
   useEffect(() => {
-    changeHandler({ [item.name]: checkboxValues });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkboxValues]);
+    setCheckboxValues(values);
+  }, [values]);
 
   return (
     <Grid>
