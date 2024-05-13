@@ -2,7 +2,6 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { ListType } from "@/types/list";
 import { Loader, MultiSelect, Select } from "@mantine/core";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
@@ -13,6 +12,7 @@ const CustomAutoComplete = ({
   data,
   setData,
   url,
+  values,
   isSingle = true,
   ...props
 }: {
@@ -22,6 +22,7 @@ const CustomAutoComplete = ({
   data: any[];
   setData: Dispatch<SetStateAction<any[]>>;
   url: string;
+  values?: string[] | string | null;
   isSingle?: boolean;
   props?: any;
 }) => {
@@ -40,6 +41,7 @@ const CustomAutoComplete = ({
           url: url,
           params: {
             content: searchValue,
+            id: values ? values : null,
           },
         });
         if (status == 200 && response.result == true) {
@@ -55,7 +57,7 @@ const CustomAutoComplete = ({
         setLoading(false);
       })();
     }
-  }, [searchValue]);
+  }, [searchValue, values]);
 
   return isSingle ? (
     <Select

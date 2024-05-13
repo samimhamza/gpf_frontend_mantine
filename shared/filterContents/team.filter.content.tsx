@@ -14,7 +14,7 @@ export const TeamFilterContent = (t: (arg: string) => string) => {
           name: "office",
           label: t("office"),
           type: "autocomplete",
-          url: "/all_employess",
+          url: "/office/auto_complete",
           keyName: "name",
         },
         {

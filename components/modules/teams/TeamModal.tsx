@@ -81,7 +81,6 @@ const TeamModal = ({
           url: `/teams/${editId}`,
         });
         if (status == 200 && response.result == true) {
-          let values: any = {};
           form.setValues({
             name: response.data.name,
             office_id: response.data.office_id.toString(),

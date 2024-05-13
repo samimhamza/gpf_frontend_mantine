@@ -51,6 +51,7 @@ const MosqueStepOne = ({
             data={offices}
             setData={setOffices}
             url={`/office/auto_complete`}
+            values={form?.values?.office_id}
             withAsterisk
             {...form.getInputProps("office_id")}
           />
