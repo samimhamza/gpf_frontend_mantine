@@ -31,7 +31,7 @@ const TeamModal = ({
   const teamsSchema = TeamsSchema(t);
   const callApi = useAxios();
   const [loading, setLoading] = useState(false);
-  const [employees, SetEmployees] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
   const initialValues: any = {
     name: "",
@@ -102,7 +102,7 @@ const TeamModal = ({
         url: "/all_employees",
       });
       if (status == 200 && response.result == true) {
-        SetEmployees(
+        setEmployees(
           response.data.map((item: any) => {
             return {
               value: item.id.toString(),

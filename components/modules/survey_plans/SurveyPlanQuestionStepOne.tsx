@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Flex, MultiSelect } from "@mantine/core";
-import { useState } from "react";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
+import { Flex } from "@mantine/core";
 
 interface SurveyPlanQuestionStepOneProps {
   form: any;
@@ -25,19 +25,17 @@ const SurveyPlanQuestionStepOne = ({
         p="sm"
         justify={{ sm: "center" }}
       >
-        <MultiSelect
+        <CustomAutoComplete
           style={{ flex: 1 }}
+          lng={lng}
           label={t("questions")}
           placeholder={t("questions")}
-          withAsterisk
           data={questions}
-          searchable
-          clearable
-          hidePickedOptions
-          nothingFoundMessage={t("noting_found")}
+          url={`/question/auto_complete`}
+          values={form?.values?.questions}
+          withAsterisk
+          isSingle={false}
           {...form.getInputProps("questions")}
-          size="sm"
-          maxDropdownHeight={140}
         />
       </Flex>
     </>

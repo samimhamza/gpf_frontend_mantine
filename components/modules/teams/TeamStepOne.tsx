@@ -3,7 +3,7 @@
 import { useTranslation } from "@/app/i18n/client";
 import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
 import { ListType } from "@/types/list";
-import { Box, Flex, MultiSelect, TextInput } from "@mantine/core";
+import { Box, Flex, TextInput } from "@mantine/core";
 import { Dispatch, SetStateAction } from "react";
 
 interface TeamStepOneProps {
@@ -40,19 +40,17 @@ const TeamStepOne = ({
           withAsterisk
           {...form.getInputProps("name")}
         />
-        <MultiSelect
+        <CustomAutoComplete
           style={{ flex: 1 }}
+          lng={lng}
           label={t("members")}
           placeholder={t("members")}
-          withAsterisk
           data={employees}
-          searchable
-          clearable
-          hidePickedOptions
-          nothingFoundMessage={t("noting_found")}
+          url={`/employee/auto_complete`}
+          values={form?.values?.members}
+          withAsterisk
+          isSingle={false}
           {...form.getInputProps("members")}
-          size="sm"
-          maxDropdownHeight={140}
         />
       </Flex>
       {office == "all" && (

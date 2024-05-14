@@ -45,14 +45,16 @@ const CustomAutoComplete = ({
           },
         });
         if (status == 200 && response.result == true) {
-          setData(
-            response.data.map((item: any) => {
-              return {
-                value: item.id.toString(),
-                label: item.name + " (" + item.code + ")",
-              };
-            })
-          );
+          if (setData) {
+            setData(
+              response.data.map((item: any) => {
+                return {
+                  value: item.id.toString(),
+                  label: item.name + " (" + item.code + ")",
+                };
+              })
+            );
+          }
         }
         setLoading(false);
       })();
