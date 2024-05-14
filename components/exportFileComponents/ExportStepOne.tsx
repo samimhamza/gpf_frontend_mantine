@@ -1,115 +1,56 @@
-'use client';
+"use client";
 
-import { useTranslation } from '@/app/i18n/client';
-import { Box, Flex, Select, TextInput } from '@mantine/core';
+import { useTranslation } from "@/app/i18n/client";
+import { Flex, Select } from "@mantine/core";
 
 interface ExportStepOneProps {
   form: any;
   lng: string;
-  offices: Array<{ value: string; label: string }>;
-  office: string | null;
-  users: Array<{ value: string; label: string }>;
 }
 
-const ExportStepOne = ({
-  form,
-  lng,
-  office,
-  offices,
-  users,
-}: ExportStepOneProps) => {
+const ExportStepOne = ({ form, lng }: ExportStepOneProps) => {
   const { t } = useTranslation(lng);
+  const types = [
+    { label: "PDF", value: "pdf" },
+    { label: "Excel", value: "excel" },
+  ];
+  const sizes = [
+    { label: "Current Page Data", value: "current" },
+    { label: "Current Filter Data", value: "filtered" },
+    { label: "All Data", value: "all" },
+  ];
 
   return (
     <>
       <Flex
-        direction={{ base: 'column', sm: 'row' }}
+        direction={{ base: "column", sm: "row" }}
         gap='sm'
         p='sm'
-        justify={{ sm: 'center' }}
+        justify={{ sm: "center" }}
       >
-        <TextInput
+        <Select
           style={{ flex: 1 }}
-          label={t('first_name')}
-          placeholder={t('first_name')}
+          label={t("downloadType")}
+          placeholder={t("downloadType")}
           withAsterisk
-          {...form.getInputProps('first_name')}
-        />
-        <TextInput
-          style={{ flex: 1 }}
-          label={t('last_name')}
-          placeholder={t('last_name')}
-          withAsterisk
-          {...form.getInputProps('last_name')}
-        />
-      </Flex>
-      <Flex
-        direction={{ base: 'column', sm: 'row' }}
-        gap='sm'
-        p='sm'
-        justify={{ sm: 'center' }}
-      >
-        <TextInput
-          style={{ flex: 1 }}
-          label={t('father_name')}
-          placeholder={t('father_name')}
-          withAsterisk
-          {...form.getInputProps('father_name')}
-        />
-        <TextInput
-          style={{ flex: 1 }}
-          label={t('job_location')}
-          placeholder={t('job_location')}
-          withAsterisk
-          {...form.getInputProps('job_location')}
-        />
-      </Flex>
-      <Flex
-        direction={{ base: 'column', sm: 'row' }}
-        gap='sm'
-        p='sm'
-        justify={{ sm: 'left' }}
-      >
-        <TextInput
-          style={{ flex: 1 }}
-          label={t('position')}
-          placeholder={t('position')}
-          withAsterisk
-          {...form.getInputProps('position')}
+          data={types}
+          searchable
+          clearable
+          nothingFoundMessage={t("noting_found")}
+          {...form.getInputProps("downloadType")}
         />
         <Select
           style={{ flex: 1 }}
-          label={t('user')}
-          placeholder={t('user')}
+          label={t("downloadSize")}
+          placeholder={t("downloadSize")}
           withAsterisk
-          data={users}
+          data={sizes}
           searchable
           clearable
-          nothingFoundMessage={t('noting_found')}
-          {...form.getInputProps('user_id')}
+          nothingFoundMessage={t("noting_found")}
+          {...form.getInputProps("downloadSize")}
         />
       </Flex>
-      {office == 'all' && (
-        <Flex
-          direction={{ base: 'column', sm: 'row' }}
-          gap='sm'
-          p='sm'
-          justify={{ sm: 'center' }}
-        >
-          <Select
-            style={{ flex: 1 }}
-            label={t('office')}
-            placeholder={t('office')}
-            withAsterisk
-            data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t('noting_found')}
-            {...form.getInputProps('office_id')}
-          />
-          <Box style={{ flex: 1 }}></Box>
-        </Flex>
-      )}
     </>
   );
 };
