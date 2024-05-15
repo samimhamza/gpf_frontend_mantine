@@ -8,7 +8,10 @@ interface ExportStepOneProps {
   lng: string;
 }
 
-const ExportStepOne = ({ form, lng }: ExportStepOneProps) => {
+const ExportStepOne = ({
+  form,
+  lng,
+}: ExportStepOneProps) => {
   const { t } = useTranslation(lng);
   const types = [
     { label: "PDF", value: "pdf" },
