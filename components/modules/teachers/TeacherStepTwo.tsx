@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
 import { useAxios } from "@/customHooks/useAxios";
 import { Genders, StaffTypes, SurveyTypes } from "@/shared/constants";
 import { ListType } from "@/types/list";
@@ -96,7 +97,7 @@ const TeacherStepTwo = ({
         p="sm"
         justify={{ sm: "center" }}
       >
-        <Select
+        {/* <Select
           style={{ flex: 1 }}
           label={t("school")}
           placeholder={t("school")}
@@ -105,6 +106,17 @@ const TeacherStepTwo = ({
           searchable
           clearable
           nothingFoundMessage={t("noting_found")}
+          {...form.getInputProps("school_id")}
+        /> */}
+        <CustomAutoComplete
+          style={{ flex: 1 }}
+          lng={lng}
+          label={t("school")}
+          placeholder={t("school")}
+          data={schools}
+          url={`/school/auto_complete`}
+          values={form?.values?.school_id}
+          withAsterisk
           {...form.getInputProps("school_id")}
         />
         <Select

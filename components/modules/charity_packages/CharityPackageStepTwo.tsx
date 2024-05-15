@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
 import {
   ActionIcon,
   Box,

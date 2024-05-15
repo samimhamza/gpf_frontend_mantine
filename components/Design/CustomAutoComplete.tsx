@@ -32,7 +32,7 @@ const CustomAutoComplete = ({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    let index = data.findIndex((item) => item.label == searchValue);
+    let index = data?.findIndex((item) => item.label == searchValue);
     if (index == -1) {
       (async () => {
         setLoading(true);
@@ -50,7 +50,7 @@ const CustomAutoComplete = ({
               response.data.map((item: any) => {
                 return {
                   value: item.id.toString(),
-                  label: item.name + " (" + item.code + ")",
+                  label: item.name + " (" + item.code ? item.code : "" + ")",
                 };
               })
             );
