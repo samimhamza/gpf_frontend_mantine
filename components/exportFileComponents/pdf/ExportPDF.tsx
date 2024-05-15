@@ -1,14 +1,14 @@
 import {
   Document,
   PDFDownloadLink,
-  PDFViewer,
   Page,
   StyleSheet,
   Text,
   View,
+  pdf,
 } from "@react-pdf/renderer";
+import { saveAs } from "file-saver";
 import { useTranslation } from "react-i18next";
-
 // Define types for data
 interface UserData {
   id: number;
@@ -188,7 +188,7 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({ data }) => {
   );
 };
 
-// Define UI component
+// ! Define UI component
 const DownloadPDFButton: React.FC<{ data: UserData[] }> = ({ data }) => {
   return (
     <PDFDownloadLink
@@ -201,41 +201,8 @@ const DownloadPDFButton: React.FC<{ data: UserData[] }> = ({ data }) => {
 };
 export default DownloadPDFButton;
 
-export function generatePDFDownloadLink(data: UserData[]) {
-  return (
-    <PDFDownloadLink
-      document={<MyPDFDocument data={data} />}
-      fileName='data.pdf'
-    >
-      {({ loading }) => (loading ? "" : "Download PDF")}
-    </PDFDownloadLink>
-  );
-}
-
-// Function to handle PDF download
-const handleDownloadPDF = (data: any) => {
-  // Render the PDF using PDFViewer
-  const pdfViewer = (
-    <PDFViewer width='100%' height='100%'>
-      <MyPDFDocument data={data} />
-    </PDFViewer>
-  );
-
-  // Create a new promise to wait for the PDF to be rendered
-  const pdfPromise = new Promise((resolve) => {
-    const container = document.createElement("div");
-    createRoot(container).render(pdfViewer);
-    resolve(container.querySelector("canvas").toBlob());
-  });
-
-  // Once the PDF is rendered, generate a blob and initiate download
-  pdfPromise.then((blob) => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "user_data.pdf";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  });
+// ! Download PDF function
+export const handleDownloadPDF = async (data: any) => {
+  const blob = await pdf(<MyPDFDocument data={data} />).toBlob();
+  saveAs(blob, "untitled.pdf");
 };

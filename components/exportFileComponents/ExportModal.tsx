@@ -7,8 +7,7 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import { FaUserShield } from "react-icons/fa";
 import ExportStepOne from "./ExportStepOne";
-import { PDFViewer } from "@react-pdf/renderer";
-import { createRoot } from "react-dom";
+import { handleDownloadPDF } from "./pdf/ExportPDF";
 
 // Sample data for the DataTable
 const data = [
@@ -249,10 +248,8 @@ const ExportModal = ({
   ];
 
   const handleSubmit = () => {
-    // Call the generatePDFDownloadLink function with the necessary data
+    handleDownloadPDF(data);
   };
-
-
 
   return (
     <form>
@@ -261,7 +258,7 @@ const ExportModal = ({
         close={anotherClose}
         steps={steps}
         form={form}
-        submit={handleDownloadPDF}
+        submit={handleSubmit}
         lng={lng}
         title={title}
         editId={editId}
