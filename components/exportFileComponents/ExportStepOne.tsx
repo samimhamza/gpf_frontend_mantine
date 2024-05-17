@@ -5,23 +5,13 @@ import { Flex, Select } from "@mantine/core";
 
 interface ExportStepOneProps {
   form: any;
+  types: any;
+  sizes: any;
   lng: string;
 }
 
-const ExportStepOne = ({
-  form,
-  lng,
-}: ExportStepOneProps) => {
+const ExportStepOne = ({ form, lng, types, sizes }: ExportStepOneProps) => {
   const { t } = useTranslation(lng);
-  const types = [
-    { label: "PDF", value: "pdf" },
-    { label: "Excel", value: "excel" },
-  ];
-  const sizes = [
-    { label: "Current Page Data", value: "current" },
-    { label: "Current Filter Data", value: "filtered" },
-    { label: "All Data", value: "all" },
-  ];
 
   return (
     <>
