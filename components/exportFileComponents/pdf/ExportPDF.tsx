@@ -10,9 +10,9 @@ import {
   pdf,
 } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
+import { t } from "i18next";
 import NotoSans from "../../../public/fonts/NotoSansArabic-Regular.ttf";
 
-// Define types for data
 interface UserData {
   id: number;
   full_name: string;
@@ -26,10 +26,8 @@ interface UserData {
 interface MyPDFDocumentProps {
   data: UserData[];
   lng: string;
+  exportTitle: string;
 }
-const item = {
-  created_at: "2024-05-07T20:12:30.000000Z",
-};
 
 // ! Format TimeStamps
 function formatTimestamp(isoTimestamp: string): string {
@@ -78,6 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#989898",
     fontSize: 10,
     fontWeight: "ultrabold",
+    justifyContent: "center",
   },
 
   tableCell: {
@@ -87,6 +86,7 @@ const styles = StyleSheet.create({
     borderRightColor: "#bfbfbf",
     borderBottomWidth: 1,
     borderBottomColor: "#bfbfbf",
+    justifyContent: "center",
   },
 
   tableRow: {
@@ -134,12 +134,16 @@ const styles = StyleSheet.create({
 });
 
 // ! PDF Table
-const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({ data, lng }) => {
+const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
+  data,
+  lng,
+  exportTitle,
+}) => {
   const { t } = useTranslation(lng);
   return (
     <Document>
       <Page size='A4' style={styles.page}>
-        <Text style={styles.header}>{t("users")}</Text>
+        <Text style={styles.header}>{t(exportTitle)}</Text>
         <View style={styles.table}>
           {/* Table header */}
           <View style={[styles.tableRow, styles.tableHeader]}>
@@ -218,19 +222,28 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({ data, lng }) => {
 };
 
 // ! Download PDF function
-export const handleDownloadPDF = async (data: UserData[], lng: string) => {
-  const blob = await pdf(<MyPDFDocument data={data} lng={lng} />).toBlob();
-  saveAs(blob, "pdf");
+export const handleDownloadPDF = async (
+  data: UserData[],
+  lng: string,
+  exportTitle: string
+) => {
+  const blob = await pdf(
+    <MyPDFDocument data={data} lng={lng} exportTitle={exportTitle} />
+  ).toBlob();
+  saveAs(blob, t(exportTitle));
 };
 
 // ! Define UI component
-const DownloadPDFButton: React.FC<{ data: UserData[]; lng: string }> = ({
-  data,
-  lng,
-}) => {
+const DownloadPDFButton: React.FC<{
+  data: UserData[];
+  lng: string;
+  exportTitle: string;
+}> = ({ data, lng, exportTitle }) => {
   return (
     <PDFDownloadLink
-      document={<MyPDFDocument data={data} lng={lng} />}
+      document={
+        <MyPDFDocument data={data} lng={lng} exportTitle={exportTitle} />
+      }
       fileName='data.pdf'
     >
       {({ loading }) => (loading ? "" : "Download PDF")}

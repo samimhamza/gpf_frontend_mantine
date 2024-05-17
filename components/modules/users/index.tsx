@@ -93,6 +93,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
           }}
           lng={lng}
           title={t("export")}
+          exportTitle={t('users')}
           setMutated={setMutated}
           editId={edit}
         />
