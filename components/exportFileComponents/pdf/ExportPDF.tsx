@@ -6,9 +6,11 @@ import {
   Page,
   StyleSheet,
   Text,
+  View,
   pdf,
 } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
+import NotoSans from "../../../public/fonts/NotoSansArabic-Regular.ttf";
 
 // Define types for data
 interface UserData {
@@ -24,16 +26,29 @@ interface UserData {
 interface MyPDFDocumentProps {
   data: UserData[];
   lng: string;
-} // Register Noto Naskh Arabic font for English and Persian
+}
+const item = {
+  created_at: "2024-05-07T20:12:30.000000Z",
+};
 
-// ! Register Vazir font for English and Persian
+// ! Format TimeStamps
+function formatTimestamp(isoTimestamp: string): string {
+  const date = new Date(isoTimestamp);
 
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // getUTCMonth() returns 0-11, so we add 1
+  const year = String(date.getUTCFullYear()).slice(-2); // get last 2 digits of the year
+
+  return `${day}/${month}/${year}`;
+}
+
+// ! Register Noto Sans Arabic Google font for English and Persian
+// ! Because not every font support Persian
 Font.register({
-  family: "NotoNaskhArabic",
+  family: "NotoSans",
   fonts: [
     {
-      src: "https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj4wv4o.woff2",
-      fontWeight: "normal",
+      src: NotoSans,
     },
   ],
 });
@@ -42,11 +57,11 @@ Font.register({
 const styles = StyleSheet.create({
   page: {
     padding: 4,
-    // fontFamily: "NotoNaskhArabic", // Apply the registered font
+    fontFamily: "NotoSans", // Apply the registered font
   },
   header: {
     fontSize: 16,
-    // fontWeight: "extrabold",
+    fontWeight: "extrabold",
     margin: 10,
     textAlign: "center",
     color: "black",
@@ -60,9 +75,9 @@ const styles = StyleSheet.create({
   },
   tableHeader: {
     width: "100%",
-    backgroundColor: "cyan",
+    backgroundColor: "#989898",
     fontSize: 10,
-    // fontWeight: "ultrabold",
+    fontWeight: "ultrabold",
   },
 
   tableCell: {
@@ -80,7 +95,7 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    fontSize: 8,
+    fontSize: 10,
   },
 
   evenRow: {
@@ -91,30 +106,30 @@ const styles = StyleSheet.create({
   },
 
   idCell: {
-    width: "5%",
+    width: "8%",
   },
 
   emailCell: {
-    width: "20%",
+    width: "22%",
   },
 
   userNameCell: {
     width: "12%",
   },
   fullNameCell: {
-    width: "16%",
+    width: "18%",
   },
   statusCell: {
     width: "8%",
   },
   createdAtCell: {
-    width: "15%",
+    width: "13%",
   },
   createdByCell: {
     width: "12%",
   },
   officeCell: {
-    width: "13%",
+    width: "8%",
   },
 });
 
@@ -124,10 +139,88 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({ data, lng }) => {
   return (
     <Document>
       <Page size='A4' style={styles.page}>
-        <Text style={styles.header}> {t("users")}</Text>
+        <Text style={styles.header}>{t("users")}</Text>
+        <View style={styles.table}>
+          {/* Table header */}
+          <View style={[styles.tableRow, styles.tableHeader]}>
+            <View style={[styles.tableCell, styles.idCell]}>
+              <Text>{t("id")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.userNameCell]}>
+              <Text>{t("username")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.fullNameCell]}>
+              <Text>{t("full_name")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.emailCell]}>
+              <Text>{t("email")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.statusCell]}>
+              <Text>{t("status")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.createdAtCell]}>
+              <Text>{t("created_at")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.createdByCell]}>
+              <Text>{t("created_by")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.officeCell]}>
+              <Text>{t("office_code")}</Text>
+            </View>
+          </View>
+          {/* Table data */}
+          {data.map((item, index) => (
+            <View
+              style={[
+                styles.tableRow,
+                index % 2 === 0 ? styles.evenRow : styles.oddRow,
+              ]}
+              key={item.id}
+            >
+              <View style={[styles.tableCell, styles.item, styles.idCell]}>
+                <Text>{item.id}</Text>
+              </View>
+              <View
+                style={[styles.tableCell, styles.item, styles.userNameCell]}
+              >
+                <Text>{item.username}</Text>
+              </View>
+              <View
+                style={[styles.tableCell, styles.item, styles.fullNameCell]}
+              >
+                <Text>{item.full_name}</Text>
+              </View>
+              <View style={[styles.tableCell, styles.item, styles.emailCell]}>
+                <Text>{item.email}</Text>
+              </View>
+              <View style={[styles.tableCell, styles.item, styles.statusCell]}>
+                <Text>{item.status}</Text>
+              </View>
+              <View
+                style={[styles.tableCell, styles.item, styles.createdAtCell]}
+              >
+                <Text>{formatTimestamp(item.created_at)}</Text>
+              </View>
+              <View
+                style={[styles.tableCell, styles.item, styles.createdByCell]}
+              >
+                <Text>{item.created_by}</Text>
+              </View>
+              <View style={[styles.tableCell, styles.item, styles.officeCell]}>
+                <Text>{item.office_code}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
       </Page>
     </Document>
   );
+};
+
+// ! Download PDF function
+export const handleDownloadPDF = async (data: UserData[], lng: string) => {
+  const blob = await pdf(<MyPDFDocument data={data} lng={lng} />).toBlob();
+  saveAs(blob, "pdf");
 };
 
 // ! Define UI component
@@ -145,9 +238,3 @@ const DownloadPDFButton: React.FC<{ data: UserData[]; lng: string }> = ({
   );
 };
 export default DownloadPDFButton;
-
-// ! Download PDF function
-export const handleDownloadPDF = async (data: UserData[], lng: string) => {
-  const blob = await pdf(<MyPDFDocument data={data} lng={lng} />).toBlob();
-  saveAs(blob, "dfsg");
-};

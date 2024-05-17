@@ -87,7 +87,7 @@ const ExportModal = ({
         if (status == 200 && response.result) {
           const data = response.data;
           await setMutated(true);
-          handleDownloadPDF(data, lng);
+          handleDownloadPDF(data, lng, );
 
           return true;
         }

@@ -226,5 +226,6 @@
 	"position": "شغل",
 	"user_id": "آی دی کاربر",
 	"all_offices": "تمام دفاتر",
-	"export": "دانلود"
+	"export": "دانلود",
+	"office_code": "کد دفتر"
 }
