@@ -18,14 +18,14 @@ const ExportModal = ({
   setMutated,
   title,
   editId,
-  exportTitle
+  exportTitle,
 }: {
   anotherOpened: boolean;
   anotherClose: () => void;
   lng: string;
   setMutated: any;
   title: string;
-  exportTitle: string,
+  exportTitle: string;
   editId: number | undefined;
 }) => {
   const { t } = useTranslation(lng);
@@ -85,16 +85,26 @@ const ExportModal = ({
           method: "GET",
           url: "/users",
         });
-
         if (status == 200 && response.result) {
           const data = response.data;
           await setMutated(true);
           handleDownloadPDF(data, lng, exportTitle);
-
           return true;
         }
       } else if (downloadSize == "filtered") {
         // ! TODO LATER
+      } else if (downloadSize == "all") {
+        const { response, status } = await callApi({
+          method: "GET",
+          url: "/users",
+          params: { per_page: -1 },
+        });
+        if (status == 200 && response.result) {
+          const data = response.data;
+          await setMutated(true);
+          handleDownloadPDF(data, lng, exportTitle);
+          return true;
+        }
       }
     } else if (downloadType == "excel") {
     }
