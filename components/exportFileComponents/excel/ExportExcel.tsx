@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import * as XLSX from "xlsx";
 
 interface UserData {
@@ -15,14 +16,32 @@ interface UserData {
   updated_by: string;
 }
 
+const translateHeaders = (headers: string[]) => {
+  return headers.map((header) => t(header));
+};
+
 // ! Function To Download Excel Table
-export const handleDownloadExcel = (data: UserData[]) => {
-  console.log("downlaod excel");
-  // Convert JSON to worksheet
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  // Create a new workbook
+
+export const handleDownloadExcel = (data: UserData[], exportTitle: string) => {
+  const translatedHeaders = translateHeaders([
+    "id",
+    "fullName",
+    "email",
+    "status",
+  ]); // Translate header labels
+
+  const worksheetData = data.map((user) => ({
+    [t("id")]: user.id,
+    [t("fullName")]: user.full_name,
+    [t("email")]: user.email,
+    [t("status")]: user.status,
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(worksheetData, {
+    header: translatedHeaders,
+  });
   const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
-  // Generate binary string and trigger download
-  XLSX.writeFile(workbook, "User_data.xlsx");
+  XLSX.utils.book_append_sheet(workbook, worksheet, exportTitle); // Translate sheet name
+
+  XLSX.writeFile(workbook, `${exportTitle}.xlsx`);
 };
