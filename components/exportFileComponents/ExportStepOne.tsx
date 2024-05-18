@@ -32,6 +32,13 @@ const ExportStepOne = ({ form, lng, types, sizes }: ExportStepOneProps) => {
           nothingFoundMessage={t("noting_found")}
           {...form.getInputProps("downloadType")}
         />
+      </Flex>
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        gap='sm'
+        p='sm'
+        justify={{ sm: "center" }}
+      >
         <Select
           style={{ flex: 1 }}
           label={t("downloadSize")}
