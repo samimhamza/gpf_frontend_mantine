@@ -3,7 +3,7 @@ import * as z from "zod";
 
 export const ExportFileSchema = (t: (arg: string) => string) => {
   return z.object({
-    downloadType: z
+    downloadFormat: z
       .string({
         invalid_type_error: t("field_required"),
       }) .min(1, {

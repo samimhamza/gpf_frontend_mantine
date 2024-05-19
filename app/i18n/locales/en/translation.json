@@ -242,5 +242,11 @@
 	"total_choices": "Total Choices",
 	"office_id": "Office ID",
 	"export": "Export",
-	"office_code": "Office Code"
+	"office_code": "Office Code",
+	"exportFile_info": "Export File",
+	"download_format": "Download Format",
+	"download_size": "Download Size",
+	"current_page_data": "Current Page Data" ,
+	"current_filtered_data": "current Filtered Data",
+	"all_data": "All Data"
 }

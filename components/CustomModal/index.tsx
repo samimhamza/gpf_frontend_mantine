@@ -132,7 +132,7 @@ const CustomModal = ({
         closeOnClickOutside={false}
       >
         <Group justify='space-between' className='modal-header' p='xs'>
-          <Title order={4}>{"title"}</Title>
+          <Title order={4}>{t("title")}</Title>
           <CloseButton
             className='close-btn'
             aria-label='Close modal'
