@@ -1,14 +1,16 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { useAxios } from "@/customHooks/useAxios";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
+import { ListType } from "@/types/list";
 import { Flex, Select, TextInput } from "@mantine/core";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface MosqueStepOneProps {
   form: any;
   lng: string;
-  offices: any;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<ListType[]>>;
   provinces: any;
   districts: any;
   office: string | null;
@@ -18,29 +20,13 @@ const MosqueStepOne = ({
   form,
   lng,
   offices,
+  setOffices,
   provinces,
   districts,
   office,
 }: MosqueStepOneProps) => {
   const { t } = useTranslation(lng);
-  const callApi = useAxios();
-  const [loading, setLoading] = useState(false);
 
-  // const handleSearch = async (value: string) => {
-  // 	setLoading(true);
-  // 	const { response, status, error } = await callApi({
-  //    method: "GET",
-  // 		url: `/office/auto_complete?name=${value}`,
-  // 	});
-  // 	if (status == 200 && response.result == true) {
-  // 		setOffices(
-  // 			response.data.map((item: any) => {
-  // 				return { value: item.id.toString(), label: item.name };
-  // 			})
-  // 		);
-  // 	}
-  // 	setLoading(false);
-  // };
   return (
     <>
       <Flex
@@ -57,15 +43,16 @@ const MosqueStepOne = ({
           {...form.getInputProps("name")}
         />
         {office == "all" && (
-          <Select
+          <CustomAutoComplete
             style={{ flex: 1 }}
+            lng={lng}
             label={t("office")}
             placeholder={t("office")}
-            withAsterisk
             data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
+            setData={setOffices}
+            url={`/office/auto_complete`}
+            values={form?.values?.office_id}
+            withAsterisk
             {...form.getInputProps("office_id")}
           />
         )}

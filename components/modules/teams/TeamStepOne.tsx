@@ -1,13 +1,17 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Flex, MultiSelect, Select, TextInput } from "@mantine/core";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
+import { ListType } from "@/types/list";
+import { Box, Flex, TextInput } from "@mantine/core";
+import { Dispatch, SetStateAction } from "react";
 
 interface TeamStepOneProps {
   form: any;
   lng: string;
-  offices: Array<{ value: string; label: string }>;
-  employees: Array<{ value: string; label: string }>;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<any[]>>;
+  employees: ListType[];
   office: string | null;
 }
 
@@ -15,6 +19,7 @@ const TeamStepOne = ({
   form,
   lng,
   offices,
+  setOffices,
   employees,
   office,
 }: TeamStepOneProps) => {
@@ -35,6 +40,18 @@ const TeamStepOne = ({
           withAsterisk
           {...form.getInputProps("name")}
         />
+        <CustomAutoComplete
+          style={{ flex: 1 }}
+          lng={lng}
+          label={t("members")}
+          placeholder={t("members")}
+          data={employees}
+          url={`/employee/auto_complete`}
+          values={form?.values?.members}
+          withAsterisk
+          isSingle={false}
+          {...form.getInputProps("members")}
+        />
       </Flex>
       {office == "all" && (
         <Flex
@@ -43,42 +60,21 @@ const TeamStepOne = ({
           p="sm"
           justify={{ sm: "center" }}
         >
-          <Select
+          <CustomAutoComplete
             style={{ flex: 1 }}
+            lng={lng}
             label={t("office")}
             placeholder={t("office")}
-            withAsterisk
             data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
-            // onSearchChange={handleSearch}
-            // rightSection={loading && <Loader color="primary" size={15} />}
+            setData={setOffices}
+            url={`/office/auto_complete`}
+            values={form?.values?.office_id}
+            withAsterisk
             {...form.getInputProps("office_id")}
           />
+          <Box style={{ flex: 1 }}></Box>
         </Flex>
       )}
-      <Flex
-        direction={{ base: "column", sm: "row" }}
-        gap="sm"
-        p="sm"
-        justify={{ sm: "center" }}
-      >
-        <MultiSelect
-          style={{ flex: 1 }}
-          label={t("team")}
-          placeholder={t("team")}
-          withAsterisk
-          data={employees}
-          searchable
-          clearable
-          hidePickedOptions
-          nothingFoundMessage={t("noting_found")}
-          {...form.getInputProps("members")}
-          size="sm"
-          maxDropdownHeight={140}
-        />
-      </Flex>
     </>
   );
 };

@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useTranslation } from '@/app/i18n/client';
-import { ActionIcon, Button, Group, Input, Paper } from '@mantine/core';
-import { FaFileDownload } from 'react-icons/fa';
-import { IoSearch } from 'react-icons/io5';
-import { MdAdd, MdDelete } from 'react-icons/md';
-
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useTranslation } from "@/app/i18n/client";
+import { ActionIcon, Button, Group, Input, Paper } from "@mantine/core";
+import { MdAdd, MdFilter } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { IoSearch } from "react-icons/io5";
+import { Dispatch, SetStateAction, useState } from "react";
+import { FaFileDownload } from "react-icons/fa";
 
 interface ActionMenuProps {
   deleteUrl: string;
@@ -22,6 +22,8 @@ interface ActionMenuProps {
   deleteLoading: boolean;
   showExport: boolean;
   handleDelete: (e: any) => {};
+  showFilter?: boolean;
+  openFilterCliked: any;
 }
 
 const ActionMenu = ({
@@ -35,9 +37,11 @@ const ActionMenu = ({
   showExport,
   deleteLoading,
   handleDelete,
+  showFilter,
+  openFilterCliked,
 }: ActionMenuProps) => {
   const { t } = useTranslation(lng);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const handleSearch = (e: any) => {
     if (e.keyCode == 13) {
@@ -46,20 +50,29 @@ const ActionMenu = ({
   };
 
   return (
-    <Paper p='md' withBorder shadow='sm' mb='md'>
-      <Group justify='space-between' align='center'>
+    <Paper p="md" withBorder shadow="sm" mb="md">
+      <Group justify="space-between" align="center">
         <Group>
+          {showFilter && (
+            <Button
+              onClick={openFilterCliked}
+              rightSection={<MdFilter size={14} />}
+            >
+              {t("filter")}
+            </Button>
+          )}
+
           <Input
-            radius='xl'
-            placeholder={t('search')}
-            w='300px'
+            radius="xl"
+            placeholder={t("search")}
+            w="300px"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={handleSearch}
           />
-          <ActionIcon variant='filled' radius='xl' aria-label='Search'>
+          <ActionIcon variant="filled" radius="xl" aria-label="Search">
             <IoSearch
-              style={{ width: '70%', height: '70%' }}
+              style={{ width: "70%", height: "70%" }}
               onClick={() => onSearch(search)}
             />
           </ActionIcon>
@@ -69,24 +82,24 @@ const ActionMenu = ({
             <Button
               loading={deleteLoading}
               onClick={handleDelete}
-              color='red'
+              color="red"
               rightSection={<MdDelete size={14} />}
             >
-              {t('delete')}
+              {t("delete")}
             </Button>
           )}
           {showAdd && (
             <Button onClick={open} rightSection={<MdAdd size={14} />}>
-              {t('add')}
+              {t("add")}
             </Button>
           )}
           {showExport && (
             <Button
               onClick={anotherOpen}
-              color='green'
+              color="green"
               rightSection={<FaFileDownload size={14} />}
             >
-              {t('export')}
+              {t("export")}
             </Button>
           )}
         </Group>

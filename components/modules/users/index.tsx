@@ -16,6 +16,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import UserModal from "./UserModal";
+import CustomFilterModal from "@/components/CustomFilterModal";
+import { UserFilterContent } from "@/shared/filterContents/user.filter.content";
 
 export const UserModule = ({ lng }: { lng: string }) => {
   const router = useRouter();
@@ -34,6 +36,9 @@ export const UserModule = ({ lng }: { lng: string }) => {
 
   const [edit, setEdit] = useState<number>();
   const [view, setView] = useState<number>();
+  const [openFilter, setOpenFilter] = useState(false);
+  const [filterData, setFilterData] = useState({});
+  const filterContent = UserFilterContent(t);
 
   useEffect(() => {
     if (edit) {
@@ -57,8 +62,8 @@ export const UserModule = ({ lng }: { lng: string }) => {
       />
       <CustomDataTable
         title={t("users")}
-        url='/users'
-        deleteUrl='/users/1'
+        url="/users"
+        deleteUrl="/users/1"
         lng={lng}
         columns={columns}
         open={open}
@@ -70,6 +75,9 @@ export const UserModule = ({ lng }: { lng: string }) => {
         showAdd={permissionChecker(CREATE_USERS)}
         showDelete={permissionChecker(DELETE_USERS)}
         showEdit={permissionChecker(UPDATE_USERS)}
+        showFilter={true}
+        openFilterCliked={() => setOpenFilter(true)}
+        filterData={filterData}
       />
       {opened && (
         <UserModal
@@ -93,9 +101,20 @@ export const UserModule = ({ lng }: { lng: string }) => {
           }}
           lng={lng}
           title={t("export")}
-          exportTitle={t('users')}
+          exportTitle={t("users")}
           setMutated={setMutated}
           editId={edit}
+        />
+      )}
+      {openFilter && (
+        <CustomFilterModal
+          open={openFilter}
+          close={() => setOpenFilter((open) => !open)}
+          initialData={filterData}
+          updateFilterData={setFilterData}
+          title={t("users_filter")}
+          content={filterContent}
+          lng={lng}
         />
       )}
     </>

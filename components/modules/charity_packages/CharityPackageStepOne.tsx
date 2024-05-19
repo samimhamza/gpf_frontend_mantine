@@ -7,12 +7,15 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { getTime } from "@/shared/functions";
 import { Currencies } from "@/shared/constants";
+import { ListType } from "@/types/list";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
 
 interface CharityPackageStepOneProps {
   form: any;
   lng: string;
-  offices: Array<{ value: string; label: string }>;
-  categories: Array<{ value: string; label: string }>;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<ListType[]>>;
+  categories: ListType[];
   startDateErrorMessage: string;
   setStartDateErrorMessage: Dispatch<SetStateAction<string>>;
   endDateErrorMessage: string;
@@ -28,6 +31,7 @@ const CharityPackageStepOne = ({
   form,
   lng,
   offices,
+  setOffices,
   categories,
   startDateErrorMessage,
   setStartDateErrorMessage,
@@ -142,7 +146,7 @@ const CharityPackageStepOne = ({
         pt="sm"
         justify={{ sm: "center" }}
       >
-        <Select
+        {/* <Select
           style={{ flex: 1 }}
           label={t("category")}
           placeholder={t("category")}
@@ -152,17 +156,30 @@ const CharityPackageStepOne = ({
           clearable
           nothingFoundMessage={t("noting_found")}
           {...form.getInputProps("category_id")}
+        /> */}
+        <CustomAutoComplete
+          style={{ flex: 1 }}
+          lng={lng}
+          label={t("category")}
+          placeholder={t("category")}
+          data={categories}
+          url={`/category/auto_complete`}
+          values={form?.values?.category_id}
+          withAsterisk
+          {...form.getInputProps("category_id")}
         />
+
         {office == "all" ? (
-          <Select
+          <CustomAutoComplete
             style={{ flex: 1 }}
+            lng={lng}
             label={t("office")}
             placeholder={t("office")}
-            withAsterisk
             data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
+            setData={setOffices}
+            url={`/office/auto_complete`}
+            values={form?.values?.office_id}
+            withAsterisk
             {...form.getInputProps("office_id")}
           />
         ) : (

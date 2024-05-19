@@ -38,8 +38,8 @@ const SurveyPlansModal = ({
   const [endDate, setEndDate] = useState<Value>();
   const [startDateErrorMessage, setStartDateErrorMessage] = useState("");
   const [endDateErrorMessage, setEndDateErrorMessage] = useState("");
-  const [districts, setDistricts] = useState([]);
   const [provinces, setProvinces] = useState([]);
+  // const [districts, setDistricts] = useState([]);
 
   const initialValues: any = {
     title: "",
@@ -57,7 +57,7 @@ const SurveyPlansModal = ({
     validateInputOnBlur: true,
   });
 
-  const { offices, office } = useOffice(form);
+  const { offices, office, setOffices } = useOffice(form);
 
   const submit = async () => {
     const { response, status } = !editId
@@ -111,6 +111,7 @@ const SurveyPlansModal = ({
         }
       })();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editId]);
 
   useEffect(() => {
@@ -127,22 +128,7 @@ const SurveyPlansModal = ({
         );
       }
     })();
-  }, []);
-
-  useEffect(() => {
-    (async function () {
-      const { response, status, error } = await callApi({
-        method: "GET",
-        url: "/all_districts",
-      });
-      if (status == 200 && response.result == true) {
-        setDistricts(
-          response.data.map((item: any) => {
-            return { value: item.id.toString(), label: item.name_fa };
-          })
-        );
-      }
-    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const steps = [
@@ -158,6 +144,7 @@ const SurveyPlansModal = ({
           />
           <SurveyPlanStepOne
             offices={offices}
+            setOffices={setOffices}
             employees={employees}
             form={form}
             lng={lng}
@@ -170,14 +157,18 @@ const SurveyPlansModal = ({
             setStartDateErrorMessage={setStartDateErrorMessage}
             endDateErrorMessage={endDateErrorMessage}
             setEndDateErrorMessage={setEndDateErrorMessage}
-            districts={districts}
-            setDistricts={setDistricts}
             provinces={provinces}
           />
         </Box>
       ),
       async validate() {
         form.validate();
+        if (!form.values.start_date) {
+          setStartDateErrorMessage(t("field_required"));
+        }
+        if (!form.values.end_date) {
+          setEndDateErrorMessage(t("field_required"));
+        }
         let res = form.isValid();
         if (res) {
           let { response, status } = await callApi({
