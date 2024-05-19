@@ -9,8 +9,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaUserShield } from "react-icons/fa";
 import ExportStepOne from "./ExportStepOne";
-import { handleDownloadExcel } from "./excel/ExportExcel";
-import { handleDownloadPDF } from "./pdf/ExportPDF";
+import { handleDownloadExcel } from "./excel/UserExportExcel";
+import { handleDownloadPDF } from "./pdf/UsersExportPDF";
 
 const ExportModal = ({
   anotherOpened,
