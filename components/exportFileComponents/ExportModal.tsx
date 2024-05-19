@@ -7,7 +7,7 @@ import { Box, LoadingOverlay } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaUserShield } from "react-icons/fa";
+import { FaFileDownload } from "react-icons/fa";
 import ExportStepOne from "./ExportStepOne";
 import { handleDownloadExcel } from "./excel/UserExportExcel";
 import { handleDownloadPDF } from "./pdf/UsersExportPDF";
@@ -35,7 +35,7 @@ const ExportModal = ({
   const callApi = useAxios();
 
   const initialValues = {
-    downloadType: "",
+    downloadFormat: "",
     downloadSize: "",
   };
 
@@ -45,21 +45,21 @@ const ExportModal = ({
     validateInputOnBlur: true,
   });
 
-  const { downloadSize, downloadType } = form.values;
-  const types = [
+  const { downloadSize, downloadFormat } = form.values;
+  const formats = [
     { label: "PDF", value: "pdf" },
     { label: "Excel", value: "excel" },
   ];
   const sizes = [
-    { label: "Current Page Data", value: "current" },
-    { label: "Current Filter Data", value: "filtered" },
-    { label: "All Data", value: "all" },
+    { label: t("current_page_data"), value: "current" },
+    { label: t("current_filtered_data"), value: "filtered" },
+    { label: t("all_data"), value: "all" },
   ];
 
   const steps = [
     {
-      title: t("references_info"),
-      icon: <FaUserShield size={22} />,
+      title: t("exportFile_info"),
+      icon: <FaFileDownload size={22} />,
       step: (
         <Box pos='relative'>
           <LoadingOverlay
@@ -67,7 +67,12 @@ const ExportModal = ({
             zIndex={1000}
             overlayProps={{ radius: "sm", blur: 2 }}
           />
-          <ExportStepOne form={form} lng={lng} types={types} sizes={sizes} />
+          <ExportStepOne
+            form={form}
+            lng={lng}
+            formats={formats}
+            sizes={sizes}
+          />
         </Box>
       ),
 
@@ -80,7 +85,7 @@ const ExportModal = ({
   ];
 
   const handleSubmit = async () => {
-    if (downloadType == "pdf") {
+    if (downloadFormat == "pdf") {
       if (downloadSize == "current") {
         const { response, status } = await callApi({
           method: "GET",
@@ -108,7 +113,7 @@ const ExportModal = ({
           return true;
         }
       }
-    } else if (downloadType == "excel") {
+    } else if (downloadFormat == "excel") {
       if (downloadSize == "current") {
         const { response, status } = await callApi({
           method: "GET",

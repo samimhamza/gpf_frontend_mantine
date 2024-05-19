@@ -227,5 +227,11 @@
 	"user_id": "آی دی کاربر",
 	"all_offices": "تمام دفاتر",
 	"export": "دانلود",
-	"office_code": "کد دفتر"
+	"office_code": "کد دفتر",
+	"exportFile_info": "دانلود داده ها",
+	"download_format": "فرمت دانلود",
+	"download_size": "اندازه دانلود",
+	"current_page_data": "داده های صفحه فعلی" ,
+	"current_filtered_data": "داده های فعلی فیلتر شده",
+	"all_data": "همه داده ها"
 }

@@ -5,12 +5,12 @@ import { Flex, Select } from "@mantine/core";
 
 interface ExportStepOneProps {
   form: any;
-  types: any;
+  formats: any;
   sizes: any;
   lng: string;
 }
 
-const ExportStepOne = ({ form, lng, types, sizes }: ExportStepOneProps) => {
+const ExportStepOne = ({ form, lng, formats, sizes }: ExportStepOneProps) => {
   const { t } = useTranslation(lng);
 
   return (
@@ -23,14 +23,14 @@ const ExportStepOne = ({ form, lng, types, sizes }: ExportStepOneProps) => {
       >
         <Select
           style={{ flex: 1 }}
-          label={t("downloadType")}
-          placeholder={t("downloadType")}
+          label={t("download_format")}
+          placeholder={t("download_format")}
           withAsterisk
-          data={types}
+          data={formats}
           searchable
           clearable
           nothingFoundMessage={t("noting_found")}
-          {...form.getInputProps("downloadType")}
+          {...form.getInputProps("downloadFormat")}
         />
       </Flex>
       <Flex
@@ -41,8 +41,8 @@ const ExportStepOne = ({ form, lng, types, sizes }: ExportStepOneProps) => {
       >
         <Select
           style={{ flex: 1 }}
-          label={t("downloadSize")}
-          placeholder={t("downloadSize")}
+          label={t("download_size")}
+          placeholder={t("download_size")}
           withAsterisk
           data={sizes}
           searchable
