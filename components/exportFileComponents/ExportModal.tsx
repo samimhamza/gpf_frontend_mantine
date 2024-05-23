@@ -5,18 +5,20 @@ import { ExportFileSchema } from "@/schemas/models/exportFile";
 import {
   ActionIcon,
   Button,
+  Divider,
   Group,
   Modal,
   Radio,
   RadioGroup,
+  Text,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsFiletypePdf } from "react-icons/bs";
 import { FaFilePdf } from "react-icons/fa6";
+import { IoMdDownload } from "react-icons/io";
 import { SiMicrosoftexcel } from "react-icons/si";
-import { setTimeout } from "timers";
 import { handleDownloadExcel } from "./excel/UserExportExcel";
 
 import { handleDownloadPDF } from "./pdf/UsersExportPDF";
@@ -58,15 +60,15 @@ const ExportModal = ({
     { label: "Excel", value: "excel" },
   ];
   const sizes = [
-    { label: t("current_page_data"), value: "current" },
-    { label: t("current_filtered_data"), value: "filtered" },
+    { label: t("current_page"), value: "current" },
+    { label: t("filtered_data"), value: "filtered" },
     { label: t("all_data"), value: "all" },
   ];
 
-  const closeModal = () =>
-    setTimeout(() => {
-      anotherClose();
-    }, 700);
+  const closeModal = () => {
+    anotherClose();
+    setLoading(false);
+  };
 
   const handleFormatSelect = (format: string) => {
     form.setFieldValue("downloadFormat", format);
@@ -85,13 +87,13 @@ const ExportModal = ({
           await setMutated(true);
           handleDownloadPDF(data, lng, exportTitle);
           closeModal();
-          setLoading(false);
           return true;
         }
       } else if (downloadSize == "filtered") {
         // ! TODO LATER
         console.log("TODO LATER");
       } else if (downloadSize == "all") {
+        setLoading(true);
         const { response, status } = await callApi({
           method: "GET",
           url: "/users",
@@ -107,6 +109,7 @@ const ExportModal = ({
       }
     } else if (downloadFormat == "excel") {
       if (downloadSize == "current") {
+        setLoading(true);
         const { response, status, loading } = await callApi({
           method: "GET",
           url: "/users",
@@ -115,13 +118,15 @@ const ExportModal = ({
           const data = response.data;
           await setMutated(true);
           handleDownloadExcel(data, exportTitle);
-          closeModal();
+          anotherClose();
+          setLoading(false);
           return true;
         }
       } else if (downloadSize == "filtered") {
         // ! TODO Later
         console.log("TODO LATER");
       } else if (downloadSize == "all") {
+        setLoading(true);
         const { response, status } = await callApi({
           method: "GET",
           url: "/users",
@@ -131,7 +136,8 @@ const ExportModal = ({
           const data = response.data;
           await setMutated(true);
           handleDownloadExcel(data, exportTitle);
-          closeModal();
+          anotherClose();
+          setLoading(false);
           return true;
         }
       }
@@ -142,59 +148,99 @@ const ExportModal = ({
   };
 
   return (
-    <Modal opened={anotherOpened} onClose={anotherClose} title={title} centered>
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-        {loading && <h1>Loading...</h1>}
-        <Group style={{ marginBottom: 20 }}>
-          <ActionIcon
-            variant={
-              form.values.downloadFormat === "pdf" ? "filled" : "outline"
-            }
-            size="60px"
-            onClick={() => handleFormatSelect("pdf")}
-            color="red"
-            style={{ border: "none", padding: "4px" }}
+    <>
+      <Modal
+        opened={anotherOpened}
+        onClose={anotherClose}
+        title={`${title} ${exportTitle}`}
+        centered
+        size="xs"
+      >
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Divider />
+          <Group
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
           >
-            <BsFiletypePdf size={60} />
-          </ActionIcon>
-          <ActionIcon
-            variant={
-              form.values.downloadFormat === "excel" ? "filled" : "outline"
-            }
-            size="60px"
-            onClick={() => handleFormatSelect("excel")}
-            color="green"
-            style={{ border: "none", padding: "4px" }}
+            <Text
+              size="md"
+              style={{ margin: 10, fontSize: 16, fontWeight: 500 }}
+            >
+              {t("file_format")}
+            </Text>
+            <Group>
+              <ActionIcon
+                variant={
+                  form.values.downloadFormat === "pdf" ? "filled" : "outline"
+                }
+                size="60px"
+                onClick={() => handleFormatSelect("pdf")}
+                color="red"
+                style={{ border: "none", padding: "6px" }}
+              >
+                <BsFiletypePdf size={60} />
+              </ActionIcon>
+              <ActionIcon
+                variant={
+                  form.values.downloadFormat === "excel" ? "filled" : "outline"
+                }
+                size="60px"
+                onClick={() => handleFormatSelect("excel")}
+                color="green"
+                style={{ border: "none", padding: "6px" }}
+              >
+                <SiMicrosoftexcel size={60} />
+              </ActionIcon>
+            </Group>
+          </Group>
+
+          {form.errors.downloadFormat && (
+            <div
+              style={{ color: "red", textAlign: "center", fontSize: "14px" }}
+            >
+              {t("field_required")}
+            </div>
+          )}
+
+          <RadioGroup
+            value={form.values.downloadSize}
+            onChange={(value) => form.setFieldValue("downloadSize", value)}
+            label={t("file_size")}
+            required
+            error={form.errors.downloadSize && t("field_required")}
+            style={{ margin: 20 }}
           >
-            <SiMicrosoftexcel size={60} />
-          </ActionIcon>
-        </Group>
-        {form.errors.downloadFormat && (
-          <div style={{ color: "red", textAlign: "center", marginBottom: 10 }}>
-            {t("form.errors.downloadFormat")}
-          </div>
-        )}
+            {sizes.map((size) => (
+              <Radio
+                key={size.value}
+                value={size.value}
+                label={size.label}
+                style={{ margin: "10px 0" }}
+              />
+            ))}
+          </RadioGroup>
+          <Divider />
 
-        <RadioGroup
-          value={form.values.downloadSize}
-          onChange={(value) => form.setFieldValue("downloadSize", value)}
-          label={t("select_data_option")}
-          required
-          error={form.errors.downloadSize && t("field_required")}
-          style={{ marginTop: 20 }}
-        >
-          {sizes.map((size) => (
-            <Radio key={size.value} value={size.value} label={size.label} />
-          ))}
-        </RadioGroup>
-
-        <Group style={{ marginTop: 20 }}>
-          <Button type="submit" loading={loading}>
-            {t("submit")}
-          </Button>
-        </Group>
-      </form>
-    </Modal>
+          <Group style={{ marginTop: 20 }}>
+            <Button
+              leftSection={<IoMdDownload size={14} />}
+              type="submit"
+              loading={loading}
+            >
+              {t("export")}
+            </Button>
+          </Group>
+        </form>
+      </Modal>
+      <style jsx global>{`
+        .mantine-Modal-title {
+          font-size: 18px;
+          font-weight: 700
+        }
+      `}</style>
+    </>
   );
 };
 
