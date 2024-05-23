@@ -1,15 +1,24 @@
 "use client";
 import { useTranslation } from "@/app/i18n/client";
-import CustomModal from "@/components/CustomModal";
 import { useAxios } from "@/customHooks/useAxios";
 import { ExportFileSchema } from "@/schemas/models/exportFile";
-import { Box, LoadingOverlay } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Modal,
+  Radio,
+  RadioGroup,
+} from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaFileDownload } from "react-icons/fa";
-import ExportStepOne from "./ExportStepOne";
+import { BsFiletypePdf } from "react-icons/bs";
+import { FaFilePdf } from "react-icons/fa6";
+import { SiMicrosoftexcel } from "react-icons/si";
+import { setTimeout } from "timers";
 import { handleDownloadExcel } from "./excel/UserExportExcel";
+
 import { handleDownloadPDF } from "./pdf/UsersExportPDF";
 
 const ExportModal = ({
@@ -18,7 +27,6 @@ const ExportModal = ({
   lng,
   setMutated,
   title,
-  editId,
   exportTitle,
 }: {
   anotherOpened: boolean;
@@ -27,7 +35,6 @@ const ExportModal = ({
   setMutated: any;
   title: string;
   exportTitle: string;
-  editId: number | undefined;
 }) => {
   const { t } = useTranslation(lng);
   const exportFileSchema = ExportFileSchema(t);
@@ -47,7 +54,7 @@ const ExportModal = ({
 
   const { downloadSize, downloadFormat } = form.values;
   const formats = [
-    { label: "PDF", value: "pdf" },
+    { label: <FaFilePdf fontSize={40} />, value: "pdf" },
     { label: "Excel", value: "excel" },
   ];
   const sizes = [
@@ -56,37 +63,19 @@ const ExportModal = ({
     { label: t("all_data"), value: "all" },
   ];
 
-  const steps = [
-    {
-      title: t("exportFile_info"),
-      icon: <FaFileDownload size={22} />,
-      step: (
-        <Box pos='relative'>
-          <LoadingOverlay
-            visible={loading}
-            zIndex={1000}
-            overlayProps={{ radius: "sm", blur: 2 }}
-          />
-          <ExportStepOne
-            form={form}
-            lng={lng}
-            formats={formats}
-            sizes={sizes}
-          />
-        </Box>
-      ),
+  const closeModal = () =>
+    setTimeout(() => {
+      anotherClose();
+    }, 700);
 
-      async validate() {
-        form.validate();
-        let res = form.isValid();
-        return res;
-      },
-    },
-  ];
+  const handleFormatSelect = (format: string) => {
+    form.setFieldValue("downloadFormat", format);
+  };
 
   const handleSubmit = async () => {
     if (downloadFormat == "pdf") {
       if (downloadSize == "current") {
+        setLoading(true);
         const { response, status } = await callApi({
           method: "GET",
           url: "/users",
@@ -95,6 +84,8 @@ const ExportModal = ({
           const data = response.data;
           await setMutated(true);
           handleDownloadPDF(data, lng, exportTitle);
+          closeModal();
+          setLoading(false);
           return true;
         }
       } else if (downloadSize == "filtered") {
@@ -110,12 +101,13 @@ const ExportModal = ({
           const data = response.data;
           await setMutated(true);
           handleDownloadPDF(data, lng, exportTitle);
+          closeModal();
           return true;
         }
       }
     } else if (downloadFormat == "excel") {
       if (downloadSize == "current") {
-        const { response, status } = await callApi({
+        const { response, status, loading } = await callApi({
           method: "GET",
           url: "/users",
         });
@@ -123,6 +115,7 @@ const ExportModal = ({
           const data = response.data;
           await setMutated(true);
           handleDownloadExcel(data, exportTitle);
+          closeModal();
           return true;
         }
       } else if (downloadSize == "filtered") {
@@ -138,6 +131,7 @@ const ExportModal = ({
           const data = response.data;
           await setMutated(true);
           handleDownloadExcel(data, exportTitle);
+          closeModal();
           return true;
         }
       }
@@ -148,19 +142,59 @@ const ExportModal = ({
   };
 
   return (
-    <form>
-      <CustomModal
-        opened={anotherOpened}
-        close={anotherClose}
-        steps={steps}
-        form={form}
-        submit={handleSubmit}
-        lng={lng}
-        title={title}
-        editId={editId}
-        width='40%'
-      />
-    </form>
+    <Modal opened={anotherOpened} onClose={anotherClose} title={title} centered>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        {loading && <h1>Loading...</h1>}
+        <Group style={{ marginBottom: 20 }}>
+          <ActionIcon
+            variant={
+              form.values.downloadFormat === "pdf" ? "filled" : "outline"
+            }
+            size="60px"
+            onClick={() => handleFormatSelect("pdf")}
+            color="red"
+            style={{ border: "none", padding: "4px" }}
+          >
+            <BsFiletypePdf size={60} />
+          </ActionIcon>
+          <ActionIcon
+            variant={
+              form.values.downloadFormat === "excel" ? "filled" : "outline"
+            }
+            size="60px"
+            onClick={() => handleFormatSelect("excel")}
+            color="green"
+            style={{ border: "none", padding: "4px" }}
+          >
+            <SiMicrosoftexcel size={60} />
+          </ActionIcon>
+        </Group>
+        {form.errors.downloadFormat && (
+          <div style={{ color: "red", textAlign: "center", marginBottom: 10 }}>
+            {t("form.errors.downloadFormat")}
+          </div>
+        )}
+
+        <RadioGroup
+          value={form.values.downloadSize}
+          onChange={(value) => form.setFieldValue("downloadSize", value)}
+          label={t("select_data_option")}
+          required
+          error={form.errors.downloadSize && t("field_required")}
+          style={{ marginTop: 20 }}
+        >
+          {sizes.map((size) => (
+            <Radio key={size.value} value={size.value} label={size.label} />
+          ))}
+        </RadioGroup>
+
+        <Group style={{ marginTop: 20 }}>
+          <Button type="submit" loading={loading}>
+            {t("submit")}
+          </Button>
+        </Group>
+      </form>
+    </Modal>
   );
 };
 

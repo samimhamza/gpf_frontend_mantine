@@ -2,6 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
+import CustomFilterModal from "@/components/CustomFilterModal";
 import { CustomDataTable } from "@/components/DataTable";
 import ExportModal from "@/components/exportFileComponents/ExportModal";
 import { UserColumns } from "@/shared/columns/user.columns";
@@ -11,13 +12,12 @@ import {
   DELETE_USERS,
   UPDATE_USERS,
 } from "@/shared/constants/Permissions";
+import { UserFilterContent } from "@/shared/filterContents/user.filter.content";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import UserModal from "./UserModal";
-import CustomFilterModal from "@/components/CustomFilterModal";
-import { UserFilterContent } from "@/shared/filterContents/user.filter.content";
 
 export const UserModule = ({ lng }: { lng: string }) => {
   const router = useRouter();
@@ -103,7 +103,6 @@ export const UserModule = ({ lng }: { lng: string }) => {
           title={t("export")}
           exportTitle={t("users")}
           setMutated={setMutated}
-          editId={edit}
         />
       )}
       {openFilter && (
