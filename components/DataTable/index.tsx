@@ -39,6 +39,7 @@ interface DataTableProps {
   showFilter?: boolean;
   openFilterCliked?: any;
   filterData?: any;
+  setPageNumber?: Dispatch<SetStateAction<number>>;
 }
 
 const CustomDataTable = ({
@@ -68,6 +69,7 @@ const CustomDataTable = ({
   showFilter,
   openFilterCliked,
   filterData,
+  setPageNumber,
   ...additionalProps
 }: DataTableProps) => {
   const { t } = useTranslation(lng);
@@ -82,7 +84,7 @@ const CustomDataTable = ({
     order_by: orderBy,
     filter_data: filterData ?? {},
   });
-
+  
   const { data, error, isLoading, mutate } = useSWR(
     [url, tableDetails],
     async () => {
@@ -94,7 +96,15 @@ const CustomDataTable = ({
       return response;
     }
   );
+  
+  useEffect(() => {
+    if (tableDetails.page && setPageNumber) {
+      const { page } = tableDetails;
+      setPageNumber(page);
+    }
+  }, [tableDetails, setPageNumber]);
 
+  
   useEffect(() => {
     (async function () {
       if (mutated) {

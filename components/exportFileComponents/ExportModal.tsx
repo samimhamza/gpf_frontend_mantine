@@ -16,11 +16,9 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { BsFiletypePdf } from "react-icons/bs";
-import { FaFilePdf } from "react-icons/fa6";
 import { IoMdDownload } from "react-icons/io";
 import { SiMicrosoftexcel } from "react-icons/si";
 import { handleDownloadExcel } from "./excel/UserExportExcel";
-
 import { handleDownloadPDF } from "./pdf/UsersExportPDF";
 
 const ExportModal = ({
@@ -30,6 +28,7 @@ const ExportModal = ({
   setMutated,
   title,
   exportTitle,
+  pageNumber,
 }: {
   anotherOpened: boolean;
   anotherClose: () => void;
@@ -37,6 +36,7 @@ const ExportModal = ({
   setMutated: any;
   title: string;
   exportTitle: string;
+  pageNumber: number;
 }) => {
   const { t } = useTranslation(lng);
   const exportFileSchema = ExportFileSchema(t);
@@ -53,14 +53,19 @@ const ExportModal = ({
     validate: zodResolver(exportFileSchema),
     validateInputOnBlur: true,
   });
-
   const { downloadSize, downloadFormat } = form.values;
-  const formats = [
-    { label: <FaFilePdf fontSize={40} />, value: "pdf" },
-    { label: "Excel", value: "excel" },
-  ];
   const sizes = [
-    { label: t("current_page"), value: "current" },
+    {
+      label: (
+        <span>
+          {t("current_page")}{" "}
+          <Text component="span" variant="gradient" size="sm">
+            ({pageNumber})
+          </Text>
+        </span>
+      ),
+      value: "current",
+    },
     { label: t("filtered_data"), value: "filtered" },
     { label: t("all_data"), value: "all" },
   ];
@@ -81,6 +86,7 @@ const ExportModal = ({
         const { response, status } = await callApi({
           method: "GET",
           url: "/users",
+          params: { page: pageNumber },
         });
         if (status == 200 && response.result) {
           const data = response.data;
@@ -113,6 +119,7 @@ const ExportModal = ({
         const { response, status, loading } = await callApi({
           method: "GET",
           url: "/users",
+          params: { page: pageNumber },
         });
         if (status == 200 && response.result) {
           const data = response.data;
@@ -195,7 +202,6 @@ const ExportModal = ({
               </ActionIcon>
             </Group>
           </Group>
-
           {form.errors.downloadFormat && (
             <div
               style={{ color: "red", textAlign: "center", fontSize: "14px" }}
@@ -203,7 +209,6 @@ const ExportModal = ({
               {t("field_required")}
             </div>
           )}
-
           <RadioGroup
             value={form.values.downloadSize}
             onChange={(value) => form.setFieldValue("downloadSize", value)}

@@ -33,6 +33,8 @@ export const UserModule = ({ lng }: { lng: string }) => {
   // Second useDisclosure state for ExportModal
   const [anotherOpened, { open: anotherOpen, close: anotherClose }] =
     useDisclosure(false);
+  // Get Page Number details for Export Modal params
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const [edit, setEdit] = useState<number>();
   const [view, setView] = useState<number>();
@@ -78,6 +80,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
         showFilter={true}
         openFilterCliked={() => setOpenFilter(true)}
         filterData={filterData}
+        setPageNumber={setPageNumber}
       />
       {opened && (
         <UserModal
@@ -103,6 +106,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
           title={t("export")}
           exportTitle={t("users")}
           setMutated={setMutated}
+          pageNumber={pageNumber}
         />
       )}
       {openFilter && (
