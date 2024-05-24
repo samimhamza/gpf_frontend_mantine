@@ -178,7 +178,7 @@ const ExportModal = ({
                 size="60px"
                 onClick={() => handleFormatSelect("pdf")}
                 color="red"
-                style={{ border: "none", padding: "6px" }}
+                style={{ borderRadius: "50%", padding: "10px" }}
               >
                 <BsFiletypePdf size={60} />
               </ActionIcon>
@@ -189,7 +189,7 @@ const ExportModal = ({
                 size="60px"
                 onClick={() => handleFormatSelect("excel")}
                 color="green"
-                style={{ border: "none", padding: "6px" }}
+                style={{ borderRadius: "50%", padding: "10px" }}
               >
                 <SiMicrosoftexcel size={60} />
               </ActionIcon>
@@ -237,7 +237,7 @@ const ExportModal = ({
       <style jsx global>{`
         .mantine-Modal-title {
           font-size: 18px;
-          font-weight: 700
+          font-weight: 700;
         }
       `}</style>
     </>
