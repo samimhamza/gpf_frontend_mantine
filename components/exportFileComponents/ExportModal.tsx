@@ -126,18 +126,16 @@ const ExportModal = ({
   const handleDownload = async (
     url: string,
     params: any,
-    handleDownloadFunc: any
+    exportTitle: string,
+    handleDownloadFunc: any,
+    lng?: string
   ) => {
     setLoading(true);
-    const { response, status } = await callApi({
-      method: "GET",
-      url,
-      params,
-    });
+    const { response, status } = await callApi({ method: "GET", url, params });
     if (status === 200 && response.result) {
       const data = response.data;
       await setMutated(true);
-      handleDownloadFunc(data, exportTitle);
+      handleDownloadFunc(data, lng, exportTitle); 
       closeModal();
       return true;
     }
@@ -155,12 +153,18 @@ const ExportModal = ({
               ...tableDetails,
               filter_data: JSON.stringify(tableDetails.filter_data),
             };
+      const handleFunc =
+        downloadFormat === "pdf" ? handleDownloadPDF : handleDownloadExcel;
+      const lngParam = downloadFormat === "pdf" ? lng : undefined; // Only pass lng when downloading PDF
       return await handleDownload(
         url,
         params,
-        downloadFormat === "pdf" ? handleDownloadPDF : handleDownloadExcel
+        exportTitle,
+        handleFunc,
+        lngParam
       );
     }
+
     toast.error(t("something_went_wrong"));
     return false;
   };
