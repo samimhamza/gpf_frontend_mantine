@@ -29,6 +29,12 @@ const ExportModal = ({
   title,
   exportTitle,
   pageNumber,
+  url,
+  filterData,
+  orderBy = {
+    column: "created_at",
+    order: "desc",
+  },
 }: {
   anotherOpened: boolean;
   anotherClose: () => void;
@@ -37,11 +43,24 @@ const ExportModal = ({
   title: string;
   exportTitle: string;
   pageNumber: number;
+  url: string;
+  filterData?: any;
+  orderBy?: {
+    column: string;
+    order: "desc" | "asc";
+  };
 }) => {
   const { t } = useTranslation(lng);
   const exportFileSchema = ExportFileSchema(t);
   const [loading, setLoading] = useState(false);
   const callApi = useAxios();
+  const tableDetails = {
+    page: 1,
+    per_page: -1,
+    search: "",
+    order_by: orderBy,
+    filter_data: filterData ?? {},
+  };
 
   const initialValues = {
     downloadFormat: "",
@@ -53,6 +72,12 @@ const ExportModal = ({
     validate: zodResolver(exportFileSchema),
     validateInputOnBlur: true,
   });
+
+  const isFilterDataEmpty =
+    tableDetails.filter_data &&
+    Object.keys(tableDetails.filter_data).length === 0 &&
+    tableDetails.filter_data.constructor === Object;
+
   const { downloadSize, downloadFormat } = form.values;
   const sizes = [
     {
@@ -66,7 +91,26 @@ const ExportModal = ({
       ),
       value: "current",
     },
-    { label: t("filtered_data"), value: "filtered" },
+    {
+      label: (
+        <span>
+          {isFilterDataEmpty ? (
+            <Text
+              component="span"
+              style={{ color: "#adb5bd", fontSize: "15px" }}
+              size="sx"
+            >
+              {t("filtered_data")}
+            </Text>
+          ) : (
+            <Text component="span" style={{ fontSize: "15px" }}>
+              {t("filtered_data")}
+            </Text>
+          )}
+        </span>
+      ),
+      value: "filtered",
+    },
     { label: t("all_data"), value: "all" },
   ];
 
@@ -85,7 +129,7 @@ const ExportModal = ({
         setLoading(true);
         const { response, status } = await callApi({
           method: "GET",
-          url: "/users",
+          url,
           params: { page: pageNumber },
         });
         if (status == 200 && response.result) {
@@ -96,13 +140,25 @@ const ExportModal = ({
           return true;
         }
       } else if (downloadSize == "filtered") {
-        // ! TODO LATER
-        console.log("TODO LATER");
+        setLoading(true);
+        const filterDataString = JSON.stringify(tableDetails.filter_data);
+        const { response, status } = await callApi({
+          method: "GET",
+          url,
+          params: { ...tableDetails, filter_data: filterDataString },
+        });
+        if (status == 200 && response.result) {
+          const data = response.data;
+          await setMutated(true);
+          handleDownloadPDF(data, lng, exportTitle);
+          closeModal();
+          return true;
+        }
       } else if (downloadSize == "all") {
         setLoading(true);
         const { response, status } = await callApi({
           method: "GET",
-          url: "/users",
+          url,
           params: { per_page: -1 },
         });
         if (status == 200 && response.result) {
@@ -118,7 +174,7 @@ const ExportModal = ({
         setLoading(true);
         const { response, status, loading } = await callApi({
           method: "GET",
-          url: "/users",
+          url,
           params: { page: pageNumber },
         });
         if (status == 200 && response.result) {
@@ -130,13 +186,25 @@ const ExportModal = ({
           return true;
         }
       } else if (downloadSize == "filtered") {
-        // ! TODO Later
-        console.log("TODO LATER");
+        setLoading(true);
+        const filterDataString = JSON.stringify(tableDetails.filter_data);
+        const { response, status } = await callApi({
+          method: "GET",
+          url,
+          params: { ...tableDetails, filter_data: filterDataString },
+        });
+        if (status == 200 && response.result) {
+          const data = response.data;
+          await setMutated(true);
+          handleDownloadExcel(data, exportTitle);
+          closeModal();
+          return true;
+        }
       } else if (downloadSize == "all") {
         setLoading(true);
         const { response, status } = await callApi({
           method: "GET",
-          url: "/users",
+          url,
           params: { per_page: -1 },
         });
         if (status == 200 && response.result) {

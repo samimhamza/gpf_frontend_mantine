@@ -107,6 +107,8 @@ export const UserModule = ({ lng }: { lng: string }) => {
           exportTitle={t("users")}
           setMutated={setMutated}
           pageNumber={pageNumber}
+          url="/users"
+          filterData={filterData}
         />
       )}
       {openFilter && (
