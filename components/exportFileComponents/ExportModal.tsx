@@ -135,7 +135,9 @@ const ExportModal = ({
     if (status === 200 && response.result) {
       const data = response.data;
       await setMutated(true);
-      handleDownloadFunc(data, lng, exportTitle); 
+      downloadFormat === "pdf"
+        ? handleDownloadFunc(data, lng, exportTitle)
+        : handleDownloadFunc(data, exportTitle);
       closeModal();
       return true;
     }
