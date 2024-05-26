@@ -123,101 +123,44 @@ const ExportModal = ({
     form.setFieldValue("downloadFormat", format);
   };
 
-  const handleSubmit = async () => {
-    if (downloadFormat == "pdf") {
-      if (downloadSize == "current") {
-        setLoading(true);
-        const { response, status } = await callApi({
-          method: "GET",
-          url,
-          params: { page: pageNumber },
-        });
-        if (status == 200 && response.result) {
-          const data = response.data;
-          await setMutated(true);
-          handleDownloadPDF(data, lng, exportTitle);
-          closeModal();
-          return true;
-        }
-      } else if (downloadSize == "filtered") {
-        setLoading(true);
-        const filterDataString = JSON.stringify(tableDetails.filter_data);
-        const { response, status } = await callApi({
-          method: "GET",
-          url,
-          params: { ...tableDetails, filter_data: filterDataString },
-        });
-        if (status == 200 && response.result) {
-          const data = response.data;
-          await setMutated(true);
-          handleDownloadPDF(data, lng, exportTitle);
-          closeModal();
-          return true;
-        }
-      } else if (downloadSize == "all") {
-        setLoading(true);
-        const { response, status } = await callApi({
-          method: "GET",
-          url,
-          params: { per_page: -1 },
-        });
-        if (status == 200 && response.result) {
-          const data = response.data;
-          await setMutated(true);
-          handleDownloadPDF(data, lng, exportTitle);
-          closeModal();
-          return true;
-        }
-      }
-    } else if (downloadFormat == "excel") {
-      if (downloadSize == "current") {
-        setLoading(true);
-        const { response, status, loading } = await callApi({
-          method: "GET",
-          url,
-          params: { page: pageNumber },
-        });
-        if (status == 200 && response.result) {
-          const data = response.data;
-          await setMutated(true);
-          handleDownloadExcel(data, exportTitle);
-          anotherClose();
-          setLoading(false);
-          return true;
-        }
-      } else if (downloadSize == "filtered") {
-        setLoading(true);
-        const filterDataString = JSON.stringify(tableDetails.filter_data);
-        const { response, status } = await callApi({
-          method: "GET",
-          url,
-          params: { ...tableDetails, filter_data: filterDataString },
-        });
-        if (status == 200 && response.result) {
-          const data = response.data;
-          await setMutated(true);
-          handleDownloadExcel(data, exportTitle);
-          closeModal();
-          return true;
-        }
-      } else if (downloadSize == "all") {
-        setLoading(true);
-        const { response, status } = await callApi({
-          method: "GET",
-          url,
-          params: { per_page: -1 },
-        });
-        if (status == 200 && response.result) {
-          const data = response.data;
-          await setMutated(true);
-          handleDownloadExcel(data, exportTitle);
-          anotherClose();
-          setLoading(false);
-          return true;
-        }
-      }
+  const handleDownload = async (
+    url: string,
+    params: any,
+    handleDownloadFunc: any
+  ) => {
+    setLoading(true);
+    const { response, status } = await callApi({
+      method: "GET",
+      url,
+      params,
+    });
+    if (status === 200 && response.result) {
+      const data = response.data;
+      await setMutated(true);
+      handleDownloadFunc(data, exportTitle);
+      closeModal();
+      return true;
     }
+    return false;
+  };
 
+  const handleSubmit = async () => {
+    if (downloadFormat === "pdf" || downloadFormat === "excel") {
+      const params =
+        downloadSize === "current"
+          ? { page: pageNumber }
+          : downloadSize === "all"
+          ? { per_page: -1 }
+          : {
+              ...tableDetails,
+              filter_data: JSON.stringify(tableDetails.filter_data),
+            };
+      return await handleDownload(
+        url,
+        params,
+        downloadFormat === "pdf" ? handleDownloadPDF : handleDownloadExcel
+      );
+    }
     toast.error(t("something_went_wrong"));
     return false;
   };
