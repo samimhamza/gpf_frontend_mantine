@@ -39,7 +39,7 @@ export const handleDownloadExcel = (data: UserData[], exportTitle: string) => {
     [t("username")]: user.username,
     [t("full_name")]: user.full_name,
     [t("email")]: user.email,
-    [t("status")]: user.status,
+    [t("status")]: t(user.status),
     [t("created_at")]: user.created_at,
     [t("created_by")]: user.created_by,
     [t("office_code")]: user.office_code,

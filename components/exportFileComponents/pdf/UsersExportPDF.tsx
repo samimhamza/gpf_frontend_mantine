@@ -142,7 +142,7 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
   const { t } = useTranslation(lng);
   return (
     <Document>
-      <Page size='A4' style={styles.page}>
+      <Page size="A4" style={styles.page}>
         <Text style={styles.header}>{t(exportTitle)}</Text>
         <View style={styles.table}>
           {/* Table header */}
@@ -198,7 +198,7 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
                 <Text>{item.email}</Text>
               </View>
               <View style={[styles.tableCell, styles.item, styles.statusCell]}>
-                <Text>{item.status}</Text>
+                <Text>{t(item.status)}</Text>
               </View>
               <View
                 style={[styles.tableCell, styles.item, styles.createdAtCell]}
@@ -244,7 +244,7 @@ const DownloadPDFButton: React.FC<{
       document={
         <MyPDFDocument data={data} lng={lng} exportTitle={exportTitle} />
       }
-      fileName='data.pdf'
+      fileName="data.pdf"
     >
       {({ loading }) => (loading ? "" : "Download PDF")}
     </PDFDownloadLink>
