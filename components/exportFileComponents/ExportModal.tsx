@@ -18,8 +18,6 @@ import toast from "react-hot-toast";
 import { BsFiletypePdf } from "react-icons/bs";
 import { IoMdDownload } from "react-icons/io";
 import { SiMicrosoftexcel } from "react-icons/si";
-import { handleDownloadExcel } from "./excel/UserExportExcel";
-import { handleDownloadPDF } from "./pdf/UsersExportPDF";
 
 const ExportModal = ({
   anotherOpened,
@@ -35,6 +33,8 @@ const ExportModal = ({
     column: "created_at",
     order: "desc",
   },
+  handleDownloadExcel,
+  handleDownloadPDF,
 }: {
   anotherOpened: boolean;
   anotherClose: () => void;
@@ -49,6 +49,8 @@ const ExportModal = ({
     column: string;
     order: "desc" | "asc";
   };
+  handleDownloadExcel: any;
+  handleDownloadPDF: any;
 }) => {
   const { t } = useTranslation(lng);
   const exportFileSchema = ExportFileSchema(t);
