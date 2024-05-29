@@ -10,6 +10,7 @@ interface MosqueData {
   district_name: string;
   mosque_type: string;
   mosque_formal: string;
+  status: string;
   created_by: string;
   created_at: string;
 }
@@ -32,6 +33,7 @@ export const handleDownloadExcel = (
     "district",
     "mosque_type",
     "mosque_formal",
+    "status",
     "created_by",
     "created_at",
   ]);
@@ -44,6 +46,7 @@ export const handleDownloadExcel = (
     [t("district")]: mosque.district_name,
     [t("mosque_type")]: mosque.mosque_type,
     [t("mosque_formal")]: mosque.mosque_formal,
+    [t("status")]: t(mosque.status),
     [t("created_by")]: mosque.created_by,
     [t("created_at")]: formatTimestamp(mosque.created_at),
   }));

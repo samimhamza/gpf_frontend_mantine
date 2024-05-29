@@ -1,19 +1,21 @@
 "use client";
 
-import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { CategoryColumns } from "@/shared/columns/category.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
-import { useDisclosure } from "@mantine/hooks";
-import CategoryModal from "./CategoryModal";
-import { useEffect, useState } from "react";
-import { permissionChecker } from "@/shared/functions/permissionChecker";
+import { CustomDataTable } from "@/components/DataTable";
+import ExportModal from "@/components/exportFileComponents/ExportModal";
+import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/Categories";
+import { CategoryColumns } from "@/shared/columns/category.columns";
 import {
-  UPDATE_ITEMS,
+  CHANGE_STATUS,
   CREATE_ITEMS,
   DELETE_ITEMS,
-  CHANGE_STATUS,
+  UPDATE_ITEMS,
 } from "@/shared/constants/Permissions";
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import { useDisclosure } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import CategoryModal from "./CategoryModal";
 
 export const CategoryModule = ({ lng }: { lng: string }) => {
   const { t } = useTranslation(lng);
@@ -25,6 +27,12 @@ export const CategoryModule = ({ lng }: { lng: string }) => {
     setMutated
   );
   const [opened, { open, close }] = useDisclosure(false);
+  // Second useDisclosure state for ExportModal
+  const [anotherOpened, { open: anotherOpen, close: anotherClose }] =
+    useDisclosure(false);
+  // Get Page Number details for Export Modal params
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
   const [edit, setEdit] = useState<number>();
   const [view, setView] = useState<number>();
 
@@ -49,6 +57,7 @@ export const CategoryModule = ({ lng }: { lng: string }) => {
         lng={lng}
         columns={columns}
         open={open}
+        anotherOpen={anotherOpen}
         mutated={mutated}
         setMutated={setMutated}
         setEdit={setEdit}
@@ -57,6 +66,7 @@ export const CategoryModule = ({ lng }: { lng: string }) => {
         showDelete={permissionChecker(DELETE_ITEMS)}
         showEdit={permissionChecker(UPDATE_ITEMS)}
         showView={false}
+        setPageNumber={setPageNumber}
       />
       {opened && (
         <CategoryModal
@@ -69,6 +79,24 @@ export const CategoryModule = ({ lng }: { lng: string }) => {
           setMutated={setMutated}
           title={!edit ? t("add_category") : t("update_category")}
           editId={edit}
+        />
+      )}
+      {anotherOpened && (
+        <ExportModal
+          anotherOpened={anotherOpened}
+          anotherClose={() => {
+            anotherClose();
+            setEdit(undefined);
+          }}
+          lng={lng}
+          title={t("export")}
+          exportTitle={t("categories")}
+          setMutated={setMutated}
+          pageNumber={pageNumber}
+          url="/categories"
+          filterData={{}} // TODO LATER
+          handleDownloadPDF={handleDownloadPDF}
+          handleDownloadExcel={null}
         />
       )}
     </>
