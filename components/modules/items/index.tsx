@@ -4,6 +4,7 @@ import { useTranslation } from "@/app/i18n/client";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { CustomDataTable } from "@/components/DataTable";
 import ExportModal from "@/components/exportFileComponents/ExportModal";
+import { handleDownloadExcel } from "@/components/exportFileComponents/excel/ItemsExportExcel";
 import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/ItemsExportPDF";
 import { ItemColumns } from "@/shared/columns/item.columns";
 import {
@@ -90,7 +91,7 @@ export const ItemModule = ({ lng }: { lng: string }) => {
           url="/items"
           filterData={{}} // TODO LATER
           handleDownloadPDF={handleDownloadPDF}
-          handleDownloadExcel={null}
+          handleDownloadExcel={handleDownloadExcel}
         />
       )}
     </>
