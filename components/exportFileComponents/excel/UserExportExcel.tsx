@@ -1,5 +1,6 @@
 import { t } from "i18next";
 import * as XLSX from "xlsx";
+import { formatTimestamp } from "../FormatDataFunction";
 
 interface UserData {
   id: number;
@@ -40,7 +41,7 @@ export const handleDownloadExcel = (data: UserData[], exportTitle: string) => {
     [t("full_name")]: user.full_name,
     [t("email")]: user.email,
     [t("status")]: t(user.status),
-    [t("created_at")]: user.created_at,
+    [t("created_at")]: formatTimestamp(user.created_at),
     [t("created_by")]: user.created_by,
     [t("office_code")]: user.office_code,
   }));

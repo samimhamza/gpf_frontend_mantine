@@ -1,5 +1,6 @@
 import { t } from "i18next";
 import * as XLSX from "xlsx";
+import { formatTimestamp } from "../FormatDataFunction";
 
 interface MosqueData {
   id: number;
@@ -44,7 +45,7 @@ export const handleDownloadExcel = (
     [t("mosque_type")]: mosque.mosque_type,
     [t("mosque_formal")]: mosque.mosque_formal,
     [t("created_by")]: mosque.created_by,
-    [t("created_at")]: mosque.created_at,
+    [t("created_at")]: formatTimestamp(mosque.created_at),
   }));
 
   const worksheet = XLSX.utils.json_to_sheet(worksheetData, {

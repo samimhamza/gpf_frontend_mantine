@@ -12,6 +12,7 @@ import {
 import { saveAs } from "file-saver";
 import { t } from "i18next";
 import NotoSans from "../../../public/fonts/NotoSansArabic-Regular.ttf";
+import { formatTimestamp } from "../FormatDataFunction";
 
 interface MosqueData {
   id: number;
@@ -31,16 +32,7 @@ interface MyPDFDocumentProps {
   exportTitle: string;
 }
 
-// ! Format TimeStamps
-function formatTimestamp(isoTimestamp: string): string {
-  const date = new Date(isoTimestamp);
 
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0"); // getUTCMonth() returns 0-11, so we add 1
-  const year = String(date.getUTCFullYear()).slice(-2); // get last 2 digits of the year
-
-  return `${day}/${month}/${year}`;
-}
 
 // ! Register Noto Sans Arabic Google font for English and Persian
 // ! Because not every font support Persian
