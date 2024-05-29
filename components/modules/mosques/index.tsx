@@ -4,7 +4,7 @@ import { useTranslation } from "@/app/i18n/client";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { CustomDataTable } from "@/components/DataTable";
 import ExportModal from "@/components/exportFileComponents/ExportModal";
-import { handleDownloadExcel } from "@/components/exportFileComponents/excel/UserExportExcel";
+import { handleDownloadExcel } from "@/components/exportFileComponents/excel/MosquesExportExcel";
 import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/MosquesExportPDF";
 import { MosqueColumns } from "@/shared/columns/mosque.columns";
 import {
