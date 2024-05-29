@@ -14,24 +14,23 @@ import { t } from "i18next";
 import NotoSans from "../../../public/fonts/NotoSansArabic-Regular.ttf";
 import { formatTimestamp } from "../FormatDataFunction";
 
-interface UserData {
+interface ItemData {
   id: number;
-  full_name: string;
-  email: string;
-  status: string;
-  username: string;
-  created_at: string;
+  name: string;
+  unit: string;
   created_by: string;
-  office_code: string;
+  created_at: string;
+  updated_by: string;
+  updated_at: string;
 }
+
 interface MyPDFDocumentProps {
-  data: UserData[];
+  data: ItemData[];
   lng: string;
   exportTitle: string;
 }
 
-// ! Register Noto Sans Arabic Google font for English and Persian
-// ! Because not every font support Persian
+// Register Noto Sans Arabic Google font
 Font.register({
   family: "NotoSans",
   fonts: [
@@ -41,7 +40,6 @@ Font.register({
   ],
 });
 
-// ! PDF table styles
 const styles = StyleSheet.create({
   page: {
     padding: 4,
@@ -68,9 +66,7 @@ const styles = StyleSheet.create({
     fontWeight: "ultrabold",
     justifyContent: "center",
   },
-
   tableCell: {
-    // flex: 1,
     padding: 3,
     borderRightWidth: 1,
     borderRightColor: "#bfbfbf",
@@ -78,58 +74,49 @@ const styles = StyleSheet.create({
     borderBottomColor: "#bfbfbf",
     justifyContent: "center",
   },
-
   tableRow: {
     flexDirection: "row",
     fontSize: 12,
   },
-
   item: {
     fontSize: 8,
   },
-
   evenRow: {
     backgroundColor: "#f2f2f2",
   },
   oddRow: {
     backgroundColor: "#ffffff",
   },
-
   idCell: {
-    width: "8%",
+    width: "7%",
   },
-
-  emailCell: {
-    width: "22%",
+  nameCell: {
+    width: "28%",
   },
-
-  userNameCell: {
-    width: "12%",
-  },
-  fullNameCell: {
-    width: "18%",
-  },
-  statusCell: {
-    width: "8%",
-  },
-  createdAtCell: {
-    width: "13%",
+  unitCell: {
+    width: "9%",
   },
   createdByCell: {
-    width: "12%",
+    width: "18%",
   },
-  officeCell: {
-    width: "8%",
+  createdAtCell: {
+    width: "10%",
+  },
+  updatedByCell: {
+    width: "15%",
+  },
+  updatedAtCell: {
+    width: "13%",
   },
 });
 
-// ! PDF Table
 const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
   data,
   lng,
   exportTitle,
 }) => {
   const { t } = useTranslation(lng);
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -140,26 +127,23 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
             <View style={[styles.tableCell, styles.idCell]}>
               <Text>{t("id")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.userNameCell]}>
-              <Text>{t("username")}</Text>
+            <View style={[styles.tableCell, styles.nameCell]}>
+              <Text>{t("name")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.fullNameCell]}>
-              <Text>{t("full_name")}</Text>
-            </View>
-            <View style={[styles.tableCell, styles.emailCell]}>
-              <Text>{t("email")}</Text>
-            </View>
-            <View style={[styles.tableCell, styles.statusCell]}>
-              <Text>{t("status")}</Text>
-            </View>
-            <View style={[styles.tableCell, styles.createdAtCell]}>
-              <Text>{t("created_at")}</Text>
+            <View style={[styles.tableCell, styles.unitCell]}>
+              <Text>{t("unit")}</Text>
             </View>
             <View style={[styles.tableCell, styles.createdByCell]}>
               <Text>{t("created_by")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.officeCell]}>
-              <Text>{t("office")}</Text>
+            <View style={[styles.tableCell, styles.createdAtCell]}>
+              <Text>{t("created_at")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.updatedByCell]}>
+              <Text>{t("updated_by")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.updatedAtCell]}>
+              <Text>{t("updated_by")}</Text>
             </View>
           </View>
           {/* Table data */}
@@ -171,37 +155,34 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
               ]}
               key={item.id}
             >
-              <View style={[styles.tableCell, styles.item, styles.idCell]}>
+              <View style={[styles.tableCell, styles.idCell, styles.item]}>
                 <Text>{item.id}</Text>
               </View>
+              <View style={[styles.tableCell, styles.nameCell, styles.item]}>
+                <Text>{item.name}</Text>
+              </View>
+              <View style={[styles.tableCell, styles.unitCell, styles.item]}>
+                <Text>{item.unit}</Text>
+              </View>
               <View
-                style={[styles.tableCell, styles.item, styles.userNameCell]}
+                style={[styles.tableCell, styles.createdByCell, styles.item]}
               >
-                <Text>{item.username}</Text>
+                <Text>{item.created_by}</Text>
               </View>
               <View
-                style={[styles.tableCell, styles.item, styles.fullNameCell]}
-              >
-                <Text>{item.full_name}</Text>
-              </View>
-              <View style={[styles.tableCell, styles.item, styles.emailCell]}>
-                <Text>{item.email}</Text>
-              </View>
-              <View style={[styles.tableCell, styles.item, styles.statusCell]}>
-                <Text>{t(item.status)}</Text>
-              </View>
-              <View
-                style={[styles.tableCell, styles.item, styles.createdAtCell]}
+                style={[styles.tableCell, styles.createdAtCell, styles.item]}
               >
                 <Text>{formatTimestamp(item.created_at)}</Text>
               </View>
               <View
-                style={[styles.tableCell, styles.item, styles.createdByCell]}
+                style={[styles.tableCell, styles.updatedByCell, styles.item]}
               >
-                <Text>{item.created_by}</Text>
+                <Text>{item.updated_by}</Text>
               </View>
-              <View style={[styles.tableCell, styles.item, styles.officeCell]}>
-                <Text>{item.office_code}</Text>
+              <View
+                style={[styles.tableCell, styles.updatedAtCell, styles.item]}
+              >
+                <Text>{formatTimestamp(item.updated_at)}</Text>
               </View>
             </View>
           ))}
@@ -213,7 +194,7 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
 
 // ! Download PDF function
 export const handleDownloadPDF = async (
-  data: UserData[],
+  data: ItemData[],
   lng: string,
   exportTitle: string
 ) => {
@@ -225,7 +206,7 @@ export const handleDownloadPDF = async (
 
 // ! Define UI component
 const DownloadPDFButton: React.FC<{
-  data: UserData[];
+  data: ItemData[];
   lng: string;
   exportTitle: string;
 }> = ({ data, lng, exportTitle }) => {

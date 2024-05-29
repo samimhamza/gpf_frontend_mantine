@@ -84,7 +84,7 @@ const CustomDataTable = ({
     order_by: orderBy,
     filter_data: filterData ?? {},
   });
-  
+
   const { data, error, isLoading, mutate } = useSWR(
     [url, tableDetails],
     async () => {
@@ -96,7 +96,7 @@ const CustomDataTable = ({
       return response;
     }
   );
-  
+  console.log(data);
   useEffect(() => {
     if (tableDetails.page && setPageNumber) {
       const { page } = tableDetails;
@@ -104,7 +104,6 @@ const CustomDataTable = ({
     }
   }, [tableDetails, setPageNumber]);
 
-  
   useEffect(() => {
     (async function () {
       if (mutated) {
