@@ -14,48 +14,35 @@ import { t } from "i18next";
 import NotoSans from "../../../public/fonts/NotoSansArabic-Regular.ttf";
 import { formatTimestamp } from "../FormatDataFunction";
 
-// ! Register Noto Sans Arabic Google font for English and Persian
-// ! Because not every font support Persian
+// Register Noto Sans Arabic Google font
 Font.register({
   family: "NotoSans",
-  fonts: [
-    {
-      src: NotoSans,
-    },
-  ],
+  src: NotoSans,
 });
 
-interface WarehouseData {
+interface CharityPackageData {
   id: number;
-  name: string;
   office_code: string;
-  province_id: number;
-  province_name: string;
-  province_name_fa: string;
-  created_by: string;
-  created_at: string;
+  category_name: string;
+  name: string;
+  period: string;
+  items_count: number;
+  start_date: string;
+  end_date: string;
+  cash_amount: number;
+  currency: string;
 }
 
 interface MyPDFDocumentProps {
-  data: WarehouseData[];
+  data: CharityPackageData[];
   lng: string;
   exportTitle: string;
 }
 
-// Register Noto Sans Arabic Google font
-Font.register({
-  family: "NotoSans",
-  fonts: [
-    {
-      src: NotoSans,
-    },
-  ],
-});
-
 const styles = StyleSheet.create({
   page: {
     padding: 4,
-    fontFamily: "NotoSans", // Apply the registered font 
+    fontFamily: "NotoSans", // Apply the registered font
   },
   header: {
     fontSize: 16,
@@ -102,23 +89,29 @@ const styles = StyleSheet.create({
   idCell: {
     width: "6%",
   },
-  nameCell: {
-    width: "25%",
-  },
   officeCodeCell: {
     width: "10%",
   },
-  provinceIdCell: {
-    width: "16%",
-  },
-  provinceNameCell: {
+  categoryNameCell: {
     width: "15%",
   },
-  createdByCell: {
-    width: "18%",
+  nameCell: {
+    width: "15%",
   },
-  createdAtCell: {
+  periodCell: {
     width: "10%",
+  },
+  itemsCountCell: {
+    width: "12%",
+  },
+  startDateCell: {
+    width: "10%",
+  },
+  endDateCell: {
+    width: "10%",
+  },
+  cashAmountCell: {
+    width: "12%",
   },
 });
 
@@ -139,23 +132,29 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
             <View style={[styles.tableCell, styles.idCell]}>
               <Text>{t("id")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.nameCell]}>
-              <Text>{t("name")}</Text>
-            </View>
             <View style={[styles.tableCell, styles.officeCodeCell]}>
               <Text>{t("office")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.provinceIdCell]}>
-              <Text>{t("province") + "  " + t("id")}</Text>
+            <View style={[styles.tableCell, styles.categoryNameCell]}>
+              <Text>{t("category")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.provinceNameCell]}>
-              <Text>{t("province")}</Text>
+            <View style={[styles.tableCell, styles.nameCell]}>
+              <Text>{t("name")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.createdByCell]}>
-              <Text>{t("created_by")}</Text>
+            <View style={[styles.tableCell, styles.periodCell]}>
+              <Text>{t("period")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.createdAtCell]}>
-              <Text>{t("created_at")}</Text>
+            <View style={[styles.tableCell, styles.itemsCountCell]}>
+              <Text>{t("total_items")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.startDateCell]}>
+              <Text>{t("start_date")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.endDateCell]}>
+              <Text>{t("end_date")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.cashAmountCell]}>
+              <Text>{t("cash_amount")}</Text>
             </View>
           </View>
           {/* Table data */}
@@ -170,37 +169,42 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
               <View style={[styles.tableCell, styles.idCell, styles.item]}>
                 <Text>{item.id}</Text>
               </View>
-              <View style={[styles.tableCell, styles.nameCell, styles.item]}>
-                <Text>{item.name}</Text>
-              </View>
               <View
                 style={[styles.tableCell, styles.officeCodeCell, styles.item]}
               >
                 <Text>{item.office_code}</Text>
               </View>
               <View
-                style={[styles.tableCell, styles.provinceIdCell, styles.item]}
+                style={[styles.tableCell, styles.categoryNameCell, styles.item]}
               >
-                <Text>{item.province_id}</Text>
+                <Text>{item.category_name}</Text>
+              </View>
+              <View style={[styles.tableCell, styles.nameCell, styles.item]}>
+                <Text>{item.name}</Text>
+              </View>
+              <View style={[styles.tableCell, styles.periodCell, styles.item]}>
+                <Text>{item.period}</Text>
               </View>
               <View
-                style={[styles.tableCell, styles.provinceNameCell, styles.item]}
+                style={[styles.tableCell, styles.itemsCountCell, styles.item]}
+              >
+                <Text>{item.items_count}</Text>
+              </View>
+              <View
+                style={[styles.tableCell, styles.startDateCell, styles.item]}
+              >
+                <Text>{formatTimestamp(item.start_date)}</Text>
+              </View>
+              <View style={[styles.tableCell, styles.endDateCell, styles.item]}>
+                <Text>{formatTimestamp(item.end_date)}</Text>
+              </View>
+              <View
+                style={[styles.tableCell, styles.cashAmountCell, styles.item]}
               >
                 <Text>
-                  {t("province") == "Province"
-                    ? item.province_name
-                    : item.province_name_fa}
+                  {item.cash_amount}{" "}
+                  {item.currency == "USD" ? t("usd") : t("afn")}
                 </Text>
-              </View>
-              <View
-                style={[styles.tableCell, styles.createdByCell, styles.item]}
-              >
-                <Text>{item.created_by}</Text>
-              </View>
-              <View
-                style={[styles.tableCell, styles.createdAtCell, styles.item]}
-              >
-                <Text>{formatTimestamp(item.created_at)}</Text>
               </View>
             </View>
           ))}
@@ -210,9 +214,9 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
   );
 };
 
-// ! Download PDF function
+// Download PDF function
 export const handleDownloadPDF = async (
-  data: WarehouseData[],
+  data: CharityPackageData[],
   lng: string,
   exportTitle: string
 ) => {
@@ -222,9 +226,9 @@ export const handleDownloadPDF = async (
   saveAs(blob, t(exportTitle));
 };
 
-// ! Define UI component
+// Define UI component
 const DownloadPDFButton: React.FC<{
-  data: WarehouseData[];
+  data: CharityPackageData[];
   lng: string;
   exportTitle: string;
 }> = ({ data, lng, exportTitle }) => {
@@ -239,4 +243,5 @@ const DownloadPDFButton: React.FC<{
     </PDFDownloadLink>
   );
 };
+
 export default DownloadPDFButton;
