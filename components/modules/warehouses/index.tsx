@@ -4,7 +4,8 @@ import { useTranslation } from "@/app/i18n/client";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { CustomDataTable } from "@/components/DataTable";
 import ExportModal from "@/components/exportFileComponents/ExportModal";
-import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/Warehouse";
+import { handleDownloadExcel } from "@/components/exportFileComponents/excel/Warehouses";
+import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/Warehouses";
 import { WarehouseColumns } from "@/shared/columns/warehouse.columns";
 import {
   CREATE_WAREHOUSES,
@@ -97,7 +98,7 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
           url="/warehouses"
           filterData={{}} // TODO LATE
           handleDownloadPDF={handleDownloadPDF}
-          handleDownloadExcel={null}
+          handleDownloadExcel={handleDownloadExcel}
         />
       )}
     </>

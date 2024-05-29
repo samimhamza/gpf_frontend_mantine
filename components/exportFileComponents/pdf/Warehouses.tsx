@@ -31,6 +31,7 @@ interface WarehouseData {
   office_code: string;
   province_id: number;
   province_name: string;
+  province_name_fa: string;
   created_by: string;
   created_at: string;
 }
@@ -185,7 +186,11 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
               <View
                 style={[styles.tableCell, styles.provinceNameCell, styles.item]}
               >
-                <Text>{item.province_name}</Text>
+                <Text>
+                  {t("province") == "Province"
+                    ? item.province_name
+                    : item.province_name_fa}
+                </Text>
               </View>
               <View
                 style={[styles.tableCell, styles.createdByCell, styles.item]}
