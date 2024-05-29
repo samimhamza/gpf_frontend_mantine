@@ -5,8 +5,8 @@ import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import CustomFilterModal from "@/components/CustomFilterModal";
 import { CustomDataTable } from "@/components/DataTable";
 import ExportModal from "@/components/exportFileComponents/ExportModal";
-import { handleDownloadExcel } from "@/components/exportFileComponents/excel/UserExportExcel";
-import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/UsersExportPDF";
+import { handleDownloadExcel } from "@/components/exportFileComponents/excel/Users";
+import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/Users";
 import { UserColumns } from "@/shared/columns/user.columns";
 import {
   CHANGE_STATUS,
