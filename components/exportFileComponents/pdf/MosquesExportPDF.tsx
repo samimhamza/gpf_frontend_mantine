@@ -13,18 +13,20 @@ import { saveAs } from "file-saver";
 import { t } from "i18next";
 import NotoSans from "../../../public/fonts/NotoSansArabic-Regular.ttf";
 
-interface UserData {
+interface MosqueData {
   id: number;
-  full_name: string;
-  email: string;
-  status: string;
-  username: string;
-  created_at: string;
-  created_by: string;
   office_code: string;
+  name: string;
+  province_name: string;
+  district_name: string;
+  mosque_type: string;
+  mosque_formal: string;
+  created_by: string;
+  created_at: string;
 }
+
 interface MyPDFDocumentProps {
-  data: UserData[];
+  data: MosqueData[];
   lng: string;
   exportTitle: string;
 }
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    fontSize: 10,
+    fontSize: 8,
   },
 
   evenRow: {
@@ -106,30 +108,31 @@ const styles = StyleSheet.create({
   },
 
   idCell: {
+    width: "6%",
+  },
+  officeCodeCell: {
     width: "8%",
   },
-
-  emailCell: {
-    width: "22%",
-  },
-
-  userNameCell: {
-    width: "12%",
-  },
-  fullNameCell: {
+  nameCell: {
     width: "18%",
   },
-  statusCell: {
-    width: "8%",
-  },
-  createdAtCell: {
+  provinceNameCell: {
     width: "13%",
   },
-  createdByCell: {
-    width: "12%",
+  districtNameCell: {
+    width: "17%",
   },
-  officeCell: {
-    width: "8%",
+  mosqueTypeCell: {
+    width: "10%",
+  },
+  mosqueFormalCell: {
+    width: "10%",
+  },
+  createdByCell: {
+    width: "16%",
+  },
+  createdAtCell: {
+    width: "12%",
   },
 });
 
@@ -150,26 +153,29 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
             <View style={[styles.tableCell, styles.idCell]}>
               <Text>{t("id")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.userNameCell]}>
-              <Text>{t("username")}</Text>
+            <View style={[styles.tableCell, styles.officeCodeCell]}>
+              <Text>{t("office")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.fullNameCell]}>
-              <Text>{t("full_name")}</Text>
+            <View style={[styles.tableCell, styles.nameCell]}>
+              <Text>{t("name")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.emailCell]}>
-              <Text>{t("email")}</Text>
+            <View style={[styles.tableCell, styles.provinceNameCell]}>
+              <Text>{t("province")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.statusCell]}>
-              <Text>{t("status")}</Text>
+            <View style={[styles.tableCell, styles.districtNameCell]}>
+              <Text>{t("district")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.createdAtCell]}>
-              <Text>{t("created_at")}</Text>
+            <View style={[styles.tableCell, styles.mosqueTypeCell]}>
+              <Text>{t("mosque_type")}</Text>
+            </View>
+            <View style={[styles.tableCell, styles.mosqueFormalCell]}>
+              <Text>{t("mosque_formal")}</Text>
             </View>
             <View style={[styles.tableCell, styles.createdByCell]}>
               <Text>{t("created_by")}</Text>
             </View>
-            <View style={[styles.tableCell, styles.officeCell]}>
-              <Text>{t("office")}</Text>
+            <View style={[styles.tableCell, styles.createdAtCell]}>
+              <Text>{t("created_at")}</Text>
             </View>
           </View>
           {/* Table data */}
@@ -185,33 +191,42 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
                 <Text>{item.id}</Text>
               </View>
               <View
-                style={[styles.tableCell, styles.item, styles.userNameCell]}
+                style={[styles.tableCell, styles.item, styles.officeCodeCell]}
               >
-                <Text>{item.username}</Text>
+                <Text>{item.office_code}</Text>
+              </View>
+              <View style={[styles.tableCell, styles.item, styles.nameCell]}>
+                <Text>{item.name}</Text>
               </View>
               <View
-                style={[styles.tableCell, styles.item, styles.fullNameCell]}
+                style={[styles.tableCell, styles.item, styles.provinceNameCell]}
               >
-                <Text>{item.full_name}</Text>
-              </View>
-              <View style={[styles.tableCell, styles.item, styles.emailCell]}>
-                <Text>{item.email}</Text>
-              </View>
-              <View style={[styles.tableCell, styles.item, styles.statusCell]}>
-                <Text>{t(item.status)}</Text>
+                <Text>{item.province_name}</Text>
               </View>
               <View
-                style={[styles.tableCell, styles.item, styles.createdAtCell]}
+                style={[styles.tableCell, styles.item, styles.districtNameCell]}
               >
-                <Text>{formatTimestamp(item.created_at)}</Text>
+                <Text>{item.district_name}</Text>
+              </View>
+              <View
+                style={[styles.tableCell, styles.item, styles.mosqueTypeCell]}
+              >
+                <Text>{item.mosque_type}</Text>
+              </View>
+              <View
+                style={[styles.tableCell, styles.item, styles.mosqueFormalCell]}
+              >
+                <Text>{item.mosque_formal}</Text>
               </View>
               <View
                 style={[styles.tableCell, styles.item, styles.createdByCell]}
               >
                 <Text>{item.created_by}</Text>
               </View>
-              <View style={[styles.tableCell, styles.item, styles.officeCell]}>
-                <Text>{item.office_code}</Text>
+              <View
+                style={[styles.tableCell, styles.item, styles.createdAtCell]}
+              >
+                <Text>{formatTimestamp(item.created_at)}</Text>
               </View>
             </View>
           ))}
@@ -223,7 +238,7 @@ const MyPDFDocument: React.FC<MyPDFDocumentProps> = ({
 
 // ! Download PDF function
 export const handleDownloadPDF = async (
-  data: UserData[],
+  data: MosqueData[],
   lng: string,
   exportTitle: string
 ) => {
@@ -235,7 +250,7 @@ export const handleDownloadPDF = async (
 
 // ! Define UI component
 const DownloadPDFButton: React.FC<{
-  data: UserData[];
+  data: MosqueData[];
   lng: string;
   exportTitle: string;
 }> = ({ data, lng, exportTitle }) => {

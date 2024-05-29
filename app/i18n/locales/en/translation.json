@@ -254,5 +254,7 @@
   "file_size":"File Size",
   "current_page": "Current Page",
   "filtered_data": "Filtered Data",
-  "all_data": "All Data"
+  "all_data": "All Data",
+  "mosque_type": "Type",
+  "mosque_formal": "Format"
 }

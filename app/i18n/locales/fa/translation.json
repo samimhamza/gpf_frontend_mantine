@@ -256,5 +256,8 @@
   "file_size": "حجم فایل",
   "current_page": "داده های صفحه فعلی",
   "filtered_data": "داده های فیلتر شده",
-  "all_data": "همه داده ها"
+  "all_data": "همه داده ها",
+  "mosque_type": "نوع",
+  "mosque_formal": "رسمیت"
+
 }
