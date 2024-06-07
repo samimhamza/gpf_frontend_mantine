@@ -1,2 +1,6 @@
 /* 👇 Make sure the styles are applied in the correct order */
 @layer mantine, mantine-datatable;
+
+.m_77c9d27d:where([data-with-right-section]){
+    direction: ltr;
+}
