@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from '@/app/i18n/client';
-import { Flex, MultiSelect, Select, TextInput } from '@mantine/core';
+import { Flex, MultiSelect, Select, TextInput, Textarea } from '@mantine/core';
 
 interface StepOneProps {
 	form: any;
@@ -22,6 +22,19 @@ const StepOne = ({ form, lng, offices, employees, office }: StepOneProps) => {
 				p="sm"
 				justify={{ sm: 'center' }}
 			>
+				<Select
+					style={{ flex: 1 }}
+					checkIconPosition="right"
+					label={t('applicant_type')}
+					placeholder={t('applicant_type')}
+					withAsterisk
+					data={[
+						{ value: 'mosque', label: t('mosque') },
+						{ value: 'community', label: t('community') },
+						{ value: 'program', label: t('program') },
+						{ value: 'other', label: t('other') },
+					]}
+				/>
 				<TextInput
 					style={{ flex: 1 }}
 					label={t('name')}
@@ -29,6 +42,13 @@ const StepOne = ({ form, lng, offices, employees, office }: StepOneProps) => {
 					withAsterisk
 					{...form.getInputProps('name')}
 				/>
+			</Flex>
+			<Flex
+				direction={{ base: 'column', sm: 'row' }}
+				gap="sm"
+				p="sm"
+				justify={{ sm: 'center' }}
+			>
 				<TextInput
 					style={{ flex: 1 }}
 					label={t('agent_name')}
@@ -36,13 +56,6 @@ const StepOne = ({ form, lng, offices, employees, office }: StepOneProps) => {
 					withAsterisk
 					{...form.getInputProps('agent_name')}
 				/>
-			</Flex>
-			<Flex
-				direction={{ base: 'column', sm: 'row' }}
-				gap="sm"
-				p="sm"
-				justify={{ sm: 'center' }}
-			>
 				<TextInput
 					style={{ flex: 1 }}
 					label={t('agent_phone')}
@@ -50,13 +63,6 @@ const StepOne = ({ form, lng, offices, employees, office }: StepOneProps) => {
 					withAsterisk
 					{...form.getInputProps('agent_phone')}
 				/>
-				<TextInput
-					style={{ flex: 1 }}
-					label={t('descriptions')}
-					placeholder={t('descriptions')}
-					withAsterisk
-					{...form.getInputProps('descriptions')}
-				/>
 			</Flex>
 			<Flex
 				direction={{ base: 'column', sm: 'row' }}
@@ -64,19 +70,11 @@ const StepOne = ({ form, lng, offices, employees, office }: StepOneProps) => {
 				p="sm"
 				justify={{ sm: 'center' }}
 			>
-				<TextInput
+				<Textarea
+					label={t('descriptions')}
+					placeholder={t('descriptions')}
+					minRows={4}
 					style={{ flex: 1 }}
-					label={t('address')}
-					placeholder={t('address')}
-					withAsterisk
-					{...form.getInputProps('address')}
-				/>
-				<TextInput
-					style={{ flex: 1 }}
-					label={t('applicant_type')}
-					placeholder={t('applicant_type')}
-					withAsterisk
-					{...form.getInputProps('applicant_type')}
 				/>
 			</Flex>
 		</>

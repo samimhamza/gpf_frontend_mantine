@@ -7,8 +7,10 @@ import { useAxios } from "@/customHooks/useAxios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Box, LoadingOverlay } from "@mantine/core";
-import { HiMiniUsers } from "react-icons/hi2";
-import { TeamsSchema } from "@/schemas/models/teams";
+import { FaPersonCircleCheck } from "react-icons/fa6";
+import { PiMapPinAreaBold } from "react-icons/pi";
+
+import { GeneralApplicantSchema } from "@/schemas/models/general_applicants";
 import StepOne from "./StepOne";
 import useOffice from "@/customHooks/useOffice";
 import { GeneralApplicantModule } from ".";
@@ -29,7 +31,7 @@ const GeneralApplicantModal = ({
 	editId: number | undefined;
 }) => {
 	const { t } = useTranslation(lng);
-	const teamsSchema = TeamsSchema(t);
+	const generalApplicantSchema = GeneralApplicantSchema(t);
 	const callApi = useAxios();
 	const [loading, setLoading] = useState(false);
 	const [employees, SetEmployees] = useState([]);
@@ -42,7 +44,7 @@ const GeneralApplicantModal = ({
 
 	const form = useForm({
 		initialValues: initialValues,
-		validate: zodResolver(teamsSchema),
+		validate: zodResolver(generalApplicantSchema),
 		validateInputOnBlur: true,
 	});
 
@@ -118,8 +120,8 @@ const GeneralApplicantModal = ({
 
 	const steps = [
 		{
-			title: t("team_info"),
-			icon: <HiMiniUsers size={22} />,
+			title: t("general_information"),
+			icon: <FaPersonCircleCheck size={22} />,
 			step: (
 				<Box pos="relative">
 					<LoadingOverlay
@@ -158,6 +160,23 @@ const GeneralApplicantModal = ({
 					return true;
 				}
 				return res;
+			},
+		},
+		{
+			title: t("contract_details"),
+			icon: <PiMapPinAreaBold size={22} />,
+			step: (
+				<Box pos="relative">
+					<LoadingOverlay
+						visible={loading}
+						zIndex={1000}
+						overlayProps={{ radius: "sm", blur: 2 }}
+					/>
+					<h1> hello world</h1>
+				</Box>
+			),
+			async validate() {
+				
 			},
 		},
 	];
