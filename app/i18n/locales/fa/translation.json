@@ -236,5 +236,13 @@
   "hide": "پنهان کردن",
   "total_choices": "تمام انتخاب ها",
   "general": "عمومی",
-  "requests": "درخواستی ها"
+  "requests": "درخواستی ها",
+  "mosque": "مسجید",
+  "community": "نهاد",
+  "program": "برنامه",
+  "other": "دیگر",
+  "applicant_type": "نوع متقاضی",
+  "agent_name": "اسم نماینده",
+  "agent_phone": "شماره تماس نماینده",
+  "descriptions": "توضیحات"
 }
