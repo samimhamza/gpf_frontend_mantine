@@ -11,8 +11,9 @@ import { HiMiniUsers } from "react-icons/hi2";
 import { TeamsSchema } from "@/schemas/models/teams";
 import StepOne from "./StepOne";
 import useOffice from "@/customHooks/useOffice";
+import { GeneralApplicantModule } from ".";
 
-const TeamModal = ({
+const GeneralApplicantModal = ({
 	opened,
 	close,
 	lng,
@@ -178,4 +179,4 @@ const TeamModal = ({
 	);
 };
 
-export default TeamModal;
+export default GeneralApplicantModal;
