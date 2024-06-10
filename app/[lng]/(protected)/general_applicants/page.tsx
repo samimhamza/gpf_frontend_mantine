@@ -1,8 +1,8 @@
-import { ItemModule } from "@/components/modules/items";
+import { GeneralApplicantModule } from "@/components/modules/general_applicants";
 import usePermissionChecker from "@/customHooks/usePermissionChecker";
 import { VIEW_ITEMS } from "@/shared/constants/Permissions";
 
-const ItemsPage = async ({
+const GeneralApplicantsPage = async ({
   params: { lng, warehouse },
 }: {
   params: {
@@ -12,7 +12,7 @@ const ItemsPage = async ({
 }) => {
   await usePermissionChecker(VIEW_ITEMS);
 
-  return <ItemModule lng={lng} />;
+  return <GeneralApplicantModule lng={lng} />;
 };
 
-export default ItemsPage;
+export default GeneralApplicantsPage;
