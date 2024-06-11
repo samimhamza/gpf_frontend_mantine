@@ -36,7 +36,7 @@ interface DataProps {
 	pageSize: number; // rohullah
 }
 
-const PAGE_SIZES = [10, 20, 50, 100];
+const PAGE_SIZES = [10, 15, 20, 30, 50, 100];
 
 interface DataTableProps {
 	title: string | ReactNode;
