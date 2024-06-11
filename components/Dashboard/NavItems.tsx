@@ -60,7 +60,7 @@ export const NavItems = (t: (arg: string) => string) => [
       },
       {
         label: t("requests"),
-        link: "/requests",
+        link: "/applicant_requests",
         permission: VIEW_APPLICANTS,
       },
     ],

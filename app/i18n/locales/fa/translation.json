@@ -247,6 +247,12 @@
   "descriptions": "توضیحات",
   "general_information": "اطلاعات عمومی",
   "location": "موقعیت",
-  "referenced_by": "ارجاع دهنده"
-  
+  "referenced_by": "ارجاع دهنده",
+  "priority": "اولویت",
+  "request": "درخواست",
+  "applicant_name": "اسم مرجع",
+  "high": "بالا",
+  "medium": "متوسط",
+  "low": "پایین",
+  "approved": "قبول شده"  
 }

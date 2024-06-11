@@ -80,6 +80,7 @@ export const GeneralApplicantColumns = (t: (arg: string) => string) => {
 			title: t('referenced_by'),
 			noWrap: true,
 			sortable: true,
+			// render: ({ reference }: {reference: any}) => `${reference.first_name} ${reference.last_name}`,
 		},
 	];
 };
