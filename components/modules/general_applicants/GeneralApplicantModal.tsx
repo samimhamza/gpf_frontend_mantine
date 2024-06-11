@@ -8,11 +8,10 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Box, LoadingOverlay } from '@mantine/core';
 import { PiMapPinAreaBold } from 'react-icons/pi';
-import { RxInfoCircled } from "react-icons/rx";
-
+import { RxInfoCircled } from 'react-icons/rx';
 
 import { GeneralApplicantSchema } from '@/schemas/models/general_applicants';
-import StepOne from './GeneralApplicantStepOne';
+import GeneralApplicantStepOne from './GeneralApplicantStepOne';
 import useOffice from '@/customHooks/useOffice';
 import GeneralApplicantStepTwo from './GeneralApplicantStepTwo';
 
@@ -37,8 +36,7 @@ const GeneralApplicantModal = ({
 	const [loading, setLoading] = useState(false);
 	const [references, setReferences] = useState([]);
 	const [provinces, setProvinces] = useState([]);
-	const [editDistrict, setEditDistrict] = useState("");
-
+	const [editDistrict, setEditDistrict] = useState('');
 
 	const initialValues: any = {
 		name: '',
@@ -50,7 +48,7 @@ const GeneralApplicantModal = ({
 		office_id: '',
 		referenced_by: '',
 		province_id: '',
-		district_id: ''
+		district_id: '',
 	};
 
 	const form = useForm({
@@ -62,9 +60,7 @@ const GeneralApplicantModal = ({
 	const { offices, office } = useOffice(form);
 
 	const submit = async () => {
-		console.log("from submit form" , form.values, editId);
-		
-		const { response, status } = !editId
+		const { response, status, error } = !editId
 			? await callApi({
 					method: 'POST',
 					url: '/general_applicants',
@@ -81,24 +77,19 @@ const GeneralApplicantModal = ({
 		}
 		if (status == 422) {
 			toast.error(t('editing_not_allowed'));
-			close();
+			// close();
 			return false;
 		}
 		toast.error(t('something_went_wrong'));
 		return false;
 	};
 
-
 	useEffect(() => {
-		console.log("YESHHHS");
-		
 		if (editId) {
-			console.log("INSIDE ***((((((()))))))");
-			
 			(async function () {
 				setLoading(true);
 				const { response, status, error } = await callApi({
-					method: "GET",
+					method: 'GET',
 					url: `/schools/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
@@ -106,17 +97,20 @@ const GeneralApplicantModal = ({
 					Object.entries(response.data).forEach(([key, value]) => {
 						if (Object.keys(initialValues).includes(key)) {
 							if (
-								key != "province_id" &&
-								key != "district_id" &&
-								key != "office_id"
+								key != 'province_id' &&
+								key != 'district_id' &&
+								key != 'office_id'
 							)
-								values[key] = value ? value : initialValues[key];
+								values[key] = value
+									? value
+									: initialValues[key];
 						}
 						if (
-							(key == "office_id" || key == "province_id") && value
+							(key == 'office_id' || key == 'province_id') &&
+							value
 						) {
 							values[key] = value.toString();
-						}				
+						}
 					});
 					form.setValues(values);
 					setLoading(false);
@@ -128,41 +122,40 @@ const GeneralApplicantModal = ({
 	useEffect(() => {
 		(async function () {
 			const { response, status, error } = await callApi({
-				method: "GET",
-				url: "/all_provinces",
+				method: 'GET',
+				url: '/all_provinces',
 			});
 			if (status == 200 && response.result == true) {
 				setProvinces(
 					response.data.map((item: any) => {
-						return { value: item.id.toString(), label: item.name_fa };
+						return {
+							value: item.id.toString(),
+							label: item.name_fa,
+						};
 					})
 				);
 			}
 		})();
 	}, [callApi]);
 
-
-
-
 	useEffect(() => {
 		(async function () {
-			console.log('methods called form referecnes....');
-			
-			const { response, status, error } = await callApi({				
-				method: "GET",
-				url: "/all_references",
-				// url: "/office/auto_complete",
+			const { response, status, error } = await callApi({
+				method: 'GET',
+				url: '/all_references',
 			});
 			if (status == 200 && response.result == true) {
 				setReferences(
 					response.data.map((item: any) => {
-						return {value: item.id.toString(), label: item.first_name + " " + item.last_name};
+						return {
+							value: item.id.toString(),
+							label: item.first_name + ' ' + item.last_name,
+						};
 					})
 				);
 			}
 		})();
 	}, [callApi]);
-
 
 	const steps = [
 		{
@@ -175,35 +168,20 @@ const GeneralApplicantModal = ({
 						zIndex={1000}
 						overlayProps={{ radius: 'sm', blur: 2 }}
 					/>
-					<StepOne
-						form={form}
-						lng={lng}
-					/>
+					<GeneralApplicantStepOne form={form} lng={lng} />
 				</Box>
 			),
 			async validate() {
 				form.validate();
-				let res = form.isValid();
-				// if (res) {
-				// 	let { response, status } = await callApi({
-				// 		method: 'POST',
-				// 		url: '/general_applicants/check_uniqueness',
-				// 		data: {
-				// 			name: form.values.name,
-				// 			office_id: form.values.office_id,
-				// 			id: editId ? editId : null,
-				// 		},
-				// 	});
-				// 	if (status == 226) {
-				// 		form.setErrors({
-				// 			name:
-				// 				response.message == 0 &&
-				// 				t('value_already_exists'),
-				// 		});
-				// 		return false;
-				// 	} else if (status !== 200) return false;
-				// 	return true;
-				// }
+				const fieldsToValidate = [
+					'name',
+					'agent_name',
+					'agent_phone',
+					'applicant_type',
+				];
+				const res = fieldsToValidate.every((fieldName) =>
+					form.isValid(fieldName)
+				);
 				return res;
 			},
 		},
@@ -239,7 +217,7 @@ const GeneralApplicantModal = ({
 
 	return (
 		<form>
-		<CustomModal
+			<CustomModal
 				opened={opened}
 				close={close}
 				steps={steps}
