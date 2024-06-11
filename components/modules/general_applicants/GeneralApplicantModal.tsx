@@ -37,14 +37,20 @@ const GeneralApplicantModal = ({
 	const [loading, setLoading] = useState(false);
 	const [references, setReferences] = useState([]);
 	const [provinces, setProvinces] = useState([]);
-	const [districts, setDistricts] = useState([]);
 	const [editDistrict, setEditDistrict] = useState("");
 
 
 	const initialValues: any = {
 		name: '',
+		agent_name: '',
+		agent_phone: '',
+		descriptions: '',
+		address: '',
+		applicant_type: '',
 		office_id: '',
-		members: [],
+		referenced_by: '',
+		province_id: '',
+		district_id: ''
 	};
 
 	const form = useForm({
@@ -56,6 +62,8 @@ const GeneralApplicantModal = ({
 	const { offices, office } = useOffice(form);
 
 	const submit = async () => {
+		console.log("from submit form" , form.values, editId);
+		
 		const { response, status } = !editId
 			? await callApi({
 					method: 'POST',
@@ -85,7 +93,7 @@ const GeneralApplicantModal = ({
 		console.log("YESHHHS");
 		
 		if (editId) {
-			console.log("INSIDE ***(((((((");
+			console.log("INSIDE ***((((((()))))))");
 			
 			(async function () {
 				setLoading(true);
@@ -221,13 +229,17 @@ const GeneralApplicantModal = ({
 					/>
 				</Box>
 			),
-			async validate() {},
+			async validate() {
+				form.validate();
+				let res = form.isValid();
+				return res;
+			},
 		},
 	];
 
 	return (
 		<form>
-			<CustomModal
+		<CustomModal
 				opened={opened}
 				close={close}
 				steps={steps}

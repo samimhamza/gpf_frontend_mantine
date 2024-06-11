@@ -30,10 +30,32 @@ export const GeneralApplicantColumns = (t: (arg: string) => string) => {
 			accessor: 'descriptions',
 			title: t('descriptions'),
 			noWrap: true,
+			render: ({ descriptions }: { descriptions: string }) => (
+				<div title={descriptions}>
+					{descriptions && descriptions.length > 50 ? `${descriptions.slice(0, 50)}...` : descriptions}
+				</div>
+			),
 		},
 		{
 			accessor: 'applicant_type',
 			title: t('applicant_type'),
+			noWrap: true,
+			sortable: true,
+			render: ({ applicant_type }: { applicant_type: string }) => (
+				<div title={applicant_type}>
+					{t(applicant_type)}
+				</div>
+			),
+		},
+		{
+			accessor: 'province_name',
+			title: t('province'),
+			noWrap: true,
+			sortable: true,
+		},
+		{
+			accessor: 'district_name',
+			title: t('district'),
 			noWrap: true,
 			sortable: true,
 		},
@@ -41,30 +63,23 @@ export const GeneralApplicantColumns = (t: (arg: string) => string) => {
 			accessor: 'address',
 			title: t('address'),
 			noWrap: true,
+			render: ({ descriptions }: { descriptions: string }) => (
+				<div title={descriptions}>
+					{descriptions && descriptions.length > 30 ? `${descriptions.slice(0, 30)}...` : descriptions}
+				</div>
+			),
 		},
 		{
-			accessor: 'province_id',
-			title: t('province'),
-			noWrap: true,
-			sortable: true,
-		},
-		{
-			accessor: 'district_id',
-			title: t('district'),
-			noWrap: true,
-			sortable: true,
-		},
-		{
-			accessor: 'office_id',
+			accessor: 'office_name',
 			title: t('office'),
 			noWrap: true,
 			sortable: true,
 		},
 		{
-			accessor: 'referenced_by',
-			title: t('reference'),
+			accessor: 'first_name',
+			title: t('referenced_by'),
 			noWrap: true,
 			sortable: true,
-		}
+		},
 	];
 };

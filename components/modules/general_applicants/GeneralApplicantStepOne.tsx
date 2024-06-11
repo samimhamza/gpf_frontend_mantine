@@ -31,6 +31,7 @@ const GeneralApplicantStepOne = ({ form, lng }: GeneralApplicantStepOneProps) =>
 						{ value: 'program', label: t('program') },
 						{ value: 'other', label: t('other') },
 					]}
+					{...form.getInputProps('applicant_type')}
 				/>
 				<TextInput
 					style={{ flex: 1 }}
@@ -72,6 +73,7 @@ const GeneralApplicantStepOne = ({ form, lng }: GeneralApplicantStepOneProps) =>
 					placeholder={t('descriptions')}
 					minRows={4}
 					style={{ flex: 1 }}
+					{...form.getInputProps('descriptions')}
 				/>
 			</Flex>
 		</>
