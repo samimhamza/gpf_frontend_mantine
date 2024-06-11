@@ -130,7 +130,7 @@ export const TeacherColumns = (
 			noWrap: true,
 			sortable: true,
 			render: ({ gender }: { gender: string }) =>
-				gender == "male" ? t("male") : gender == "female" ? t("female") : "",
+				t(gender),
 		},
 		...logs,
 	];

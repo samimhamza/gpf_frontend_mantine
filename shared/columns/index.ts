@@ -73,3 +73,39 @@ export const sharedStatuses = (t: (arg: string) => string) => [
     text: t("pending"),
   },
 ];
+
+
+export const priorities = (t: (arg: string) => string) => [
+  {
+    status: "high",
+    color: "red",
+    text: t("high"),
+  },
+  {
+    status: "medium",
+    color: "gray",
+    text: t("medium"),
+  },
+  {
+    status: "low",
+    color: "yellow",
+    text: t("low"),
+  },
+];
+export const applicantRequestStatuses = (t: (arg: string) => string) => [
+  {
+    status: "approved",
+    color: "green",
+    text: t("approved"),
+  },
+  {
+    status: "rejected",
+    color: "red",
+    text: t("rejected"),
+  },
+  {
+    status: "pending",
+    color: "yellow",
+    text: t("pending"),
+  },
+];

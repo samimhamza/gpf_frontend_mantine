@@ -56,6 +56,8 @@ export const ApplicantRequestColumns = (t: (arg: string) => string) => {
 					{descriptions && descriptions.length > 50 ? `${descriptions.slice(0, 50)}...` : descriptions}
 				</div>
 			),
-		},	
+		},
+        
+        
 	];
 };
