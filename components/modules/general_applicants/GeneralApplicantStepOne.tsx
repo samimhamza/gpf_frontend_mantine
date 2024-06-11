@@ -3,15 +3,12 @@
 import { useTranslation } from '@/app/i18n/client';
 import { Flex, MultiSelect, Select, TextInput, Textarea } from '@mantine/core';
 
-interface StepOneProps {
+interface GeneralApplicantStepOneProps {
 	form: any;
 	lng: string;
-	offices: Array<{ value: string; label: string }>;
-	employees: Array<{ value: string; label: string }>;
-	office: string | null;
 }
 
-const StepOne = ({ form, lng, offices, employees, office }: StepOneProps) => {
+const GeneralApplicantStepOne = ({ form, lng }: GeneralApplicantStepOneProps) => {
 	const { t } = useTranslation(lng);
 
 	return (
@@ -81,4 +78,4 @@ const StepOne = ({ form, lng, offices, employees, office }: StepOneProps) => {
 	);
 };
 
-export default StepOne;
+export default GeneralApplicantStepOne;

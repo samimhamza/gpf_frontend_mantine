@@ -244,5 +244,9 @@
   "applicant_type": "نوع متقاضی",
   "agent_name": "اسم نماینده",
   "agent_phone": "شماره تماس نماینده",
-  "descriptions": "توضیحات"
+  "descriptions": "توضیحات",
+  "general_information": "اطلاعات عمومی",
+  "location": "موقعیت",
+  "referenced_by": "ارجاع دهنده"
+  
 }
