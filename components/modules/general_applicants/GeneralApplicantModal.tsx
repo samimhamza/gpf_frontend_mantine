@@ -7,7 +7,6 @@ import { useAxios } from '@/customHooks/useAxios';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Box, LoadingOverlay } from '@mantine/core';
-import { FaPersonCircleCheck } from 'react-icons/fa6';
 import { PiMapPinAreaBold } from 'react-icons/pi';
 import { RxInfoCircled } from "react-icons/rx";
 
@@ -39,6 +38,8 @@ const GeneralApplicantModal = ({
 	const [references, setReferences] = useState([]);
 	const [provinces, setProvinces] = useState([]);
 	const [districts, setDistricts] = useState([]);
+	const [editDistrict, setEditDistrict] = useState("");
+
 
 	const initialValues: any = {
 		name: '',
@@ -212,11 +213,11 @@ const GeneralApplicantModal = ({
 						form={form}
 						lng={lng}
 						provinces={provinces}
-						districts={districts}
+						editDistrict={editDistrict}
+						setEditDistrict={setEditDistrict}
 						references={references}
 						offices={offices}
 						office={office}
-						setDistricts={setDistricts}
 					/>
 				</Box>
 			),

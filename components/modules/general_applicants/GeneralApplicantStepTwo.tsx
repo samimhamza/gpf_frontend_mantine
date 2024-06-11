@@ -1,31 +1,63 @@
 'use client';
 
 import { useTranslation } from '@/app/i18n/client';
-import { Flex, Select, TextInput, Textarea } from '@mantine/core';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Flex, Select, TextInput } from '@mantine/core';
+import { useEffect , useState} from 'react';
+import { useAxios } from "@/customHooks/useAxios";
 
 interface GeneralApplicantStepTwoProps {
 	form: any;
 	lng: string;
 	provinces: Array<{ value: string; label: string }>;
-	districts: Array<{ value: string; label: string }>;
 	offices: Array<{ value: string; label: string }>;
 	references: Array<{ value: string; label: string }>;
-	setDistricts: any;
   office: string | null;
+  editDistrict: string | undefined;
+	setEditDistrict: any;
 }
 
 const GeneralApplicantStepTwo = ({
 	form,
 	lng,
-	districts,
 	offices,
 	references,
 	provinces,
-	setDistricts,
+	editDistrict,
+	setEditDistrict,
   office
 }: GeneralApplicantStepTwoProps) => {
 	const { t } = useTranslation(lng);
+
+  const callApi = useAxios();
+	const [loading, setLoading] = useState(false);
+	const [districts, setDistricts] = useState([]);
+
+  useEffect(() => {
+		(async function () {
+			if (editDistrict) {
+				form.setFieldValue("district_id", editDistrict);
+				setEditDistrict("");
+			} else {
+				form.setFieldValue("district_id", null);
+				setDistricts([]);
+			}
+			if (form?.values?.province_id) {
+				setLoading(true);
+				const { response, status, error } = await callApi({
+					method: "GET",
+					url: `/all_districts?province_id=${form?.values?.province_id}`,
+				});
+				if (status == 200 && response.result == true) {
+					setDistricts(
+						response.data.map((item: any) => {
+							return { value: item.id.toString(), label: item.name_fa };
+						})
+					);
+				}
+				setLoading(false);
+			}
+		})();
+	}, [form?.values?.province_id, callApi, setEditDistrict, editDistrict]);
 
 	return (
 		<>
