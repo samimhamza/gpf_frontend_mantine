@@ -74,6 +74,7 @@ const GeneralApplicantStepTwo = ({
 					data={provinces}
 					searchable
 					clearable
+					withAsterisk
 					nothingFoundMessage={t('noting_found')}
 					{...form.getInputProps('province_id')}
 				/>
@@ -84,6 +85,7 @@ const GeneralApplicantStepTwo = ({
 					data={districts}
 					searchable
 					clearable
+					withAsterisk
 					nothingFoundMessage={t('noting_found')}
 					{...form.getInputProps('district_id')}
 				/>
@@ -108,6 +110,7 @@ const GeneralApplicantStepTwo = ({
 					placeholder={t('referenced_by')}
 					data={references}
 					searchable
+					withAsterisk					
 					clearable
 					nothingFoundMessage={t('noting_found')}
 					{...form.getInputProps('referenced_by')}

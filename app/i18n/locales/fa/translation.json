@@ -254,5 +254,6 @@
   "high": "بالا",
   "medium": "متوسط",
   "low": "پایین",
-  "approved": "قبول شده"  
+  "approved": "قبول شده",
+  "request_content": "متن درخواستی"
 }
