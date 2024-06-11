@@ -7,7 +7,6 @@ import { useAxios } from '@/customHooks/useAxios';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Box, LoadingOverlay } from '@mantine/core';
-import { PiMapPinAreaBold } from 'react-icons/pi';
 import { RxInfoCircled } from 'react-icons/rx';
 
 import { ApplicantRequestSchema } from '@/schemas/models/applicant_requests';
@@ -37,7 +36,6 @@ const ApplicantRequestModal = ({
 	const initialValues: any = {
 		general_applicant_id: '',
 		request: '',
-		status: '',
 		priority: '',
 		descriptions: '',
 	};
@@ -74,8 +72,37 @@ const ApplicantRequestModal = ({
 	};
 
 	useEffect(() => {
+		console.log("lets go for edit:   ", editId);
+		
+		if (editId) {
+			console.log("INDIS E  EDIT");
+			
+			(async function () {
+				setLoading(true);
+				const { response, status } = await callApi({
+					method: "GET",
+					url: `/general_applicant_requests/${editId}`,
+				});
+				if (status == 200 && response.result == true) {
+					let values: any = {};
+					form.setValues({
+						request: response.data.request,
+						descriptions: response.data.descriptions,
+						priority: response.data.priority,
+						general_applicant_id: response.data.general_applicant_id.toString(),				
+					});
+					setLoading(false);
+				}
+			})();
+		}
+	}, [editId, callApi]);
+
+
+
+
+	useEffect(() => {
 		(async function () {
-			const { response, status, error } = await callApi({
+			const { response, status } = await callApi({
 				method: 'GET',
 				url: '/all_general_applicants',
 			});
