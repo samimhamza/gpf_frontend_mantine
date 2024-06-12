@@ -50,12 +50,12 @@ const ApplicantRequestModal = ({
 		const { response, status } = !editId
 			? await callApi({
 					method: 'POST',
-					url: '/general_applicant_requests',
+					url: '/applicant_request_decisions',
 					data: {...form.values, status: 'pending'},
 				})
 			: await callApi({
 					method: 'PUT',
-					url: `/general_applicant_requests/${editId}`,
+					url: `/applicant_request_decisions/${editId}`,
 					data: form.values,
 				});
 		if ((!editId ? status == 201 : status == 202) && response.result) {
@@ -71,49 +71,30 @@ const ApplicantRequestModal = ({
 		return false;
 	};
 
-	useEffect(() => {		
-		if (editId) {			
-			(async function () {
-				setLoading(true);
-				const { response, status } = await callApi({
-					method: "GET",
-					url: `/general_applicant_requests/${editId}`,
-				});
-				if (status == 200 && response.result == true) {
-					let values: any = {};
-					form.setValues({
-						request: response.data.request,
-						descriptions: response.data.descriptions,
-						priority: response.data.priority,
-						general_applicant_id: response.data.general_applicant_id.toString(),				
-					});
-					setLoading(false);
-				}
-			})();
-		}
-	}, [editId, callApi]);
+	// useEffect(() => {		
+	// 	if (editId) {			
+	// 		(async function () {
+	// 			setLoading(true);
+	// 			const { response, status } = await callApi({
+	// 				method: "GET",
+	// 				url: `/general_applicant_requests/${editId}`,
+	// 			});
+	// 			if (status == 200 && response.result == true) {
+	// 				let values: any = {};
+	// 				form.setValues({
+	// 					request: response.data.request,
+	// 					descriptions: response.data.descriptions,
+	// 					priority: response.data.priority,
+	// 					general_applicant_id: response.data.general_applicant_id.toString(),				
+	// 				});
+	// 				setLoading(false);
+	// 			}
+	// 		})();
+	// 	}
+	// }, [editId, callApi]);
 
 
 
-
-	useEffect(() => {
-		(async function () {
-			const { response, status } = await callApi({
-				method: 'GET',
-				url: '/all_general_applicants',
-			});
-			if (status == 200 && response.result == true) {
-				setGeneralApplicants(
-					response.data.map((item: any) => {
-						return {
-							value: item.id.toString(),
-							label: item.name,
-						};
-					})
-				);
-			}
-		})();
-	}, [callApi]);
 
 	const steps = [
 		{

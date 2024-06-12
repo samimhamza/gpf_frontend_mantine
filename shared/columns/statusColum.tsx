@@ -1,8 +1,10 @@
 import { useAxios } from "@/customHooks/useAxios";
 import { Badge, Center, Loader, Menu, Text } from "@mantine/core";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { GoChevronDown } from "react-icons/go";
+import { useDisclosure } from '@mantine/hooks';
+
 
 export const statusColum = (
 	t: (arg: string) => string,
@@ -24,6 +26,21 @@ export const statusColum = (
 		isLoading: false,
 	});
 
+
+
+
+	// const [opened, { open, close }] = useDisclosure(false);
+	// const [makeDecision, setMakeDecision] = useState<number>();
+	// useEffect(() => {
+	// 	if (makeDecision) {
+	// 		open();
+	// 	}
+	// }, [makeDecision, open]);
+
+
+
+
+
 	const getStatus = (status: string) => {
 		return statuses.find((item) => item.status == status);
 	};
@@ -44,6 +61,14 @@ export const statusColum = (
 		newStatus: string
 	) => {
 		if (currentStatus != newStatus) {
+
+
+			if(statusUrl.length > 25 && newStatus != 'pending'){
+				console.log("Alright NOW");	
+				// showChangeStatusModal(true);
+			}
+
+
 			setIsLoading({ id: id, isLoading: true });
 			const { status } = await callApi({
 				method: "PUT",
@@ -98,6 +123,6 @@ export const statusColum = (
 						</Text>
 					</Badge>
 				</Center>
-			),
+			),		
 	};
 };

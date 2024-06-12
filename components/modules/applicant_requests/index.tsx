@@ -5,13 +5,13 @@ import { useTranslation } from '@/app/i18n/client';
 import CustomBreadCrumb from '@/components/CustomBreadCrumb';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
-// import { permissionChecker } from '@/shared/functions/permissionChecker';
-// import {
-// 	CHANGE_STATUS,
-// 	CREATE_TEAMS,
-// 	DELETE_TEAMS,
-// 	UPDATE_TEAMS,
-// } from '@/shared/constants/Permissions';
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import {
+	CHANGE_STATUS,
+	CREATE_TEAMS,
+	DELETE_TEAMS,
+	UPDATE_TEAMS,
+} from '@/shared/constants/Permissions';
 import { ApplicantRequestColumns } from '@/shared/columns/general_applicants/applicant_request_columns';
 import { useRouter } from 'next/navigation';
 import ApplicantRequestModal from './ApplicantRequestModal';
@@ -20,7 +20,12 @@ export const ApplicantRequestModule = ({ lng }: { lng: string }) => {
 	const router = useRouter();
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
-	const columns = ApplicantRequestColumns(t);
+	const columns = ApplicantRequestColumns(
+		t,
+		permissionChecker(CHANGE_STATUS),
+		"/general_applicant_requests/",
+		setMutated
+	  );
 	const [opened, { open, close }] = useDisclosure(false);
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
