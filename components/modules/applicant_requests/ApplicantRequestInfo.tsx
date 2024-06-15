@@ -124,7 +124,7 @@ const ApplicantRequestInfo = ({
 						</Group>
 						<Group flex={1}>
 							<Text className="title">{t('priority')} :</Text>
-							<Text>{data?.priority}</Text>
+							<Text>{t(data?.priority)}</Text>
 						</Group>
 					</Flex>
 					<Flex
@@ -136,7 +136,7 @@ const ApplicantRequestInfo = ({
 					>
 						<Group flex={1} wrap="nowrap">
 							<Text className="title">{t('status')} :</Text>
-							<Text>{data?.status}</Text>
+							<Text>{t(data?.status)}</Text>
 						</Group>
 						<Group flex={1}>
 							<Text className="title">{t('descriptions')} :</Text>
