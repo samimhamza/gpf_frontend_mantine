@@ -56,6 +56,36 @@ const ApplicantRequestInfo = ({
 	return (
 		<>
 			<Paper withBorder shadow="sm" mb="md">
+				<Flex
+					justify={{ base: 'center', xs: 'space-between' }}
+					align="center"
+					className="applicant-title"
+					p="md"
+					gap="sm"
+					wrap="wrap"
+				>
+					<Title order={3}>{t('applicant_request_info')}</Title>
+					{/* <Group>
+						{permissionChecker(CHANGE_STATUS) ? (
+							<Menu shadow="md" width={100}>
+								<Menu.Target>{badge}</Menu.Target>
+								<Menu.Dropdown>
+									{getMenu(team?.id, team?.status)}
+								</Menu.Dropdown>
+							</Menu>
+						) : (
+							badge
+						)}
+						{checkPermission(UPDATE_TEAMS) && (
+							<Button
+								onClick={() => open()}
+								rightSection={<TbEdit size={16} />}
+							>
+								{t('edit')}
+							</Button>
+						)}
+					</Group> */}
+				</Flex>
 				<Box pos="relative" p="md">
 					<LoadingOverlay
 						visible={loading}
@@ -149,72 +179,70 @@ const ApplicantRequestInfo = ({
 							)}
 						</Group>
 					</Flex>
-					<Title
-						order={3}
-						p="sm"
-						mt={10}
-						className="applicant-title"
-						ta="center"
-					>
-						{t('decision')}
-					</Title>
-					<Flex
-						px="sm"
-						direction={{ base: 'column', sm: 'row' }}
-						gap="sm"
-						pt="sm"
-						justify="center"
-					>
-						<Group flex={1}>
-							<Text className="title">{t('decided_by')} :</Text>
-							<Text>{data?.decision?.user?.username}</Text>
-						</Group>
-						<Group flex={1}>
-							<Text className="title">{t('decided_at')} :</Text>
-							{data?.decision && (
-								<Text>
-									{getDateTime(data?.decision?.decided_at)}
-								</Text>
-							)}
-						</Group>
-					</Flex>
-					<Flex
-						px="sm"
-						direction={{ base: 'column', sm: 'row' }}
-						gap="sm"
-						pt="sm"
-						justify="center"
-					>
-						<Group flex={1}>
-							<Text className="title">{t('reason')} :</Text>
-							<Text>{data?.decision?.reason}</Text>
-						</Group>
-						<Group flex={1}>
-							<Text className="title">{t('created_at')} :</Text>
-							{data?.decision && (
-								<Text>
-									{getDateTime(data?.decision?.created_at)}
-								</Text>
-							)}
-						</Group>
-					</Flex>
-					<Flex
-						px="sm"
-						direction={{ base: 'column', sm: 'row' }}
-						gap="sm"
-						pt="sm"
-						justify="center"
-					>
-						<Group flex={1}>
-							<Text className="title">{t('updated_at')} :</Text>
-							{data?.decision && (
-								<Text>
-									{getDateTime(data?.decision?.updated_at)}
-								</Text>
-							)}
-						</Group>
-					</Flex>
 				</Box>
+			</Paper>
+
+			<Paper withBorder shadow="sm" mb="md" pb="lg">
+				<Title order={3} p="sm" className="applicant-title" ta="center">
+					{t('decision')}
+				</Title>
+
+				<Flex
+					px="sm"
+					direction={{ base: 'column', sm: 'row' }}
+					gap="sm"
+					pt="sm"
+					justify="center"
+				>
+					<Group flex={1}>
+						<Text className="title">{t('decided_by')} :</Text>
+						<Text>{data?.decision?.user?.username}</Text>
+					</Group>
+					<Group flex={1}>
+						<Text className="title">{t('decided_at')} :</Text>
+						{data?.decision && (
+							<Text>
+								{getDateTime(data?.decision?.decided_at)}
+							</Text>
+						)}
+					</Group>
+				</Flex>
+				<Flex
+					px="sm"
+					direction={{ base: 'column', sm: 'row' }}
+					gap="sm"
+					pt="sm"
+					justify="center"
+				>
+					<Group flex={1}>
+						<Text className="title">{t('reason')} :</Text>
+						<Text>{data?.decision?.reason}</Text>
+					</Group>
+					<Group flex={1}>
+						<Text className="title">{t('created_at')} :</Text>
+						{data?.decision && (
+							<Text>
+								{getDateTime(data?.decision?.created_at)}
+							</Text>
+						)}
+					</Group>
+				</Flex>
+				<Flex
+					px="sm"
+					direction={{ base: 'column', sm: 'row' }}
+					gap="sm"
+					pt="sm"
+					justify="center"
+				>
+					<Group flex={1}>
+						<Text className="title">{t('updated_at')} :</Text>
+						{data?.decision && (
+							<Text>
+								{getDateTime(data?.decision?.updated_at)}
+							</Text>
+						)}
+					</Group>
+				</Flex>
 			</Paper>
 			{opened && (
 				<ApplicantRequestModal

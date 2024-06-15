@@ -259,5 +259,7 @@
   "reason": "دلیل",
   "decision": "تصمیم",
   "decided_by": "تصمیم‌گیرنده",
-  "decided_at" : "تاریخ تصمیم‌گیری"
+  "decided_at" : "تاریخ تصمیم‌گیری",
+  "applicant_request_info" : "اطلاعات درخواستی متقاضی",
+  "general_applicant_info" : "اطلاعات متقاضی"
 }

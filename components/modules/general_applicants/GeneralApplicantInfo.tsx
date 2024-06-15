@@ -76,6 +76,36 @@ const ApplicantRequestInfo = ({
 	return (
 		<>
 			<Paper withBorder shadow="sm" mb="md">
+            <Flex
+					justify={{ base: 'center', xs: 'space-between' }}
+					align="center"
+					className="applicant-title"
+					p="md"
+					gap="sm"
+					wrap="wrap"
+				>
+					<Title order={3}>{t('general_applicant_info')}</Title>
+					{/* <Group>
+						{permissionChecker(CHANGE_STATUS) ? (
+							<Menu shadow="md" width={100}>
+								<Menu.Target>{badge}</Menu.Target>
+								<Menu.Dropdown>
+									{getMenu(team?.id, team?.status)}
+								</Menu.Dropdown>
+							</Menu>
+						) : (
+							badge
+						)}
+						{checkPermission(UPDATE_TEAMS) && (
+							<Button
+								onClick={() => open()}
+								rightSection={<TbEdit size={16} />}
+							>
+								{t('edit')}
+							</Button>
+						)}
+					</Group> */}
+				</Flex>
 				<Box pos="relative" p="md">
 					<LoadingOverlay
 						visible={loading}
@@ -208,7 +238,8 @@ const ApplicantRequestInfo = ({
 						</Group>
 					</Flex>
 				</Box>
-
+                </Paper>
+                <Paper withBorder shadow="sm" mb="md" pb="lg">
 				<Title order={3} p="sm" className="applicant-title" ta="center">
 					{t('requests')}
 				</Title>
