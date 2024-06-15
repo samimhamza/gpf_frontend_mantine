@@ -255,5 +255,9 @@
   "medium": "متوسط",
   "low": "پایین",
   "approved": "قبول شده",
-  "request_content": "متن درخواستی"
+  "request_content": "متن درخواستی",
+  "reason": "دلیل",
+  "decision": "تصمیم",
+  "decided_by": "تصمیم‌گیرنده",
+  "decided_at" : "تاریخ تصمیم‌گیری"
 }

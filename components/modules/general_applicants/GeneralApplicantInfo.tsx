@@ -5,26 +5,23 @@ import { useAxios } from '@/customHooks/useAxios';
 import { sharedStatuses } from '@/shared/columns';
 import { getDateTime } from '@/shared/functions';
 import {
-	Avatar,
-	Badge,
 	Box,
-	Button,
-	Center,
 	Divider,
 	Flex,
 	Group,
-	Loader,
 	LoadingOverlay,
-	Menu,
+	Table,
 	Paper,
 	Text,
 	Title,
+	Center,
 	useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 import { permissionChecker } from '@/shared/functions/permissionChecker';
-import ApplicantRequestModal from './ApplicantRequestModal';
+import GeneralApplicantModal from './GeneralApplicantModal';
+import { ApplicantRequestInfoColumns } from '@/shared/columns/general_applicants/applicant_request_info_columns';
 
 const ApplicantRequestInfo = ({
 	applicantRequestId,
@@ -42,6 +39,29 @@ const ApplicantRequestInfo = ({
 	mutate: any;
 }) => {
 	const { t } = useTranslation(lng);
+	const [mutated, setMutated] = useState(false);
+
+	const columns = ApplicantRequestInfoColumns(t);
+	const rows = data?.requests?.map((element: any) => (
+		<Table.Tr key={element?.id}>
+			{columns.map((column) => (
+				<Table.Td key={column.accessor}>
+					{column.render
+						? column.render(element)
+						: element[column.accessor]}
+				</Table.Td>
+			))}
+		</Table.Tr>
+	));
+
+	const ths = (
+		<Table.Tr>
+			{columns.map((column) => (
+				<Table.Th key={column.accessor}>{column.title}</Table.Th>
+			))}
+		</Table.Tr>
+	);
+
 	const theme = useMantineTheme();
 	const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
 	const statuses = sharedStatuses(t);
@@ -75,10 +95,8 @@ const ApplicantRequestInfo = ({
 							<Text>{applicantRequestId}</Text>
 						</Group>
 						<Group flex={1} wrap="nowrap">
-							<Text className="title">
-								{t('applicant_name')} :
-							</Text>
-							<Text>{data?.general_applicant?.agent_name}</Text>
+							<Text className="title">{t('name')} :</Text>
+							<Text>{data?.name}</Text>
 						</Group>
 					</Flex>
 					<Flex
@@ -89,12 +107,12 @@ const ApplicantRequestInfo = ({
 						justify="center"
 					>
 						<Group flex={1} wrap="nowrap">
-							<Text className="title">{t('request')} :</Text>
-							<Text>{data?.request}</Text>
+							<Text className="title">{t('agent_name')} :</Text>
+							<Text>{data?.agent_name}</Text>
 						</Group>
 						<Group flex={1}>
-							<Text className="title">{t('priority')} :</Text>
-							<Text>{data?.priority}</Text>
+							<Text className="title">{t('agent_phone')} :</Text>
+							<Text>{data?.agent_phone}</Text>
 						</Group>
 					</Flex>
 					<Flex
@@ -105,8 +123,48 @@ const ApplicantRequestInfo = ({
 						justify="center"
 					>
 						<Group flex={1} wrap="nowrap">
-							<Text className="title">{t('status')} :</Text>
-							<Text>{data?.status}</Text>
+							<Text className="title">
+								{t('applicant_type')} :
+							</Text>
+							<Text>{data?.applicant_type}</Text>
+						</Group>
+						<Group flex={1}>
+							<Text className="title">
+								{t('referenced_by')} :
+							</Text>
+							<Text>
+								{data?.reference?.first_name +
+									' ' +
+									data?.reference?.last_name}
+							</Text>
+						</Group>
+					</Flex>
+					<Flex
+						px="sm"
+						direction={{ base: 'column', sm: 'row' }}
+						gap="sm"
+						pt="sm"
+						justify="center"
+					>
+						<Group flex={1} wrap="nowrap">
+							<Text className="title">{t('province')} :</Text>
+							<Text>{data?.province?.name_fa}</Text>
+						</Group>
+						<Group flex={1}>
+							<Text className="title">{t('district')} :</Text>
+							<Text>{data?.district?.name_fa}</Text>
+						</Group>
+					</Flex>
+					<Flex
+						px="sm"
+						direction={{ base: 'column', sm: 'row' }}
+						gap="sm"
+						pt="sm"
+						justify="center"
+					>
+						<Group flex={1} wrap="nowrap">
+							<Text className="title">{t('address')} :</Text>
+							<Text>{data?.address}</Text>
 						</Group>
 						<Group flex={1}>
 							<Text className="title">{t('descriptions')} :</Text>
@@ -149,75 +207,28 @@ const ApplicantRequestInfo = ({
 							)}
 						</Group>
 					</Flex>
-					<Title
-						order={3}
-						p="sm"
-						mt={10}
-						className="applicant-title"
-						ta="center"
-					>
-						{t('decision')}
-					</Title>
-					<Flex
-						px="sm"
-						direction={{ base: 'column', sm: 'row' }}
-						gap="sm"
-						pt="sm"
-						justify="center"
-					>
-						<Group flex={1}>
-							<Text className="title">{t('decided_by')} :</Text>
-							<Text>{data?.decision?.user?.username}</Text>
-						</Group>
-						<Group flex={1}>
-							<Text className="title">{t('decided_at')} :</Text>
-							{data?.decision && (
-								<Text>
-									{getDateTime(data?.decision?.decided_at)}
-								</Text>
-							)}
-						</Group>
-					</Flex>
-					<Flex
-						px="sm"
-						direction={{ base: 'column', sm: 'row' }}
-						gap="sm"
-						pt="sm"
-						justify="center"
-					>
-						<Group flex={1}>
-							<Text className="title">{t('reason')} :</Text>
-							<Text>{data?.decision?.reason}</Text>
-						</Group>
-						<Group flex={1}>
-							<Text className="title">{t('created_at')} :</Text>
-							{data?.decision && (
-								<Text>
-									{getDateTime(data?.decision?.created_at)}
-								</Text>
-							)}
-						</Group>
-					</Flex>
-					<Flex
-						px="sm"
-						direction={{ base: 'column', sm: 'row' }}
-						gap="sm"
-						pt="sm"
-						justify="center"
-					>
-						<Group flex={1}>
-							<Text className="title">{t('updated_at')} :</Text>
-							{data?.decision && (
-								<Text>
-									{getDateTime(data?.decision?.updated_at)}
-								</Text>
-							)}
-						</Group>
-					</Flex>
+				</Box>
+
+				<Title order={3} p="sm" className="applicant-title" ta="center">
+					{t('requests')}
+				</Title>
+				<Box pos="relative">
+					<LoadingOverlay
+						visible={loading}
+						zIndex={1000}
+						overlayProps={{ radius: 'sm', blur: 2 }}
+					/>
+					<Table horizontalSpacing="xs" striped highlightOnHover>
+						<Table.Thead>{ths}</Table.Thead>
+						<Table.Tbody>
+								{rows}
+							
+						</Table.Tbody>
+					</Table>
 				</Box>
 			</Paper>
 			{opened && (
-				<ApplicantRequestModal
+				<GeneralApplicantModal
 					opened={opened}
 					close={() => {
 						close();
