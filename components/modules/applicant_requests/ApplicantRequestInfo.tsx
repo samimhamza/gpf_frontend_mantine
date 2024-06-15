@@ -4,18 +4,17 @@ import { useTranslation } from '@/app/i18n/client';
 import { useAxios } from '@/customHooks/useAxios';
 import { sharedStatuses } from '@/shared/columns';
 import { getDateTime } from '@/shared/functions';
+import { TbEdit } from 'react-icons/tb';
+import { CHANGE_STATUS, UPDATE_TEAMS } from "@/shared/constants/Permissions";
+
 import {
-	Avatar,
-	Badge,
 	Box,
 	Button,
-	Center,
-	Divider,
+	Badge,
 	Flex,
-	Group,
-	Loader,
-	LoadingOverlay,
 	Menu,
+	Group,
+	LoadingOverlay,
 	Paper,
 	Text,
 	Title,
@@ -48,10 +47,22 @@ const ApplicantRequestInfo = ({
 	const callApi = useAxios();
 	const [statusLoading, setStatusLoading] = useState(false);
 	const [opened, { open, close }] = useDisclosure(false);
-	// const checkPermission = (permission: string) => {
-	// 	const hasPermission = permissionChecker(permission);
-	// 	return hasPermission && data?.status == 'active';
-	// };
+	const checkPermission = (permission: string) => {
+		const hasPermission = permissionChecker(permission);
+		return hasPermission && data?.status == 'active';
+	};
+
+
+	const badge = (
+		<Badge
+		  style={{ cursor: "pointer" }}
+		
+		  p="sm"
+		>
+		  pending
+		</Badge>
+	  );
+	
 
 	return (
 		<>
@@ -65,18 +76,18 @@ const ApplicantRequestInfo = ({
 					wrap="wrap"
 				>
 					<Title order={3}>{t('applicant_request_info')}</Title>
-					{/* <Group>
+					<Group>
 						{permissionChecker(CHANGE_STATUS) ? (
 							<Menu shadow="md" width={100}>
 								<Menu.Target>{badge}</Menu.Target>
 								<Menu.Dropdown>
-									{getMenu(team?.id, team?.status)}
+									name
 								</Menu.Dropdown>
 							</Menu>
 						) : (
 							badge
 						)}
-						{checkPermission(UPDATE_TEAMS) && (
+						{2> 1 && (
 							<Button
 								onClick={() => open()}
 								rightSection={<TbEdit size={16} />}
@@ -84,7 +95,7 @@ const ApplicantRequestInfo = ({
 								{t('edit')}
 							</Button>
 						)}
-					</Group> */}
+					</Group>
 				</Flex>
 				<Box pos="relative" p="md">
 					<LoadingOverlay
@@ -252,7 +263,7 @@ const ApplicantRequestInfo = ({
 					}}
 					lng={lng}
 					setMutated={mutate}
-					title={t('update_user')}
+					title={t('update_applicant_request')}
 					editId={databaseID}
 				/>
 			)}

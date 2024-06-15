@@ -27,7 +27,7 @@ export const ApplicantRequestInfoModule = ({ lng, id }: { lng: string; id: numbe
       <CustomBreadCrumb
         items={[
           { title: t("dashboard"), link: "/dashboard" },
-          { title: t("applicant_requests"), link: "/applicant_requests" },
+          { title: t("general_applicant_requests"), link: "/general_applicant_requests" },
           {
             title: data ? data?.id : id.toString(),
           },
