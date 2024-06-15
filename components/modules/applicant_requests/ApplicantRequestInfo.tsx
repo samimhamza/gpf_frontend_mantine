@@ -2,15 +2,18 @@
 
 import { useTranslation } from '@/app/i18n/client';
 import { useAxios } from '@/customHooks/useAxios';
-import { sharedStatuses } from '@/shared/columns';
+import { applicantRequestStatuses } from '@/shared/columns';
 import { getDateTime } from '@/shared/functions';
 import { TbEdit } from 'react-icons/tb';
-import { CHANGE_STATUS, UPDATE_TEAMS } from "@/shared/constants/Permissions";
+import { CHANGE_STATUS, UPDATE_TEAMS } from '@/shared/constants/Permissions';
+import toast from "react-hot-toast";
+import { GoChevronDown } from "react-icons/go";
 
 import {
 	Box,
 	Button,
 	Badge,
+	Loader, Center,
 	Flex,
 	Menu,
 	Group,
@@ -43,7 +46,7 @@ const ApplicantRequestInfo = ({
 	const { t } = useTranslation(lng);
 	const theme = useMantineTheme();
 	const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-	const statuses = sharedStatuses(t);
+	const statuses = applicantRequestStatuses(t);
 	const callApi = useAxios();
 	const [statusLoading, setStatusLoading] = useState(false);
 	const [opened, { open, close }] = useDisclosure(false);
@@ -53,16 +56,63 @@ const ApplicantRequestInfo = ({
 	};
 
 
-	const badge = (
+	const getStatus = (status: string) => {
+		return statuses.find((item) => item.status == status);
+	  };
+	
+	  const getMenu = (id: number, currentStatus: string) =>
+		statuses.map((item, index) => (
+		  <Menu.Item
+			key={index}
+			onClick={() => changeStatus(id, currentStatus, item.status)}
+		  >
+			{item.text}
+		  </Menu.Item>
+		));
+	
+	  const changeStatus = async (
+		id: number,
+		currentStatus: string,
+		newStatus: string
+	  ) => {
+		if (currentStatus != newStatus) {
+		  setStatusLoading(true);
+		  const { status } = await callApi({
+			method: "PUT",
+			url: "general_applicant_request/" + id + "/status",
+			data: {
+			  status: newStatus,
+			},
+		  });
+		  if (status == 202) {
+			mutate();
+		  } else if (status == 226) {
+			toast.error(t("status_change_not_allowed"));
+		  } else {
+			toast.error(t("something_went_wrong"));
+		  }
+		  setStatusLoading(false);
+		}
+	  };
+
+	  const badge = (
 		<Badge
 		  style={{ cursor: "pointer" }}
-		
+		  color={getStatus(data?.status)?.color}
+		  rightSection={<GoChevronDown size={16} />}
 		  p="sm"
 		>
-		  pending
+		  {statusLoading ? (
+			<Center>
+			  <Loader size={20} color="white" />
+			</Center>
+		  ) : (
+			<Text size="md" fw={500}>
+			  {getStatus(data?.status)?.text}
+			</Text>
+		  )}
 		</Badge>
 	  );
-	
 
 	return (
 		<>
@@ -81,13 +131,13 @@ const ApplicantRequestInfo = ({
 							<Menu shadow="md" width={100}>
 								<Menu.Target>{badge}</Menu.Target>
 								<Menu.Dropdown>
-									name
+									{getMenu(data?.id, data?.status)}
 								</Menu.Dropdown>
 							</Menu>
 						) : (
 							badge
 						)}
-						{2> 1 && (
+						{2 > 1 && (
 							<Button
 								onClick={() => open()}
 								rightSection={<TbEdit size={16} />}
