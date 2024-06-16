@@ -71,9 +71,7 @@ const ApplicantRequestModal = ({
 		return false;
 	};
 
-	useEffect(() => {	
-		console.log("NO BUGS:   ", editId);
-			
+	useEffect(() => {				
 		if (editId) {			
 			(async function () {
 				setLoading(true);

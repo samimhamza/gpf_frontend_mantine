@@ -60,8 +60,6 @@ const ApplicantRequestDecisionModal = ({
 			reason: form.values.reason,
 			general_applicant_request_id: parentId,
 		};
-		console.log('some data from submission', data, form);
-
 		const { response, status } = await callApi({
 			method: 'POST',
 			url: '/applicant_request_decisions',
