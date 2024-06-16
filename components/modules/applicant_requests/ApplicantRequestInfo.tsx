@@ -27,7 +27,7 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 import { permissionChecker } from '@/shared/functions/permissionChecker';
 import ApplicantRequestModal from './ApplicantRequestModal';
-
+import ApplicantRequestDecisionModal from './ApplicantRequestDecisionModal';
 const ApplicantRequestInfo = ({
 	applicantRequestId,
 	databaseID,
@@ -50,6 +50,10 @@ const ApplicantRequestInfo = ({
 	const callApi = useAxios();
 	const [statusLoading, setStatusLoading] = useState(false);
 	const [opened, { open, close }] = useDisclosure(false);
+    const [isCreateDecisionOpened, { open: openCreateDecision, close: closeCreateDecision }] = useDisclosure(false);
+	const [selectedStatus, setSelectedStatus] = useState('');
+	const [generalApplicantRequestId, setGeneralApplicantRequestId] = useState(undefined);
+
 	const checkPermission = (permission: string) => {
 		const hasPermission = permissionChecker(permission);
 		return hasPermission && data?.status == 'active';
@@ -64,11 +68,18 @@ const ApplicantRequestInfo = ({
 		statuses.map((item, index) => (
 		  <Menu.Item
 			key={index}
-			onClick={() => changeStatus(id, currentStatus, item.status)}
+			onClick={() => handleCreateDecision(item.status)}
 		  >
 			{item.text}
 		  </Menu.Item>
 		));
+
+		const handleCreateDecision = (status: string) =>{
+			console.log("selected status is: ", status);
+			setSelectedStatus(status);
+			setGeneralApplicantRequestId(data?.id)
+			openCreateDecision();
+		}
 	
 	  const changeStatus = async (
 		id: number,
@@ -305,6 +316,20 @@ const ApplicantRequestInfo = ({
 					</Group>
 				</Flex>
 			</Paper>
+			{isCreateDecisionOpened && (
+				<ApplicantRequestDecisionModal
+					opened={isCreateDecisionOpened}
+					close={() => {
+						closeCreateDecision();
+					}}
+					lng={lng}
+					setMutated={mutate}
+					title={t('make_decision')}
+					editId={databaseID}
+					parentId={generalApplicantRequestId}
+					selectedStatus={selectedStatus}
+				/>
+			)}
 			{opened && (
 				<ApplicantRequestModal
 					opened={opened}
