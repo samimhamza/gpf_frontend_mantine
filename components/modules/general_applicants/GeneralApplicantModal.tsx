@@ -88,36 +88,43 @@ const GeneralApplicantModal = ({
 		if (editId) {
 			(async function () {
 				setLoading(true);
-				const { response, status, error } = await callApi({
+				const { response, status } = await callApi({
 					method: 'GET',
-					url: `/schools/${editId}`,
+					url: `/general_applicants/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
-					let values: any = {};
-					Object.entries(response.data).forEach(([key, value]) => {
-						if (Object.keys(initialValues).includes(key)) {
-							if (
-								key != 'province_id' &&
-								key != 'district_id' &&
-								key != 'office_id'
-							)
-								values[key] = value
-									? value
-									: initialValues[key];
-						}
-						if (
-							(key == 'office_id' || key == 'province_id') &&
-							value
-						) {
-							values[key] = value.toString();
-						}
-					});
-					form.setValues(values);
+					const {
+						name,
+						agent_name,
+						agent_phone,
+						descriptions,
+						applicant_type,
+						address,
+						province_id,
+						district_id,
+						referenced_by,
+						office_id,
+					} = response.data;
+
+					const parsedValues = {
+						name,
+						agent_name,
+						agent_phone,
+						descriptions,
+						applicant_type,
+						address,
+						province_id: province_id.toString(),
+						district_id: district_id.toString(),
+						referenced_by: referenced_by.toString(),
+						office_id: office_id.toString(),
+					};
+
+					form.setValues(parsedValues);
 					setLoading(false);
 				}
 			})();
 		}
-	}, [editId, callApi, initialValues]);
+	}, [editId, callApi]);
 
 	useEffect(() => {
 		(async function () {

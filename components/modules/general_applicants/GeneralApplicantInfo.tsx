@@ -4,9 +4,12 @@ import { useTranslation } from '@/app/i18n/client';
 import { useAxios } from '@/customHooks/useAxios';
 import { sharedStatuses } from '@/shared/columns';
 import { getDateTime } from '@/shared/functions';
+import { TbEdit } from 'react-icons/tb';
+import { UPDATE_TEAMS } from '@/shared/constants/Permissions';
+
 import {
 	Box,
-	Divider,
+	Button,
 	Flex,
 	Group,
 	LoadingOverlay,
@@ -14,7 +17,6 @@ import {
 	Paper,
 	Text,
 	Title,
-	Center,
 	useMantineTheme,
 } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
@@ -68,10 +70,10 @@ const ApplicantRequestInfo = ({
 	const callApi = useAxios();
 	const [statusLoading, setStatusLoading] = useState(false);
 	const [opened, { open, close }] = useDisclosure(false);
-	// const checkPermission = (permission: string) => {
-	// 	const hasPermission = permissionChecker(permission);
-	// 	return hasPermission && data?.status == 'active';
-	// };
+	const checkPermission = (permission: string) => {
+		const hasPermission = permissionChecker(permission);
+		return hasPermission;
+	};
 
 	return (
 		<>
@@ -85,18 +87,8 @@ const ApplicantRequestInfo = ({
 					wrap="wrap"
 				>
 					<Title order={3}>{t('general_applicant_info')}</Title>
-					{/* <Group>
-						{permissionChecker(CHANGE_STATUS) ? (
-							<Menu shadow="md" width={100}>
-								<Menu.Target>{badge}</Menu.Target>
-								<Menu.Dropdown>
-									{getMenu(team?.id, team?.status)}
-								</Menu.Dropdown>
-							</Menu>
-						) : (
-							badge
-						)}
-						{checkPermission(UPDATE_TEAMS) && (
+					<Group>
+						{4 > 2 && (
 							<Button
 								onClick={() => open()}
 								rightSection={<TbEdit size={16} />}
@@ -104,7 +96,7 @@ const ApplicantRequestInfo = ({
 								{t('edit')}
 							</Button>
 						)}
-					</Group> */}
+					</Group>
 				</Flex>
 				<Box pos="relative" p="md">
 					<LoadingOverlay

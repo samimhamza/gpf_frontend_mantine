@@ -71,7 +71,9 @@ const ApplicantRequestModal = ({
 		return false;
 	};
 
-	useEffect(() => {		
+	useEffect(() => {	
+		console.log("NO BUGS:   ", editId);
+			
 		if (editId) {			
 			(async function () {
 				setLoading(true);
@@ -80,7 +82,6 @@ const ApplicantRequestModal = ({
 					url: `/general_applicant_requests/${editId}`,
 				});
 				if (status == 200 && response.result == true) {
-					let values: any = {};
 					form.setValues({
 						request: response.data.request,
 						descriptions: response.data.descriptions,
