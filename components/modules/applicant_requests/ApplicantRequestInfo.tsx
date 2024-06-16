@@ -64,7 +64,7 @@ const ApplicantRequestInfo = ({
 		return statuses.find((item) => item.status == status);
 	  };
 	
-	  const getMenu = (id: number, currentStatus: string) =>
+	  const getMenu = () =>
 		statuses.map((item, index) => (
 		  <Menu.Item
 			key={index}
@@ -75,36 +75,10 @@ const ApplicantRequestInfo = ({
 		));
 
 		const handleCreateDecision = (status: string) =>{
-			console.log("selected status is: ", status);
 			setSelectedStatus(status);
 			setGeneralApplicantRequestId(data?.id)
 			openCreateDecision();
 		}
-	
-	  const changeStatus = async (
-		id: number,
-		currentStatus: string,
-		newStatus: string
-	  ) => {
-		if (currentStatus != newStatus) {
-		  setStatusLoading(true);
-		  const { status } = await callApi({
-			method: "PUT",
-			url: "general_applicant_request/" + id + "/status",
-			data: {
-			  status: newStatus,
-			},
-		  });
-		  if (status == 202) {
-			mutate();
-		  } else if (status == 226) {
-			toast.error(t("status_change_not_allowed"));
-		  } else {
-			toast.error(t("something_went_wrong"));
-		  }
-		  setStatusLoading(false);
-		}
-	  };
 
 	  const badge = (
 		<Badge
@@ -142,7 +116,7 @@ const ApplicantRequestInfo = ({
 							<Menu shadow="md" width={100}>
 								<Menu.Target>{badge}</Menu.Target>
 								<Menu.Dropdown>
-									{getMenu(data?.id, data?.status)}
+									{getMenu()}
 								</Menu.Dropdown>
 							</Menu>
 						) : (
