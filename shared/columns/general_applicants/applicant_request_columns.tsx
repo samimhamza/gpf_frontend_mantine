@@ -55,16 +55,6 @@ export const ApplicantRequestColumns = (
 			),
 		},
 		statusColum(t, statuses, statusUrl, showStatus, setMutated),
-
-		// {
-		// 	accessor: 'status',
-		// 	title: t('status'),
-		// 	noWrap: true,
-		// 	sortable: true,
-		// 	render: ({ status }: { status: string }) => (
-		// 		<div title={status}>{t(status)}</div>
-		// 	),
-		// },
 		{
 			accessor: 'priority',
 			title: t('priority'),

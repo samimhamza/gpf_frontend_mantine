@@ -63,8 +63,8 @@ export const statusColum = (
 		if (currentStatus != newStatus) {
 
 
-			if(statusUrl.length > 25 && newStatus != 'pending'){
-				console.log("Alright NOW");	
+			if(statusUrl.includes('general_applicant_requests') && newStatus != 'pending'){
+				console.log("Alright NOW", statusUrl);	
 				// showChangeStatusModal(true);
 			}
 
