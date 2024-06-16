@@ -154,7 +154,7 @@ const ApplicantRequestInfo = ({
 							<Text className="title">
 								{t('applicant_name')} :
 							</Text>
-							<Text>{data?.general_applicant?.agent_name}</Text>
+							<Text>{data?.general_applicant?.name}</Text>
 						</Group>
 					</Flex>
 					<Flex
