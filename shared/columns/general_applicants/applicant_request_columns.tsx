@@ -33,6 +33,7 @@ export const ApplicantRequestColumns = (
 			accessor: 'id',
 			title: t('id'),
 			noWrap: true,
+			hidden: false,
 			sortable: true,
 			render: ({ id }: { id: number }) => <Center>{id}</Center>,
 		},
@@ -41,11 +42,13 @@ export const ApplicantRequestColumns = (
 			title: t('applicant_name'),
 			noWrap: true,
 			sortable: true,
+			hidden: false,
 		},
 		{
 			accessor: 'request',
 			title: t('request'),
 			noWrap: true,
+			hidden: true,
 			render: ({ request }: { request: string }) => (
 				<div title={request}>
 					{request && request.length > 50
@@ -60,6 +63,7 @@ export const ApplicantRequestColumns = (
 			title: t('priority'),
 			noWrap: true,
 			sortable: true,
+			hidden: false,
 			render: ({ priority }: { priority: string }) => (
 				<div title={priority}>{t(priority)}</div>
 			),
@@ -68,6 +72,7 @@ export const ApplicantRequestColumns = (
 			accessor: 'descriptions',
 			title: t('descriptions'),
 			noWrap: true,
+			hidden: false,
 			render: ({ descriptions }: { descriptions: string }) => (
 				<div title={descriptions}>
 					{descriptions && descriptions.length > 50

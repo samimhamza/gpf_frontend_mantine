@@ -1,24 +1,21 @@
 'use client';
 
 import { useTranslation } from '@/app/i18n/client';
-import {
-	Badge,
-	Box,
-	Center,
-	Group,
-	Paper,
-	Flex,
-	Button,
-	MultiSelect,
-} from '@mantine/core';
+import { Paper, Flex, Button, Switch, Menu } from '@mantine/core';
 import { DataTable } from 'mantine-datatable';
+import { GoSortAsc, GoSortDesc } from 'react-icons/go';
+
 import {
 	FaRegFilePdf,
 	FaRegFileExcel,
 	FaRegCopy,
 	FaPrint,
+	FaRegEye,
+	FaRegEyeSlash,
 } from 'react-icons/fa';
-import { TbFileTypeCsv } from 'react-icons/tb';
+import { HiMiniBars2, HiMiniBars3, HiMiniBars4 } from 'react-icons/hi2';
+
+import { TbFileTypeCsv, TbColumns } from 'react-icons/tb';
 
 import {
 	Dispatch,
@@ -35,7 +32,6 @@ interface DataProps {
 	total: number;
 	pageSize: number; // rohullah
 }
-
 const PAGE_SIZES = [10, 15, 20, 30, 50, 100];
 
 interface DataTableProps {
@@ -75,6 +71,12 @@ const MantineDataTable = ({
 	height,
 	...additionalProps
 }: DataTableProps) => {
+	const [tableSize, setTableSize] = useState('xs');
+	const [verticalSpacing, setVerticalSpacing] = useState('xs');
+	const [showBar2, setShowBar2] = useState(false);
+	const [showBar3, setShowBar3] = useState(false);
+	const [showBar4, setShowBar4] = useState(true);
+	const [updatedColumns, setUpdatedColumns] = useState(columns);
 	const [pageSize, setPageSize] = useState(PAGE_SIZES[1]); // Set initial page size
 	// const [page, setPage] = useState(1); // Set initial page number
 
@@ -119,9 +121,16 @@ const MantineDataTable = ({
 			highlightOnHover
 			withColumnBorders
 			striped
+			fz={tableSize}
+			verticalSpacing={verticalSpacing}
 			verticalAlign="top"
+			paginationWithEdges
+			sortIcons={{
+				sorted: <GoSortAsc />,
+				unsorted: <GoSortDesc />,
+			}}
 			pinLastColumn
-			columns={columns}
+			columns={updatedColumns}
 			fetching={isLoading}
 			records={data?.data}
 			page={data?.page ? data?.page : 1}
@@ -151,6 +160,71 @@ const MantineDataTable = ({
 		/>
 	);
 
+	const hideAll = () => {
+		setUpdatedColumns((prevColumns) =>
+			prevColumns.map((column) => ({ ...column, hidden: true }))
+		);
+	};
+	const showAll = () => {
+		setUpdatedColumns((prevColumns) =>
+			prevColumns.map((column) => ({ ...column, hidden: false }))
+		);
+	};
+
+	const toggleColumnVisibility = (accessor: string) => {
+		setUpdatedColumns((prevColumns) =>
+			prevColumns.map((column) =>
+				column.accessor === accessor
+					? { ...column, hidden: !column.hidden }
+					: column
+			)
+		);
+	};
+
+	const customColumn = (
+		<div>
+			{columns.map((column: any) => (
+				<Menu.Item
+					key={column.accessor}
+					disabled={column.accessor === 'id'}
+				>
+					<Switch
+						style={{
+							height: '24px',
+							fontWeight: 'bold',
+						}}
+						labelPosition="right"
+						onChange={() => toggleColumnVisibility(column.accessor)}
+						checked={!column.hidden}
+						label={column.title}
+					/>
+				</Menu.Item>
+			))}
+		</div>
+	);
+
+	function onToggleDensity() {
+		if (showBar4 && !showBar3) {
+			setShowBar3(true);
+			setShowBar2(false);
+			setShowBar4(false);
+			setTableSize('sm');
+			setVerticalSpacing('sm');
+		} else if (showBar3 && !showBar2) {
+			setShowBar2(true);
+			setShowBar4(false);
+			setShowBar3(false);
+			setTableSize('md');
+			setVerticalSpacing('md');
+		} else if (showBar2 && !showBar4) {
+			setShowBar4(true);
+			setShowBar3(false);
+			setShowBar2(false);
+			setTableSize('xs');
+			setVerticalSpacing('xs');
+		}
+	}
+
 	return (
 		<>
 			<Paper withBorder shadow="sm" my="md">
@@ -178,26 +252,60 @@ const MantineDataTable = ({
 							<FaPrint />
 						</Button>
 					</Button.Group>
-					<MultiSelect
-						my="md"
-            maxDropdownHeight={200}
-						checkIconPosition="right"					
-            data={[
-              { label: 'آی دی', value: 'id', disabled: true },
-              { label: 'پروفایل', value: 'profile', disabled: true },
-              { label: 'اسم و تخلص', value: 'full_name' },
-              { label: 'دفتر', value: 'office' },
-              { label: 'ایمیل', value: 'email' },
-              { label: 'نام کاربری', value: 'username' },
-              { label: 'وضعیت', value: 'status' },
-              { label: 'تاریخ ایجاد', value: 'created_at' },
-              { label: 'ایجاد کننده', value: 'created_by' },
-            ]}
-						placeholder="نمایش"
-						defaultValue={['id', 'profile', 'email']}
-					/>
-				</Flex>
 
+					<Flex direction={{ base: 'column', sm: 'row' }} my="md">
+						<Button
+							onClick={onToggleDensity}
+							variant="default"
+							me={10}
+						>
+							{showBar4 ? (
+								<HiMiniBars4 size={25} />
+							) : showBar3 ? (
+								<HiMiniBars3 size={25} />
+							) : (
+								<HiMiniBars2 size={25} />
+							)}
+						</Button>
+
+						<Menu closeOnItemClick={false} shadow="md" width={280}>
+							<Menu.Target>
+								<Button variant="default">
+									<TbColumns size={25} />
+								</Button>
+							</Menu.Target>
+
+							<Menu.Dropdown>
+								<Flex
+									direction={{ base: 'column', sm: 'row' }}
+									gap="sm"
+									p="sm"
+									justify={{ sm: 'center' }}
+								>
+									<Button
+										onClick={showAll}
+
+										variant="light"
+										leftSection={<FaRegEye size={18} />}
+									>
+										نمایش همه
+									</Button>
+									<Button
+										onClick={hideAll}
+										variant="light"
+										leftSection={
+											<FaRegEyeSlash size={18} />
+										}
+									>
+										پنهان همه
+									</Button>
+								</Flex>
+								<Menu.Divider />
+								{customColumn}
+							</Menu.Dropdown>
+						</Menu>
+					</Flex>
+				</Flex>
 				{/* {typeof title === 'string' ? (
 					<Center className="datatable_title">
 						<Group justify="space-between" align="center" p="sm">
@@ -208,7 +316,6 @@ const MantineDataTable = ({
 				) : (
 					<Box className="datatable_title">{title}</Box>
 				)} */}
-
 				{dataTable}
 			</Paper>
 			<style jsx global>{`

@@ -82,6 +82,11 @@ export const NavItems = (t: (arg: string) => string) => [
         permission: VIEW_ITEMS,
       },
       {
+        label: t("invoices"),
+        link: "/invoices",
+        permission: VIEW_ITEMS,
+      },
+      {
         label: t("warehouses"),
         link: "/warehouses",
         permission: VIEW_WAREHOUSES,
