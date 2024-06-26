@@ -5,18 +5,18 @@ import CustomBreadCrumb from "@/components/CustomBreadCrumb";
 import { useAxios } from "@/customHooks/useAxios";
 import useSWR from "swr";
 import { getID } from "@/shared/functions";
-import GeneralApplicantInfo from "./GeneralApplicantInfo";
+import InvoiceInfo from "./InvoiceInfo";
 
-export const GeneralApplicantInfoModule = ({ lng, id }: { lng: string; id: number }) => {
+export const InvoiceInfoModule = ({ lng, id }: { lng: string; id: number }) => {
   const { t } = useTranslation(lng);
   const callApi = useAxios();
 
   const { data, error, isLoading, mutate } = useSWR(
-    `/general_applicants/${id}`,
+    `/invoices/${id}`,
     async () => {
       const { response, error, status } = await callApi({
         method: "GET",
-        url: `/general_applicants/${id}`,
+        url: `/invoices/${id}`,
       });
       return response?.data;
     }
@@ -27,14 +27,14 @@ export const GeneralApplicantInfoModule = ({ lng, id }: { lng: string; id: numbe
       <CustomBreadCrumb
         items={[
           { title: t("dashboard"), link: "/dashboard" },
-          { title: t("general_applicants"), link: "/general_applicants" },
+          { title: t("invoices"), link: "/invoices" },
           {
             title: data ? data?.name : id.toString(),
           },
         ]}
       />
-      <GeneralApplicantInfo
-        applicantRequestId={
+      <InvoiceInfo
+        invoiceId={
           data
             ? getID(data?.office?.code, data?.created_at, data?.id)
             : undefined

@@ -78,7 +78,7 @@ const ApplicantRequestInfo = ({
 	return (
 		<>
 			<Paper withBorder shadow="sm" mb="md">
-            <Flex
+				<Flex
 					justify={{ base: 'center', xs: 'space-between' }}
 					align="center"
 					className="applicant-title"
@@ -230,8 +230,8 @@ const ApplicantRequestInfo = ({
 						</Group>
 					</Flex>
 				</Box>
-                </Paper>
-                <Paper withBorder shadow="sm" mb="md" pb="lg">
+			</Paper>
+			<Paper withBorder shadow="sm" mb="md" pb="lg">
 				<Title order={3} p="sm" className="applicant-title" ta="center">
 					{t('requests')}
 				</Title>
@@ -243,10 +243,7 @@ const ApplicantRequestInfo = ({
 					/>
 					<Table horizontalSpacing="xs" striped highlightOnHover>
 						<Table.Thead>{ths}</Table.Thead>
-						<Table.Tbody>
-								{rows}
-							
-						</Table.Tbody>
+						<Table.Tbody>{rows}</Table.Tbody>
 					</Table>
 				</Box>
 			</Paper>
