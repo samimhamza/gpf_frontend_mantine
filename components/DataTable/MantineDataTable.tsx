@@ -158,10 +158,14 @@ const MantineDataTable = ({
     />
   );
 
-  const hideAll = () => {
-    setUpdatedColumns((prevColumns) =>
-      prevColumns.map((column) => ({ ...column, hidden: true }))
-    );
+  const hideAll = () => {    
+	setUpdatedColumns((prevColumns) =>
+		prevColumns.map((column) =>
+		  column.accessor === 'id' || column.accessor === 'actions'
+			? column
+			: { ...column, hidden: true }
+		)
+	  );
   };
   const showAll = () => {
     setUpdatedColumns((prevColumns) =>
@@ -181,7 +185,7 @@ const MantineDataTable = ({
 
   const customColumn = (
     <div>
-      {columns.map((column: any) => (
+      {updatedColumns.map((column: any) => (
         <Menu.Item key={column.accessor} disabled={column.accessor === "id"}>
           <Switch
             style={{
