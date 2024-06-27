@@ -15,21 +15,25 @@ import { useEffect, useState } from 'react';
 import { InvoiceColumns } from '@/shared/columns/invoices/invoice_columns';
 import { useRouter } from 'next/navigation';
 import InvoiceModal from './InvoiceModal';
-
+import InvoiceEditModal from './InvoiceEditModal';
 export const InvoiceModule = ({ lng }: { lng: string }) => {
 	const router = useRouter();
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
 	const columns = InvoiceColumns(t);
 	const [opened, { open, close }] = useDisclosure(false);
+	const [isEditInvoiceModalOpened, { open: openEditInvoiceModal, close: closeEditInvoiceModal }] = useDisclosure(false);
+
 	const [edit, setEdit] = useState<number>();
 	const [view, setView] = useState<number>();
 
 	useEffect(() => {
 		if (edit) {
-			open();
+			console.log("edit is here:::    " + edit);
+			
+			openEditInvoiceModal();
 		}
-	}, [edit, open]);
+	}, [edit, isEditInvoiceModalOpened]);
 
 	useEffect(() => {
 		if (view) {
@@ -65,14 +69,27 @@ export const InvoiceModule = ({ lng }: { lng: string }) => {
 					opened={opened}
 					close={() => {
 						close();
-						setEdit(undefined);
 					}}
 					lng={lng}
 					setMutated={setMutated}
-					title={!edit ? t('add_invoice') : t('update_invoice')}
-					editId={edit}
+					title={t('add_invoice')}
 				/>
 			)}
+
+			{isEditInvoiceModalOpened && (
+				<InvoiceEditModal
+					opened={isEditInvoiceModalOpened}
+					close={() => {
+						closeEditInvoiceModal();
+						setEdit(undefined)
+					}}
+					lng={lng}
+					setMutated={setMutated}
+					title={t('edit_invoice')}
+					editId={edit}				
+				/>
+			)}
+
 		</>
 	);
 };

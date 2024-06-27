@@ -101,15 +101,17 @@ const InvoiceStepOne = ({
 					withAsterisk
 					{...form.getInputProps('vendor_name')}
 				/>
-				<Select
-					style={{ flex: 1 }}
-					checkIconPosition="right"
-					label={t('warehouse')}
-					placeholder={t('warehouse')}
-					withAsterisk
-					data={warehouses}
-					{...form.getInputProps('warehouse_id')}
-				/>
+				{warehouses.length > 0 && (
+					<Select
+						style={{ flex: 1 }}
+						checkIconPosition="right"
+						label={t('warehouse')}
+						placeholder={t('warehouse')}
+						withAsterisk
+						data={warehouses}
+						{...form.getInputProps('warehouse_id')}
+					/>
+				)}
 				<Select
 					checkIconPosition="right"
 					style={{ flex: 1 }}
@@ -135,14 +137,14 @@ const InvoiceStepOne = ({
 					placeholder={t('purchase_date')}
 					value={purchaseDate}
 					onChange={setPurchaseDate}
-					errorMessage={form.errors?.purchase_date}
+					errorMessage={purchaseDateErrorMessage}
 				/>
 				<PersianDatePicker
 					label={t('due_date')}
 					placeholder={t('due_date')}
 					value={dueDate}
 					onChange={setDueDate}
-					errorMessage={form.errors?.due_date}
+					errorMessage={dueDateErrorMessage}
 				/>
 				<NumberInput
 					style={{ flex: 1 }}
