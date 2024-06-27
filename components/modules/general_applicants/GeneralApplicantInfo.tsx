@@ -2,7 +2,7 @@
 
 import { useTranslation } from '@/app/i18n/client';
 import { useAxios } from '@/customHooks/useAxios';
-import { sharedStatuses } from '@/shared/columns';
+import { applicantRequestStatuses } from '@/shared/columns';
 import { getDateTime } from '@/shared/functions';
 import { TbEdit } from 'react-icons/tb';
 import { UPDATE_TEAMS } from '@/shared/constants/Permissions';
@@ -66,7 +66,7 @@ const ApplicantRequestInfo = ({
 
 	const theme = useMantineTheme();
 	const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-	const statuses = sharedStatuses(t);
+	const statuses = applicantRequestStatuses(t);
 	const callApi = useAxios();
 	const [statusLoading, setStatusLoading] = useState(false);
 	const [opened, { open, close }] = useDisclosure(false);

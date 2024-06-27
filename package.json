@@ -9,6 +9,7 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@hello-pangea/dnd": "^16.6.0",
 		"@mantine/core": "^7.6.2",
 		"@mantine/dropzone": "^7.6.2",
 		"@mantine/form": "^7.5.3",
@@ -18,7 +19,7 @@
 		"@react-pdf/renderer": "^3.4.4",
 		"accept-language": "^3.0.18",
 		"axios": "^1.6.7",
-		"clsx": "^2.1.0",
+		"clsx": "^2.1.1",
 		"file-saver": "^2.0.5",
 		"html2canvas": "^1.4.1",
 		"i18next": "^23.9.0",

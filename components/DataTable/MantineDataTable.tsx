@@ -4,6 +4,15 @@ import { useTranslation } from "@/app/i18n/client";
 import { Paper, Flex, Button, ActionIcon, Switch, Menu } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import { GoSortAsc, GoSortDesc } from "react-icons/go";
+import { LuGripVertical } from "react-icons/lu";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "@hello-pangea/dnd";
+import classes from "./DndListHandle.module.css";
+import cx from "clsx";
 
 import {
   FaRegFilePdf,
@@ -71,12 +80,17 @@ const MantineDataTable = ({
   height,
   ...additionalProps
 }: DataTableProps) => {
-  const [tableSize, setTableSize] = useState("xs");
-  const [verticalSpacing, setVerticalSpacing] = useState("xs");
-  const [showBar2, setShowBar2] = useState(false);
-  const [showBar3, setShowBar3] = useState(false);
-  const [showBar4, setShowBar4] = useState(true);
+
+  const [densityIndex, setDensityIndex] = useState(0);
+  const densityConfigurations = [
+    { tableSize: "xs", verticalSpacing: "xs", densityIcon: <HiMiniBars4 size={22} /> },
+    { tableSize: "sm", verticalSpacing: "sm", densityIcon: <HiMiniBars3 size={22} /> },
+    { tableSize: "md", verticalSpacing: "md", densityIcon: <HiMiniBars2 size={22} /> },
+  ];
+  const { tableSize, verticalSpacing, densityIcon } = densityConfigurations[densityIndex];
+
   const [updatedColumns, setUpdatedColumns] = useState(columns);
+
   const [pageSize, setPageSize] = useState(PAGE_SIZES[1]); // Set initial page size
   // const [page, setPage] = useState(1); // Set initial page number
 
@@ -158,14 +172,14 @@ const MantineDataTable = ({
     />
   );
 
-  const hideAll = () => {    
-	setUpdatedColumns((prevColumns) =>
-		prevColumns.map((column) =>
-		  column.accessor === 'id' || column.accessor === 'actions'
-			? column
-			: { ...column, hidden: true }
-		)
-	  );
+  const hideAll = () => {
+    setUpdatedColumns((prevColumns) =>
+      prevColumns.map((column) =>
+        column.accessor === "id" || column.accessor === "actions"
+          ? column
+          : { ...column, hidden: true }
+      )
+    );
   };
   const showAll = () => {
     setUpdatedColumns((prevColumns) =>
@@ -183,46 +197,73 @@ const MantineDataTable = ({
     );
   };
 
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    const reorderedColumns = Array.from(updatedColumns);
+    const [removed] = reorderedColumns.splice(result.source.index, 1);
+    reorderedColumns.splice(result.destination.index, 0, removed);
+    setUpdatedColumns(reorderedColumns);
+  };
+
   const customColumn = (
-    <div>
-      {updatedColumns.map((column: any) => (
-        <Menu.Item key={column.accessor} disabled={column.accessor === "id"}>
-          <Switch
-            style={{
-              height: "24px",
-              fontWeight: "bold",
-            }}
-            labelPosition="right"
-            onChange={() => toggleColumnVisibility(column.accessor)}
-            checked={!column.hidden}
-            label={column.title}
-          />
-        </Menu.Item>
-      ))}
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="updatedColumns">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {updatedColumns.map((column, index) => (
+              <Draggable
+                key={column.accessor}
+                draggableId={column.accessor}
+                index={index}
+              >
+                {(provided, snapshot) => (
+                  <div
+                    className={cx(classes.item, {
+                      [classes.itemDragging]: snapshot.isDragging,
+                    })}
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                  >
+                    <div
+                      {...provided.dragHandleProps}
+                      style={{
+                        cursor: "grab",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <LuGripVertical
+                        style={{ width: "18px", height: "18px" }}
+                      />
+                    </div>
+                    <Menu.Item
+                      key={column.accessor}
+                      disabled={column.accessor === "id"}
+                    >
+                      <Switch
+                        style={{ height: "24px", fontWeight: "bold" }}
+                        labelPosition="right"
+                        onChange={() => toggleColumnVisibility(column.accessor)}
+                        checked={!column.hidden}
+                        label={column.title}
+                      />
+                    </Menu.Item>
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 
-  function onToggleDensity() {
-    if (showBar4 && !showBar3) {
-      setShowBar3(true);
-      setShowBar2(false);
-      setShowBar4(false);
-      setTableSize("sm");
-      setVerticalSpacing("sm");
-    } else if (showBar3 && !showBar2) {
-      setShowBar2(true);
-      setShowBar4(false);
-      setShowBar3(false);
-      setTableSize("md");
-      setVerticalSpacing("md");
-    } else if (showBar2 && !showBar4) {
-      setShowBar4(true);
-      setShowBar3(false);
-      setShowBar2(false);
-      setTableSize("xs");
-      setVerticalSpacing("xs");
-    }
-  }
+  const onToggleDensity = () => {
+    const nextIndex = (densityIndex + 1) % densityConfigurations.length;
+    setDensityIndex(nextIndex);
+  };
 
   return (
     <>
@@ -259,14 +300,9 @@ const MantineDataTable = ({
               variant="subtle"
               me={10}
             >
-              {showBar4 ? (
-                <HiMiniBars4 size={22} />
-              ) : showBar3 ? (
-                <HiMiniBars3 size={22} />
-              ) : (
-                <HiMiniBars2 size={22} />
-              )}
+              {densityIcon}
             </ActionIcon>
+       
 
             <Menu closeOnItemClick={false} shadow="md" width={300}>
               <Menu.Target>
