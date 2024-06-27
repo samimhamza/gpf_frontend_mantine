@@ -261,9 +261,9 @@
   "reason": "دلیل",
   "decision": "تصمیم",
   "decided_by": "تصمیم‌گیرنده",
-  "decided_at" : "تاریخ تصمیم‌گیری",
-  "applicant_request_info" : "اطلاعات درخواستی متقاضی",
-  "general_applicant_info" : "اطلاعات متقاضی",
+  "decided_at": "تاریخ تصمیم‌گیری",
+  "applicant_request_info": "اطلاعات درخواستی متقاضی",
+  "general_applicant_info": "اطلاعات متقاضی",
   "purchaser": "مسول خرید",
   "invoice": "فاکتور",
   "invoices": "فاکتور ها",
@@ -279,7 +279,7 @@
   "unit_price": "قیمت هر",
   "invoice_info": "جزئیات فاکتور",
   "invoice_items": "اجناس فاکتور",
-  "add_invoice":"ایجاد فاکتور جدید",
+  "add_invoice": "ایجاد فاکتور جدید",
   "edit_invoice": "ویرایش فاکتور",
   "mosque_info": "اطلاعات مسجد",
   "resigned": "استعفا",
@@ -303,6 +303,7 @@
   "filtered_data": "داده های فیلتر شده",
   "all_data": "همه داده ها",
   "mosque_type": "نوع",
-  "mosque_formal": "رسمیت"
-
+  "mosque_formal": "رسمیت",
+  "showAll": "نمایش همه",
+  "hideAll": "پنهان همه"
 }
