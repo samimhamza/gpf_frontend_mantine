@@ -1,20 +1,25 @@
 "use client";
 
-import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { UserColumns } from "@/shared/columns/user.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
-import { useDisclosure } from "@mantine/hooks";
-import UserModal from "./UserModal";
-import { useEffect, useState } from "react";
-import { permissionChecker } from "@/shared/functions/permissionChecker";
+import CustomFilterModal from "@/components/CustomFilterModal";
+import { CustomDataTable } from "@/components/DataTable";
+import ExportModal from "@/components/exportFileComponents/ExportModal";
+import { handleDownloadExcel } from "@/components/exportFileComponents/excel/Users";
+import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/Users";
+import { UserColumns } from "@/shared/columns/user.columns";
 import {
+  CHANGE_STATUS,
   CREATE_USERS,
   DELETE_USERS,
   UPDATE_USERS,
-  CHANGE_STATUS,
 } from "@/shared/constants/Permissions";
+import { UserFilterContent } from "@/shared/filterContents/user.filter.content";
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import UserModal from "./UserModal";
 
 export const UserModule = ({ lng }: { lng: string }) => {
   const router = useRouter();
@@ -27,8 +32,17 @@ export const UserModule = ({ lng }: { lng: string }) => {
     setMutated
   );
   const [opened, { open, close }] = useDisclosure(false);
+  // Second useDisclosure state for ExportModal
+  const [anotherOpened, { open: anotherOpen, close: anotherClose }] =
+    useDisclosure(false);
+  // Get Page Number details for Export Modal params
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
   const [edit, setEdit] = useState<number>();
   const [view, setView] = useState<number>();
+  const [openFilter, setOpenFilter] = useState(false);
+  const [filterData, setFilterData] = useState({});
+  const filterContent = UserFilterContent(t);
 
   useEffect(() => {
     if (edit) {
@@ -57,6 +71,7 @@ export const UserModule = ({ lng }: { lng: string }) => {
         lng={lng}
         columns={columns}
         open={open}
+        anotherOpen={anotherOpen}
         mutated={mutated}
         setMutated={setMutated}
         setEdit={setEdit}
@@ -64,6 +79,10 @@ export const UserModule = ({ lng }: { lng: string }) => {
         showAdd={permissionChecker(CREATE_USERS)}
         showDelete={permissionChecker(DELETE_USERS)}
         showEdit={permissionChecker(UPDATE_USERS)}
+        showFilter={true}
+        openFilterCliked={() => setOpenFilter(true)}
+        filterData={filterData}
+        setPageNumber={setPageNumber}
       />
       {opened && (
         <UserModal
@@ -76,6 +95,35 @@ export const UserModule = ({ lng }: { lng: string }) => {
           setMutated={setMutated}
           title={!edit ? t("add_user") : t("update_user")}
           editId={edit}
+        />
+      )}
+      {anotherOpened && (
+        <ExportModal
+          anotherOpened={anotherOpened}
+          anotherClose={() => {
+            anotherClose();
+            setEdit(undefined);
+          }}
+          lng={lng}
+          title={t("export")}
+          exportTitle={t("users")}
+          setMutated={setMutated}
+          pageNumber={pageNumber}
+          url="/users"
+          filterData={filterData}
+          handleDownloadPDF={handleDownloadPDF}
+          handleDownloadExcel={handleDownloadExcel}
+        />
+      )}
+      {openFilter && (
+        <CustomFilterModal
+          open={openFilter}
+          close={() => setOpenFilter((open) => !open)}
+          initialData={filterData}
+          updateFilterData={setFilterData}
+          title={t("users_filter")}
+          content={filterContent}
+          lng={lng}
         />
       )}
     </>

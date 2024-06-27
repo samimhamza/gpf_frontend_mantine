@@ -1,3 +1,5 @@
+import { ListType } from "@/types/list";
+
 export const SurveyTypes = (t: (arg: string) => string) => [
   { value: "survey", label: t("survey") },
   { value: "without_survey", label: t("without_survey") },
@@ -24,11 +26,6 @@ export const QuestionTypes = (t: (arg: string) => string) => [
   { value: "descriptive", label: t("descriptive") },
 ];
 
-export const getType = (
-  items: Array<{ value: string; label: string }>,
-  value: string
-) => {
-  return items.find(
-    (item: { value: string; label: string }) => item.value == value
-  )?.label;
+export const getType = (items: ListType[], value: string) => {
+  return items.find((item: ListType) => item.value == value)?.label;
 };

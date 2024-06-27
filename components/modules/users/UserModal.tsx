@@ -69,7 +69,7 @@ const UserModal = ({
     validateInputOnBlur: true,
   });
 
-  const { offices, office } = useOffice(form);
+  const { offices, office, setOffices } = useOffice(form);
 
   const submit = async () => {
     const values = getFormData(form.values);
@@ -145,7 +145,7 @@ const UserModal = ({
         }
       })();
     }
-  }, [editId, callApi, editInitialValues]);
+  }, [editId]);
 
   useEffect(() => {
     (async function () {
@@ -192,6 +192,7 @@ const UserModal = ({
             form={form}
             lng={lng}
             offices={offices}
+            setOffices={setOffices}
             editId={editId}
             profileUrl={profileUrl}
             office={office}

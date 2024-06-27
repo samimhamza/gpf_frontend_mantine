@@ -2,10 +2,11 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { ActionIcon, Button, Group, Input, Paper } from "@mantine/core";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdFilter } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { Dispatch, SetStateAction, useState } from "react";
+import { FaFileDownload } from "react-icons/fa";
 
 interface ActionMenuProps {
   deleteUrl: string;
@@ -15,10 +16,14 @@ interface ActionMenuProps {
   lng: string;
   mutate: any;
   open?: () => void;
+  anotherOpen?: () => void;
   showAdd: boolean;
   showDelete: boolean;
   deleteLoading: boolean;
+  showExport: boolean;
   handleDelete: (e: any) => {};
+  showFilter?: boolean;
+  openFilterCliked: any;
 }
 
 const ActionMenu = ({
@@ -26,10 +31,14 @@ const ActionMenu = ({
   onSearch,
   lng,
   open,
+  anotherOpen,
   showAdd,
   showDelete,
+  showExport,
   deleteLoading,
   handleDelete,
+  showFilter,
+  openFilterCliked,
 }: ActionMenuProps) => {
   const { t } = useTranslation(lng);
   const [search, setSearch] = useState("");
@@ -44,6 +53,15 @@ const ActionMenu = ({
     <Paper p="md" withBorder shadow="sm" mb="md">
       <Group justify="space-between" align="center">
         <Group>
+          {showFilter && (
+            <Button
+              onClick={openFilterCliked}
+              rightSection={<MdFilter size={14} />}
+            >
+              {t("filter")}
+            </Button>
+          )}
+
           <Input
             radius="xl"
             placeholder={t("search")}
@@ -73,6 +91,15 @@ const ActionMenu = ({
           {showAdd && (
             <Button onClick={open} rightSection={<MdAdd size={14} />}>
               {t("add")}
+            </Button>
+          )}
+          {showExport && (
+            <Button
+              onClick={anotherOpen}
+              color="green"
+              rightSection={<FaFileDownload size={14} />}
+            >
+              {t("export")}
             </Button>
           )}
         </Group>

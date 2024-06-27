@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { TeamMembersColumns } from "@/shared/columns/team_members.columns";
-import { Box, Flex, LoadingOverlay, Paper, Table, Title } from "@mantine/core";
+import { Box, LoadingOverlay, Paper, Table, Title } from "@mantine/core";
 
 const TeamMemberInfo = ({
   lng,

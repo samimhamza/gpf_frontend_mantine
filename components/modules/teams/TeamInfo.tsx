@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { sharedStatuses } from "@/shared/columns";
+import { ThreeSharedStatuses } from "@/shared/columns";
 import { getDateTime } from "@/shared/functions";
 import {
   Badge,
@@ -46,7 +46,7 @@ const TeamInfo = ({
   const { t } = useTranslation(lng);
   const theme = useMantineTheme();
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const statuses = sharedStatuses(t);
+  const statuses = ThreeSharedStatuses(t);
   const callApi = useAxios();
   const [statusLoading, setStatusLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);

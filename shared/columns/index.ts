@@ -33,7 +33,7 @@ export const logColumns = (t: (arg: string) => string) => {
   ];
 };
 
-export const applicantStatuses = (t: (arg: string) => string) => [
+export const FourSharedStatuses = (t: (arg: string) => string) => [
   {
     status: "active",
     color: "green",
@@ -56,7 +56,7 @@ export const applicantStatuses = (t: (arg: string) => string) => [
   },
 ];
 
-export const sharedStatuses = (t: (arg: string) => string) => [
+export const ThreeSharedStatuses = (t: (arg: string) => string) => [
   {
     status: "active",
     color: "green",

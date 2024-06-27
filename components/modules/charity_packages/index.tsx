@@ -1,24 +1,33 @@
 "use client";
 
-import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { CharityPackageColumns } from "@/shared/columns/charity_package.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
-import { useDisclosure } from "@mantine/hooks";
-import CharityPackageModal from "./CharityPackageModal";
-import { useEffect, useState } from "react";
-import { permissionChecker } from "@/shared/functions/permissionChecker";
+import { CustomDataTable } from "@/components/DataTable";
+import ExportModal from "@/components/exportFileComponents/ExportModal";
+import { handleDownloadExcel } from "@/components/exportFileComponents/excel/CharityPackages";
+import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/CharityPackages";
+import { CharityPackageColumns } from "@/shared/columns/charity_package.columns";
 import {
-  UPDATE_CHARITY_PACKAGES,
   CREATE_CHARITY_PACKAGES,
   DELETE_CHARITY_PACKAGES,
+  UPDATE_CHARITY_PACKAGES,
 } from "@/shared/constants/Permissions";
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import { useDisclosure } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import CharityPackageModal from "./CharityPackageModal";
 
 export const CharityPackageModule = ({ lng }: { lng: string }) => {
   const { t } = useTranslation(lng);
   const [mutated, setMutated] = useState(false);
   const columns = CharityPackageColumns(t);
   const [opened, { open, close }] = useDisclosure(false);
+  // Second useDisclosure state for ExportModal
+  const [anotherOpened, { open: anotherOpen, close: anotherClose }] =
+    useDisclosure(false);
+  // Get Page Number details for Export Modal params
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
   const [edit, setEdit] = useState<number>();
   const [view, setView] = useState<number>();
 
@@ -43,6 +52,7 @@ export const CharityPackageModule = ({ lng }: { lng: string }) => {
         lng={lng}
         columns={columns}
         open={open}
+        anotherOpen={anotherOpen}
         mutated={mutated}
         setMutated={setMutated}
         setEdit={setEdit}
@@ -51,6 +61,7 @@ export const CharityPackageModule = ({ lng }: { lng: string }) => {
         showDelete={permissionChecker(DELETE_CHARITY_PACKAGES)}
         showEdit={permissionChecker(UPDATE_CHARITY_PACKAGES)}
         showView={false}
+        setPageNumber={setPageNumber}
       />
       {opened && (
         <CharityPackageModal
@@ -63,6 +74,24 @@ export const CharityPackageModule = ({ lng }: { lng: string }) => {
           setMutated={setMutated}
           title={!edit ? t("add_charity_package") : t("update_charity_package")}
           editId={edit}
+        />
+      )}
+      {anotherOpened && (
+        <ExportModal
+          anotherOpened={anotherOpened}
+          anotherClose={() => {
+            anotherClose();
+            setEdit(undefined);
+          }}
+          lng={lng}
+          title={t("export")}
+          exportTitle={t("charity_packages")}
+          setMutated={setMutated}
+          pageNumber={pageNumber}
+          url="/charity_packages"
+          filterData={{}} // TODO LATER
+          handleDownloadPDF={handleDownloadPDF}
+          handleDownloadExcel={handleDownloadExcel}
         />
       )}
     </>

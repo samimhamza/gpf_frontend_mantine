@@ -1,13 +1,17 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Box, Flex, Select, TextInput } from "@mantine/core";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
+import { ListType } from "@/types/list";
+import { Flex, Select, TextInput } from "@mantine/core";
+import { Dispatch, SetStateAction } from "react";
 
 interface WarehouseStepOneProps {
   form: any;
   lng: string;
-  offices: Array<{ value: string; label: string }>;
-  provinces: Array<{ value: string; label: string }>;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<ListType[]>>;
+  provinces: ListType[];
   office: string | null;
 }
 
@@ -15,6 +19,7 @@ const WarehouseStepOne = ({
   form,
   lng,
   offices,
+  setOffices,
   provinces,
   office,
 }: WarehouseStepOneProps) => {
@@ -54,15 +59,16 @@ const WarehouseStepOne = ({
           p="sm"
           justify={{ sm: "center" }}
         >
-          <Select
+          <CustomAutoComplete
             style={{ flex: 1 }}
+            lng={lng}
             label={t("office")}
             placeholder={t("office")}
-            withAsterisk
             data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
+            setData={setOffices}
+            url={`/office/auto_complete`}
+            values={form?.values?.office_id}
+            withAsterisk
             {...form.getInputProps("office_id")}
           />
         </Flex>

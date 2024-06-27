@@ -29,7 +29,7 @@ import {
   UPDATE_SURVEY_PLANS,
 } from "@/shared/constants/Permissions";
 import SurveyPlansModal from "./SurveyPlansModal";
-import { sharedStatuses } from "@/shared/columns";
+import { ThreeSharedStatuses } from "@/shared/columns";
 
 const SurveyPlanInfo = ({
   surveyPlanId,
@@ -49,7 +49,7 @@ const SurveyPlanInfo = ({
   const { t } = useTranslation(lng);
   const theme = useMantineTheme();
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const statuses = sharedStatuses(t);
+  const statuses = ThreeSharedStatuses(t);
   const callApi = useAxios();
   const [statusLoading, setStatusLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);

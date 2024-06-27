@@ -1,3 +1,4 @@
+import { useTranslation } from "@/app/i18n/client";
 import {
   Button,
   CloseButton,
@@ -8,16 +9,13 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { useState } from "react";
-import { TbChevronRight } from "react-icons/tb";
-import { TbChevronLeft } from "react-icons/tb";
-import { FaArrowRotateLeft } from "react-icons/fa6";
-import { FaCheck } from "react-icons/fa6";
-import { MdSend } from "react-icons/md";
 import { useMediaQuery } from "@mantine/hooks";
-import Done from "./Done";
+import { useState } from "react";
+import { FaArrowRotateLeft, FaCheck } from "react-icons/fa6";
 import { IoMdCloseCircle } from "react-icons/io";
-import { useTranslation } from "@/app/i18n/client";
+import { MdSend } from "react-icons/md";
+import { TbChevronLeft, TbChevronRight } from "react-icons/tb";
+import Done from "./Done";
 
 interface CustomModalProps {
   opened: boolean;
@@ -108,7 +106,6 @@ const CustomModal = ({
       if (form.isValid()) {
         let res = await submit();
         if (res) {
-          // next();
           setActive(active + 1);
           form.clearErrors();
         }
@@ -116,6 +113,7 @@ const CustomModal = ({
     }
     setLoading(null);
   };
+
   return (
     <>
       <Modal
@@ -123,7 +121,7 @@ const CustomModal = ({
         onClose={close}
         centered
         size={mdMatches ? (width ? width : "65%") : smMatches ? "80%" : "100%"}
-        className="custom-modal"
+        className='custom-modal'
         withCloseButton={false}
         overlayProps={{
           backgroundOpacity: 0.55,
@@ -133,32 +131,32 @@ const CustomModal = ({
         lockScroll={true}
         closeOnClickOutside={false}
       >
-        <Group justify="space-between" className="modal-header" p="xs">
-          <Title order={4}>{title}</Title>
+        <Group justify='space-between' className='modal-header' p='xs'>
+          <Title order={4}>{t("title")}</Title>
           <CloseButton
-            className="close-btn"
-            aria-label="Close modal"
+            className='close-btn'
+            aria-label='Close modal'
             onClick={close}
           />
         </Group>
         <Group
-          justify="space-between"
-          align="flex-start"
-          p="xs"
-          className="modal-header"
+          justify='space-between'
+          align='flex-start'
+          p='xs'
+          className='modal-header'
         >
           <Stepper
             active={active}
             onStepClick={changeStep}
             style={{ flex: 1 }}
-            py="sm"
+            py='sm'
           >
             {stepInside.map((step, i) => (
               <Stepper.Step
                 icon={step.icon}
                 label={smMatches ? step.title : ""}
                 key={i}
-                color="primary"
+                color='primary'
                 loading={loading == i}
               />
             ))}
@@ -174,12 +172,12 @@ const CustomModal = ({
             </div>
           ))}
         </ScrollArea>
-        <Group justify="flex-end" p="sm" className="modal-footer">
+        <Group justify='flex-end' p='sm' className='modal-footer'>
           {active == stepInside.length - 1 && (
             <Button
               rightSection={<IoMdCloseCircle />}
-              variant="filled"
-              color="red"
+              variant='filled'
+              color='red'
               onClick={close}
             >
               {t("close")}
@@ -199,7 +197,7 @@ const CustomModal = ({
                   }}
                 />
               }
-              type="submit"
+              type='submit'
               onClick={submitInside}
             >
               {t("submit")}

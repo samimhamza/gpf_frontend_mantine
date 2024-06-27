@@ -1,25 +1,34 @@
 "use client";
 
-import { CustomDataTable } from "@/components/DataTable";
 import { useTranslation } from "@/app/i18n/client";
-import { WarehouseColumns } from "@/shared/columns/warehouse.columns";
 import CustomBreadCrumb from "@/components/CustomBreadCrumb";
-import { useDisclosure } from "@mantine/hooks";
-import WarehouseModal from "./WarehouseModal";
-import { useEffect, useState } from "react";
-import { permissionChecker } from "@/shared/functions/permissionChecker";
+import { CustomDataTable } from "@/components/DataTable";
+import ExportModal from "@/components/exportFileComponents/ExportModal";
+import { handleDownloadExcel } from "@/components/exportFileComponents/excel/Warehouses";
+import { handleDownloadPDF } from "@/components/exportFileComponents/pdf/Warehouses";
+import { WarehouseColumns } from "@/shared/columns/warehouse.columns";
 import {
-  UPDATE_WAREHOUSES,
   CREATE_WAREHOUSES,
   DELETE_WAREHOUSES,
+  UPDATE_WAREHOUSES,
 } from "@/shared/constants/Permissions";
+import { permissionChecker } from "@/shared/functions/permissionChecker";
+import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import WarehouseModal from "./WarehouseModal";
 
 export const WarehouseModule = ({ lng }: { lng: string }) => {
   const { t } = useTranslation(lng);
   const router = useRouter();
   const [mutated, setMutated] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
+  // Second useDisclosure state for ExportModal
+  const [anotherOpened, { open: anotherOpen, close: anotherClose }] =
+    useDisclosure(false);
+  // Get Page Number details for Export Modal params
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
   const [edit, setEdit] = useState<number>();
   const [view, setView] = useState<number>();
   const columns = WarehouseColumns(t);
@@ -51,6 +60,7 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
         lng={lng}
         columns={columns}
         open={open}
+        anotherOpen={anotherOpen}
         mutated={mutated}
         setMutated={setMutated}
         setEdit={setEdit}
@@ -58,6 +68,7 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
         showAdd={permissionChecker(CREATE_WAREHOUSES)}
         showDelete={permissionChecker(DELETE_WAREHOUSES)}
         showEdit={permissionChecker(UPDATE_WAREHOUSES)}
+        setPageNumber={setPageNumber}
       />
       {opened && (
         <WarehouseModal
@@ -70,6 +81,24 @@ export const WarehouseModule = ({ lng }: { lng: string }) => {
           setMutated={setMutated}
           title={!edit ? t("add_warehouse") : t("update_warehouse")}
           editId={edit}
+        />
+      )}
+      {anotherOpened && (
+        <ExportModal
+          anotherOpened={anotherOpened}
+          anotherClose={() => {
+            anotherClose();
+            setEdit(undefined);
+          }}
+          lng={lng}
+          title={t("export")}
+          exportTitle={t("warehouses")}
+          setMutated={setMutated}
+          pageNumber={pageNumber}
+          url="/warehouses"
+          filterData={{}} // TODO LATE
+          handleDownloadPDF={handleDownloadPDF}
+          handleDownloadExcel={handleDownloadExcel}
         />
       )}
     </>

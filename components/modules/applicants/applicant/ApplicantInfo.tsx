@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@/app/i18n/client";
 import { useAxios } from "@/customHooks/useAxios";
-import { applicantStatuses } from "@/shared/columns";
+import { FourSharedStatuses } from "@/shared/columns";
 import { Genders, getType, StaffTypes, SurveyTypes } from "@/shared/constants";
 import { getDateTime } from "@/shared/functions";
 import {
@@ -30,7 +30,7 @@ import TeacherModal from "../../teachers/TeacherModal";
 import { permissionChecker } from "@/shared/functions/permissionChecker";
 import {
   CHANGE_STATUS,
-  UPDATE_APPLICANT_PACKAGE_IMPLEMENTS,
+  UPDATE_PACKAGE_IMPLEMENTS,
 } from "@/shared/constants/Permissions";
 
 const ApplicantInfo = ({
@@ -54,7 +54,7 @@ const ApplicantInfo = ({
   const staffTypes = StaffTypes(t);
   const theme = useMantineTheme();
   const mdMatches = useMediaQuery(`(min-width: ${theme.breakpoints.md})`);
-  const statuses = applicantStatuses(t);
+  const statuses = FourSharedStatuses(t);
   const callApi = useAxios();
   const [statusLoading, setStatusLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
@@ -147,7 +147,7 @@ const ApplicantInfo = ({
             </Center>
           )}
           <Group>
-            {checkPermission(UPDATE_APPLICANT_PACKAGE_IMPLEMENTS) && (
+            {checkPermission(UPDATE_PACKAGE_IMPLEMENTS) && (
               <Button
                 onClick={() => open()}
                 rightSection={<TbEdit size={16} />}

@@ -1,16 +1,16 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import ActionMenu from "./ActionMenu";
-import { MantineDataTable } from "./MantineDataTable";
-import useSWR from "swr";
-import { Center } from "@mantine/core";
-import { useAxios } from "@/customHooks/useAxios";
-import { TbClick } from "react-icons/tb";
-import { Actions } from "./Actions";
-import toast from "react-hot-toast";
-import SecondTableTitle from "../SecondTableTitle";
 import { useTranslation } from "@/app/i18n/client";
+import { useAxios } from "@/customHooks/useAxios";
+import { Center } from "@mantine/core";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { TbClick } from "react-icons/tb";
+import useSWR from "swr";
+import SecondTableTitle from "../SecondTableTitle";
+import ActionMenu from "./ActionMenu";
+import { Actions } from "./Actions";
+import { MantineDataTable } from "./MantineDataTable";
 
 interface DataTableProps {
   title: string;
@@ -19,6 +19,7 @@ interface DataTableProps {
   columns: Array<any>;
   lng: string;
   open?: () => void;
+  anotherOpen?: () => void;
   mutated: boolean;
   setMutated: Dispatch<SetStateAction<boolean>>;
   setEdit: Dispatch<SetStateAction<number | undefined>>;
@@ -35,6 +36,10 @@ interface DataTableProps {
   showSecondTitle?: boolean;
   secondTitleAddLabel?: string;
   onDelete?: () => {};
+  showFilter?: boolean;
+  openFilterCliked?: any;
+  filterData?: any;
+  setPageNumber?: Dispatch<SetStateAction<number>>;
 }
 
 const CustomDataTable = ({
@@ -44,6 +49,7 @@ const CustomDataTable = ({
   columns,
   lng,
   open,
+  anotherOpen,
   mutated,
   setMutated,
   setEdit,
@@ -60,6 +66,10 @@ const CustomDataTable = ({
   showSecondTitle = false,
   secondTitleAddLabel,
   onDelete,
+  showFilter,
+  openFilterCliked,
+  filterData,
+  setPageNumber,
   ...additionalProps
 }: DataTableProps) => {
   const { t } = useTranslation(lng);
@@ -72,8 +82,9 @@ const CustomDataTable = ({
     per_page: 20,
     search: "",
     order_by: orderBy,
-    filter_data: {},
+    filter_data: filterData ?? {},
   });
+
   const { data, error, isLoading, mutate } = useSWR(
     [url, tableDetails],
     async () => {
@@ -85,6 +96,14 @@ const CustomDataTable = ({
       return response;
     }
   );
+  console.log(data);
+  useEffect(() => {
+    if (tableDetails.page && setPageNumber) {
+      const { page } = tableDetails;
+      setPageNumber(page);
+    }
+  }, [tableDetails, setPageNumber]);
+
   useEffect(() => {
     (async function () {
       if (mutated) {
@@ -93,6 +112,12 @@ const CustomDataTable = ({
       }
     })();
   }, [mutated, mutate, setMutated]);
+
+  useEffect(() => {
+    setTableDetails((d: any) => {
+      return { ...d, filter_data: JSON.stringify(filterData) };
+    });
+  }, [filterData]);
 
   const renderActions = (record: any) => (
     <Actions
@@ -153,6 +178,7 @@ const CustomDataTable = ({
     />
   );
 
+  console.log();
   return (
     <>
       {!showSecondTitle && (
@@ -164,10 +190,14 @@ const CustomDataTable = ({
           setSelectedRecords={setSelectedRecords}
           mutate={mutate}
           open={open}
+          anotherOpen={anotherOpen}
           showAdd={showAdd}
           showDelete={showDelete}
           deleteLoading={deleteLoading}
           handleDelete={handleDelete}
+          showExport={!!data?.data?.length} // TODO LATER
+          showFilter={showFilter}
+          openFilterCliked={openFilterCliked}
         />
       )}
       <MantineDataTable

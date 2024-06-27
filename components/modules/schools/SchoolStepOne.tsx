@@ -1,16 +1,26 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
+import { ListType } from "@/types/list";
 import { Box, Flex, Select, TextInput } from "@mantine/core";
+import { Dispatch, SetStateAction } from "react";
 
 interface SchoolStepOneProps {
   form: any;
   lng: string;
-  offices: Array<{ value: string; label: string }>;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<ListType[]>>;
   office: string | null;
 }
 
-const SchoolStepOne = ({ form, lng, offices, office }: SchoolStepOneProps) => {
+const SchoolStepOne = ({
+  form,
+  lng,
+  offices,
+  setOffices,
+  office,
+}: SchoolStepOneProps) => {
   const { t } = useTranslation(lng);
   const types = [
     { value: "elementary", label: t("elementary") },
@@ -79,15 +89,16 @@ const SchoolStepOne = ({ form, lng, offices, office }: SchoolStepOneProps) => {
           {...form.getInputProps("type")}
         />
         {office == "all" ? (
-          <Select
+          <CustomAutoComplete
             style={{ flex: 1 }}
+            lng={lng}
             label={t("office")}
             placeholder={t("office")}
-            withAsterisk
             data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
+            setData={setOffices}
+            url={`/office/auto_complete`}
+            values={form?.values?.office_id}
+            withAsterisk
             {...form.getInputProps("office_id")}
           />
         ) : (

@@ -3,15 +3,19 @@
 import { useTranslation } from "@/app/i18n/client";
 import PersianDatePicker from "@/components/PersianDatePicker";
 import { getTime } from "@/shared/functions";
-import { Flex, Select, Spoiler, Textarea, TextInput } from "@mantine/core";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Flex, Loader, Select, Textarea, TextInput } from "@mantine/core";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Value } from "react-multi-date-picker";
+import { useAxios } from "@/customHooks/useAxios";
+import { ListType } from "@/types/list";
+import CustomAutoComplete from "@/components/Design/CustomAutoComplete";
 
 interface SurveyPlanStepOneProps {
   form: any;
   lng: string;
-  offices: Array<{ value: string; label: string }>;
-  employees: Array<{ value: string; label: string }>;
+  offices: ListType[];
+  setOffices: Dispatch<SetStateAction<ListType[]>>;
+  employees: ListType[];
   office: string | null;
   startDate: Value | undefined;
   setStartDate: Dispatch<SetStateAction<Value | undefined>>;
@@ -21,15 +25,14 @@ interface SurveyPlanStepOneProps {
   setEndDate: Dispatch<SetStateAction<Value | undefined>>;
   endDateErrorMessage: string;
   setEndDateErrorMessage: Dispatch<SetStateAction<string>>;
-  districts: Array<{ value: string; label: string }>;
-  provinces: Array<{ value: string; label: string }>;
-  setDistricts: any;
+  provinces: ListType[];
 }
 
 const SurveyPlanStepOne = ({
   form,
   lng,
   offices,
+  setOffices,
   office,
   startDate,
   setStartDate,
@@ -39,11 +42,12 @@ const SurveyPlanStepOne = ({
   setEndDate,
   endDateErrorMessage,
   setEndDateErrorMessage,
-  districts,
-  setDistricts,
   provinces,
 }: SurveyPlanStepOneProps) => {
   const { t } = useTranslation(lng);
+  const [districts, setDistricts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const callApi = useAxios();
 
   useEffect(() => {
     if (startDate) {
@@ -52,6 +56,7 @@ const SurveyPlanStepOne = ({
     } else {
       form.setFieldValue("start_date", null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate]);
 
   useEffect(() => {
@@ -61,6 +66,7 @@ const SurveyPlanStepOne = ({
     } else {
       form.setFieldValue("end_date", null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endDate]);
 
   useEffect(() => {
@@ -69,37 +75,61 @@ const SurveyPlanStepOne = ({
         setEndDateErrorMessage(t("end_date_must_be_greater"));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startDate, endDate]);
+
+  useEffect(() => {
+    (async function () {
+      if (form?.values?.province_id) {
+        form.setValues({ district_id: null });
+        setLoading(true);
+        const { response, status, error } = await callApi({
+          method: "GET",
+          url: `/all_districts?province_id=${form?.values?.province_id}`,
+        });
+        if (status == 200 && response.result == true) {
+          setDistricts(
+            response.data.map((item: any) => {
+              return { value: item.id.toString(), label: item.name_fa };
+            })
+          );
+        }
+        setLoading(false);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form?.values?.province_id]);
 
   return (
     <>
-      {office == "all" && (
-        <Flex
-          direction={{ base: "column", sm: "row" }}
-          gap="sm"
-          p="sm"
-          justify={{ sm: "center" }}
-        >
-          <TextInput
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        gap="sm"
+        p="sm"
+        justify={{ sm: "center" }}
+      >
+        <TextInput
+          style={{ flex: 1 }}
+          label={t("subject")}
+          placeholder={t("subject")}
+          withAsterisk
+          {...form.getInputProps("title")}
+        />
+        {office == "all" && (
+          <CustomAutoComplete
             style={{ flex: 1 }}
-            label={t("subject")}
-            placeholder={t("subject")}
-            withAsterisk
-            {...form.getInputProps("title")}
-          />
-          <Select
-            style={{ flex: 1 }}
+            lng={lng}
             label={t("office")}
             placeholder={t("office")}
-            withAsterisk
             data={offices}
-            searchable
-            clearable
-            nothingFoundMessage={t("noting_found")}
+            setData={setOffices}
+            url={`/office/auto_complete`}
+            values={form?.values?.office_id}
+            withAsterisk
             {...form.getInputProps("office_id")}
           />
-        </Flex>
-      )}
+        )}
+      </Flex>
       <Flex
         direction={{ base: "column", sm: "row" }}
         gap="sm"
@@ -117,6 +147,7 @@ const SurveyPlanStepOne = ({
           {...form.getInputProps("province_id")}
         />
         <Select
+          disabled={districts.length < 1}
           style={{ flex: 1 }}
           label={t("districts")}
           placeholder={t("districts")}
@@ -124,6 +155,7 @@ const SurveyPlanStepOne = ({
           searchable
           clearable
           nothingFoundMessage={t("noting_found")}
+          rightSection={loading && <Loader color="primary" size={15} />}
           {...form.getInputProps("district_id")}
         />
       </Flex>
