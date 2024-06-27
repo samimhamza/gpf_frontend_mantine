@@ -1,7 +1,15 @@
 "use client";
 
 import { useTranslation } from "@/app/i18n/client";
-import { Paper, Flex, Button, ActionIcon, Switch, Menu } from "@mantine/core";
+import {
+  Paper,
+  Flex,
+  Button,
+  ActionIcon,
+  Switch,
+  Menu,
+  Tooltip,
+} from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import { GoSortAsc, GoSortDesc } from "react-icons/go";
 import { LuGripVertical } from "react-icons/lu";
@@ -80,14 +88,26 @@ const MantineDataTable = ({
   height,
   ...additionalProps
 }: DataTableProps) => {
-
   const [densityIndex, setDensityIndex] = useState(0);
   const densityConfigurations = [
-    { tableSize: "xs", verticalSpacing: "xs", densityIcon: <HiMiniBars4 size={22} /> },
-    { tableSize: "sm", verticalSpacing: "sm", densityIcon: <HiMiniBars3 size={22} /> },
-    { tableSize: "md", verticalSpacing: "md", densityIcon: <HiMiniBars2 size={22} /> },
+    {
+      tableSize: "xs",
+      verticalSpacing: "xs",
+      densityIcon: <HiMiniBars4 size={22} />,
+    },
+    {
+      tableSize: "sm",
+      verticalSpacing: "sm",
+      densityIcon: <HiMiniBars3 size={22} />,
+    },
+    {
+      tableSize: "md",
+      verticalSpacing: "md",
+      densityIcon: <HiMiniBars2 size={22} />,
+    },
   ];
-  const { tableSize, verticalSpacing, densityIcon } = densityConfigurations[densityIndex];
+  const { tableSize, verticalSpacing, densityIcon } =
+    densityConfigurations[densityIndex];
 
   const [updatedColumns, setUpdatedColumns] = useState(columns);
 
@@ -276,39 +296,52 @@ const MantineDataTable = ({
           justify={{ sm: "space-between" }}
         >
           <ActionIcon.Group my="md">
-            <ActionIcon variant="default" size="lg" aria-label="Gallery">
-              <FaRegFilePdf />
-            </ActionIcon>
-            <ActionIcon variant="default" size="lg" aria-label="Settings">
-              <FaRegFileExcel />
-            </ActionIcon>
-            <ActionIcon variant="default" size="lg" aria-label="Settings">
-              <FaRegCopy />
-            </ActionIcon>
-            <ActionIcon variant="default" size="lg" aria-label="Settings">
-              <FaPrint />
-            </ActionIcon>
-            <ActionIcon variant="default" size="lg" aria-label="Likes">
-              <TbFileTypeCsv />
-            </ActionIcon>
+            <Tooltip label="Download PDF" withArrow={true}>
+              <ActionIcon variant="default" size="lg" aria-label="PDF">
+                <FaRegFilePdf />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Download Excel" withArrow={true}>
+              <ActionIcon variant="default" size="lg" aria-label="Excel">
+                <FaRegFileExcel />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Download CSV" withArrow={true}>
+              <ActionIcon variant="default" size="lg" aria-label="CSV">
+                <TbFileTypeCsv />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Copy" withArrow={true}>
+              <ActionIcon variant="default" size="lg" aria-label="Copy">
+                <FaRegCopy />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Print" withArrow={true}>
+              <ActionIcon variant="default" size="lg" aria-label="Print">
+                <FaPrint />
+              </ActionIcon>
+            </Tooltip>
           </ActionIcon.Group>
 
           <Flex direction={{ base: "column", sm: "row" }} my="md">
-            <ActionIcon
-              onClick={onToggleDensity}
-              size="lg"
-              variant="subtle"
-              me={10}
-            >
-              {densityIcon}
-            </ActionIcon>
-       
+            <Tooltip label="Toggle Density" withArrow={true}>
+              <ActionIcon
+                onClick={onToggleDensity}
+                size="lg"
+                variant="subtle"
+                me={10}
+              >
+                {densityIcon}
+              </ActionIcon>
+            </Tooltip>
 
             <Menu closeOnItemClick={false} shadow="md" width={300}>
               <Menu.Target>
-                <ActionIcon size="lg" variant="subtle">
-                  <TbColumns size={22} />
-                </ActionIcon>
+                <Tooltip label="Customize Column" withArrow={true}>
+                  <ActionIcon size="lg" variant="subtle">
+                    <TbColumns size={22} />
+                  </ActionIcon>
+                </Tooltip>
               </Menu.Target>
               <Menu.Dropdown
                 style={{
