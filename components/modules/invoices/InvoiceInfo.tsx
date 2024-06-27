@@ -2,8 +2,7 @@
 
 import { useTranslation } from '@/app/i18n/client';
 import { useAxios } from '@/customHooks/useAxios';
-import { sharedStatuses } from '@/shared/columns';
-import { getDateTime } from '@/shared/functions';
+import { getDateTime, getDate } from '@/shared/functions';
 import { TbEdit } from 'react-icons/tb';
 import { UPDATE_TEAMS } from '@/shared/constants/Permissions';
 import { InvoiceItemsColumns } from '@/shared/columns/invoices/invoice_items_columns';
@@ -24,7 +23,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import { permissionChecker } from '@/shared/functions/permissionChecker';
-import InvoiceModal from './InvoiceModal';
+import InvoiceEditModal from './InvoiceEditModal';
 
 const InvoiceInfo = ({
 	invoiceId,
@@ -56,8 +55,8 @@ const InvoiceInfo = ({
 				' ' +
 				data?.purchased_by?.last_name,
 		},
-		{ label: t('purchase_date'), value: data?.purchase_date },
-		{ label: t('due_date'), value: data?.due_date },
+		{ label: t('purchase_date'), value: getDate(data?.purchase_date?.toString()) },
+		{ label: t('due_date'), value: getDate(data?.due_date?.toString()) },
 		{ label: t('payment_status'), value: data?.payment_status },
 		{ label: t('total_price'), value: data?.total_price },
 		{ label: t('remarks'), value: data?.remarks },
@@ -111,7 +110,7 @@ const InvoiceInfo = ({
 					gap="sm"
 					wrap="wrap"
 				>
-					<Title order={3}>{t('team_info')}</Title>
+					<Title order={3}>{t('invoice_info')}</Title>
 					<Group>
 						{checkPermission(UPDATE_TEAMS) && (
 							<Button
@@ -146,7 +145,7 @@ const InvoiceInfo = ({
 			</Paper>
 			<Paper withBorder shadow="sm" mb="md" pb="lg">
 				<Title order={3} p="sm" className="applicant-title" ta="center">
-					{t('requests')}
+					{t('invoice_items')}
 				</Title>
 				<Box pos="relative">
 					<LoadingOverlay
@@ -160,6 +159,18 @@ const InvoiceInfo = ({
 					</Table>
 				</Box>
 			</Paper>
+			{opened && (
+				<InvoiceEditModal
+					opened={opened}
+					close={() => {
+						close();
+					}}
+					lng={lng}
+					setMutated={mutate}
+					title={t('update_invoice')}
+					editId={databaseID}
+				/>
+			)}
 		</>
 	);
 };
