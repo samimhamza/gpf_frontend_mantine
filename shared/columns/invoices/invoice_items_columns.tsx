@@ -11,14 +11,11 @@ export const InvoiceItemsColumns = (t: (arg: string) => string) => {
 			textAlign: 'center',
 		},
 		{
-			accessor: 'item_id',
+			accessor: 'item_name',
 			title: t('item'),
 			noWrap: true,
 			sortable: true,
 			hidden: false,
-			render: (record: any) => {
-				return record?.item?.name;
-			},
 		},
 		{
 			accessor: 'quantity',
@@ -77,6 +74,6 @@ export const InvoiceItemsColumns = (t: (arg: string) => string) => {
 			sortable: true,
 			render: ({ item_updated_by }: { item_updated_by: any }) =>
 				item_updated_by ? item_updated_by?.full_name : '',
-		},
+		},		
 	];
 };

@@ -6,6 +6,7 @@ import { getDateTime, getDate } from '@/shared/functions';
 import { TbEdit } from 'react-icons/tb';
 import { UPDATE_TEAMS } from '@/shared/constants/Permissions';
 import { InvoiceItemsColumns } from '@/shared/columns/invoices/invoice_items_columns';
+import { CustomDataTable } from '@/components/DataTable';
 import {
 	Box,
 	Button,
@@ -42,6 +43,9 @@ const InvoiceInfo = ({
 }) => {
 	const { t } = useTranslation(lng);
 	const [mutated, setMutated] = useState(false);
+	const [edit, setEdit] = useState<number>();
+	const [view, setView] = useState<number>();
+
 
 	const invoiceDetails = [
 		{ label: t('id'), value: data?.id },
@@ -68,27 +72,6 @@ const InvoiceInfo = ({
 
 
 	const columns = InvoiceItemsColumns(t);
-	const rows = data?.items?.map((element: any) => (
-		<Table.Tr key={element?.id}>
-			{columns.map((column) => (
-				<Table.Td key={column.accessor}>
-					{column.render
-						? column.render(element)
-						: element[column.accessor]}
-				</Table.Td>
-			))}
-		</Table.Tr>
-	));
-
-	const ths = (
-		<Table.Tr>
-			{columns.map((column) => (
-				<Table.Th key={column.accessor}>{column.title}</Table.Th>
-			))}
-		</Table.Tr>
-	);
-
-	
 
 	const theme = useMantineTheme();
 	const callApi = useAxios();
@@ -143,21 +126,26 @@ const InvoiceInfo = ({
 					</Grid>				
 				</Box>
 			</Paper>
+		
 			<Paper withBorder shadow="sm" mb="md" pb="lg">
 				<Title order={3} p="sm" className="applicant-title" ta="center">
 					{t('invoice_items')}
 				</Title>
-				<Box pos="relative">
-					<LoadingOverlay
-						visible={loading}
-						zIndex={1000}
-						overlayProps={{ radius: 'sm', blur: 2 }}
-					/>
-					<Table horizontalSpacing="xs" striped highlightOnHover>
-						<Table.Thead>{ths}</Table.Thead>
-						<Table.Tbody>{rows}</Table.Tbody>
-					</Table>
-				</Box>
+				<CustomDataTable
+				title={t('invoice_items')}
+				url={`/invoice_items?invoice_id=${data?.id}`}
+				deleteUrl="/invoice_items/1"
+				lng={lng}
+				columns={columns}
+				open={open}
+				mutated={mutated}
+				setMutated={setMutated}
+				setEdit={setEdit}
+				setView={setView}
+				showAdd={true}
+				showDelete={true}
+				showEdit={true}
+			/>
 			</Paper>
 			{opened && (
 				<InvoiceEditModal
@@ -168,7 +156,7 @@ const InvoiceInfo = ({
 					lng={lng}
 					setMutated={mutate}
 					title={t('update_invoice')}
-					editId={databaseID}
+					editId={data?.id}
 				/>
 			)}
 		</>
