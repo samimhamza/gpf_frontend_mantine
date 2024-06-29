@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-const InvoiceItemSchema = (t: (arg: string) => string) => {
+export const InvoiceItemSchema = (t: (arg: string) => string) => {
 	return z.object({
 		item_id: z
 			.string({

@@ -190,6 +190,7 @@ const InvoiceStepTwo = ({ form, lng, items }: InvoiceStepTwoProps) => {
 								</Table.Td>
 								<Table.Td>
 									<NumberInput
+									disabled
 										placeholder={t('total_price')}
 										{...form.getInputProps(
 											`invoice_items.${index}.total_price`
